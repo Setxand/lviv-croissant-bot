@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <title>More info</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js}"></script>
+    <script th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+    <style>
+        label{
+            display: flex;
+            flex-direction: row;
+
+        }
+        #btn-style{
+
+            width: 100%;
+            height: 50px;
+        }
+
+
+        body {
+            margin:0;
+            padding:0;
+            height:100%;
+        }
+        #container {
+            min-height:100%;
+            position:relative;
+        }
+
+        #body {
+            padding:10px;
+            padding-bottom:60px;   /* Height of the footer */
+        }
+        #footer {
+            position:absolute;
+            bottom:0;
+            width:100%;
+            height:60px;   /* Height of the footer */
+        }
+
+    </style>
+
+    <script th:inline="javascript">
+        (function(d, s, id){
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {return;}
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.com/en_US/messenger.Extensions.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'Messenger'));
+
+        window.extAsyncInit = function() {
+            $(document).ready(function () {
+                $("button").click(function () {
+                        MessengerExtensions.requestCloseBrowser(function success() {
+
+                        },
+                        function error(err) {
+                        });
+                })
+            })
+        }
+
+    </script>
+
+</head>
+<body>
+<h3>Ordering:</h3>
+    <div id = "body">
+        <label><p th:text="'Ordering id:   '+${ordering.id}"></p></label>
+        <label><p th:text="'Customer name: '+${ordering.name}"></p></label>
+        <label><p th:text="'Phone number:  '+${ordering.phoneNumber}"></p></label>
+        <label><p th:text="'Address:       '+${ordering.address}"></p></label>
+        <label><p th:text="'Time:          '+${ordering.time}"></p></label>
+        <label><ul>croissants:
+                <li th:each="croissant:${croissants}" th:text="${croissant}"></li>
+        </ul></label>
+    </div>
+    <div id="footer">
+        <button type = "button" class = "btn btn-primary btn-lg" id = "btn-style">OK</button>
+
+    </div>
+</body>
+</html>

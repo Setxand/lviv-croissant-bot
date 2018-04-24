@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js}"></script>
+    <script th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+    <title>Fillings</title>
+</head>
+    <script th:inline="javascript">
+        (function(d, s, id){
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {return;}
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.com/en_US/messenger.Extensions.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'Messenger'));
+
+        window.extAsyncInit = function() {
+            $(document).ready(function () {
+                $("button").click(function () {
+                    MessengerExtensions.requestCloseBrowser(function success() {
+
+                        },
+                        function error(err) {
+                        });
+                })
+            })
+        }
+    </script>
+<style>
+
+    #btn-style{
+
+
+        width: 100%;
+        height: 50px;
+    }
+    ul{
+        height: 330px;
+    }
+    body {
+        margin:0;
+        padding:0;
+        height:100%;
+    }
+    #container {
+        min-height:100%;
+        position:relative;
+    }
+    #header {
+        background:#ff0;
+        padding:10px;
+    }
+    #body {
+        padding:10px;
+        padding-bottom:60px;   /* Height of the footer */
+    }
+    #footer {
+        position:absolute;
+        bottom:0;
+        width:100%;
+        height:60px;   /* Height of the footer */
+    }
+</style>
+
+
+<body>
+<div id="container">
+<div id="body">
+<h3>Fillings:</h3>
+<ul>
+    <li th:each="fs:${fillings}" th:text="${fs.name}"></li>
+</ul>
+</div>
+</div>
+<div id="footer">
+<button type = "button" class = "btn btn-primary btn-lg" id = "btn-style">OK</button>
+</div>
+
+
+</body>
+</html>

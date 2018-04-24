@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>User rating</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js}"></script>
+    <script th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+    <style>
+        #backImg{
+            opacity: 0.2;
+
+        }
+        #backImg img{
+            height: 520px;
+            width: 402px;
+        }
+        .container {
+            display: block;
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            font-size: 22px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .container input {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 25px;
+            width: 25px;
+            background-color: #eee;
+            border-radius: 50%;
+        }
+
+        .container:hover input ~ .checkmark {
+            background-color: #ccc;
+        }
+
+        .container input:checked ~ .checkmark {
+            background-color: #2196F3;
+        }
+
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        .container input:checked ~ .checkmark:after {
+            display: block;
+        }
+
+        .container .checkmark:after {
+            top: 9px;
+            left: 9px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: white;
+        }
+        #rbutns label{
+            opacity: 0.7;
+        }
+        #btn-style{
+            margin-top: 226px;
+            width: 401px;
+            height: 50px;
+        }
+        #label-btn-style{
+            width: 401px;
+            height: 50px;
+        }
+
+    </style>
+
+    <script th:inline="javascript">
+        (function(d, s, id){
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {return;}
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.com/en_US/messenger.Extensions.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'Messenger'));
+
+        window.extAsyncInit = function() {
+        $(document).ready(function () {
+            $("#animation").hide();
+            var rId = [[${customerId}]];
+
+            var mark = "" ;
+            $('#myForm input').on('change', function() {
+                mark = $('input[name=mark]:checked', '#myForm').val();
+            });
+
+
+            $(".submLabel").click(function(){
+                $("#animation").show();
+                        $.ajax({
+                        method:"GET",
+                        data: {mark1 : mark,recipientId:rId},
+                        url: "/reqDispatcher/sendMail", success: function() {
+                            MessengerExtensions.requestCloseBrowser(function success() {
+
+                            },
+                                function error(err) {
+                            });
+
+                }});
+            });
+        })
+        };
+
+
+
+
+    </script>
+</head>
+
+<body>
+<div >
+<div style="position: fixed" id = "backImg">
+    <img style="position: absolute" src="http://i0.wp.com/b-live.in/wp-content/uploads/2017/06/Croissant.jpg?resize=700%2C400"/>
+    </div>
+<h3 style="opacity: 0.8">Будь ласка, оцініть програму:</h3>
+    <div style="position: absolute; margin-top: 220px; margin-left: 56px" id="animation">
+    <img src="https://loading.io/spinners/eclipse/lg.ring-loading-gif.gif"/>
+    </div>
+<div style="margin-right: 300px; margin-top: 100px" id = "rbutns">
+    <form id = "myForm">
+    <label class="container">Погана
+        <input type="radio" value="bad"  name="mark"/>
+        <span class="checkmark"></span>
+    </label>
+    <label class="container">Нормальна
+        <input type="radio" value="Norm" name="mark" />
+        <span class="checkmark"></span>
+    </label>
+    <label class="container">Добра
+        <input type="radio" value="Good" name="mark"/>
+        <span class="checkmark"></span>
+    </label>
+    <label class="container">Супер
+        <input type="radio" value="Great" name="mark"/>
+        <span class="checkmark"></span>
+    </label>
+    <label id="label-btn-style" class="submLabel">
+    <button type = "button" class = "btn btn-primary btn-lg" id = "btn-style">Відправити</button>
+    </label>
+    </form>
+</div>
+
+</div>
+</body>
+</html>

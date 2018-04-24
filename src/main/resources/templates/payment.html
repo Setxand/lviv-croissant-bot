@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js}"></script>
+    <script th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+    <title>Stripe payment</title>
+
+</head>
+<body>
+
+<form action="/charge" method="POST" >
+    <script src="https://checkout.stripe.com/checkout.js"></script>
+
+
+    <script th:inline="javascript">
+        var orderPrice = [[${price}]];
+        orderPrice*=100;
+        var handler = StripeCheckout.configure({
+            key: 'pk_test_8HuDnTYLb2qD43FKLsCcdhom',
+            image: 'https://www.lviv-croissants.com/wp-content/themes/croissants/img/ing-m1.png',
+            locale: 'auto',
+            token: function(token) {
+
+                $.ajax({
+                    method:'POST',
+                    data:{stripeToken:token.id,price:orderPrice},
+                    url:'/reqDispatcher/charge',
+                    success:function (data) {
+                        window.location.replace("/successTrans");
+
+                        var userId = [[${userId}]];
+                        $.ajax({
+                            method:'GET',
+                            data:{"userId":userId},
+                            url:'/reqDispatcher/successTrans',
+                            success:function () {
+
+                            }
+                        });
+
+                    }
+                        
+                    
+                });
+            }
+        });
+
+
+        handler.open({
+                name: 'Lviv - croissants - bot',
+                description: 'Fill the form below:',
+                amount: orderPrice
+            });
+
+        window.addEventListener('popstate', function() {
+            handler.close();
+        });
+    </script>
+</form>
+<div id="result"></div>
+
+</body>
+</html>
