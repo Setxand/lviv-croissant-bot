@@ -123,7 +123,7 @@ public class TelegramOrderingEventServiceImpl implements TelegramOrderingEventSe
         customerOrdering.setPrice(croissant.getPrice());
         customerOrdering.setName(tUser.getName() + " " + tUser.getLastName());
 
-        customerOrdering.getCroissants().add(croissant.toString());
+        customerOrdering.getCroissants().add(croissant.getId().toString());
         tUser.addCustomerOrdering(customerOrdering);
         if (tUser.getPhoneNumber() == null) {
             tUser = telegramUserRepositoryService.saveAndFlush(tUser);

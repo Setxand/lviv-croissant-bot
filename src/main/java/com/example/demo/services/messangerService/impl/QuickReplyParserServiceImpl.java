@@ -124,12 +124,14 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
 
     }
 
-    private void typePayload(Messaging messaging, String payload) {
-
+    private void typePayload(Messaging messaging) {
+        String payload = messaging.getMessage().getQuickReply().getPayload();
         String type = TextFormatter.ejectSingleVariable(payload);
         Croissant croissant = new Croissant();
         croissant.setType(type);
+        croissant.setCreatorId(messaging.getSender().getId());
         croissantRepositoryService.saveAndFlush(croissant);
+
         SupportEntity supportEntity = null;
         logicTypePayload(messaging,supportEntity,type);
 
@@ -177,15 +179,15 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
         parseRoleRequest(messaging);
 
     }
-    private void typePayload(Messaging messaging){
-        Message message = messaging.getMessage();
-        String payload = TextFormatter.ejectSingleVariable(message.getQuickReply().getPayload());
-        Croissant croissant = new Croissant();
-        croissant.setType(payload);
-        croissant.setCreatorId(messaging.getSender().getId());
-        croissantRepositoryService.saveAndFlush(croissant);
-        messageSenderService.sendSimpleMessage(recognizeService.recognize(NAMING_CROISSANT.name(),messaging.getSender().getId()),messaging.getSender().getId());
-    }
+//    private void typePayload(Messaging messaging){
+//        Message message = messaging.getMessage();
+//        String payload = TextFormatter.ejectSingleVariable(message.getQuickReply().getPayload());
+//        Croissant croissant = new Croissant();
+//        croissant.setType(payload);
+//        croissant.setCreatorId(messaging.getSender().getId());
+//        croissantRepositoryService.saveAndFlush(croissant);
+//        messageSenderService.sendSimpleMessage(recognizeService.recognize(NAMING_CROISSANT.name(),messaging.getSender().getId()),messaging.getSender().getId());
+//    }
     private void adminRequestPayload(Messaging messaging) {
         parseRoleRequest(messaging);
     }

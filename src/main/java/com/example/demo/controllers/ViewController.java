@@ -48,7 +48,13 @@ public class ViewController {
         CustomerOrdering customerOrdering = customerOrderingRepositoryService.findOne(Long.parseLong(orderId));
         List<String> orderings = new ArrayList<>();
         for(String cr: customerOrdering.getCroissants()){
-            orderings.add(cr);
+            try {
+                Croissant croissant = croissantRepositoryService.findOne(Long.parseLong(cr));
+                orderings.add(croissant.toString());
+            }
+            catch (Exception ex) {
+                orderings.add(cr);
+            }
         }
         model.addAttribute("ordering",customerOrdering);
         model.addAttribute("croissants",orderings);
