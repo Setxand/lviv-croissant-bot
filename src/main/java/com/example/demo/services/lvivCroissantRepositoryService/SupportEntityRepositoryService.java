@@ -1,6 +1,6 @@
 package com.example.demo.services.lvivCroissantRepositoryService;
 
-import com.example.demo.entities.lvivCroissants.SupportEntity;
+import com.example.demo.entities.SupportEntity;
 
 public interface SupportEntityRepositoryService {
     public SupportEntity getByUserId(Long userId);

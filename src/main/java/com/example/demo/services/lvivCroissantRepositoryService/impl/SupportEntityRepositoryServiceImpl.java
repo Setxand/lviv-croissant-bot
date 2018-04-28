@@ -1,6 +1,6 @@
 package com.example.demo.services.lvivCroissantRepositoryService.impl;
 
-import com.example.demo.entities.lvivCroissants.SupportEntity;
+import com.example.demo.entities.SupportEntity;
 import com.example.demo.repository.SupportEntityRepository;
 import com.example.demo.services.lvivCroissantRepositoryService.SupportEntityRepositoryService;
 import org.springframework.beans.factory.annotation.Autowired;
