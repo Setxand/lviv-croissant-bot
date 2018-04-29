@@ -1,5 +1,6 @@
 package com.example.demo.models.telegram;
 
+import com.example.demo.enums.Platform;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
@@ -17,5 +18,6 @@ public class Message {
     private Integer date;
     private Chat chat;
     private String text;
+    private Platform platform;
 
 }
