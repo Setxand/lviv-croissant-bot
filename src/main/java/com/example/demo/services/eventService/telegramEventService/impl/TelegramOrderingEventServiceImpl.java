@@ -142,7 +142,7 @@ public class TelegramOrderingEventServiceImpl implements TelegramOrderingEventSe
     private void oneMoreAddingCroissant(Message message, TUser tUser) {
         CustomerOrdering customerOrdering = customerOrderingRepositoryService.findTopByTUser(tUser);
         Croissant croissant = croissantRepositoryService.findOne(Long.parseLong(message.getText()));
-        customerOrdering.getCroissants().add(croissant.toString());
+        customerOrdering.getCroissants().add(croissant.getId().toString());
         customerOrdering.setPrice(customerOrdering.getPrice()+croissant.getPrice());
         telegramUserRepositoryService.saveAndFlush(tUser);
         nullChecking(message);

@@ -1,4 +1,4 @@
-package com.example.demo.entities.lvivCroissants;
+package com.example.demo.entities;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,4 +21,5 @@ public class SupportEntity {
     private String type;
     private Long userId;
     private Boolean oneMore;
+    
 }

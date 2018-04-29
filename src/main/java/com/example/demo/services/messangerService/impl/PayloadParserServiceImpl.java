@@ -1,6 +1,6 @@
 package com.example.demo.services.messangerService.impl;
 
-import com.example.demo.entities.lvivCroissants.SupportEntity;
+import com.example.demo.entities.SupportEntity;
 import com.example.demo.entities.peopleRegister.User;
 import com.example.demo.enums.messengerEnums.payloads.Payloads;
 import com.example.demo.models.messanger.Message;

@@ -130,6 +130,7 @@ public class TelegramTelegramGetMenuEventServiceImpl implements TelegramGetMenuE
 
 
     private void    askType(Message message) {
+        telegramUserRepositoryService.changeStatus(telegramUserRepositoryService.findByChatId(message.getChat().getId()),null);
         String text = ResourceBundle.getBundle("dictionary").getString(CHOOSE_TYPE_CROISSANT.name());
         String sweet = ResourceBundle.getBundle("dictionary").getString(SWEET.name());
         String own = ResourceBundle.getBundle("dictionary").getString(OWN.name());

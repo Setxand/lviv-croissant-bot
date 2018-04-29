@@ -2,7 +2,7 @@ package com.example.demo.services.messangerService.impl;
 
 import com.example.demo.entities.lvivCroissants.Croissant;
 import com.example.demo.entities.lvivCroissants.CustomerOrdering;
-import com.example.demo.entities.lvivCroissants.SupportEntity;
+import com.example.demo.entities.SupportEntity;
 import com.example.demo.entities.peopleRegister.User;
 import com.example.demo.models.messanger.*;
 import com.example.demo.services.eventService.messengerEventService.*;
