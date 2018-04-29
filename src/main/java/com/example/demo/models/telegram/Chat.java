@@ -22,4 +22,7 @@ public class Chat {
     private String lastName;
     private String text;
 
+    public Chat(Integer id) {
+        this.id = id;
+    }
 }

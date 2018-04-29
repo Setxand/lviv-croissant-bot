@@ -47,8 +47,7 @@ public class TelegramCreatingOwnCroissantEventServiceImpl implements TelegramCre
                 inputtingFillingsIfOnwCroissant(message,tUser);
                 break;
             default:
-                telegramMessageSenderService.errorMessage(message.getChat().getId());
-                break;
+                telegramMessageSenderService.errorMessage(message);                break;
         }
 
 
@@ -81,25 +80,24 @@ public class TelegramCreatingOwnCroissantEventServiceImpl implements TelegramCre
         }
         catch (Exception ex){
             ex.printStackTrace();
-            telegramMessageSenderService.simpleMessage(message.getChat().getId(),ResourceBundle.getBundle("dictionary").getString(NON_CORRECT_FORMAT_OF_FILLING.name()));
-            telegramMessageSenderService.simpleMessage(message.getChat().getId(),ResourceBundle.getBundle("dictionary").getString(ID_OF_FILLING.name()));
+            telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(NON_CORRECT_FORMAT_OF_FILLING.name()),message);
+            telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(ID_OF_FILLING.name()),message);
         }
 
 
     }
 
     private void finalCreating(Message message, TUser tUser) {
-        telegramMessageSenderService.simpleMessage(message.getChat().getId(),ResourceBundle.getBundle("dictionary").getString(CREATED_CROISSANT.name()));
+        telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(CREATED_CROISSANT.name()),message);
         telegramUserRepositoryService.changeStatus(tUser,GETTING_MENU_STATUS);
         message.setText(CroissantsTypes.OWN.name());
         telegramGetMenuEventService.getMenu(message);
     }
 
     private void startCreatingOwnCroissant(Message message, TUser tUser) {
-        Integer chatId = message.getChat().getId();
-        telegramMessageSenderService.simpleMessage(chatId,"Here you can to create your own croissant!!!");
+        telegramMessageSenderService.simpleMessage("Here you can to create your own croissant!!!",message);
         telegramGetMenuEventService.getMenuOfFillings(message);
-        telegramMessageSenderService.simpleMessage(chatId, ResourceBundle.getBundle("dictionary").getString(ID_OF_FILLING.name()));
+        telegramMessageSenderService.simpleMessage( ResourceBundle.getBundle("dictionary").getString(ID_OF_FILLING.name()),message);
         telegramUserRepositoryService.changeStatus(tUser, INPUTTING_FILLINGS_IN_OWN_CROISSANT_STATUS);
     }
 }

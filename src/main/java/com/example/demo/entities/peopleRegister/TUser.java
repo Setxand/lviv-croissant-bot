@@ -2,6 +2,7 @@ package com.example.demo.entities.peopleRegister;
 
 import com.example.demo.entities.lvivCroissants.Croissant;
 import com.example.demo.entities.lvivCroissants.CustomerOrdering;
+import com.example.demo.enums.messengerEnums.Roles;
 import com.example.demo.enums.telegramEnums.TelegramUserStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,7 @@ public class TUser {
     private String userName;
     private TelegramUserStatus status;
     private String phoneNumber;
+    private Roles role;
     @OneToMany(mappedBy = "tUser",cascade = CascadeType.ALL)
     private List<CustomerOrdering>customerOrderings = new ArrayList<>();
     @OneToMany(mappedBy = "tUser",cascade = CascadeType.ALL)

@@ -1,6 +1,8 @@
 package com.example.demo.services.telegramService;
 
+import com.example.demo.enums.Platform;
 import com.example.demo.enums.telegramEnums.CallBackData;
+import com.example.demo.models.telegram.Message;
 import com.example.demo.models.telegram.TelegramRequest;
 import com.example.demo.models.telegram.buttons.InlineKeyboardButton;
 import com.example.demo.models.telegram.buttons.Markup;
@@ -8,14 +10,15 @@ import com.example.demo.models.telegram.buttons.Markup;
 import java.util.List;
 
 public interface TelegramMessageSenderService {
-    public void sendMessage(TelegramRequest telegramRequest);
-    public void helloMessage(Integer chatId);
-    public void simpleMessage(Integer chatId, String message);
-    public void errorMessage(Integer chatId);
-    public void sendButtons(Markup markup,String text, Integer chatId);
-    public void sendKeyBoardButtons(Integer chatId);
-    public void sendInlineButtons(Integer chatId, List<List<InlineKeyboardButton>>buttons,String text);
-    public void sendPhoto(Integer chatId, String photo, String caption,Markup markup);
-    public void sendActions(Integer chatId);
-    public void simpleQuestion(Integer chatId, CallBackData data, String splitter,String text);
+    public void sendMessage(TelegramRequest telegramRequest,Platform platform);
+    public void helloMessage(Message message);
+    public void simpleMessage( String message,Message m);
+    public void errorMessage(Message message);
+    public void sendButtons(Markup markup,String text, Message message);
+    public void sendKeyBoardButtons(Message message);
+    public void sendInlineButtons(List<List<InlineKeyboardButton>>buttons,String text, Message message);
+    public void sendPhoto( String photo, String caption,Markup markup, Message message);
+    public void sendActions(Message message);
+    public void simpleQuestion(CallBackData data, String splitter,String text, Message message );
+
 }

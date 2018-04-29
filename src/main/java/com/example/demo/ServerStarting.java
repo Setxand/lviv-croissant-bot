@@ -1,6 +1,8 @@
 package com.example.demo;
 
 import com.example.demo.models.messanger.*;
+import com.example.demo.models.telegram.Chat;
+import com.example.demo.models.telegram.Message;
 import com.example.demo.services.telegramService.TelegramMessageSenderService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +33,8 @@ public class ServerStarting {
     private String SERVER_URL;
     @Value("${telegran.url}")
     private String TELEGRAM_URL;
-
+    @Value("${telegran.admins.url}")
+    private String ADMIN_TELEGRAM_URL;
 
     private static final Logger logger = Logger.getLogger(ServerStarting.class);
 
@@ -67,8 +70,15 @@ public class ServerStarting {
         finally {
             try {
                 ResponseEntity<?>responseEntity = new RestTemplate().getForEntity(TELEGRAM_URL+"/setWebhook?url="+SERVER_URL+"/telegramWebHook",Object.class);
-                logger.debug("Telegram webhook: "+responseEntity.getBody().toString());
-                telegramMessageSenderService.simpleMessage(388073901,"Server has ran");
+                logger.debug("Telegram`s bot webhook: "+responseEntity.getBody().toString());
+
+                ResponseEntity<?>adminPanelReg = new RestTemplate().getForEntity(ADMIN_TELEGRAM_URL+"/setWebhook?url="+SERVER_URL+"/adminPanel",Object.class);
+                logger.debug("Admin panel webhook: "+ adminPanelReg.getBody().toString());
+
+
+                Message message = new Message();
+                message.setChat(new Chat(388073901));
+                telegramMessageSenderService.simpleMessage("Server has ran",message);
             }
             catch (Exception e){
                 logger.warn(e);

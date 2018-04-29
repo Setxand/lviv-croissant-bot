@@ -3,6 +3,7 @@ package com.example.demo.services.telegramService.impl;
 import com.example.demo.entities.lvivCroissants.CustomerOrdering;
 import com.example.demo.entities.peopleRegister.TUser;
 import com.example.demo.enums.messengerEnums.Objects;
+import com.example.demo.enums.messengerEnums.Roles;
 import com.example.demo.models.messanger.Shell;
 import com.example.demo.models.telegram.Message;
 import com.example.demo.services.eventService.telegramEventService.TelegramCreatingOwnCroissantEventService;
@@ -48,6 +49,7 @@ public class TelegramMessageParserHelperServiceImpl implements TelegramMessagePa
         tUser.setName(message.getFrom().getFirstName());
         tUser.setLastName(message.getFrom().getLastName());
         tUser.setLocale(message.getFrom().getLanguageCode());
+        tUser.setRole(Roles.CUSTOMER);
         telegramUserRepositoryService.saveAndFlush(tUser);
     }
 
@@ -61,7 +63,7 @@ public class TelegramMessageParserHelperServiceImpl implements TelegramMessagePa
           customerOrderingRepositoryService.delete(customerOrdering);
         }
         telegramUserRepositoryService.saveAndFlush(tUser);
-        telegramMessageSenderService.simpleMessage(tUser.getChatId(), ResourceBundle.getBundle("dictionary").getString(DONE.name()));
+        telegramMessageSenderService.simpleMessage( ResourceBundle.getBundle("dictionary").getString(DONE.name()),message);
     }
 
     @Override
@@ -82,11 +84,11 @@ public class TelegramMessageParserHelperServiceImpl implements TelegramMessagePa
         try {
             ResponseEntity<?> messengerWebhook = new RestTemplate().postForEntity(SUBSCRIPTION_URL,setMessengerWebHook,Object.class);
             logger.debug("Messenger webhook:"+messengerWebhook.getBody());
-            telegramMessageSenderService.simpleMessage(message.getChat().getId(),"Facebook messenger: "+messengerWebhook.getBody().toString());
+            telegramMessageSenderService.simpleMessage("Facebook messenger: "+messengerWebhook.getBody().toString(),message);
         }
         catch (Exception ex){
             logger.warn(ex);
-            telegramMessageSenderService.simpleMessage(message.getChat().getId(),ex.getMessage());
+            telegramMessageSenderService.simpleMessage(ex.getMessage(),message);
         }
 
     }

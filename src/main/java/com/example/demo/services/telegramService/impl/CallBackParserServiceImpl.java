@@ -67,8 +67,7 @@ public class CallBackParserServiceImpl implements CallBackParserService {
                 oneMoreOrderingData(callBackQuery);
                 break;
             default:
-                telegramMessageSenderService.errorMessage(callBackQuery.getMessage().getChat().getId());
-                break;
+                telegramMessageSenderService.errorMessage(callBackQuery.getMessage());                break;
         }
     }
 
@@ -90,8 +89,8 @@ public class CallBackParserServiceImpl implements CallBackParserService {
             createOwnCroissantData(callBackQuery);
         }
         else {
-            telegramMessageSenderService.simpleMessage(callBackQuery.getMessage().getChat().getId(),ResourceBundle.getBundle("dictionary").getString(THANKS.name()));
-            telegramMessageSenderService.sendActions(callBackQuery.getMessage().getChat().getId());
+            telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(THANKS.name()),callBackQuery.getMessage());
+            telegramMessageSenderService.sendActions(callBackQuery.getMessage());
 
         }
     }
@@ -105,7 +104,7 @@ public class CallBackParserServiceImpl implements CallBackParserService {
         croissant.setTUser(null);
         croissantRepositoryService.remove(croissant);
         telegramUserRepositoryService.saveAndFlush(tUser);
-        telegramMessageSenderService.simpleMessage(callBackQuery.getMessage().getChat().getId(), ResourceBundle.getBundle("dictionary").getString(DONE.name()));
+        telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(DONE.name()),callBackQuery.getMessage());
     }
 
     private void createOwnCroissantData(CallBackQuery callBackQuery) {

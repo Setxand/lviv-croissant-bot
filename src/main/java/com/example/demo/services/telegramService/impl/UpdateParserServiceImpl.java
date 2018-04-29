@@ -31,7 +31,7 @@ public class UpdateParserServiceImpl implements UpdateParserService {
         }
         catch (Exception ex){
             try {
-                telegramMessageSenderService.errorMessage(update.getMessage().getChat().getId());
+                telegramMessageSenderService.errorMessage(update.getMessage());
                 telegramUserRepositoryService.changeStatus(telegramUserRepositoryService.findByChatId(update.getMessage().getChat().getId()),null);
             }
             catch (Exception e) {

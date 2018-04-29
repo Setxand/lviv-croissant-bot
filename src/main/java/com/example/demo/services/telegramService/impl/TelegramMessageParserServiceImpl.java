@@ -42,7 +42,7 @@ public class TelegramMessageParserServiceImpl implements TelegramMessageParserSe
             }
             switch (MessageCases.valueOf(message.getText().toUpperCase())) {
                 case HI:
-                    telegramMessageSenderService.helloMessage(message.getChat().getId());
+                    telegramMessageSenderService.helloMessage(message);
                     break;
                 case MENU:
                     menu(message, tUser);
@@ -57,7 +57,7 @@ public class TelegramMessageParserServiceImpl implements TelegramMessageParserSe
                     telegramMessageParserHelperService.helpSetUpMessenger(message);
                     break;
                 default:
-                    telegramMessageSenderService.errorMessage(message.getChat().getId());
+                    telegramMessageSenderService.errorMessage(message);
                     break;
             }
         }
@@ -83,7 +83,7 @@ public class TelegramMessageParserServiceImpl implements TelegramMessageParserSe
                 createOwn(message);
                 break;
             default:
-                telegramMessageSenderService.errorMessage(message.getChat().getId());
+                telegramMessageSenderService.errorMessage(message);
                 break;
         }
     }
@@ -106,7 +106,7 @@ public class TelegramMessageParserServiceImpl implements TelegramMessageParserSe
     private void start(Message message) {
         if (telegramUserRepositoryService.findByChatId(message.getChat().getId()) == null)
             telegramMessageParserHelperService.helpStart(message);
-        telegramMessageSenderService.sendKeyBoardButtons(message.getChat().getId());
-        telegramMessageSenderService.sendActions(message.getChat().getId());
+        telegramMessageSenderService.sendKeyBoardButtons(message);
+        telegramMessageSenderService.sendActions(message);
     }
 }
