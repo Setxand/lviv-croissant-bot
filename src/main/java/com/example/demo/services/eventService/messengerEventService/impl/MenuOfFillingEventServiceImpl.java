@@ -69,7 +69,6 @@ public class MenuOfFillingEventServiceImpl implements MenuOfFillingEventService 
             catch (Exception ex){
                 logger.warn(ex);
                 messageSenderService.sendSimpleMessage(recognizeService.recognize(NON_CORRECT_FORMAT_OF_FILLING.name(),messaging.getSender().getId()),messaging.getSender().getId());
-                getMenuOfFilling(messaging.getSender().getId());
                 messageSenderService.sendMessage(new Messaging(new Message(recognizeService.recognize(NAME_OF_FILLING.name(),messaging.getSender().getId())), new Recipient(messaging.getSender().getId())));
                 if(menuOfFilling!=null)
                     menuOfFillingRepositoryService.remove(menuOfFilling);
