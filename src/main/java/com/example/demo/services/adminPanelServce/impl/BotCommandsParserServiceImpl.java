@@ -25,9 +25,16 @@ public class BotCommandsParserServiceImpl implements BotCommandsParserService {
                 filling(message);
                 break;
             case ADD:
+                add(message);
                 break;
         }
 
+    }
+
+    private void add(Message message) {
+        TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
+        telegramUserRepositoryService.changeStatus(tUser,TelegramUserStatus.ADDING_CROISSANT_STATUS);
+        telegramAddingRecordingsEventService.addCroissant(message);
     }
 
     private void filling(Message message) {

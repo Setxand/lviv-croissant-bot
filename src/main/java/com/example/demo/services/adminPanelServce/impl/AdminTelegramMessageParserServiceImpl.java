@@ -26,26 +26,27 @@ public class AdminTelegramMessageParserServiceImpl implements AdminTelegramMessa
     private TelegramMessageSenderService telegramMessageSenderService;
     @Autowired
     private TelegramAddingRecordingsEventService telegramAddingRecordingsEventService;
+
     @Override
     public void parseMessage(Message message) {
-        if(message.getEntities()!=null){
-            List<Entity>entities = message.getEntities();
-            for(Entity entity:entities){
+        if (message.getEntities() != null) {
+            List<Entity> entities = message.getEntities();
+            for (Entity entity : entities) {
                 botCommandsParserService.parseBotCommand(message);
             }
             return;
         }
         TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
-        switch (tUser.getStatus()){
+        switch (tUser.getStatus()) {
             case ADDING_FILLING_STATUS:
-                addingFillingStatus(message,tUser);
+                addingFillingStatus(message, tUser);
                 break;
             case ADDING_FILLING_STATUS_1:
-                addingFillingStatus1(message,tUser);
+                addingFillingStatus1(message, tUser);
                 break;
-                default:
-                    telegramMessageSenderService.errorMessage(message);
-                    break;
+            default:
+                telegramMessageSenderService.errorMessage(message);
+                break;
 
         }
     }
@@ -55,7 +56,7 @@ public class AdminTelegramMessageParserServiceImpl implements AdminTelegramMessa
     }
 
     private void addingFillingStatus(Message message, TUser tUser) {
-        telegramUserRepositoryService.changeStatus(tUser,ADDING_FILLING_STATUS_1);
+        telegramUserRepositoryService.changeStatus(tUser, ADDING_FILLING_STATUS_1);
         telegramAddingRecordingsEventService.addFilling(message);
 
     }

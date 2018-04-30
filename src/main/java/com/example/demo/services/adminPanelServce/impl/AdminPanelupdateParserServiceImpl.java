@@ -5,7 +5,7 @@ import com.example.demo.enums.Platform;
 import com.example.demo.enums.messengerEnums.Roles;
 import com.example.demo.models.telegram.Update;
 import com.example.demo.services.adminPanelServce.AdminCallBackParserService;
-import com.example.demo.services.adminPanelServce.AdminPanelupdateParserService;
+import com.example.demo.services.adminPanelServce.AdminPanelUpdateParserService;
 import com.example.demo.services.adminPanelServce.AdminTelegramMessageParserService;
 import com.example.demo.services.peopleRegisterService.TelegramUserRepositoryService;
 import com.example.demo.services.telegramService.TelegramMessageSenderService;
@@ -13,8 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AdminPanelUpdateParserServiceImpl implements AdminPanelupdateParserService {
-
+public class AdminPanelUpdateParserServiceImpl implements AdminPanelUpdateParserService {
 
 
     @Autowired

@@ -50,6 +50,22 @@ public class TelegramAddingRecordingsEventServiceImpl implements TelegramAddingR
         }
     }
 
+    @Override
+    public void addCroissant(Message message) {
+        TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
+        switch (tUser.getStatus()) {
+            case ADDING_CROISSANT_STATUS:
+                addingCroissantStatus(message,tUser);
+                break;
+                default:
+                    telegramMessageSenderService.errorMessage(message);
+                    break;
+        }
+    }
+
+    private void addingCroissantStatus(Message message, TUser tUser) {
+    }
+
     private void addingFillingStatus1(Message message, TUser tUser) {
         try {
             inputHandling(message,tUser);
