@@ -1,4 +1,4 @@
-package com.example.demo.services.adminPanelServce;
+package com.example.demo.services.adminPanelService;
 
 import com.example.demo.models.telegram.Update;
 

@@ -18,5 +18,4 @@ public class CallBackQuery {
     @JsonProperty("chat_instance")
     private Long chatInstance;
     private String data;
-    private Platform platform;
 }

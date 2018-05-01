@@ -1,7 +1,7 @@
 package com.example.demo.controllers.telegramControllers;
 
 import com.example.demo.models.telegram.Update;
-import com.example.demo.services.adminPanelServce.AdminPanelUpdateParserService;
+import com.example.demo.services.adminPanelService.AdminPanelUpdateParserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

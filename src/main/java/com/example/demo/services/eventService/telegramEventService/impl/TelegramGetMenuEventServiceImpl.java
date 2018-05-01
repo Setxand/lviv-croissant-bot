@@ -29,7 +29,7 @@ import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.*
 import static com.example.demo.enums.telegramEnums.CallBackData.*;
 
 @Service
-public class TelegramTelegramGetMenuEventServiceImpl implements TelegramGetMenuEventService {
+public class TelegramGetMenuEventServiceImpl implements TelegramGetMenuEventService {
     @Autowired
     private TelegramUserRepositoryService telegramUserRepositoryService;
     @Autowired
