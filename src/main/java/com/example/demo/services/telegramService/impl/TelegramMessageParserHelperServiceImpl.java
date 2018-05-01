@@ -74,22 +74,5 @@ public class TelegramMessageParserHelperServiceImpl implements TelegramMessagePa
 
     }
 
-    @Override
-    public void helpSetUpMessenger(Message message) {
-        Shell setMessengerWebHook = new Shell();
-        setMessengerWebHook.setCallbackUrl(SERVER_URL+"/WebHook");
-        setMessengerWebHook.setVerToken(VER_TOK);
-        setMessengerWebHook.setObject(Objects.page);
-        setMessengerWebHook.setFields(new String[]{"messages","messaging_postbacks"});
-        try {
-            ResponseEntity<?> messengerWebhook = new RestTemplate().postForEntity(SUBSCRIPTION_URL,setMessengerWebHook,Object.class);
-            logger.debug("Messenger webhook:"+messengerWebhook.getBody());
-            telegramMessageSenderService.simpleMessage("Facebook messenger: "+messengerWebhook.getBody().toString(),message);
-        }
-        catch (Exception ex){
-            logger.warn(ex);
-            telegramMessageSenderService.simpleMessage(ex.getMessage(),message);
-        }
 
-    }
 }

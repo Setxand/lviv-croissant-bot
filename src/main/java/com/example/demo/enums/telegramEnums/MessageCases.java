@@ -5,6 +5,5 @@ public enum MessageCases {
     MENU,
     DELETE_ORDERINGS,
     CREATE_OWN_CROISSANT,
-    SET_UP_MESSENGER
 
 }

@@ -53,9 +53,7 @@ public class TelegramMessageParserServiceImpl implements TelegramMessageParserSe
                 case CREATE_OWN_CROISSANT:
                     telegramMessageParserHelperService.helpCreateOwnCroissant(message);
                     break;
-                case SET_UP_MESSENGER:
-                    telegramMessageParserHelperService.helpSetUpMessenger(message);
-                    break;
+
                 default:
                     telegramMessageSenderService.errorMessage(message);
                     break;

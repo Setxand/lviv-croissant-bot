@@ -32,8 +32,15 @@ public class BotCommandsParserServiceImpl implements BotCommandsParserService {
             case HELP:
                 help(message);
                 break;
+            case SETUPMESSENGER:
+                setUpMessenger(message);
+                break;
         }
 
+    }
+
+    private void setUpMessenger(Message message) {
+        botCommendParseHelperService.helpSetUpMessenger(message);
     }
 
     private void help(Message message) {

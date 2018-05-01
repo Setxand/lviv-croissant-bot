@@ -4,4 +4,6 @@ import com.example.demo.models.telegram.Message;
 
 public interface BotCommendParseHelperService {
     public void helpInvokeBotHelpCommand(Message message);
+
+    void helpSetUpMessenger(Message message);
 }

@@ -63,23 +63,23 @@ public class TelegramAddingRecordingsEventServiceImpl implements TelegramAddingR
         TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
         switch (tUser.getStatus()) {
             case ADDING_CROISSANT_STATUS:
-                addingCroissantStatus(message,tUser);
+                addingCroissantStatus(message, tUser);
                 break;
             case ADDING_CROISSANT_STATUS_1:
                 addingCroissantStatus1(message);
                 break;
-                default:
-                    nullChecking(message);
-                    break;
+            default:
+                nullChecking(message);
+                break;
         }
     }
 
     private void addingCroissantStatus1(Message message) {
         Croissant croissant = new Croissant();
-        String type = ResourceBundle.getBundle("dictionary",new Locale("ua")).getString(message.getText());
+        String type = ResourceBundle.getBundle("dictionary", new Locale("ua")).getString(message.getText());
         croissant.setType(message.getText());
         int id = message.getChat().getId();
-        croissant.setCreatorId((long)id);
+        croissant.setCreatorId((long) id);
         croissantRepositoryService.saveAndFlush(croissant);
 
         TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
@@ -88,96 +88,84 @@ public class TelegramAddingRecordingsEventServiceImpl implements TelegramAddingR
     }
 
     private void nullChecking(Message message) {
-        Croissant croissant = croissantRepositoryService.findLastByCreatorId((long)message.getChat().getId());
+        Croissant croissant = croissantRepositoryService.findLastByCreatorId((long) message.getChat().getId());
         TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
-        if(croissant.getName()==null){
-            createNameForCroissant(message,croissant,tUser);
-        }
-        else if(croissant.getImageUrl()==null){
-            addingImageForCroissant(message,croissant,tUser);
-        }
-        else if(croissant.getCroissantsFillings().isEmpty()){
-            addingCroissantsFillings(message,croissant,tUser);
-        }
-        else if(croissant.getPrice()==0){
-            settingCroissantPrice(message,croissant,tUser);
-        }
-        else {
-            finalSavingCroissant(message,tUser);
+        if (croissant.getName() == null) {
+            createNameForCroissant(message, croissant, tUser);
+        } else if (croissant.getImageUrl() == null) {
+            addingImageForCroissant(message, croissant, tUser);
+        } else if (croissant.getCroissantsFillings().isEmpty()) {
+            addingCroissantsFillings(message, croissant, tUser);
+        } else if (croissant.getPrice() == 0) {
+            settingCroissantPrice(message, croissant, tUser);
+        } else {
+            finalSavingCroissant(message, tUser);
         }
     }
 
     private void finalSavingCroissant(Message message, TUser tUser) {
         String text = ResourceBundle.getBundle("dictionary").getString(CROISSANT_SUCCESSFULLY_ADDED.name());
-        telegramUserRepositoryService.changeStatus(tUser,null);
-        telegramMessageSenderService.simpleMessage(text+" /help",message);
+        telegramUserRepositoryService.changeStatus(tUser, null);
+        telegramMessageSenderService.simpleMessage(text + " /help", message);
     }
 
     private void settingCroissantPrice(Message message, Croissant croissant, TUser tUser) {
-        if(tUser.getStatus() == NULL_CHECKING_ADDING_CROISSANT_STATUS){
-            nullCheckingStatus(message,tUser,ASK_PRICE.name());
-            }
-        else if(tUser.getStatus() == NULL_CHECKING_ADDING_CROISSANT_STATUS_1){
+        if (tUser.getStatus() == NULL_CHECKING_ADDING_CROISSANT_STATUS) {
+            nullCheckingStatus(message, tUser, ASK_PRICE.name());
+        } else if (tUser.getStatus() == NULL_CHECKING_ADDING_CROISSANT_STATUS_1) {
             try {
                 croissant.setPrice(Integer.parseInt(message.getText()));
                 croissantRepositoryService.saveAndFlush(croissant);
                 telegramUserRepositoryService.changeStatus(tUser, NULL_CHECKING_ADDING_CROISSANT_STATUS);
                 nullChecking(message);
+            } catch (Exception ex) {
+                nonCorrectInputInCroissantSaving(message, NON_CORRECT_FORMAT_OF_PRICE.name(), ASK_PRICE.name());
+
             }
-            catch (Exception ex){
-                String nonCorrect = ResourceBundle.getBundle("dictionary").getString(NON_CORRECT_FORMAT_OF_PRICE.name());
-                String askPrice =  ResourceBundle.getBundle("dictionary").getString(ASK_PRICE.name());
-                telegramMessageSenderService.simpleMessage(nonCorrect,message);
-                telegramMessageSenderService.simpleMessage(askPrice,message);
-            }
-            }
+        }
     }
 
-    private void nullCheckingStatus(Message message, TUser tUser,String rBString) {
+    private void nullCheckingStatus(Message message, TUser tUser, String rBString) {
         telegramUserRepositoryService.changeStatus(tUser, NULL_CHECKING_ADDING_CROISSANT_STATUS_1);
         String text = ResourceBundle.getBundle("dictionary").getString(rBString);
-        telegramMessageSenderService.simpleMessage(text,message);
+        telegramMessageSenderService.simpleMessage(text, message);
     }
 
     private void addingCroissantsFillings(Message message, Croissant croissant, TUser tUser) {
-        if(tUser.getStatus() == NULL_CHECKING_ADDING_CROISSANT_STATUS){
+        if (tUser.getStatus() == NULL_CHECKING_ADDING_CROISSANT_STATUS) {
             telegramGetMenuEventService.getMenuOfFillings(message);
-            nullCheckingStatus(message,tUser,ID_OF_FILLING.name());
+            nullCheckingStatus(message, tUser, ID_OF_FILLING.name());
+        } else if (tUser.getStatus() == NULL_CHECKING_ADDING_CROISSANT_STATUS_1) {
+            addingFillings(message, croissant, tUser);
         }
-        else if(tUser.getStatus() == NULL_CHECKING_ADDING_CROISSANT_STATUS_1){
-             addingFillings(message,croissant,tUser);
-             }
     }
 
     private void addingFillings(Message message, Croissant croissant, TUser tUser) {
         try {
             String[] fillings = message.getText().split(",");
-
-
-            for(String filling:fillings){
+            for (String filling : fillings) {
                 MenuOfFilling menuOfFilling = menuOfFillingRepositoryService.findOne(Long.parseLong(filling));
                 croissant.addSingleFilling(new CroissantsFilling(menuOfFilling));
             }
             croissantRepositoryService.saveAndFlush(croissant);
             telegramUserRepositoryService.changeStatus(tUser, NULL_CHECKING_ADDING_CROISSANT_STATUS);
             nullChecking(message);
-        }
-        catch (Exception ex){
-            String nonCorrect = ResourceBundle.getBundle("dictionary").getString(NON_CORRECT_FORMAT_OF_FILLING.name());
-            String fillingId= ResourceBundle.getBundle("dictionary").getString(ID_OF_FILLING.name());
-
-            telegramMessageSenderService.simpleMessage(nonCorrect,message);
-            telegramMessageSenderService.simpleMessage(fillingId,message);
+        } catch (Exception ex) {
+            nonCorrectInputInCroissantSaving(message, NON_CORRECT_FORMAT_OF_FILLING.name(), ID_OF_FILLING.name());
         }
     }
 
+    private void nonCorrectInputInCroissantSaving(Message message, String nonCorrectMessage, String directions) {
+        String nonCorrect = ResourceBundle.getBundle("dictionary").getString(nonCorrectMessage);
+        String fillingId = ResourceBundle.getBundle("dictionary").getString(directions);
+        telegramMessageSenderService.simpleMessage(nonCorrect, message);
+        telegramMessageSenderService.simpleMessage(fillingId, message);
+    }
+
     private void addingImageForCroissant(Message message, Croissant croissant, TUser tUser) {
-        if(tUser.getStatus() == NULL_CHECKING_ADDING_CROISSANT_STATUS){
-            telegramUserRepositoryService.changeStatus(tUser, NULL_CHECKING_ADDING_CROISSANT_STATUS_1);
-            String croissantName = ResourceBundle.getBundle("dictionary").getString(IMAGE_URL.name());
-            telegramMessageSenderService.simpleMessage(croissantName,message);
-        }
-        else if(tUser.getStatus() == NULL_CHECKING_ADDING_CROISSANT_STATUS_1){
+        if (tUser.getStatus() == NULL_CHECKING_ADDING_CROISSANT_STATUS) {
+            nullCheckingStatus(message, tUser, IMAGE_URL.name());
+        } else if (tUser.getStatus() == NULL_CHECKING_ADDING_CROISSANT_STATUS_1) {
             croissant.setImageUrl(message.getText());
             croissantRepositoryService.saveAndFlush(croissant);
             telegramUserRepositoryService.changeStatus(tUser, NULL_CHECKING_ADDING_CROISSANT_STATUS);
@@ -187,12 +175,9 @@ public class TelegramAddingRecordingsEventServiceImpl implements TelegramAddingR
     }
 
     private void createNameForCroissant(Message message, Croissant croissant, TUser tUser) {
-        if(tUser.getStatus() == NULL_CHECKING_ADDING_CROISSANT_STATUS){
-            telegramUserRepositoryService.changeStatus(tUser, NULL_CHECKING_ADDING_CROISSANT_STATUS_1);
-            String croissantName = ResourceBundle.getBundle("dictionary").getString(NAMING_CROISSANT.name());
-            telegramMessageSenderService.simpleMessage(croissantName,message);
-        }
-        else if(tUser.getStatus() == NULL_CHECKING_ADDING_CROISSANT_STATUS_1){
+        if (tUser.getStatus() == NULL_CHECKING_ADDING_CROISSANT_STATUS) {
+            nullCheckingStatus(message, tUser, NAMING_CROISSANT.name());
+        } else if (tUser.getStatus() == NULL_CHECKING_ADDING_CROISSANT_STATUS_1) {
             croissant.setName(message.getText());
             croissantRepositoryService.saveAndFlush(croissant);
             telegramUserRepositoryService.changeStatus(tUser, NULL_CHECKING_ADDING_CROISSANT_STATUS);
@@ -205,17 +190,16 @@ public class TelegramAddingRecordingsEventServiceImpl implements TelegramAddingR
         String text = ResourceBundle.getBundle("dictionary").getString(CHOOSE_TYPE_CROISSANT.name());
         String sweet = ResourceBundle.getBundle("dictionary").getString(SWEET.name());
         String sandwich = ResourceBundle.getBundle("dictionary").getString(SANDWICH.name());
-        List<InlineKeyboardButton>buttons = new ArrayList<>(Arrays.asList(new InlineKeyboardButton(sweet,CROISSANT_TYPE_DATA.name()+"?"+SWEET.name()),
-                new InlineKeyboardButton(sandwich,CROISSANT_TYPE_DATA.name()+"?"+SANDWICH.name())));
-        telegramMessageSenderService.sendInlineButtons(new ArrayList<>(Arrays.asList(buttons)),text,message);
+        List<InlineKeyboardButton> buttons = new ArrayList<>(Arrays.asList(new InlineKeyboardButton(sweet, CROISSANT_TYPE_DATA.name() + "?" + SWEET.name()),
+                new InlineKeyboardButton(sandwich, CROISSANT_TYPE_DATA.name() + "?" + SANDWICH.name())));
+        telegramMessageSenderService.sendInlineButtons(new ArrayList<>(Arrays.asList(buttons)), text, message);
     }
 
     private void addingFillingStatus1(Message message, TUser tUser) {
         try {
-            inputHandling(message,tUser);
-        }
-        catch (Exception ex) {
-            repeatInput(message);
+            inputHandling(message, tUser);
+        } catch (Exception ex) {
+            nonCorrectInputInCroissantSaving(message, NON_CORRECT_FORMAT_OF_FILLING.name(), NAME_OF_FILLING.name());
         }
     }
 
@@ -229,15 +213,8 @@ public class TelegramAddingRecordingsEventServiceImpl implements TelegramAddingR
         finalSaving(message, tUser);
     }
 
-    private void repeatInput(Message message) {
-        String nonCorrect = ResourceBundle.getBundle("dictionary").getString(NON_CORRECT_FORMAT_OF_FILLING.name());;
-        String enterAgain = ResourceBundle.getBundle("dictionary").getString(NAME_OF_FILLING.name());
-        telegramMessageSenderService.simpleMessage(nonCorrect,message);
-        telegramMessageSenderService.simpleMessage(enterAgain,message);
-    }
-
     private void finalSaving(Message message, TUser tUser) {
-        String addingDone = ResourceBundle.getBundle("dictionary").getString(FILLING_WAS_ADDED.name());
+        String addingDone = ResourceBundle.getBundle("dictionary").getString(FILLING_WAS_ADDED.name()+" /help");
         telegramMessageSenderService.simpleMessage(addingDone, message);
         telegramGetMenuEventService.getMenuOfFillings(message);
         telegramUserRepositoryService.changeStatus(tUser, null);
