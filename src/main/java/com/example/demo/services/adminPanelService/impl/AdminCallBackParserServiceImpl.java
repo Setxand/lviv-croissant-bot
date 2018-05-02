@@ -71,14 +71,14 @@ public class AdminCallBackParserServiceImpl implements AdminCallBackParserServic
         }
         else {
             String text = ResourceBundle.getBundle("dictionary").getString(THANKS.name());
-            telegramMessageSenderService.simpleMessage(text,callBackQuery.getMessage());
+            telegramMessageSenderService.simpleMessage(text+" /help",callBackQuery.getMessage());
         }
     }
 
     private void deleteCroissant(CallBackQuery callBackQuery) {
         Croissant croissant = croissantRepositoryService.findOne(Long.parseLong(TextFormatter.ejectContext(callBackQuery.getData())));
         croissantRepositoryService.remove(croissant);
-        telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(DONE.name()),callBackQuery.getMessage());
+        telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(DONE.name())+ "/help",callBackQuery.getMessage());
     }
 
 

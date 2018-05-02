@@ -47,7 +47,7 @@ public class BotCommandParseHelperServiceImpl implements BotCommandParseHelperSe
         try {
             ResponseEntity<?> messengerWebhook = new RestTemplate().postForEntity(SUBSCRIPTION_URL,setMessengerWebHook,Object.class);
             logger.debug("Messenger webhook:"+messengerWebhook.getBody());
-            telegramMessageSenderService.simpleMessage("Facebook messenger: "+messengerWebhook.getBody().toString(),message);
+            telegramMessageSenderService.simpleMessage("Facebook messenger: "+messengerWebhook.getBody().toString()+" /help",message);
         }
         catch (Exception ex){
             logger.warn(ex);
