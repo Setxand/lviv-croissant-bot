@@ -50,6 +50,7 @@ public class TelegramMessageParserHelperServiceImpl implements TelegramMessagePa
         tUser.setLastName(message.getFrom().getLastName());
         tUser.setLocale(message.getFrom().getLanguageCode());
         tUser.setRole(Roles.CUSTOMER);
+        tUser.setUserName(message.getFrom().getUserName());
         telegramUserRepositoryService.saveAndFlush(tUser);
     }
 
