@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.*;
+import static com.example.demo.enums.telegramEnums.CallBackData.CROISSANT_TYPE_ADDING_DATA;
 import static com.example.demo.enums.telegramEnums.CallBackData.CROISSANT_TYPE_DATA;
 import static com.example.demo.enums.telegramEnums.TelegramUserStatus.NULL_CHECKING_ADDING_CROISSANT_STATUS;
 import static com.example.demo.enums.telegramEnums.TelegramUserStatus.NULL_CHECKING_ADDING_CROISSANT_STATUS_1;
@@ -190,8 +191,8 @@ public class TelegramAddingRecordingsEventServiceImpl implements TelegramAddingR
         String text = ResourceBundle.getBundle("dictionary").getString(CHOOSE_TYPE_CROISSANT.name());
         String sweet = ResourceBundle.getBundle("dictionary").getString(SWEET.name());
         String sandwich = ResourceBundle.getBundle("dictionary").getString(SANDWICH.name());
-        List<InlineKeyboardButton> buttons = new ArrayList<>(Arrays.asList(new InlineKeyboardButton(sweet, CROISSANT_TYPE_DATA.name() + "?" + SWEET.name()),
-                new InlineKeyboardButton(sandwich, CROISSANT_TYPE_DATA.name() + "?" + SANDWICH.name())));
+        List<InlineKeyboardButton> buttons = new ArrayList<>(Arrays.asList(new InlineKeyboardButton(sweet, CROISSANT_TYPE_ADDING_DATA.name() + "?" + SWEET.name()),
+                new InlineKeyboardButton(sandwich, CROISSANT_TYPE_ADDING_DATA.name() + "?" + SANDWICH.name())));
         telegramMessageSenderService.sendInlineButtons(new ArrayList<>(Arrays.asList(buttons)), text, message);
     }
 

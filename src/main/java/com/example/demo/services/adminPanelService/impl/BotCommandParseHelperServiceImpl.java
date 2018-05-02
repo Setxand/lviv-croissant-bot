@@ -4,7 +4,7 @@ import com.example.demo.enums.messengerEnums.Objects;
 import com.example.demo.enums.telegramEnums.BotCommands;
 import com.example.demo.models.messanger.Shell;
 import com.example.demo.models.telegram.Message;
-import com.example.demo.services.adminPanelService.BotCommendParseHelperService;
+import com.example.demo.services.adminPanelService.BotCommandParseHelperService;
 import com.example.demo.services.telegramService.TelegramMessageSenderService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ResourceBundle;
 
 @Service
-public class BotCommendParseHelperServiceImpl implements BotCommendParseHelperService {
+public class BotCommandParseHelperServiceImpl implements BotCommandParseHelperService {
     @Autowired
     private TelegramMessageSenderService telegramMessageSenderService;
     @Value("${server.url}")
@@ -26,7 +26,7 @@ public class BotCommendParseHelperServiceImpl implements BotCommendParseHelperSe
     private String VER_TOK;
     @Value("${subscription.url}")
     private String SUBSCRIPTION_URL;
-    private static final Logger logger = Logger.getLogger(BotCommendParseHelperServiceImpl.class);
+    private static final Logger logger = Logger.getLogger(BotCommandParseHelperServiceImpl.class);
     @Override
     public void helpInvokeBotHelpCommand(Message message) {
         StringBuilder helpMessage = new StringBuilder();

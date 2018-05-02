@@ -5,11 +5,15 @@ import com.example.demo.enums.telegramEnums.BotCommands;
 import com.example.demo.enums.telegramEnums.TelegramUserStatus;
 import com.example.demo.models.telegram.Message;
 import com.example.demo.services.adminPanelService.BotCommandsParserService;
-import com.example.demo.services.adminPanelService.BotCommendParseHelperService;
+import com.example.demo.services.adminPanelService.BotCommandParseHelperService;
 import com.example.demo.services.eventService.servicePanel.TelegramAddingRecordingsEventService;
+import com.example.demo.services.eventService.telegramEventService.TelegramGetMenuEventService;
 import com.example.demo.services.peopleRegisterService.TelegramUserRepositoryService;
+import com.example.demo.services.telegramService.TelegramMessageSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import static com.example.demo.enums.telegramEnums.TelegramUserStatus.ASKING_TYPE_STATUS;
 
 @Service
 public class BotCommandsParserServiceImpl implements BotCommandsParserService {
@@ -18,7 +22,11 @@ public class BotCommandsParserServiceImpl implements BotCommandsParserService {
     @Autowired
     private TelegramAddingRecordingsEventService telegramAddingRecordingsEventService;
     @Autowired
-    private BotCommendParseHelperService botCommendParseHelperService;
+    private BotCommandParseHelperService botCommandParseHelperService;
+    @Autowired
+    private TelegramMessageSenderService telegramMessageSenderService;
+    @Autowired
+    private TelegramGetMenuEventService telegramGetMenuEventService;
     @Override
     public void parseBotCommand(Message message) {
         StringBuilder command = new StringBuilder(message.getText()).deleteCharAt(0);
@@ -35,16 +43,28 @@ public class BotCommandsParserServiceImpl implements BotCommandsParserService {
             case SETUPMESSENGER:
                 setUpMessenger(message);
                 break;
+            case DELETECROISSANT:
+                deleteCroissant(message);
+                break;
+                default:
+                    telegramMessageSenderService.errorMessage(message);
+                    break;
         }
 
     }
 
+    private void deleteCroissant(Message message) {
+        TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
+        telegramUserRepositoryService.changeStatus(tUser,ASKING_TYPE_STATUS);
+        telegramGetMenuEventService.getMenu(message);
+    }
+
     private void setUpMessenger(Message message) {
-        botCommendParseHelperService.helpSetUpMessenger(message);
+        botCommandParseHelperService.helpSetUpMessenger(message);
     }
 
     private void help(Message message) {
-        botCommendParseHelperService.helpInvokeBotHelpCommand(message);
+        botCommandParseHelperService.helpInvokeBotHelpCommand(message);
     }
 
     private void add(Message message) {

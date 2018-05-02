@@ -4,6 +4,7 @@ public enum BotCommands {
     FILLING,
     ADD,
     HELP,
-    SETUPMESSENGER
+    SETUPMESSENGER,
+    DELETECROISSANT
 
 }
