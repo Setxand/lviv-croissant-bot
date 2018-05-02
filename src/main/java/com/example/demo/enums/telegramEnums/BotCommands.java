@@ -5,6 +5,8 @@ public enum BotCommands {
     ADD,
     HELP,
     SETUPMESSENGER,
-    DELETECROISSANT
+    DELETECROISSANT,
+    ADMINPANEL,
+    START
 
 }

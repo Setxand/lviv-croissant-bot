@@ -31,7 +31,7 @@ public class BotCommandParseHelperServiceImpl implements BotCommandParseHelperSe
     public void helpInvokeBotHelpCommand(Message message) {
         StringBuilder helpMessage = new StringBuilder();
         for(BotCommands command: BotCommands.values()){
-            if(command!=BotCommands.HELP)
+            if(command!=BotCommands.HELP || command!=BotCommands.START)
             helpMessage.append("/"+command.name().toLowerCase()+" - "+ResourceBundle.getBundle("botCommands").getString(command.name())+"\n");
         }
         telegramMessageSenderService.simpleMessage(helpMessage.toString(),message);

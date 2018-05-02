@@ -31,4 +31,9 @@ public class TelegramUserRepositoryServiceImpl implements TelegramUserRepository
         user.setStatus(status);
         telegramUserRepository.saveAndFlush(user);
     }
+
+    @Override
+    public TUser findByUserName(String userName) {
+        return telegramUserRepository.findByUserName(userName);
+    }
 }

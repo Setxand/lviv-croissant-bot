@@ -44,7 +44,7 @@ public class AdminPanelUpdateParserServiceImpl implements AdminPanelUpdateParser
                 update.getMessage().setPlatform(Platform.TELEGRAM_ADMIN_PANEL_BOT);
 
                 tUser = telegramUserRepositoryService.findByChatId(update.getMessage().getChat().getId());
-                if(tUser.getRole()==Roles.CUSTOMER){
+                if(tUser.getRole()==Roles.CUSTOMER || update.getMessage().getText()!="/start"){
                     telegramMessageSenderService.simpleMessage("U are not a personal of Lviv croissants!",update.getMessage());
                     return;
                 }

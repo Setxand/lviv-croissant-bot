@@ -4,15 +4,24 @@ import com.example.demo.entities.peopleRegister.TUser;
 import com.example.demo.enums.telegramEnums.BotCommands;
 import com.example.demo.enums.telegramEnums.TelegramUserStatus;
 import com.example.demo.models.telegram.Message;
+import com.example.demo.models.telegram.buttons.InlineKeyboardButton;
 import com.example.demo.services.adminPanelService.BotCommandsParserService;
 import com.example.demo.services.adminPanelService.BotCommandParseHelperService;
 import com.example.demo.services.eventService.servicePanel.TelegramAddingRecordingsEventService;
 import com.example.demo.services.eventService.telegramEventService.TelegramGetMenuEventService;
 import com.example.demo.services.peopleRegisterService.TelegramUserRepositoryService;
+import com.example.demo.services.telegramService.TelegramMessageParserHelperService;
 import com.example.demo.services.telegramService.TelegramMessageSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.ResourceBundle;
+
+import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.CHOOSE_ACTIONS;
+import static com.example.demo.enums.telegramEnums.CallBackData.*;
 import static com.example.demo.enums.telegramEnums.TelegramUserStatus.ASKING_TYPE_STATUS;
 
 @Service
@@ -27,6 +36,8 @@ public class BotCommandsParserServiceImpl implements BotCommandsParserService {
     private TelegramMessageSenderService telegramMessageSenderService;
     @Autowired
     private TelegramGetMenuEventService telegramGetMenuEventService;
+    @Autowired
+    private TelegramMessageParserHelperService telegramMessageParserHelperService;
     @Override
     public void parseBotCommand(Message message) {
         StringBuilder command = new StringBuilder(message.getText()).deleteCharAt(0);
@@ -46,11 +57,27 @@ public class BotCommandsParserServiceImpl implements BotCommandsParserService {
             case DELETECROISSANT:
                 deleteCroissant(message);
                 break;
+            case ADMINPANEL:
+                adminPanel(message);
+                break;
+            case START:
+                telegramMessageParserHelperService.helpStart(message);
+                break;
                 default:
                     telegramMessageSenderService.errorMessage(message);
                     break;
         }
 
+    }
+
+
+    private void adminPanel(Message message) {
+        List<InlineKeyboardButton>buttons = new ArrayList<>(Arrays.asList(new InlineKeyboardButton("Set admin",SET_ADMIN_DATA.name()),
+                new InlineKeyboardButton("Set courier",SET_COURIER_DATA.name()),
+                new InlineKeyboardButton("Set personal",SET_PERSONAL_DATA.name()),
+                new InlineKeyboardButton("Change hello message",SET_HELLO_MESSAGE_DATA.name())));
+        String text = ResourceBundle.getBundle("dictionary").getString(CHOOSE_ACTIONS.name());
+        telegramMessageSenderService.sendInlineButtons(new ArrayList<>(Arrays.asList(buttons)),text,message);
     }
 
     private void deleteCroissant(Message message) {

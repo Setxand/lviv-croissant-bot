@@ -2,6 +2,7 @@ package com.example.demo.services.adminPanelService.impl;
 
 import com.example.demo.entities.lvivCroissants.Croissant;
 import com.example.demo.entities.peopleRegister.TUser;
+import com.example.demo.enums.messengerEnums.Roles;
 import com.example.demo.enums.telegramEnums.CallBackData;
 import com.example.demo.enums.telegramEnums.TelegramUserStatus;
 import com.example.demo.models.telegram.CallBackQuery;
@@ -27,6 +28,7 @@ import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.T
 import static com.example.demo.enums.telegramEnums.CallBackData.SURE_TO_DELETE_DATA;
 import static com.example.demo.enums.telegramEnums.TelegramUserStatus.ONE_MORE_ORDERING_GETTING_MENU_STATUS;
 import static com.example.demo.enums.telegramEnums.TelegramUserStatus.ONE_MORE_ORDERING_STATUS;
+import static com.example.demo.enums.telegramEnums.TelegramUserStatus.SETTING_ADMIN_STATUS;
 
 @Service
 public class AdminCallBackParserServiceImpl implements AdminCallBackParserService {
@@ -58,10 +60,43 @@ public class AdminCallBackParserServiceImpl implements AdminCallBackParserServic
             case SURE_TO_DELETE_DATA:
                 sureDeleteData(callBackQuery);
                 break;
+            case SET_ADMIN_DATA:
+                setAdminData(callBackQuery);
+                break;
+            case SETTING_ROLE_STATUS:
+                    settingRoleStatus(callBackQuery);
+                break;
                 default:
                     telegramMessageSenderService.errorMessage(callBackQuery.getMessage());
                     break;
         }
+    }
+
+    private void settingRoleStatus(CallBackQuery callBackQuery) {
+        String answer = TextFormatter.ejectVariableWithContext(callBackQuery.getData());
+        String userName = TextFormatter.ejectContext(callBackQuery.getData());
+        TUser tUser = telegramUserRepositoryService.findByUserName(userName);
+        if(answer.equals(QUESTION_YES.name())){
+            switch (telegramUserRepositoryService.findByChatId(callBackQuery.getMessage().getChat().getId()).getStatus()){
+                case SETTING_ADMIN_STATUS:
+                    tUser.setRole(Roles.ADMIN);
+                    break;
+                    default:
+                        telegramMessageSenderService.errorMessage(callBackQuery.getMessage());
+                        break;
+            }
+            telegramUserRepositoryService.saveAndFlush(tUser);
+            telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(DONE.name()),callBackQuery.getMessage());
+        }
+        else{
+            telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(THANKS.name()),callBackQuery.getMessage());
+        }
+    }
+
+    private void setAdminData(CallBackQuery callBackQuery) {
+        TUser tUser = telegramUserRepositoryService.findByChatId(callBackQuery.getMessage().getChat().getId());
+        telegramUserRepositoryService.changeStatus(tUser,SETTING_ADMIN_STATUS);
+        telegramMessageSenderService.simpleMessage("Enter username:",callBackQuery.getMessage());
     }
 
     private void sureDeleteData(CallBackQuery callBackQuery) {

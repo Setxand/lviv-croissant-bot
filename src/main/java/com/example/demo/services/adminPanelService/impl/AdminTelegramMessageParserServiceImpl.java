@@ -3,6 +3,7 @@ package com.example.demo.services.adminPanelService.impl;
 import com.example.demo.entities.peopleRegister.TUser;
 import com.example.demo.models.telegram.Entity;
 import com.example.demo.models.telegram.Message;
+import com.example.demo.services.adminPanelService.AdminTelegramMessageParserHelperService;
 import com.example.demo.services.adminPanelService.AdminTelegramMessageParserService;
 import com.example.demo.services.adminPanelService.BotCommandsParserService;
 import com.example.demo.services.eventService.servicePanel.TelegramAddingRecordingsEventService;
@@ -25,7 +26,8 @@ public class AdminTelegramMessageParserServiceImpl implements AdminTelegramMessa
     private TelegramMessageSenderService telegramMessageSenderService;
     @Autowired
     private TelegramAddingRecordingsEventService telegramAddingRecordingsEventService;
-
+    @Autowired
+    private AdminTelegramMessageParserHelperService adminTelegramMessageParserHelperService;
     @Override
     public void parseMessage(Message message) {
         if (message.getEntities() != null) {
@@ -57,6 +59,9 @@ public class AdminTelegramMessageParserServiceImpl implements AdminTelegramMessa
                 break;
             case NULL_CHECKING_ADDING_CROISSANT_STATUS:
                 telegramAddingRecordingsEventService.addCroissant(message);
+                break;
+            case SETTING_ADMIN_STATUS:
+                adminTelegramMessageParserHelperService.helpSetRole(message);
                 break;
             default:
                 telegramMessageSenderService.errorMessage(message);

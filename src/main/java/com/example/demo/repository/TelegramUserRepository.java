@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TelegramUserRepository extends JpaRepository<TUser,Long>{
     public TUser findByChatId(Integer chatId);
+    public TUser findByUserName(String userName);
 }

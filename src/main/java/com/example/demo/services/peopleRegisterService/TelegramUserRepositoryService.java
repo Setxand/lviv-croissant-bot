@@ -8,4 +8,5 @@ public interface TelegramUserRepositoryService {
     public TUser saveAndFlush(TUser tUser);
     public TUser findByChatId(Integer chatId);
     public void changeStatus(TUser user,TelegramUserStatus status);
+    public TUser findByUserName(String userName);
 }
