@@ -1,7 +1,7 @@
 package com.example.demo.services.adminPanelService.impl;
 
 import com.example.demo.entities.peopleRegister.TUser;
-import com.example.demo.enums.telegramEnums.BotCommands;
+import com.example.demo.enums.BotCommands;
 import com.example.demo.enums.telegramEnums.TelegramUserStatus;
 import com.example.demo.models.telegram.Message;
 import com.example.demo.models.telegram.buttons.InlineKeyboardButton;
@@ -72,9 +72,8 @@ public class BotCommandsParserServiceImpl implements BotCommandsParserService {
 
 
     private void adminPanel(Message message) {
-        List<InlineKeyboardButton>buttons = new ArrayList<>(Arrays.asList(new InlineKeyboardButton("Set admin",SET_ADMIN_DATA.name()),
-                new InlineKeyboardButton("Set courier",SET_COURIER_DATA.name()),
-                new InlineKeyboardButton("Set personal",SET_PERSONAL_DATA.name()),
+        List<InlineKeyboardButton>buttons = new ArrayList<>(Arrays.asList(new InlineKeyboardButton("Set role",SET_ROLE_DATA.name()),
+
                 new InlineKeyboardButton("Change hello message",SET_HELLO_MESSAGE_DATA.name())));
         String text = ResourceBundle.getBundle("dictionary").getString(CHOOSE_ACTIONS.name());
         telegramMessageSenderService.sendInlineButtons(new ArrayList<>(Arrays.asList(buttons)),text,message);

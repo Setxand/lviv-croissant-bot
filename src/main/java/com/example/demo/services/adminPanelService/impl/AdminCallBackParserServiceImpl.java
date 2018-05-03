@@ -8,6 +8,7 @@ import com.example.demo.enums.telegramEnums.TelegramUserStatus;
 import com.example.demo.models.telegram.CallBackQuery;
 import com.example.demo.models.telegram.Message;
 import com.example.demo.services.adminPanelService.AdminCallBackParserService;
+import com.example.demo.services.adminPanelService.AdminTelegramMessageParserHelperService;
 import com.example.demo.services.eventService.servicePanel.TelegramAddingRecordingsEventService;
 import com.example.demo.services.eventService.telegramEventService.TelegramGetMenuEventService;
 import com.example.demo.services.lvivCroissantRepositoryService.CroissantRepositoryService;
@@ -26,9 +27,7 @@ import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.D
 import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.SURE_DELETE_CROISSANT;
 import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.THANKS;
 import static com.example.demo.enums.telegramEnums.CallBackData.SURE_TO_DELETE_DATA;
-import static com.example.demo.enums.telegramEnums.TelegramUserStatus.ONE_MORE_ORDERING_GETTING_MENU_STATUS;
-import static com.example.demo.enums.telegramEnums.TelegramUserStatus.ONE_MORE_ORDERING_STATUS;
-import static com.example.demo.enums.telegramEnums.TelegramUserStatus.SETTING_ADMIN_STATUS;
+import static com.example.demo.enums.telegramEnums.TelegramUserStatus.*;
 
 @Service
 public class AdminCallBackParserServiceImpl implements AdminCallBackParserService {
@@ -44,6 +43,8 @@ public class AdminCallBackParserServiceImpl implements AdminCallBackParserServic
     private CallBackParserService callBackParserService;
     @Autowired
     private CroissantRepositoryService croissantRepositoryService;
+    @Autowired
+    private AdminTelegramMessageParserHelperService adminTelegramMessageParserHelperService;
     @Override
     public void parseAdminCallBackQuery(CallBackQuery callBackQuery) {
 
@@ -60,11 +61,14 @@ public class AdminCallBackParserServiceImpl implements AdminCallBackParserServic
             case SURE_TO_DELETE_DATA:
                 sureDeleteData(callBackQuery);
                 break;
-            case SET_ADMIN_DATA:
-                setAdminData(callBackQuery);
+            case SET_ROLE_DATA:
+                setRoleData(callBackQuery);
                 break;
-            case SETTING_ROLE_STATUS:
-                    settingRoleStatus(callBackQuery);
+            case SETTING_ROLE_DATA_1:
+                    settingRoleData1(callBackQuery);
+                break;
+            case SETTING_ROLE_DATA_2:
+                settingRoleData2(callBackQuery);
                 break;
                 default:
                     telegramMessageSenderService.errorMessage(callBackQuery.getMessage());
@@ -72,7 +76,7 @@ public class AdminCallBackParserServiceImpl implements AdminCallBackParserServic
         }
     }
 
-    private void settingRoleStatus(CallBackQuery callBackQuery) {
+    private void settingRoleData2(CallBackQuery callBackQuery) {
         String answer = TextFormatter.ejectVariableWithContext(callBackQuery.getData());
         String userName = TextFormatter.ejectContext(callBackQuery.getData());
         TUser tUser = telegramUserRepositoryService.findByUserName(userName);
@@ -80,6 +84,15 @@ public class AdminCallBackParserServiceImpl implements AdminCallBackParserServic
             switch (telegramUserRepositoryService.findByChatId(callBackQuery.getMessage().getChat().getId()).getStatus()){
                 case SETTING_ADMIN_STATUS:
                     tUser.setRole(Roles.ADMIN);
+                    break;
+                case SETTING_COURIER_STATUS:
+                    tUser.setRole(Roles.COURIER);
+                    break;
+                case SETTING_PERSONAL_STATUS:
+                    tUser.setRole(Roles.PERSONAL);
+                    break;
+                case SETTING_CUSTOMER_STATUS:
+                    tUser.setRole(Roles.CUSTOMER);
                     break;
                     default:
                         telegramMessageSenderService.errorMessage(callBackQuery.getMessage());
@@ -93,9 +106,9 @@ public class AdminCallBackParserServiceImpl implements AdminCallBackParserServic
         }
     }
 
-    private void setAdminData(CallBackQuery callBackQuery) {
+    private void setRoleData(CallBackQuery callBackQuery) {
         TUser tUser = telegramUserRepositoryService.findByChatId(callBackQuery.getMessage().getChat().getId());
-        telegramUserRepositoryService.changeStatus(tUser,SETTING_ADMIN_STATUS);
+        telegramUserRepositoryService.changeStatus(tUser,SETTING_ROLE_STATUS);
         telegramMessageSenderService.simpleMessage("Enter username:",callBackQuery.getMessage());
     }
 
@@ -141,5 +154,32 @@ public class AdminCallBackParserServiceImpl implements AdminCallBackParserServic
         telegramUserRepositoryService.changeStatus(tUser,TelegramUserStatus.ADDING_CROISSANT_STATUS_1);
         callBackQuery.getMessage().setText(data);
         telegramAddingRecordingsEventService.addCroissant(callBackQuery.getMessage());
+    }
+
+    public void settingRoleData1(CallBackQuery callBackQuery) {
+        String context = TextFormatter.ejectContext(callBackQuery.getData());
+        TUser tUser = telegramUserRepositoryService.findByChatId(callBackQuery.getMessage().getChat().getId());
+        switch (Roles.valueOf(context)){
+            case ADMIN:
+                settingRole(callBackQuery,tUser,SETTING_ADMIN_STATUS);
+                break;
+            case PERSONAL:
+                settingRole(callBackQuery,tUser,SETTING_PERSONAL_STATUS);
+
+                break;
+            case COURIER:
+                settingRole(callBackQuery,tUser,SETTING_COURIER_STATUS);
+                break;
+            case CUSTOMER:
+                      settingRole(callBackQuery,tUser,SETTING_CUSTOMER_STATUS);
+                break;
+        }
+    }
+
+
+    private void settingRole(CallBackQuery callBackQuery, TUser tUser, TelegramUserStatus telegramUserStatus){
+        telegramUserRepositoryService.changeStatus(tUser,telegramUserStatus);
+        callBackQuery.getMessage().setText(TextFormatter.ejectVariableWithContext(callBackQuery.getData()));
+        adminTelegramMessageParserHelperService.helpSetRole(callBackQuery.getMessage());
     }
 }

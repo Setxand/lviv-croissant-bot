@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class Entity {
+public class TelegramEntity {
     private Integer offset;
     private Integer length;
     private String type;     

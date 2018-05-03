@@ -215,8 +215,8 @@ public class TelegramAddingRecordingsEventServiceImpl implements TelegramAddingR
     }
 
     private void finalSaving(Message message, TUser tUser) {
-        String addingDone = ResourceBundle.getBundle("dictionary").getString(FILLING_WAS_ADDED.name()+" /help");
-        telegramMessageSenderService.simpleMessage(addingDone, message);
+        String addingDone = ResourceBundle.getBundle("dictionary").getString(FILLING_WAS_ADDED.name());
+        telegramMessageSenderService.simpleMessage(addingDone+" /help", message);
         telegramGetMenuEventService.getMenuOfFillings(message);
         telegramUserRepositoryService.changeStatus(tUser, null);
     }

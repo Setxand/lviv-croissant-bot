@@ -21,5 +21,5 @@ public class Message {
     private Chat chat;
     private String text;
     private Platform platform;
-    private List<Entity>entities;
+    private List<TelegramEntity>entities;
 }

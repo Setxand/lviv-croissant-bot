@@ -1,7 +1,7 @@
 package com.example.demo.services.adminPanelService.impl;
 
 import com.example.demo.enums.messengerEnums.Objects;
-import com.example.demo.enums.telegramEnums.BotCommands;
+import com.example.demo.enums.BotCommands;
 import com.example.demo.models.messanger.Shell;
 import com.example.demo.models.telegram.Message;
 import com.example.demo.services.adminPanelService.BotCommandParseHelperService;
@@ -31,7 +31,7 @@ public class BotCommandParseHelperServiceImpl implements BotCommandParseHelperSe
     public void helpInvokeBotHelpCommand(Message message) {
         StringBuilder helpMessage = new StringBuilder();
         for(BotCommands command: BotCommands.values()){
-            if(command!=BotCommands.HELP || command!=BotCommands.START)
+            if(command!=BotCommands.HELP && command!=BotCommands.START)
             helpMessage.append("/"+command.name().toLowerCase()+" - "+ResourceBundle.getBundle("botCommands").getString(command.name())+"\n");
         }
         telegramMessageSenderService.simpleMessage(helpMessage.toString(),message);

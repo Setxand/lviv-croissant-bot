@@ -1,7 +1,7 @@
 package com.example.demo.services.adminPanelService.impl;
 
 import com.example.demo.entities.peopleRegister.TUser;
-import com.example.demo.models.telegram.Entity;
+
 import com.example.demo.models.telegram.Message;
 import com.example.demo.services.adminPanelService.AdminTelegramMessageParserHelperService;
 import com.example.demo.services.adminPanelService.AdminTelegramMessageParserService;
@@ -11,7 +11,7 @@ import com.example.demo.services.peopleRegisterService.TelegramUserRepositorySer
 import com.example.demo.services.telegramService.TelegramMessageSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import com.example.demo.models.telegram.TelegramEntity;
 import java.util.List;
 
 import static com.example.demo.enums.telegramEnums.TelegramUserStatus.ADDING_FILLING_STATUS_1;
@@ -31,9 +31,9 @@ public class AdminTelegramMessageParserServiceImpl implements AdminTelegramMessa
     @Override
     public void parseMessage(Message message) {
         if (message.getEntities() != null) {
-            List<Entity> entities = message.getEntities();
-            for (Entity entity : entities) {
-                if(entity.getType().equals("url")){
+            List<TelegramEntity> entities = message.getEntities();
+            for (TelegramEntity telegramEntity : entities) {
+                if(telegramEntity.getType().equals("url")){
                     checkingByStatus(message);
                     break;
                 }
@@ -59,6 +59,9 @@ public class AdminTelegramMessageParserServiceImpl implements AdminTelegramMessa
                 break;
             case NULL_CHECKING_ADDING_CROISSANT_STATUS:
                 telegramAddingRecordingsEventService.addCroissant(message);
+                break;
+            case SETTING_ROLE_STATUS:
+                adminTelegramMessageParserHelperService.helpRoleQuestion(message);
                 break;
             case SETTING_ADMIN_STATUS:
                 adminTelegramMessageParserHelperService.helpSetRole(message);

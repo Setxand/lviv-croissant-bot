@@ -1,4 +1,4 @@
-package com.example.demo.enums.telegramEnums;
+package com.example.demo.enums;
 
 public enum BotCommands {
     FILLING,
