@@ -73,7 +73,6 @@ public class BotCommandsParserServiceImpl implements BotCommandsParserService {
 
     private void adminPanel(Message message) {
         List<InlineKeyboardButton>buttons = new ArrayList<>(Arrays.asList(new InlineKeyboardButton("Set role",SET_ROLE_DATA.name()),
-
                 new InlineKeyboardButton("Change hello message",SET_HELLO_MESSAGE_DATA.name())));
         String text = ResourceBundle.getBundle("dictionary").getString(CHOOSE_ACTIONS.name());
         telegramMessageSenderService.sendInlineButtons(new ArrayList<>(Arrays.asList(buttons)),text,message);

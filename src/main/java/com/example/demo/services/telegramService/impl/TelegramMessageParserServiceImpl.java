@@ -53,7 +53,6 @@ public class TelegramMessageParserServiceImpl implements TelegramMessageParserSe
                 case CREATE_OWN_CROISSANT:
                     telegramMessageParserHelperService.helpCreateOwnCroissant(message);
                     break;
-
                 default:
                     telegramMessageSenderService.errorMessage(message);
                     break;
@@ -80,6 +79,7 @@ public class TelegramMessageParserServiceImpl implements TelegramMessageParserSe
             case INPUTTING_FILLINGS_IN_OWN_CROISSANT_STATUS:
                 createOwn(message);
                 break;
+
             default:
                 telegramMessageSenderService.errorMessage(message);
                 break;

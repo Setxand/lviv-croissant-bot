@@ -1,10 +1,10 @@
-package com.example.demo.services.lvivCroissantRepositoryService.impl;
+package com.example.demo.services.repositoryService.impl;
 
 import com.example.demo.entities.lvivCroissants.CustomerOrdering;
 import com.example.demo.entities.peopleRegister.TUser;
 import com.example.demo.entities.peopleRegister.User;
 import com.example.demo.repository.CustomerOrderingRepository;
-import com.example.demo.services.lvivCroissantRepositoryService.CustomerOrderingRepositoryService;
+import com.example.demo.services.repositoryService.CustomerOrderingRepositoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

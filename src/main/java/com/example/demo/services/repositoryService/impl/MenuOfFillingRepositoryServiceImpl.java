@@ -1,8 +1,8 @@
-package com.example.demo.services.lvivCroissantRepositoryService.impl;
+package com.example.demo.services.repositoryService.impl;
 
 import com.example.demo.entities.lvivCroissants.MenuOfFilling;
 import com.example.demo.repository.MenuOfFillingRepository;
-import com.example.demo.services.lvivCroissantRepositoryService.MenuOfFillingRepositoryService;
+import com.example.demo.services.repositoryService.MenuOfFillingRepositoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

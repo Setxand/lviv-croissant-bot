@@ -12,10 +12,10 @@ import com.example.demo.services.eventService.messengerEventService.CreatingOwnC
 import com.example.demo.services.eventService.messengerEventService.GetMenuEventService;
 import com.example.demo.services.eventService.messengerEventService.MenuOfFillingEventService;
 import com.example.demo.services.eventService.messengerEventService.UserEventService;
-import com.example.demo.services.lvivCroissantRepositoryService.CroissantRepositoryService;
-import com.example.demo.services.lvivCroissantRepositoryService.CroissantsFillingRepositoryService;
-import com.example.demo.services.lvivCroissantRepositoryService.MenuOfFillingRepositoryService;
-import com.example.demo.services.lvivCroissantRepositoryService.SupportEntityRepositoryService;
+import com.example.demo.services.repositoryService.CroissantRepositoryService;
+import com.example.demo.services.repositoryService.CroissantsFillingRepositoryService;
+import com.example.demo.services.repositoryService.MenuOfFillingRepositoryService;
+import com.example.demo.services.repositoryService.SupportEntityRepositoryService;
 import com.example.demo.services.messangerService.MessageParserService;
 import com.example.demo.services.messangerService.MessageSenderService;
 import com.example.demo.services.messangerService.QuickReplyParserService;

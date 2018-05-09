@@ -1,4 +1,4 @@
-package com.example.demo.services.lvivCroissantRepositoryService;
+package com.example.demo.services.repositoryService;
 
 import com.example.demo.entities.lvivCroissants.Croissant;
 import com.example.demo.entities.lvivCroissants.CroissantsFilling;

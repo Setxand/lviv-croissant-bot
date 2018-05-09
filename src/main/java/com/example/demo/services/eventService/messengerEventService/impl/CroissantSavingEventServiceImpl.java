@@ -8,7 +8,7 @@ import com.example.demo.models.messanger.Messaging;
 import com.example.demo.models.messanger.Recipient;
 import com.example.demo.services.eventService.messengerEventService.CroissantSavingEventService;
 import com.example.demo.services.eventService.messengerEventService.MenuOfFillingEventService;
-import com.example.demo.services.lvivCroissantRepositoryService.*;
+import com.example.demo.services.repositoryService.*;
 import com.example.demo.services.messangerService.MessageParserService;
 import com.example.demo.services.messangerService.MessageSenderService;
 import com.example.demo.services.messangerService.QuickReplyParserService;

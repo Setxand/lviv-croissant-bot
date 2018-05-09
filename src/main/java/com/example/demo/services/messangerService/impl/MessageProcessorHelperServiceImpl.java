@@ -5,7 +5,7 @@ import com.example.demo.entities.peopleRegister.User;
 import com.example.demo.models.messanger.Messaging;
 import com.example.demo.models.messanger.QuickReply;
 import com.example.demo.services.eventService.messengerEventService.UserEventService;
-import com.example.demo.services.lvivCroissantRepositoryService.CustomerOrderingRepositoryService;
+import com.example.demo.services.repositoryService.CustomerOrderingRepositoryService;
 import com.example.demo.services.messangerService.MessageProcessorHelperService;
 import com.example.demo.services.messangerService.MessageSenderService;
 import com.example.demo.services.peopleRegisterService.UserRepositoryService;

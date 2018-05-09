@@ -3,7 +3,7 @@ package com.example.demo.controllers.messangerControllers;
 import com.example.demo.entities.lvivCroissants.CustomerOrdering;
 import com.example.demo.entities.peopleRegister.User;
 import com.example.demo.models.messanger.Button;
-import com.example.demo.services.lvivCroissantRepositoryService.CustomerOrderingRepositoryService;
+import com.example.demo.services.repositoryService.CustomerOrderingRepositoryService;
 import com.example.demo.services.messangerService.MessageSenderService;
 import com.example.demo.services.peopleRegisterService.UserRepositoryService;
 import com.example.demo.services.supportService.EmailService;

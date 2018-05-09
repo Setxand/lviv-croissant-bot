@@ -1,8 +1,8 @@
-package com.example.demo.services.lvivCroissantRepositoryService.impl;
+package com.example.demo.services.repositoryService.impl;
 
 import com.example.demo.entities.SupportEntity;
 import com.example.demo.repository.SupportEntityRepository;
-import com.example.demo.services.lvivCroissantRepositoryService.SupportEntityRepositoryService;
+import com.example.demo.services.repositoryService.SupportEntityRepositoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

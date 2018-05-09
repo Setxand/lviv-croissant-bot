@@ -2,8 +2,8 @@ package com.example.demo.controllers;
 
 import com.example.demo.entities.lvivCroissants.Croissant;
 import com.example.demo.entities.lvivCroissants.CustomerOrdering;
-import com.example.demo.services.lvivCroissantRepositoryService.CroissantRepositoryService;
-import com.example.demo.services.lvivCroissantRepositoryService.CustomerOrderingRepositoryService;
+import com.example.demo.services.repositoryService.CroissantRepositoryService;
+import com.example.demo.services.repositoryService.CustomerOrderingRepositoryService;
 import com.example.demo.services.messangerService.MessageSenderService;
 import com.example.demo.services.peopleRegisterService.UserRepositoryService;
 import com.example.demo.services.supportService.EmailService;

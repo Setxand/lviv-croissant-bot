@@ -1,11 +1,14 @@
 package com.example.demo.services.telegramService.impl;
 
+import com.example.demo.entities.SpeakingMessage;
 import com.example.demo.enums.Platform;
 import com.example.demo.enums.telegramEnums.CallBackData;
 import com.example.demo.models.telegram.Message;
 import com.example.demo.models.telegram.TelegramRequest;
 import com.example.demo.models.telegram.buttons.*;
+import com.example.demo.services.repositoryService.SpeakingMessagesRepositoryService;
 import com.example.demo.services.telegramService.TelegramMessageSenderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -24,7 +27,8 @@ import static com.example.demo.enums.telegramEnums.CallBackData.MENU_DATA;
 
 @Service
 public class TelegramMessageSenderServiceImpl implements TelegramMessageSenderService {
-
+    @Autowired
+    private SpeakingMessagesRepositoryService speakingMessagesRepositoryService;
     @Value("${telegran.url}")
     private String TELEGRAM_URL;
     @Value("${server.url}")
@@ -76,8 +80,9 @@ public class TelegramMessageSenderServiceImpl implements TelegramMessageSenderSe
     public void sendKeyBoardButtons(Message message) {
         List<KeyboardButton>keyboardButtons = new ArrayList<>(Arrays.asList(new KeyboardButton("Menu"),new KeyboardButton("Create own croissant")));
         Markup markup = new KeyboardMarkup(new ArrayList<>(Arrays.asList(keyboardButtons)));
-        String text = ResourceBundle.getBundle("dictionary").getString(HELLO_MESSAGE.name());
-        sendButtons(markup,text,message);
+        SpeakingMessage helloMessage = speakingMessagesRepositoryService.findByKey(HELLO_MESSAGE.name());
+
+        sendButtons(markup,helloMessage.getMessage(),message);
     }
 
     @Override

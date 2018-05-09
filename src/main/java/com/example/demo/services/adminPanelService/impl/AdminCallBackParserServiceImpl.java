@@ -1,5 +1,6 @@
 package com.example.demo.services.adminPanelService.impl;
 
+import com.example.demo.entities.SpeakingMessage;
 import com.example.demo.entities.lvivCroissants.Croissant;
 import com.example.demo.entities.peopleRegister.TUser;
 import com.example.demo.enums.messengerEnums.Roles;
@@ -11,8 +12,9 @@ import com.example.demo.services.adminPanelService.AdminCallBackParserService;
 import com.example.demo.services.adminPanelService.AdminTelegramMessageParserHelperService;
 import com.example.demo.services.eventService.servicePanel.TelegramAddingRecordingsEventService;
 import com.example.demo.services.eventService.telegramEventService.TelegramGetMenuEventService;
-import com.example.demo.services.lvivCroissantRepositoryService.CroissantRepositoryService;
+import com.example.demo.services.repositoryService.CroissantRepositoryService;
 import com.example.demo.services.peopleRegisterService.TelegramUserRepositoryService;
+import com.example.demo.services.repositoryService.SpeakingMessagesRepositoryService;
 import com.example.demo.services.supportService.TextFormatter;
 import com.example.demo.services.telegramService.CallBackParserService;
 import com.example.demo.services.telegramService.TelegramMessageSenderService;
@@ -23,9 +25,7 @@ import java.util.ResourceBundle;
 
 import static com.example.demo.enums.Platform.TELEGRAM_ADMIN_PANEL_BOT;
 import static com.example.demo.enums.messengerEnums.PayloadCases.QUESTION_YES;
-import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.DONE;
-import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.SURE_DELETE_CROISSANT;
-import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.THANKS;
+import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.*;
 import static com.example.demo.enums.telegramEnums.CallBackData.SURE_TO_DELETE_DATA;
 import static com.example.demo.enums.telegramEnums.TelegramUserStatus.*;
 
@@ -45,6 +45,8 @@ public class AdminCallBackParserServiceImpl implements AdminCallBackParserServic
     private CroissantRepositoryService croissantRepositoryService;
     @Autowired
     private AdminTelegramMessageParserHelperService adminTelegramMessageParserHelperService;
+    @Autowired
+    private SpeakingMessagesRepositoryService speakingMessagesRepositoryService;
     @Override
     public void parseAdminCallBackQuery(CallBackQuery callBackQuery) {
 
@@ -70,10 +72,20 @@ public class AdminCallBackParserServiceImpl implements AdminCallBackParserServic
             case SETTING_ROLE_DATA_2:
                 settingRoleData2(callBackQuery);
                 break;
+            case SET_HELLO_MESSAGE_DATA:
+                setHelloMessageData(callBackQuery);
+                break;
                 default:
                     telegramMessageSenderService.errorMessage(callBackQuery.getMessage());
                     break;
         }
+    }
+
+    private void setHelloMessageData(CallBackQuery callBackQuery) {
+        String text = ResourceBundle.getBundle("dictionary").getString(NAME_OF_NEW_TEXT.name());
+        telegramMessageSenderService.simpleMessage(text,callBackQuery.getMessage());
+        TUser tUser = telegramUserRepositoryService.findByChatId(callBackQuery.getMessage().getChat().getId());
+        telegramUserRepositoryService.changeStatus(tUser,NAME_OF_NEW_TEXT_STATUS);
     }
 
     private void settingRoleData2(CallBackQuery callBackQuery) {

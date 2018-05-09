@@ -6,7 +6,7 @@ import com.example.demo.models.messanger.Message;
 import com.example.demo.models.messanger.Messaging;
 import com.example.demo.models.messanger.Recipient;
 import com.example.demo.services.eventService.messengerEventService.MenuOfFillingEventService;
-import com.example.demo.services.lvivCroissantRepositoryService.MenuOfFillingRepositoryService;
+import com.example.demo.services.repositoryService.MenuOfFillingRepositoryService;
 import com.example.demo.services.messangerService.MessageSenderService;
 import com.example.demo.services.peopleRegisterService.UserRepositoryService;
 import com.example.demo.services.supportService.RecognizeService;

@@ -1,4 +1,4 @@
-package com.example.demo.services.lvivCroissantRepositoryService;
+package com.example.demo.services.repositoryService;
 
 import com.example.demo.entities.lvivCroissants.CustomerOrdering;
 import com.example.demo.entities.peopleRegister.TUser;

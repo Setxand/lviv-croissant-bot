@@ -8,8 +8,8 @@ import com.example.demo.models.telegram.Message;
 import com.example.demo.models.telegram.buttons.InlineKeyboardButton;
 import com.example.demo.services.eventService.servicePanel.TelegramAddingRecordingsEventService;
 import com.example.demo.services.eventService.telegramEventService.TelegramGetMenuEventService;
-import com.example.demo.services.lvivCroissantRepositoryService.CroissantRepositoryService;
-import com.example.demo.services.lvivCroissantRepositoryService.MenuOfFillingRepositoryService;
+import com.example.demo.services.repositoryService.CroissantRepositoryService;
+import com.example.demo.services.repositoryService.MenuOfFillingRepositoryService;
 import com.example.demo.services.peopleRegisterService.TelegramUserRepositoryService;
 import com.example.demo.services.supportService.TextFormatter;
 import com.example.demo.services.telegramService.TelegramMessageSenderService;
@@ -21,7 +21,6 @@ import java.util.*;
 
 import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.*;
 import static com.example.demo.enums.telegramEnums.CallBackData.CROISSANT_TYPE_ADDING_DATA;
-import static com.example.demo.enums.telegramEnums.CallBackData.CROISSANT_TYPE_DATA;
 import static com.example.demo.enums.telegramEnums.TelegramUserStatus.NULL_CHECKING_ADDING_CROISSANT_STATUS;
 import static com.example.demo.enums.telegramEnums.TelegramUserStatus.NULL_CHECKING_ADDING_CROISSANT_STATUS_1;
 

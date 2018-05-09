@@ -10,7 +10,7 @@ import com.example.demo.models.telegram.Message;
 import com.example.demo.services.eventService.telegramEventService.TelegramCreatingOwnCroissantEventService;
 import com.example.demo.services.eventService.telegramEventService.TelegramGetMenuEventService;
 import com.example.demo.services.eventService.telegramEventService.TelegramOrderingEventService;
-import com.example.demo.services.lvivCroissantRepositoryService.CroissantRepositoryService;
+import com.example.demo.services.repositoryService.CroissantRepositoryService;
 import com.example.demo.services.peopleRegisterService.TelegramUserRepositoryService;
 import com.example.demo.services.supportService.TextFormatter;
 import com.example.demo.services.telegramService.CallBackParserService;

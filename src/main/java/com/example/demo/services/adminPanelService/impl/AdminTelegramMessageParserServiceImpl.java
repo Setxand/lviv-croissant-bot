@@ -66,6 +66,9 @@ public class AdminTelegramMessageParserServiceImpl implements AdminTelegramMessa
             case SETTING_ADMIN_STATUS:
                 adminTelegramMessageParserHelperService.helpSetRole(message);
                 break;
+            case NAME_OF_NEW_TEXT_STATUS:
+                adminTelegramMessageParserHelperService.helpChangeHelloMessage(message);
+                break;
             default:
                 telegramMessageSenderService.errorMessage(message);
                 break;
