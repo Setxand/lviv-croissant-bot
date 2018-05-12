@@ -1,6 +1,5 @@
 package com.example.demo.services.adminPanelService.impl;
 
-import com.example.demo.entities.SpeakingMessage;
 import com.example.demo.entities.lvivCroissants.Croissant;
 import com.example.demo.entities.peopleRegister.TUser;
 import com.example.demo.enums.messengerEnums.Roles;
@@ -11,6 +10,7 @@ import com.example.demo.models.telegram.Message;
 import com.example.demo.models.telegram.buttons.KeyboardButton;
 import com.example.demo.services.adminPanelService.AdminCallBackParserService;
 import com.example.demo.services.adminPanelService.AdminTelegramMessageParserHelperService;
+import com.example.demo.services.adminPanelService.BotCommandParseHelperService;
 import com.example.demo.services.eventService.servicePanel.TelegramAddingRecordingsEventService;
 import com.example.demo.services.eventService.telegramEventService.TelegramGetMenuEventService;
 import com.example.demo.services.repositoryService.CroissantRepositoryService;
@@ -51,6 +51,8 @@ public class AdminCallBackParserServiceImpl implements AdminCallBackParserServic
     private AdminTelegramMessageParserHelperService adminTelegramMessageParserHelperService;
     @Autowired
     private SpeakingMessagesRepositoryService speakingMessagesRepositoryService;
+    @Autowired
+    private BotCommandParseHelperService botCommandParseHelperService;
     @Override
     public void parseAdminCallBackQuery(CallBackQuery callBackQuery) {
 
@@ -79,10 +81,17 @@ public class AdminCallBackParserServiceImpl implements AdminCallBackParserServic
             case SET_HELLO_MESSAGE_DATA:
                 setHelloMessageData(callBackQuery);
                 break;
+            case LIST_OF_ORDERING_DATA:
+                listOfOrderingsData(callBackQuery);
+                break;
                 default:
                     telegramMessageSenderService.errorMessage(callBackQuery.getMessage());
                     break;
         }
+    }
+
+    private void listOfOrderingsData(CallBackQuery callBackQuery) {
+        botCommandParseHelperService.helpGetListOfOrdering(callBackQuery);
     }
 
     private void setHelloMessageData(CallBackQuery callBackQuery) {

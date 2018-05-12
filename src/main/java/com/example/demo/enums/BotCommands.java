@@ -7,6 +7,7 @@ public enum BotCommands {
     SETUPMESSENGER,
     DELETECROISSANT,
     ADMINPANEL,
-    START
+    START,
+    COURIERACTIONS
 
 }

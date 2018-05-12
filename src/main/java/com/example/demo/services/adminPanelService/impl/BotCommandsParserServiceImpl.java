@@ -21,7 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.CHOOSE_ACTIONS;
+import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.*;
 import static com.example.demo.enums.telegramEnums.CallBackData.*;
 import static com.example.demo.enums.telegramEnums.TelegramUserStatus.ASKING_TYPE_STATUS;
 
@@ -64,11 +64,23 @@ public class BotCommandsParserServiceImpl implements BotCommandsParserService {
             case START:
                 telegramMessageParserHelperService.helpStart(message);
                 break;
+            case COURIERACTIONS:
+                courierActions(message);
+                break;
                 default:
                     telegramMessageSenderService.errorMessage(message);
                     break;
         }
 
+    }
+
+    private void courierActions(Message message) {
+        String listOfOrdering = ResourceBundle.getBundle("dictionary").getString(ORDERING_LIST.name());
+        String listOfOwnOrdering = ResourceBundle.getBundle("dictionary").getString(COMPLETE_ORDERING.name().toUpperCase());
+        List<InlineKeyboardButton>buttons = Arrays.asList(new InlineKeyboardButton(listOfOrdering,LIST_OF_ORDERING_DATA.name()),
+                new InlineKeyboardButton(listOfOwnOrdering, COMPLETE_ORDERING_DATA.name()));
+        String courierActions = ResourceBundle.getBundle("dictionary").getString(CHOOSE_ACTIONS.name());
+        telegramMessageSenderService.sendInlineButtons(Arrays.asList(buttons),courierActions,message);
     }
 
 
