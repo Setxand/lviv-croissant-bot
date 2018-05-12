@@ -3,7 +3,10 @@ package com.example.demo.services.eventService.telegramEventService.impl;
 import com.example.demo.entities.lvivCroissants.Croissant;
 import com.example.demo.entities.lvivCroissants.CustomerOrdering;
 import com.example.demo.entities.peopleRegister.TUser;
+import com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker;
+import com.example.demo.enums.telegramEnums.CallBackData;
 import com.example.demo.models.telegram.Message;
+import com.example.demo.models.telegram.buttons.InlineKeyboardButton;
 import com.example.demo.services.eventService.telegramEventService.TelegramGetMenuEventService;
 import com.example.demo.services.eventService.telegramEventService.TelegramOrderingEventService;
 import com.example.demo.services.repositoryService.CroissantRepositoryService;
@@ -14,6 +17,8 @@ import com.example.demo.services.telegramService.TelegramMessageSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.*;
@@ -184,7 +189,15 @@ public class TelegramOrderingEventServiceImpl implements TelegramOrderingEventSe
 
         }
         telegramMessageSenderService.simpleMessage("price:"+customerOrdering.getPrice(),message);
+        sendCancelButton(message,customerOrdering);
         telegramMessageSenderService.sendActions(message);
+    }
+
+    private void sendCancelButton(Message message, CustomerOrdering customerOrdering) {
+        String text = ResourceBundle.getBundle("dictionary").getString(ServerSideSpeaker.CANCEL.name());
+        List<InlineKeyboardButton> buttons = Arrays.asList(new InlineKeyboardButton(text, CallBackData.CANCEL_DATA.name()+"?"+customerOrdering.getId()));
+        String mes = ResourceBundle.getBundle("dictionary").getString(ServerSideSpeaker.CANCEL_TEXT.name());
+        telegramMessageSenderService.sendInlineButtons(Arrays.asList(buttons),mes,message);
     }
 
     private void timeReq(Message message) {

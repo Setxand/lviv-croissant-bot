@@ -5,6 +5,7 @@ import com.example.demo.enums.telegramEnums.CallBackData;
 import com.example.demo.models.telegram.Message;
 import com.example.demo.models.telegram.TelegramRequest;
 import com.example.demo.models.telegram.buttons.InlineKeyboardButton;
+import com.example.demo.models.telegram.buttons.KeyboardButton;
 import com.example.demo.models.telegram.buttons.Markup;
 
 import java.util.List;
@@ -20,5 +21,6 @@ public interface TelegramMessageSenderService {
     public void sendActions(Message message);
     public void simpleQuestion(CallBackData data, String splitter,String text, Message message );
     public void noEnoughPermissions(Message message);
-
+    public void sendKeyboardButtons(Message message, List<List<KeyboardButton>> buttons, String text);
+    public void removeKeyboardButtons(Message message);
 }

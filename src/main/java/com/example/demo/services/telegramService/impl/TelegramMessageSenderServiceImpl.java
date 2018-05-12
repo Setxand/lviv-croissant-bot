@@ -2,8 +2,10 @@ package com.example.demo.services.telegramService.impl;
 
 import com.example.demo.entities.SpeakingMessage;
 import com.example.demo.enums.Platform;
+import com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker;
 import com.example.demo.enums.telegramEnums.CallBackData;
 import com.example.demo.models.telegram.Message;
+import com.example.demo.models.telegram.ReplyKeyboardRemove;
 import com.example.demo.models.telegram.TelegramRequest;
 import com.example.demo.models.telegram.buttons.*;
 import com.example.demo.services.repositoryService.SpeakingMessagesRepositoryService;
@@ -117,5 +119,20 @@ public class TelegramMessageSenderServiceImpl implements TelegramMessageSenderSe
     public void noEnoughPermissions(Message message) {
         String text = "You have not enough permissions to make it!";
         simpleMessage(text,message);
+    }
+
+    @Override
+    public void sendKeyboardButtons(Message message, List<List<KeyboardButton>> buttons, String text) {
+        sendButtons(new KeyboardMarkup(buttons),text,message);
+    }
+
+    @Override
+    public void removeKeyboardButtons(Message message) {
+        TelegramRequest telegramRequest = new TelegramRequest();
+        telegramRequest.setMarkup(new ReplyKeyboardRemove(true));
+        String text = ResourceBundle.getBundle("dictionary").getString(ServerSideSpeaker.ACCEPTED.name());
+        telegramRequest.setText(text);
+        telegramRequest.setChatId(message.getChat().getId());
+        sendMessage(telegramRequest,message.getPlatform());
     }
 }

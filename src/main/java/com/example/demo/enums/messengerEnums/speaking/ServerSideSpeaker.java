@@ -97,5 +97,8 @@ public enum ServerSideSpeaker {
     CREATE_OWN_QUESTION,
     SURE_DELETE_CROISSANT,
     NAME_OF_NEW_TEXT,
-    NEW_TEXT_HAS_SET
+    NEW_TEXT_HAS_SET,
+    CANCEL,
+    CANCEL_TEXT,
+    ACCEPTED
 }

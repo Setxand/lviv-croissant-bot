@@ -47,7 +47,7 @@ public class AdminTelegramMessageParserHelperServiceImpl implements AdminTelegra
             String text = "User with username "+message.getText()+" is not exists in our database! He needs to enter command /start!!!";
             telegramMessageSenderService.simpleMessage(text,message);
         }
-
+        telegramMessageSenderService.removeKeyboardButtons(message);
         List<InlineKeyboardButton>buttons = Arrays.asList(new InlineKeyboardButton("Admin", SETTING_ROLE_DATA_1.name()+"?"+Roles.ADMIN.name()+"&"+message.getText()),
                 new InlineKeyboardButton("Personal",SETTING_ROLE_DATA_1.name()+"?"+Roles.PERSONAL.name()+"&"+message.getText()),
                 new InlineKeyboardButton("Courier",SETTING_ROLE_DATA_1.name()+"?"+Roles.COURIER.name()+"&"+message.getText()),

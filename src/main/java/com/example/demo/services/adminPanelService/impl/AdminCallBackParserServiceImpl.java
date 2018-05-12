@@ -8,6 +8,7 @@ import com.example.demo.enums.telegramEnums.CallBackData;
 import com.example.demo.enums.telegramEnums.TelegramUserStatus;
 import com.example.demo.models.telegram.CallBackQuery;
 import com.example.demo.models.telegram.Message;
+import com.example.demo.models.telegram.buttons.KeyboardButton;
 import com.example.demo.services.adminPanelService.AdminCallBackParserService;
 import com.example.demo.services.adminPanelService.AdminTelegramMessageParserHelperService;
 import com.example.demo.services.eventService.servicePanel.TelegramAddingRecordingsEventService;
@@ -21,6 +22,9 @@ import com.example.demo.services.telegramService.TelegramMessageSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import static com.example.demo.enums.Platform.TELEGRAM_ADMIN_PANEL_BOT;
@@ -121,7 +125,16 @@ public class AdminCallBackParserServiceImpl implements AdminCallBackParserServic
     private void setRoleData(CallBackQuery callBackQuery) {
         TUser tUser = telegramUserRepositoryService.findByChatId(callBackQuery.getMessage().getChat().getId());
         telegramUserRepositoryService.changeStatus(tUser,SETTING_ROLE_STATUS);
-        telegramMessageSenderService.simpleMessage("Enter username:",callBackQuery.getMessage());
+        userNameEntering(callBackQuery);
+    }
+
+    private void userNameEntering(CallBackQuery callBackQuery) {
+        List<String>list = telegramUserRepositoryService.findTopUserNames();
+        List<KeyboardButton>keyboardButtons = new ArrayList<>();
+        for(String userName: list){
+            keyboardButtons.add(new KeyboardButton(userName));
+        }
+        telegramMessageSenderService.sendKeyboardButtons(callBackQuery.getMessage(),Arrays.asList(keyboardButtons),"Enter username:");
     }
 
     private void sureDeleteData(CallBackQuery callBackQuery) {

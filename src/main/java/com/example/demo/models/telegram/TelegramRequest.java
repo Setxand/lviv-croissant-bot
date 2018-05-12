@@ -20,6 +20,7 @@ public class TelegramRequest {
     private Markup markup;
     String photo;
     String caption;
+
     public TelegramRequest(String text, Integer chatId) {
         this.text = text;
         this.chatId = chatId;

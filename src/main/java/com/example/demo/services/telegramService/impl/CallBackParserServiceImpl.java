@@ -1,6 +1,7 @@
 package com.example.demo.services.telegramService.impl;
 
 import com.example.demo.entities.lvivCroissants.Croissant;
+import com.example.demo.entities.lvivCroissants.CustomerOrdering;
 import com.example.demo.entities.peopleRegister.TUser;
 import com.example.demo.enums.messengerEnums.PayloadCases;
 import com.example.demo.enums.telegramEnums.CallBackData;
@@ -12,6 +13,7 @@ import com.example.demo.services.eventService.telegramEventService.TelegramGetMe
 import com.example.demo.services.eventService.telegramEventService.TelegramOrderingEventService;
 import com.example.demo.services.repositoryService.CroissantRepositoryService;
 import com.example.demo.services.peopleRegisterService.TelegramUserRepositoryService;
+import com.example.demo.services.repositoryService.CustomerOrderingRepositoryService;
 import com.example.demo.services.supportService.TextFormatter;
 import com.example.demo.services.telegramService.CallBackParserService;
 import com.example.demo.services.telegramService.TelegramMessageParserService;
@@ -42,6 +44,8 @@ public class CallBackParserServiceImpl implements CallBackParserService {
     private TelegramMessageParserService telegramMessageParserService;
     @Autowired
     private TelegramCreatingOwnCroissantEventService telegramCreatingOwnCroissantEventService;
+    @Autowired
+    private CustomerOrderingRepositoryService customerOrderingRepositoryService;
     @Override
     public void parseCallBackQuery(CallBackQuery callBackQuery) {
         switch (CallBackData.valueOf(TextFormatter.ejectPaySinglePayload(callBackQuery.getData()))){
@@ -66,9 +70,25 @@ public class CallBackParserServiceImpl implements CallBackParserService {
             case ONE_MORE_ORDERING_DATA:
                 oneMoreOrderingData(callBackQuery);
                 break;
+            case CANCEL_DATA:
+                cancelData(callBackQuery);
+                break;
             default:
                 telegramMessageSenderService.errorMessage(callBackQuery.getMessage());                break;
         }
+    }
+
+    private void cancelData(CallBackQuery callBackQuery) {
+        String id = TextFormatter.ejectSingleVariable(callBackQuery.getData());
+        Long idL = Long.parseLong(id);
+        CustomerOrdering customerOrdering = customerOrderingRepositoryService.findOne(idL);
+        TUser tUser = telegramUserRepositoryService.findByChatId(callBackQuery.getMessage().getChat().getId());
+        tUser.getCustomerOrderings().remove(customerOrdering);
+        customerOrderingRepositoryService.delete(customerOrdering);
+        telegramUserRepositoryService.saveAndFlush(tUser);
+        String text = ResourceBundle.getBundle("dictionary").getString(DONE.name());
+        telegramMessageSenderService.simpleMessage(text,callBackQuery.getMessage());
+
     }
 
     private void oneMoreOrderingData(CallBackQuery callBackQuery) {

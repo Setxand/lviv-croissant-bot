@@ -7,6 +7,8 @@ import com.example.demo.services.peopleRegisterService.TelegramUserRepositorySer
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TelegramUserRepositoryServiceImpl implements TelegramUserRepositoryService {
     @Autowired
@@ -35,5 +37,10 @@ public class TelegramUserRepositoryServiceImpl implements TelegramUserRepository
     @Override
     public TUser findByUserName(String userName) {
         return telegramUserRepository.findByUserName(userName);
+    }
+
+    @Override
+    public List<String> findTopUserNames() {
+        return telegramUserRepository.findTopw();
     }
 }
