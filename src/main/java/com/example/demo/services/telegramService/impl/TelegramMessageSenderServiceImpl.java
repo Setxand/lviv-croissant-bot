@@ -77,15 +77,6 @@ public class TelegramMessageSenderServiceImpl implements TelegramMessageSenderSe
     }
 
     @Override
-    public void sendKeyBoardButtons(Message message) {
-        List<KeyboardButton>keyboardButtons = new ArrayList<>(Arrays.asList(new KeyboardButton("Menu"),new KeyboardButton("Create own croissant")));
-        Markup markup = new KeyboardMarkup(new ArrayList<>(Arrays.asList(keyboardButtons)));
-        SpeakingMessage helloMessage = speakingMessagesRepositoryService.findByKey(HELLO_MESSAGE.name());
-
-        sendButtons(markup,helloMessage.getMessage(),message);
-    }
-
-    @Override
     public void sendInlineButtons(List<List<InlineKeyboardButton>>buttons,String text, Message message) {
         Markup markup = new InlineKeyboardMarkup(buttons);
         sendButtons(markup,text,message);
@@ -120,5 +111,11 @@ public class TelegramMessageSenderServiceImpl implements TelegramMessageSenderSe
         inlineKeyboardButtons.add(new InlineKeyboardButton(yes,data.name()+splitter+QUESTION_YES.name()));
         inlineKeyboardButtons.add(new InlineKeyboardButton(no,data.name()+splitter+QUESTION_NO.name()));
         sendInlineButtons(new ArrayList<>(Arrays.asList(inlineKeyboardButtons)),text,message);
+    }
+
+    @Override
+    public void noEnoughPermissions(Message message) {
+        String text = "You have not enough permissions to make it!";
+        simpleMessage(text,message);
     }
 }

@@ -2,6 +2,7 @@ package com.example.demo.services.adminPanelService.impl;
 
 import com.example.demo.entities.peopleRegister.TUser;
 import com.example.demo.enums.BotCommands;
+import com.example.demo.enums.messengerEnums.Roles;
 import com.example.demo.enums.telegramEnums.TelegramUserStatus;
 import com.example.demo.models.telegram.Message;
 import com.example.demo.models.telegram.buttons.InlineKeyboardButton;
@@ -72,6 +73,11 @@ public class BotCommandsParserServiceImpl implements BotCommandsParserService {
 
 
     private void adminPanel(Message message) {
+        TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
+        if(tUser.getRole()!=Roles.ADMIN){
+            telegramMessageSenderService.noEnoughPermissions(message);
+            return;
+        }
         List<InlineKeyboardButton>buttons = new ArrayList<>(Arrays.asList(new InlineKeyboardButton("Set role",SET_ROLE_DATA.name()),
                 new InlineKeyboardButton("Change hello message",SET_HELLO_MESSAGE_DATA.name())));
         String text = ResourceBundle.getBundle("dictionary").getString(CHOOSE_ACTIONS.name());
@@ -79,12 +85,18 @@ public class BotCommandsParserServiceImpl implements BotCommandsParserService {
     }
 
     private void deleteCroissant(Message message) {
+
         TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
+        if(tUser.getRole()!=Roles.ADMIN && tUser.getRole()!=Roles.PERSONAL){
+            telegramMessageSenderService.noEnoughPermissions(message);
+            return;
+        }
         telegramUserRepositoryService.changeStatus(tUser,ASKING_TYPE_STATUS);
         telegramGetMenuEventService.getMenu(message);
     }
 
     private void setUpMessenger(Message message) {
+
         botCommandParseHelperService.helpSetUpMessenger(message);
     }
 
@@ -94,13 +106,23 @@ public class BotCommandsParserServiceImpl implements BotCommandsParserService {
 
     private void add(Message message) {
         TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
-        telegramUserRepositoryService.changeStatus(tUser,TelegramUserStatus.ADDING_CROISSANT_STATUS);
-        telegramAddingRecordingsEventService.addCroissant(message);
+        if(tUser.getRole() != Roles.COURIER) {
+
+            telegramUserRepositoryService.changeStatus(tUser, TelegramUserStatus.ADDING_CROISSANT_STATUS);
+            telegramAddingRecordingsEventService.addCroissant(message);
+        }
+        else
+            telegramMessageSenderService.noEnoughPermissions(message);
+
     }
 
     private void filling(Message message) {
+
         TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
-        telegramUserRepositoryService.changeStatus(tUser,TelegramUserStatus.ADDING_FILLING_STATUS);
-        telegramAddingRecordingsEventService.addFilling(message);
+        if(tUser.getRole() != Roles.COURIER) {
+            telegramUserRepositoryService.changeStatus(tUser, TelegramUserStatus.ADDING_FILLING_STATUS);
+            telegramAddingRecordingsEventService.addFilling(message);
+        }else
+            telegramMessageSenderService.noEnoughPermissions(message);
     }
 }

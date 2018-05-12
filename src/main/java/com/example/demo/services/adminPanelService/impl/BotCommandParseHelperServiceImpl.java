@@ -1,10 +1,14 @@
 package com.example.demo.services.adminPanelService.impl;
 
+import com.example.demo.entities.peopleRegister.TUser;
 import com.example.demo.enums.messengerEnums.Objects;
 import com.example.demo.enums.BotCommands;
+import com.example.demo.enums.messengerEnums.Roles;
 import com.example.demo.models.messanger.Shell;
 import com.example.demo.models.telegram.Message;
+import com.example.demo.repository.TelegramUserRepository;
 import com.example.demo.services.adminPanelService.BotCommandParseHelperService;
+import com.example.demo.services.peopleRegisterService.TelegramUserRepositoryService;
 import com.example.demo.services.telegramService.TelegramMessageSenderService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +23,8 @@ import java.util.ResourceBundle;
 public class BotCommandParseHelperServiceImpl implements BotCommandParseHelperService {
     @Autowired
     private TelegramMessageSenderService telegramMessageSenderService;
+    @Autowired
+    private TelegramUserRepositoryService telegramUserRepositoryService;
     @Value("${server.url}")
     private String SERVER_URL;
 
@@ -39,6 +45,11 @@ public class BotCommandParseHelperServiceImpl implements BotCommandParseHelperSe
 
     @Override
     public void helpSetUpMessenger(Message message) {
+        TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
+        if(tUser.getRole()!= Roles.ADMIN){
+            telegramMessageSenderService.noEnoughPermissions(message);
+            return;
+        }
         Shell setMessengerWebHook = new Shell();
         setMessengerWebHook.setCallbackUrl(SERVER_URL+"/WebHook");
         setMessengerWebHook.setVerToken(VER_TOK);

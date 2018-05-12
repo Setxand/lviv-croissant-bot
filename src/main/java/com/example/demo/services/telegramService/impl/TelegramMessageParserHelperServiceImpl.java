@@ -45,14 +45,24 @@ public class TelegramMessageParserHelperServiceImpl implements TelegramMessagePa
     private String SERVER_URL;
     @Override
     public void helpStart(Message message) {
-        TUser tUser = new TUser();
-        tUser.setChatId(message.getChat().getId());
+        TUser tUser;
+        if(telegramUserRepositoryService.findByChatId(message.getChat().getId())== null){
+            tUser = new TUser();
+
+            tUser.setLocale(message.getFrom().getLanguageCode());
+            tUser.setRole(Roles.CUSTOMER);
+        }
+        else tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
+
         tUser.setName(message.getFrom().getFirstName());
         tUser.setLastName(message.getFrom().getLastName());
-        tUser.setLocale(message.getFrom().getLanguageCode());
-        tUser.setRole(Roles.CUSTOMER);
+        tUser.setChatId(message.getChat().getId());
         tUser.setUserName(message.getFrom().getUserName());
+
         telegramUserRepositoryService.saveAndFlush(tUser);
+        SpeakingMessage speakingMessage = speakingMessagesRepositoryService.findByKey(HELLO_MESSAGE.name());
+
+        telegramMessageSenderService.simpleMessage(speakingMessage.getMessage(),message);
     }
 
     @Override

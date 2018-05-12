@@ -15,10 +15,10 @@ public interface TelegramMessageSenderService {
     public void simpleMessage( String message,Message m);
     public void errorMessage(Message message);
     public void sendButtons(Markup markup,String text, Message message);
-    public void sendKeyBoardButtons(Message message);
     public void sendInlineButtons(List<List<InlineKeyboardButton>>buttons,String text, Message message);
     public void sendPhoto( String photo, String caption,Markup markup, Message message);
     public void sendActions(Message message);
     public void simpleQuestion(CallBackData data, String splitter,String text, Message message );
+    public void noEnoughPermissions(Message message);
 
 }

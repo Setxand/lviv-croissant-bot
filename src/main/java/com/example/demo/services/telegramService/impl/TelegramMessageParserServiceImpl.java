@@ -102,9 +102,8 @@ public class TelegramMessageParserServiceImpl implements TelegramMessageParserSe
     }
 
     private void start(Message message) {
-        if (telegramUserRepositoryService.findByChatId(message.getChat().getId()) == null)
             telegramMessageParserHelperService.helpStart(message);
-        telegramMessageSenderService.sendKeyBoardButtons(message);
+
         telegramMessageSenderService.sendActions(message);
     }
 }
