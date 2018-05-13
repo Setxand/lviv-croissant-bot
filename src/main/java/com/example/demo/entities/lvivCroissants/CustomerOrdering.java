@@ -24,6 +24,7 @@ public class CustomerOrdering {
     private String time;
     private Integer price;
     private PaymentWay paymentWay;
+    private String completedTime;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -37,7 +38,9 @@ public class CustomerOrdering {
     @ManyToOne
     @JoinColumn(name = "tUser_id")
     private TUser tUser;
-
+    @ManyToOne
+    @JoinColumn(name = "courier_id")
+    private TUser courier;
     @Override
     public String toString() {
         return "Замовлення № "+id+"\nзамовник: "+name+"\nНомер телефону: "+phoneNumber+"\nAddress: "+address+"\nTime: "+time+"\nprice: "+price+"\nOrder: "+croissants+"\n\n\n";

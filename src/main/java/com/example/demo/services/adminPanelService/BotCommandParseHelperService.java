@@ -9,4 +9,6 @@ public interface BotCommandParseHelperService {
     void helpSetUpMessenger(Message message);
 
     public void helpGetListOfOrdering(CallBackQuery callBackQuery);
+
+    public void helpCompleteOrderData(CallBackQuery callBackQuery);
 }

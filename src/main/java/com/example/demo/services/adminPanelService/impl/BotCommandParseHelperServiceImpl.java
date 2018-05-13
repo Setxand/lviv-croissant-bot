@@ -12,12 +12,11 @@ import com.example.demo.models.telegram.Message;
 import com.example.demo.models.telegram.buttons.InlineKeyboardButton;
 import com.example.demo.models.telegram.buttons.InlineKeyboardMarkup;
 import com.example.demo.models.telegram.buttons.Markup;
-import com.example.demo.repository.TelegramUserRepository;
 import com.example.demo.services.adminPanelService.BotCommandParseHelperService;
 import com.example.demo.services.peopleRegisterService.TelegramUserRepositoryService;
 import com.example.demo.services.repositoryService.CroissantRepositoryService;
-import com.example.demo.services.repositoryService.CroissantsFillingRepositoryService;
 import com.example.demo.services.repositoryService.CustomerOrderingRepositoryService;
+import com.example.demo.services.supportService.TextFormatter;
 import com.example.demo.services.telegramService.TelegramMessageSenderService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +26,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.*;
-import static com.example.demo.enums.telegramEnums.CallBackData.MAKE_ORDER_DATA;
+import static com.example.demo.enums.telegramEnums.CallBackData.*;
 
 @Service
 public class BotCommandParseHelperServiceImpl implements BotCommandParseHelperService {
@@ -95,26 +93,50 @@ public class BotCommandParseHelperServiceImpl implements BotCommandParseHelperSe
 
     @Override
     public void helpGetListOfOrdering(CallBackQuery callBackQuery) {
+        String data = TextFormatter.ejectPaySinglePayload(callBackQuery.getData());
+        TUser tUser = telegramUserRepositoryService.findByChatId(callBackQuery.getMessage().getChat().getId());
         String uah = ResourceBundle.getBundle("dictionary").getString(CURRENCY.name());
-        String makeOrder = ResourceBundle.getBundle("dictionary").getString(GETTING_ORDER.name());
+        String getOrder = ResourceBundle.getBundle("dictionary").getString(GETTING_ORDER.name());
+        String completeOrder = ResourceBundle.getBundle("dictionary").getString(COMPLETE_ORDERING.name());
         List<CustomerOrdering> customerOrderings = customerOrderingRepositoryService.findAll();
         StringBuilder croissants = new StringBuilder();
-        for(CustomerOrdering customerOrdering: customerOrderings){
-            croissants.setLength(0);
-            for(String orderId:customerOrdering.getCroissants()){
-                long id = Long.parseLong(orderId);
-                Croissant croissant = croissantRepositoryService.findOne(id);
-                if(croissant.getType().equals(OWN.name())){
-                    croissants.append(croissant);
-                    continue;
-                }
-                croissants.append(croissant.getName()+"; ");
+        for(CustomerOrdering customerOrdering: customerOrderings) {
+            if (customerOrdering.getCourier() == null && data.equals(LIST_OF_ORDERING_DATA.name())) {
+                Markup markup = new InlineKeyboardMarkup(Arrays.asList(Arrays.asList(new InlineKeyboardButton(getOrder, GET_ORDER_DATA.name() + "?" + customerOrdering.getId()))));
+                getListOfOrderings(callBackQuery,customerOrdering,uah, markup,croissants);
             }
-            String caption = customerOrdering.getId()+". "+"time: "+customerOrdering.getTime()+"\naddress: "+customerOrdering.getAddress()+"" +
-            "\nphone number: "+customerOrdering.getPhoneNumber()+"\n"+croissants+"\n" +
-                    customerOrdering.getPrice()+uah;
-            Markup markup = new InlineKeyboardMarkup(Arrays.asList(Arrays.asList(new InlineKeyboardButton(makeOrder,MAKE_ORDER_DATA.name()+"?"+customerOrdering.getId()))));
-            telegramMessageSenderService.sendPhoto(PICTURE_ORDERING,caption,markup,callBackQuery.getMessage());
+            else if(customerOrdering.getCourier()==tUser && data.equals(LIST_OF_COMPLETE_ORDERING_DATA.name()) && customerOrdering.getCompletedTime()==null){
+                Markup markup = new InlineKeyboardMarkup(Arrays.asList(Arrays.asList(new InlineKeyboardButton(completeOrder, COMPLETE_ORDER_DATA.name() + "?" + customerOrdering.getId()))));
+                getListOfOrderings(callBackQuery,customerOrdering,uah, markup,croissants);
+            }
         }
+    }
+
+    @Override
+    public void helpCompleteOrderData(CallBackQuery callBackQuery) {
+        String orderId = TextFormatter.ejectSingleVariable(callBackQuery.getData());
+        CustomerOrdering customerOrdering = customerOrderingRepositoryService.findOne(Long.parseLong(orderId));
+        TUser tUser = customerOrdering.getTUser();
+        callBackQuery.getMessage().getChat().setId(tUser.getChatId());
+        callBackQuery.getMessage().setPlatform(null);
+        String text = ResourceBundle.getBundle("dictionary").getString(RECEiVE_ORDER.name());
+        telegramMessageSenderService.simpleQuestion(QUESTION_COMPLETE_DATA,"?"+orderId+"&",text,callBackQuery.getMessage());
+    }
+
+    private void getListOfOrderings(CallBackQuery callBackQuery, CustomerOrdering customerOrdering, String uah, Markup markup, StringBuilder croissants) {
+        croissants.setLength(0);
+        for (String orderId : customerOrdering.getCroissants()) {
+            long id = Long.parseLong(orderId);
+            Croissant croissant = croissantRepositoryService.findOne(id);
+            if (croissant.getType().equals(OWN.name())) {
+                croissants.append(croissant);
+                continue;
+            }
+            croissants.append(croissant.getName() + "; ");
+        }
+        String caption = customerOrdering.getId() + ". " + "time: " + customerOrdering.getTime() + "\naddress: " + customerOrdering.getAddress() + "" +
+                "\nphone number: " + customerOrdering.getPhoneNumber() + "\n" + croissants + "\n" +
+                customerOrdering.getPrice() + uah;
+        telegramMessageSenderService.sendPhoto(PICTURE_ORDERING, caption, markup, callBackQuery.getMessage());
     }
 }

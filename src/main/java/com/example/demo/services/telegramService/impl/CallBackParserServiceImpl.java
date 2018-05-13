@@ -7,6 +7,7 @@ import com.example.demo.enums.messengerEnums.PayloadCases;
 import com.example.demo.enums.telegramEnums.CallBackData;
 import com.example.demo.enums.telegramEnums.TelegramUserStatus;
 import com.example.demo.models.telegram.CallBackQuery;
+import com.example.demo.models.telegram.Chat;
 import com.example.demo.models.telegram.Message;
 import com.example.demo.services.eventService.telegramEventService.TelegramCreatingOwnCroissantEventService;
 import com.example.demo.services.eventService.telegramEventService.TelegramGetMenuEventService;
@@ -21,10 +22,14 @@ import com.example.demo.services.telegramService.TelegramMessageSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.ResourceBundle;
 
+import static com.example.demo.enums.Platform.TELEGRAM_ADMIN_PANEL_BOT;
 import static com.example.demo.enums.messengerEnums.PayloadCases.QUESTION_YES;
 import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.DONE;
+import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.TECHNICAL_TROUBLE;
 import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.THANKS;
 import static com.example.demo.enums.telegramEnums.TelegramUserStatus.*;
 
@@ -73,9 +78,38 @@ public class CallBackParserServiceImpl implements CallBackParserService {
             case CANCEL_DATA:
                 cancelData(callBackQuery);
                 break;
+            case QUESTION_COMPLETE_DATA:
+                questionCompleteData(callBackQuery);
+                break;
             default:
                 telegramMessageSenderService.errorMessage(callBackQuery.getMessage());                break;
         }
+    }
+
+    private void questionCompleteData(CallBackQuery callBackQuery) {
+        String answer = TextFormatter.ejectVariableWithContext(callBackQuery.getData());
+        long orderId = Long.parseLong(TextFormatter.ejectContext(callBackQuery.getData()));
+        if(answer.equals(QUESTION_YES.name())){
+            finishingOrdering(callBackQuery,orderId);
+        }
+        else {
+            String text = ResourceBundle.getBundle("dictionary").getString(TECHNICAL_TROUBLE.name());
+            telegramMessageSenderService.simpleMessage(text,callBackQuery.getMessage());
+        }
+    }
+
+    private void finishingOrdering(CallBackQuery callBackQuery, long orderId) {
+        CustomerOrdering customerOrdering = customerOrderingRepositoryService.findOne(orderId);
+        customerOrdering.setCompletedTime(new java.util.Date().toString());
+        customerOrderingRepositoryService.saveAndFlush(customerOrdering);
+        String done = ResourceBundle.getBundle("dictionary").getString(DONE.name());
+        String thanks = ResourceBundle.getBundle("dictionary").getString(THANKS.name());
+        telegramMessageSenderService.simpleMessage(thanks,callBackQuery.getMessage());
+        TUser courier = customerOrdering.getCourier();
+        Message message = new Message();
+        message.setPlatform(TELEGRAM_ADMIN_PANEL_BOT);
+        message.setChat(new Chat(courier.getChatId()));
+        telegramMessageSenderService.simpleMessage(done,message);
     }
 
     private void cancelData(CallBackQuery callBackQuery) {

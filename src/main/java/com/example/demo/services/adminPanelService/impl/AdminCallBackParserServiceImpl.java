@@ -1,6 +1,7 @@
 package com.example.demo.services.adminPanelService.impl;
 
 import com.example.demo.entities.lvivCroissants.Croissant;
+import com.example.demo.entities.lvivCroissants.CustomerOrdering;
 import com.example.demo.entities.peopleRegister.TUser;
 import com.example.demo.enums.messengerEnums.Roles;
 import com.example.demo.enums.telegramEnums.CallBackData;
@@ -15,6 +16,7 @@ import com.example.demo.services.eventService.servicePanel.TelegramAddingRecordi
 import com.example.demo.services.eventService.telegramEventService.TelegramGetMenuEventService;
 import com.example.demo.services.repositoryService.CroissantRepositoryService;
 import com.example.demo.services.peopleRegisterService.TelegramUserRepositoryService;
+import com.example.demo.services.repositoryService.CustomerOrderingRepositoryService;
 import com.example.demo.services.repositoryService.SpeakingMessagesRepositoryService;
 import com.example.demo.services.supportService.TextFormatter;
 import com.example.demo.services.telegramService.CallBackParserService;
@@ -53,6 +55,8 @@ public class AdminCallBackParserServiceImpl implements AdminCallBackParserServic
     private SpeakingMessagesRepositoryService speakingMessagesRepositoryService;
     @Autowired
     private BotCommandParseHelperService botCommandParseHelperService;
+    @Autowired
+    private CustomerOrderingRepositoryService customerOrderingRepositoryService;
     @Override
     public void parseAdminCallBackQuery(CallBackQuery callBackQuery) {
 
@@ -84,10 +88,38 @@ public class AdminCallBackParserServiceImpl implements AdminCallBackParserServic
             case LIST_OF_ORDERING_DATA:
                 listOfOrderingsData(callBackQuery);
                 break;
+            case GET_ORDER_DATA:
+                getOrderData(callBackQuery);
+                break;
+            case LIST_OF_COMPLETE_ORDERING_DATA:
+                completeOrderingData(callBackQuery);
+                break;
+            case COMPLETE_ORDER_DATA:
+                completeOrderData(callBackQuery);
+                break;
                 default:
                     telegramMessageSenderService.errorMessage(callBackQuery.getMessage());
                     break;
         }
+    }
+
+    private void completeOrderData(CallBackQuery callBackQuery) {
+        botCommandParseHelperService.helpCompleteOrderData(callBackQuery) ;
+    }
+
+    private void completeOrderingData(CallBackQuery callBackQuery) {
+        botCommandParseHelperService.helpGetListOfOrdering(callBackQuery);
+    }
+
+    private void getOrderData(CallBackQuery callBackQuery) {
+        long orderId = Long.parseLong(TextFormatter.ejectSingleVariable(callBackQuery.getData()));
+        CustomerOrdering customerOrdering = customerOrderingRepositoryService.findOne(orderId);
+        TUser tUser = telegramUserRepositoryService.findByChatId(callBackQuery.getMessage().getChat().getId());
+        tUser.addCourierOrdering(customerOrdering);
+        telegramUserRepositoryService.saveAndFlush(tUser);
+        String text = ResourceBundle.getBundle("dictionary").getString(DONE.name());
+        telegramMessageSenderService.simpleMessage(text,callBackQuery.getMessage());
+
     }
 
     private void listOfOrderingsData(CallBackQuery callBackQuery) {

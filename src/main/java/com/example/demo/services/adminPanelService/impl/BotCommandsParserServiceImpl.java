@@ -78,7 +78,7 @@ public class BotCommandsParserServiceImpl implements BotCommandsParserService {
         String listOfOrdering = ResourceBundle.getBundle("dictionary").getString(ORDERING_LIST.name());
         String listOfOwnOrdering = ResourceBundle.getBundle("dictionary").getString(COMPLETE_ORDERING.name().toUpperCase());
         List<InlineKeyboardButton>buttons = Arrays.asList(new InlineKeyboardButton(listOfOrdering,LIST_OF_ORDERING_DATA.name()),
-                new InlineKeyboardButton(listOfOwnOrdering, COMPLETE_ORDERING_DATA.name()));
+                new InlineKeyboardButton(listOfOwnOrdering, LIST_OF_COMPLETE_ORDERING_DATA.name()));
         String courierActions = ResourceBundle.getBundle("dictionary").getString(CHOOSE_ACTIONS.name());
         telegramMessageSenderService.sendInlineButtons(Arrays.asList(buttons),courierActions,message);
     }

@@ -28,11 +28,13 @@ public class TUser {
     private TelegramUserStatus status;
     private String phoneNumber;
     private Roles role;
+    private Integer countCompletingOrderingsForCourier;
     @OneToMany(mappedBy = "tUser",cascade = CascadeType.ALL)
     private List<CustomerOrdering>customerOrderings = new ArrayList<>();
     @OneToMany(mappedBy = "tUser",cascade = CascadeType.ALL)
     private List<Croissant>ownCroissants = new ArrayList<>();
-
+    @OneToMany(mappedBy = "courier",cascade = CascadeType.ALL)
+    private List<CustomerOrdering>courierCustomerOrderings = new ArrayList<>();
     public void addCroissant(Croissant croissant){
         ownCroissants.add(croissant);
         croissant.setTUser(this);
@@ -40,6 +42,11 @@ public class TUser {
     public void addCustomerOrdering(CustomerOrdering customerOrdering){
         this.customerOrderings.add(customerOrdering);
         customerOrdering.setTUser(this);
+    }
+
+    public void addCourierOrdering(CustomerOrdering customerOrdering){
+        courierCustomerOrderings.add(customerOrdering);
+        customerOrdering.setCourier(this);
     }
 
 }
