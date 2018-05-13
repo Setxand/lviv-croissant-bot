@@ -7,6 +7,7 @@ import com.example.demo.enums.messengerEnums.Roles;
 import com.example.demo.enums.telegramEnums.CallBackData;
 import com.example.demo.enums.telegramEnums.TelegramUserStatus;
 import com.example.demo.models.telegram.CallBackQuery;
+import com.example.demo.models.telegram.Chat;
 import com.example.demo.models.telegram.Message;
 import com.example.demo.models.telegram.buttons.KeyboardButton;
 import com.example.demo.services.adminPanelService.AdminCallBackParserService;
@@ -156,6 +157,10 @@ public class AdminCallBackParserServiceImpl implements AdminCallBackParserServic
                         break;
             }
             telegramUserRepositoryService.saveAndFlush(tUser);
+            Message message1 = new Message();
+            message1.setChat(new Chat(tUser.getChatId()));
+            message1.setPlatform(TELEGRAM_ADMIN_PANEL_BOT);
+            telegramMessageSenderService.simpleMessage(String.format(ResourceBundle.getBundle("dictionary").getString(ROLE_SET.name()),tUser.getRole().name()),message1);
             telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(DONE.name()),callBackQuery.getMessage());
         }
         else{

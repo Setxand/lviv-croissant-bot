@@ -22,4 +22,5 @@ public class Message {
     private String text;
     private Platform platform;
     private List<TelegramEntity>entities;
+
 }
