@@ -21,6 +21,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import static com.example.demo.enums.messengerEnums.Roles.ADMIN;
+import static com.example.demo.enums.messengerEnums.Roles.COURIER;
 import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.*;
 import static com.example.demo.enums.telegramEnums.CallBackData.*;
 import static com.example.demo.enums.telegramEnums.TelegramUserStatus.ASKING_TYPE_STATUS;
@@ -39,10 +41,11 @@ public class BotCommandsParserServiceImpl implements BotCommandsParserService {
     private TelegramGetMenuEventService telegramGetMenuEventService;
     @Autowired
     private TelegramMessageParserHelperService telegramMessageParserHelperService;
+
     @Override
     public void parseBotCommand(Message message) {
         StringBuilder command = new StringBuilder(message.getText()).deleteCharAt(0);
-        switch (BotCommands.valueOf(command.toString().toUpperCase())){
+        switch (BotCommands.valueOf(command.toString().toUpperCase())) {
             case FILLING:
                 filling(message);
                 break;
@@ -67,43 +70,50 @@ public class BotCommandsParserServiceImpl implements BotCommandsParserService {
             case COURIERACTIONS:
                 courierActions(message);
                 break;
-                default:
-                    telegramMessageSenderService.errorMessage(message);
-                    break;
+            default:
+                telegramMessageSenderService.errorMessage(message);
+                break;
         }
 
     }
 
     private void courierActions(Message message) {
-        String listOfOrdering = ResourceBundle.getBundle("dictionary").getString(ORDERING_LIST.name());
-        String listOfOwnOrdering = ResourceBundle.getBundle("dictionary").getString(COMPLETE_ORDERING.name().toUpperCase());
-        List<InlineKeyboardButton>buttons = Arrays.asList(new InlineKeyboardButton(listOfOrdering,LIST_OF_ORDERING_DATA.name()),
-                new InlineKeyboardButton(listOfOwnOrdering, LIST_OF_COMPLETE_ORDERING_DATA.name()));
-        String courierActions = ResourceBundle.getBundle("dictionary").getString(CHOOSE_ACTIONS.name());
-        telegramMessageSenderService.sendInlineButtons(Arrays.asList(buttons),courierActions,message);
+        TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
+        if (tUser.getRole() == ADMIN || tUser.getRole() == COURIER) {
+            String listOfOrdering = ResourceBundle.getBundle("dictionary").getString(ORDERING_LIST.name());
+            String listOfOwnOrdering = ResourceBundle.getBundle("dictionary").getString(COMPLETE_ORDERING.name().toUpperCase());
+            List<InlineKeyboardButton> buttons = Arrays.asList(new InlineKeyboardButton(listOfOrdering, LIST_OF_ORDERING_DATA.name()),
+                    new InlineKeyboardButton(listOfOwnOrdering, LIST_OF_COMPLETE_ORDERING_DATA.name()));
+            String courierActions = ResourceBundle.getBundle("dictionary").getString(CHOOSE_ACTIONS.name());
+            telegramMessageSenderService.sendInlineButtons(Arrays.asList(buttons), courierActions, message);
+
+        }
+        else {
+            telegramMessageSenderService.noEnoughPermissions(message);
+        }
     }
 
 
     private void adminPanel(Message message) {
         TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
-        if(tUser.getRole()!=Roles.ADMIN){
+        if (tUser.getRole() != ADMIN) {
             telegramMessageSenderService.noEnoughPermissions(message);
             return;
         }
-        List<InlineKeyboardButton>buttons = new ArrayList<>(Arrays.asList(new InlineKeyboardButton("Set role",SET_ROLE_DATA.name()),
-                new InlineKeyboardButton("Change hello message",SET_HELLO_MESSAGE_DATA.name())));
+        List<InlineKeyboardButton> buttons = new ArrayList<>(Arrays.asList(new InlineKeyboardButton("Set role", SET_ROLE_DATA.name()),
+                new InlineKeyboardButton("Change hello message", SET_HELLO_MESSAGE_DATA.name())));
         String text = ResourceBundle.getBundle("dictionary").getString(CHOOSE_ACTIONS.name());
-        telegramMessageSenderService.sendInlineButtons(new ArrayList<>(Arrays.asList(buttons)),text,message);
+        telegramMessageSenderService.sendInlineButtons(new ArrayList<>(Arrays.asList(buttons)), text, message);
     }
 
     private void deleteCroissant(Message message) {
 
         TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
-        if(tUser.getRole()!=Roles.ADMIN && tUser.getRole()!=Roles.PERSONAL){
+        if (tUser.getRole() != ADMIN && tUser.getRole() != Roles.PERSONAL) {
             telegramMessageSenderService.noEnoughPermissions(message);
             return;
         }
-        telegramUserRepositoryService.changeStatus(tUser,ASKING_TYPE_STATUS);
+        telegramUserRepositoryService.changeStatus(tUser, ASKING_TYPE_STATUS);
         telegramGetMenuEventService.getMenu(message);
     }
 
@@ -118,12 +128,10 @@ public class BotCommandsParserServiceImpl implements BotCommandsParserService {
 
     private void add(Message message) {
         TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
-        if(tUser.getRole() != Roles.COURIER) {
-
+        if (tUser.getRole() != Roles.COURIER) {
             telegramUserRepositoryService.changeStatus(tUser, TelegramUserStatus.ADDING_CROISSANT_STATUS);
             telegramAddingRecordingsEventService.addCroissant(message);
-        }
-        else
+        } else
             telegramMessageSenderService.noEnoughPermissions(message);
 
     }
@@ -131,10 +139,10 @@ public class BotCommandsParserServiceImpl implements BotCommandsParserService {
     private void filling(Message message) {
 
         TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
-        if(tUser.getRole() != Roles.COURIER) {
+        if (tUser.getRole() != Roles.COURIER) {
             telegramUserRepositoryService.changeStatus(tUser, TelegramUserStatus.ADDING_FILLING_STATUS);
             telegramAddingRecordingsEventService.addFilling(message);
-        }else
+        } else
             telegramMessageSenderService.noEnoughPermissions(message);
     }
 }

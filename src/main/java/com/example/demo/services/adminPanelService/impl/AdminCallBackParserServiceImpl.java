@@ -176,11 +176,25 @@ public class AdminCallBackParserServiceImpl implements AdminCallBackParserServic
 
     private void userNameEntering(CallBackQuery callBackQuery) {
         List<String>list = telegramUserRepositoryService.findTopUserNames();
-        List<KeyboardButton>keyboardButtons = new ArrayList<>();
-        for(String userName: list){
-            keyboardButtons.add(new KeyboardButton(userName));
+        List<List<KeyboardButton>>keyboardButtons = new ArrayList<>();
+
+        List<KeyboardButton>keyboardButtons1 = new ArrayList<>();
+
+        for(String userName: list) {
+
+            if(keyboardButtons1.size()==3){
+                keyboardButtons1 = new ArrayList<>();
+                keyboardButtons.add(keyboardButtons1);
+            }
+
+
+            keyboardButtons1.add(new KeyboardButton(userName));
+
+
         }
-        telegramMessageSenderService.sendKeyboardButtons(callBackQuery.getMessage(),Arrays.asList(keyboardButtons),"Enter username:");
+        keyboardButtons.add(keyboardButtons1);
+
+        telegramMessageSenderService.sendKeyboardButtons(callBackQuery.getMessage(),keyboardButtons,"Enter username:");
     }
 
     private void sureDeleteData(CallBackQuery callBackQuery) {
