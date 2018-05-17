@@ -103,5 +103,6 @@ public enum ServerSideSpeaker {
     ACCEPTED,
     RECEiVE_ORDER,
     TECHNICAL_TROUBLE,
-    ROLE_SET
+    ROLE_SET,
+    HELLO_SERVICE
 }

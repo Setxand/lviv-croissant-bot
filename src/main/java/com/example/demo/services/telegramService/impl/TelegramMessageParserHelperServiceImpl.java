@@ -19,9 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.DONE;
-import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.HELLO_MESSAGE;
-import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.NEW_TEXT_HAS_SET;
+import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.*;
 import static com.example.demo.enums.telegramEnums.TelegramUserStatus.OWN_MENU_STATUS;
 
 @Service
@@ -61,8 +59,13 @@ public class TelegramMessageParserHelperServiceImpl implements TelegramMessagePa
 
         telegramUserRepositoryService.saveAndFlush(tUser);
         SpeakingMessage speakingMessage = speakingMessagesRepositoryService.findByKey(HELLO_MESSAGE.name());
-
+        if(message.getPlatform()==null)
         telegramMessageSenderService.simpleMessage(speakingMessage.getMessage(),message);
+        else{
+            String helloMessage = ResourceBundle.getBundle("dictionary").getString(HELLO_SERVICE.name());
+            telegramMessageSenderService.simpleMessage(helloMessage,message);
+        }
+
     }
 
     @Override
