@@ -1,7 +1,7 @@
 package com.example.demo.service.messangerService.impl;
 
 import com.example.demo.entity.lvivCroissants.CustomerOrdering;
-import com.example.demo.entity.peopleRegister.User;
+import com.example.demo.entity.peopleRegister.MUser;
 import com.example.demo.dto.messanger.Messaging;
 import com.example.demo.dto.messanger.QuickReply;
 import com.example.demo.service.eventService.messengerEventService.UserEventService;
@@ -75,9 +75,9 @@ public class MessageProcessorHelperServiceImpl implements MessageProcessorHelper
 
         if(verifyService.isCustomer(messaging) || text.equalsIgnoreCase(COURIER_REQUEST.name())) {
 
-            List<User> admins = userRepositoryService.getByRole(ADMIN);
-            User customer = userRepositoryService.findOnebyRId(messaging.getSender().getId());
-            for (User admin : admins) {
+            List<MUser> admins = userRepositoryService.getByRole(ADMIN);
+            MUser customer = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+            for (MUser admin : admins) {
                 if (text.toUpperCase().equals(ADMIN_REQUEST.name())) {
                     messageSenderService.sendSimpleQuestion(admin.getRecipientId(), recognizeService.recognize(ADMIN_REQ.name(),messaging.getSender().getId()) + customer.getName(), ADMIN_REQUEST_PAYLOAD.name() + "?" + messaging.getSender().getId(), "&");
                 } else if (text.toUpperCase().equals(PERSONAL_REQUEST.name())) {
@@ -115,9 +115,9 @@ public class MessageProcessorHelperServiceImpl implements MessageProcessorHelper
     public void helpDeleteOrderings(Messaging messaging) {
         List<CustomerOrdering> customerOrderings = customerOrderingRepositoryService.findAll();
         for(CustomerOrdering customerOrdering: customerOrderings){
-            if(customerOrdering.getUser()!=null){
-                customerOrdering.getUser().getCustomerOrderings().remove(customerOrdering);
-                userRepositoryService.saveAndFlush(customerOrdering.getUser());
+            if(customerOrdering.getMUser()!=null){
+                customerOrdering.getMUser().getCustomerOrderings().remove(customerOrdering);
+                userRepositoryService.saveAndFlush(customerOrdering.getMUser());
                 customerOrderingRepositoryService.delete(customerOrdering);
             }
         }

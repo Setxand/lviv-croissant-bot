@@ -58,10 +58,10 @@ public class MessageSenderServiceImpl implements MessageSenderService {
     @Value("${send.api.uri}")
     private String FACEBOOK_SEND_URL;
 
-    @Value("${facebook.user.data.url}")
+    @Value("${facebook.MUser.data.url}")
     private String USER_DATA_URL;
 
-    @Value("${facebook.user.data.uer.fields}")
+    @Value("${facebook.MUser.data.uer.fields}")
     private String DATA_FIELDS;
 
     @Value("${server.url}")

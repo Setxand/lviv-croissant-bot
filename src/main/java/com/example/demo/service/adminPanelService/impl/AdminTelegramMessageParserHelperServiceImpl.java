@@ -44,7 +44,7 @@ public class AdminTelegramMessageParserHelperServiceImpl implements AdminTelegra
         }
         catch (Exception ex){
             telegramUserRepositoryService.changeStatus(telegramUserRepositoryService.findByChatId(message.getChat().getId()),null);
-            String text = "User with username "+message.getText()+" is not exists in our database! He needs to enter command /start!!!";
+            String text = "MUser with username "+message.getText()+" is not exists in our database! He needs to enter command /start!!!";
             telegramMessageSenderService.simpleMessage(text,message);
         }
         telegramMessageSenderService.removeKeyboardButtons(message);

@@ -1,6 +1,6 @@
 package com.example.demo.service.supportService.Impl;
 
-import com.example.demo.entity.peopleRegister.User;
+import com.example.demo.entity.peopleRegister.MUser;
 import com.example.demo.service.peopleRegisterService.UserRepositoryService;
 import com.example.demo.service.supportService.RecognizeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ public class RecognizeServiceImpl implements RecognizeService {
     private UserRepositoryService userRepositoryService;
     @Override
     public String recognize(String text,Long userId) {
-        User user = userRepositoryService.findOnebyRId(userId);
-        return ResourceBundle.getBundle("dictionary", user.getLocale()).getString(text);
+        MUser MUser = userRepositoryService.findOnebyRId(userId);
+        return ResourceBundle.getBundle("dictionary", MUser.getLocale()).getString(text);
     }
 }

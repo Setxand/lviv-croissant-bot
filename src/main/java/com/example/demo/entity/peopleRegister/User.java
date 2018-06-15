@@ -1,51 +1,32 @@
 package com.example.demo.entity.peopleRegister;
 
-import com.example.demo.entity.lvivCroissants.CustomerOrdering;
-import com.example.demo.constantEnum.messengerEnums.Roles;
+import com.example.demo.constantEnum.Status;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import javax.management.relation.Role;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     private Long id;
-    private Long recipientId;
-    private String name;
-    private String lastName;
     private String phoneNumber;
-    private String address;
-    private Roles role;
-    private String status;
-    private String email;
-    private Locale locale;
-    private String picture;
+    private Status status;
+    private Role role;
 
-    @ElementCollection
-    private List<Long> ownCroissantsId = new ArrayList<>();
+    @OneToOne(mappedBy = "user")
+    private TUser tUser;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<CustomerOrdering> customerOrderings = new ArrayList<>();
-
-    public User(Long recipientId, String name, String phoneNumber, String address) {
-        this.recipientId = recipientId;
-        this.name = name;
-        this.phoneNumber = phoneNumber;
-        this.address = address;
-    }
-
-    public User() {
-    }
-    public void addCustomerOrdering(CustomerOrdering customerOrdering){
-        customerOrderings.add(customerOrdering);
-        customerOrdering.setUser(this);
-    }
-
+    @OneToOne(mappedBy = "user")
+    private MUser mUser;
 }

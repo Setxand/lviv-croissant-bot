@@ -2,7 +2,7 @@ package com.example.demo.service.eventService.messengerEventService.impl;
 
 import com.example.demo.entity.lvivCroissants.CustomerOrdering;
 import com.example.demo.entity.peopleRegister.CourierRegister;
-import com.example.demo.entity.peopleRegister.User;
+import com.example.demo.entity.peopleRegister.MUser;
 import com.example.demo.dto.messanger.*;
 import com.example.demo.service.eventService.messengerEventService.CourierEventService;
 import com.example.demo.service.eventService.messengerEventService.UserEventService;
@@ -93,9 +93,9 @@ public class CourierEventServiceImpl implements CourierEventService {
             }
         } catch (Exception ex) {
             logger.warn(ex);
-            User user = userRepositoryService.findOnebyRId(messaging.getSender().getId());
-            user.setStatus(null);
-            userRepositoryService.saveAndFlush(user);
+            MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+            MUser.setStatus(null);
+            userRepositoryService.saveAndFlush(MUser);
             messageSenderService.errorMessage(messaging.getSender().getId());
             if (courierRegisterService.findTop().getPhoneNumber() == null)
                 courierRegisterService.remove(courierRegisterService.findTop());
@@ -130,9 +130,9 @@ public class CourierEventServiceImpl implements CourierEventService {
             courierRegister.getCustomerOrderings().remove(customerOrdering);
             customerOrdering.setCourierRegister(null);
             courierRegisterService.saveAndFlush(courierRegister);
-            User user = userRepositoryService.findOnebyRId(messaging.getSender().getId());
-            user.getCustomerOrderings().remove(customerOrdering);
-            userRepositoryService.saveAndFlush(user);
+            MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+            MUser.getCustomerOrderings().remove(customerOrdering);
+            userRepositoryService.saveAndFlush(MUser);
             customerOrderingRepositoryService.delete(customerOrdering);
 
 
@@ -246,9 +246,9 @@ public class CourierEventServiceImpl implements CourierEventService {
     private void getOrderingListFirstStepIsEmpty(Messaging messaging) {
         messageSenderService.sendSimpleMessage(recognizeService.recognize(EMPTY_LIST.name(),messaging.getSender().getId()), messaging.getSender().getId());
         askOneMoreAction(messaging.getSender().getId());
-        User user = userRepositoryService.findOnebyRId(messaging.getSender().getId());
-        user.setStatus(null);
-        userRepositoryService.saveAndFlush(user);
+        MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+        MUser.setStatus(null);
+        userRepositoryService.saveAndFlush(MUser);
     }
     @Override
     public void orderingFilling(Messaging messaging,Long orderId) {
@@ -280,9 +280,9 @@ public class CourierEventServiceImpl implements CourierEventService {
             courierRegister.setPhoneNumber(messaging.getMessage().getText());
             courierRegisterService.saveAndFlush(courierRegister);
             messageSenderService.sendSimpleMessage(recognizeService.recognize(ADDED_TO_DB.name(),messaging.getSender().getId()), messaging.getSender().getId());
-            User user = userRepositoryService.findOnebyRId(messaging.getSender().getId());
-            user.setStatus(null);
-            userRepositoryService.saveAndFlush(user);
+            MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+            MUser.setStatus(null);
+            userRepositoryService.saveAndFlush(MUser);
         } else {
             messageSenderService.sendSimpleMessage(recognizeService.recognize(NON_CORRECT_FORMAT_OF_NUMBER_OF_TELEPHONE.name(),messaging.getSender().getId()), messaging.getSender().getId());
             messageSenderService.sendSimpleMessage(recognizeService.recognize(NUMBER_OF_PHONE.name(),messaging.getSender().getId()), messaging.getSender().getId());

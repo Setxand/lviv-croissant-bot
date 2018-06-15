@@ -2,7 +2,7 @@ package com.example.demo.entity.lvivCroissants;
 
 import com.example.demo.entity.peopleRegister.CourierRegister;
 import com.example.demo.entity.peopleRegister.TUser;
-import com.example.demo.entity.peopleRegister.User;
+import com.example.demo.entity.peopleRegister.MUser;
 import com.example.demo.constantEnum.messengerEnums.PaymentWay;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,8 +26,8 @@ public class CustomerOrdering {
     private PaymentWay paymentWay;
     private String completedTime;
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "mUser_id")
+    private MUser mUser;
 
     @ElementCollection
     private List<String>croissants = new ArrayList<>();

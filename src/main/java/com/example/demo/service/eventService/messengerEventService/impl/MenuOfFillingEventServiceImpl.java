@@ -1,7 +1,7 @@
 package com.example.demo.service.eventService.messengerEventService.impl;
 
 import com.example.demo.entity.lvivCroissants.MenuOfFilling;
-import com.example.demo.entity.peopleRegister.User;
+import com.example.demo.entity.peopleRegister.MUser;
 import com.example.demo.dto.messanger.Message;
 import com.example.demo.dto.messanger.Messaging;
 import com.example.demo.dto.messanger.Recipient;
@@ -62,9 +62,9 @@ public class MenuOfFillingEventServiceImpl implements MenuOfFillingEventService 
                 menuOfFilling = new MenuOfFilling(str[0],Integer.parseInt(str[1]));
                 menuOfFillingRepositoryService.saveAndFlush(menuOfFilling);
                 messageSenderService.sendMessage(new Messaging(new Message(recognizeService.recognize(FILLING_WAS_ADDED.name(),messaging.getSender().getId())), new Recipient(messaging.getSender().getId())));
-                User user = userRepositoryService.findOnebyRId(messaging.getSender().getId());
-                user.setStatus(null);
-                userRepositoryService.saveAndFlush(user);
+                MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+                MUser.setStatus(null);
+                userRepositoryService.saveAndFlush(MUser);
             }
             catch (Exception ex){
                 logger.warn(ex);

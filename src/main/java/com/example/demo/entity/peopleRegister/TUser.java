@@ -29,6 +29,9 @@ public class TUser {
     private String phoneNumber;
     private Roles role;
     private Integer countCompletingOrderingsForCourier;
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @OneToMany(mappedBy = "tUser",cascade = CascadeType.ALL)
     private List<CustomerOrdering>customerOrderings = new ArrayList<>();

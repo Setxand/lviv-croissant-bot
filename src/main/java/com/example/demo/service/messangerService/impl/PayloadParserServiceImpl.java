@@ -1,7 +1,7 @@
 package com.example.demo.service.messangerService.impl;
 
 import com.example.demo.entity.SupportEntity;
-import com.example.demo.entity.peopleRegister.User;
+import com.example.demo.entity.peopleRegister.MUser;
 import com.example.demo.constantEnum.messengerEnums.payloads.Payloads;
 import com.example.demo.dto.messanger.Message;
 import com.example.demo.dto.messanger.Messaging;
@@ -146,9 +146,9 @@ public class PayloadParserServiceImpl implements PayloadParserService {
     private void parseDelButtonPayload(Messaging messaging) {
         String varPayload = TextFormatter.ejectSingleVariable(messaging.getPostback().getPayload());
         croissantRepositoryService.remove(croissantRepositoryService.findOne(Long.parseLong(varPayload)));
-        User user = userRepositoryService.findOnebyRId(messaging.getSender().getId());
-        user.getOwnCroissantsId().remove(Long.parseLong(varPayload));
-        userRepositoryService.saveAndFlush(user);
+        MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+        MUser.getOwnCroissantsId().remove(Long.parseLong(varPayload));
+        userRepositoryService.saveAndFlush(MUser);
         messageSenderService.sendSimpleMessage(recognizeService.recognize(DONE.name(), messaging.getSender().getId()), messaging.getSender().getId());
     }
 

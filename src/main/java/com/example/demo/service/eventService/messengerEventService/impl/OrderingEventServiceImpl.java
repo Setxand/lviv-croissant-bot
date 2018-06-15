@@ -3,7 +3,7 @@ package com.example.demo.service.eventService.messengerEventService.impl;
 import com.example.demo.entity.lvivCroissants.CroissantEntity;
 import com.example.demo.entity.lvivCroissants.CustomerOrdering;
 import com.example.demo.entity.SupportEntity;
-import com.example.demo.entity.peopleRegister.User;
+import com.example.demo.entity.peopleRegister.MUser;
 import com.example.demo.dto.messanger.Messaging;
 import com.example.demo.service.eventService.messengerEventService.OrderingEventService;
 import com.example.demo.service.eventService.messengerEventService.UserEventService;
@@ -48,7 +48,7 @@ public class OrderingEventServiceImpl implements OrderingEventService {
 
 
     private void orderingCreator(Messaging messaging) {
-        User user = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+        MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
         String croissantId = TextFormatter.ejectSingleVariable(messaging.getPostback().getPayload());
         CroissantEntity croissantEntity = croissantRepositoryService.findOne(Long.parseLong(croissantId));
 
@@ -60,20 +60,20 @@ public class OrderingEventServiceImpl implements OrderingEventService {
             }
         }
 
-        createOrdering(user, croissantEntity,messaging);
+        createOrdering(MUser, croissantEntity,messaging);
     }
 
-    private void createOrdering(User user, CroissantEntity croissantEntity, Messaging messaging) {
+    private void createOrdering(MUser MUser, CroissantEntity croissantEntity, Messaging messaging) {
         CustomerOrdering customerOrdering = new CustomerOrdering();
         customerOrdering.setPrice(0);
         SupportEntity supportEntity = supportEntityRepositoryService.getByUserId(messaging.getSender().getId());
         supportEntity.setCount(Integer.parseInt(croissantEntity.getId().toString()));
         supportEntityRepositoryService.saveAndFlush(supportEntity);
-        customerOrdering.setName(user.getName() + " " + user.getLastName());
-        user.addCustomerOrdering(customerOrdering);
+        customerOrdering.setName(MUser.getName() + " " + MUser.getLastName());
+        MUser.addCustomerOrdering(customerOrdering);
         customerOrderingRepositoryService.saveAndFlush(customerOrdering);
-        userRepositoryService.saveAndFlush(user);
-        if (userEventService.isUser(user)) {
+        userRepositoryService.saveAndFlush(MUser);
+        if (userEventService.isUser(MUser)) {
 
             isExistsUser(customerOrdering, messaging);
         } else {
@@ -83,19 +83,19 @@ public class OrderingEventServiceImpl implements OrderingEventService {
 
 
     private void orderingFinalist(Messaging messaging) {
-        User user = userRepositoryService.findOnebyRId(messaging.getSender().getId());
-        CustomerOrdering ordering = customerOrderingRepositoryService.findTopByUser(user);
+        MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+        CustomerOrdering ordering = customerOrderingRepositoryService.findTopByUser(MUser);
 
 
         if (ordering.getPhoneNumber() == null) {
-             parsePhoneNumber(messaging, ordering,user);
+             parsePhoneNumber(messaging, ordering, MUser);
         }
          else if (ordering.getAddress() == null) {
-             parseAddress(messaging, ordering,user);
+             parseAddress(messaging, ordering, MUser);
 
 
         } else if (ordering.getTime() == null) {
-             parseTime(messaging, ordering,user);
+             parseTime(messaging, ordering, MUser);
 
 
         } else {
@@ -108,11 +108,11 @@ public class OrderingEventServiceImpl implements OrderingEventService {
 
     private void isExistsUser(CustomerOrdering customerOrdering, Messaging messaging) {
 
-            User user = userRepositoryService.findOnebyRId(messaging.getSender().getId());
-            customerOrdering.setPhoneNumber(user.getPhoneNumber());
-            customerOrdering.setAddress(user.getAddress());
+            MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+            customerOrdering.setPhoneNumber(MUser.getPhoneNumber());
+            customerOrdering.setAddress(MUser.getAddress());
             customerOrderingRepositoryService.saveAndFlush(customerOrdering);
-            String text = user.getName()+", "+recognizeService.recognize(ADDRESS_LOCATION_QUESTION.name(),messaging.getSender().getId())+": ("+ user.getAddress()+")?";
+            String text = MUser.getName()+", "+recognizeService.recognize(ADDRESS_LOCATION_QUESTION.name(),messaging.getSender().getId())+": ("+ MUser.getAddress()+")?";
             messageSenderService.sendSimpleQuestion(messaging.getSender().getId(),text,ADDRESS_PAYLOAD.name(),"?");
 
     }
@@ -121,7 +121,7 @@ public class OrderingEventServiceImpl implements OrderingEventService {
 
 
     private void errorAction(Messaging messaging) {
-        User customer1 = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+        MUser customer1 = userRepositoryService.findOnebyRId(messaging.getSender().getId());
         customer1.setStatus(null);
         userRepositoryService.saveAndFlush(customer1);
         messageSenderService.errorMessage(messaging.getSender().getId());
@@ -130,9 +130,9 @@ public class OrderingEventServiceImpl implements OrderingEventService {
         }
     }
 
-    private void parseTime(Messaging messaging, CustomerOrdering ordering, User user) {
+    private void parseTime(Messaging messaging, CustomerOrdering ordering, MUser MUser) {
 
-        if(!user.getStatus().equals(ASK_TIME.name())){
+        if(!MUser.getStatus().equals(ASK_TIME.name())){
             messageSenderService.sendSimpleMessage(recognizeService.recognize(TIME_OF_ORDERING.name(),messaging.getSender().getId()), messaging.getSender().getId());
             userEventService.changeStatus(messaging,ASK_TIME.name());
         }
@@ -158,14 +158,14 @@ public class OrderingEventServiceImpl implements OrderingEventService {
 
 
 
-    private void parseAddress(Messaging messaging, CustomerOrdering ordering, User user) {
-        if(user.getAddress()!=null && messaging.getMessage().getQuickReply()==null && !user.getStatus().equals(ASK_ADDRESS.name())){
-            ordering.setAddress(user.getAddress());
+    private void parseAddress(Messaging messaging, CustomerOrdering ordering, MUser MUser) {
+        if(MUser.getAddress()!=null && messaging.getMessage().getQuickReply()==null && !MUser.getStatus().equals(ASK_ADDRESS.name())){
+            ordering.setAddress(MUser.getAddress());
             customerOrderingRepositoryService.saveAndFlush(ordering);
             orderingFinalist(messaging);
 
         }
-        else if(!user.getStatus().equals(ASK_ADDRESS.name())){
+        else if(!MUser.getStatus().equals(ASK_ADDRESS.name())){
             messageSenderService.sendSimpleMessage(recognizeService.recognize(ADDRESS_OF_CUSTOMER.name(),messaging.getSender().getId()), messaging.getSender().getId());
             userEventService.changeStatus(messaging,ASK_ADDRESS.name());
         }
@@ -173,8 +173,8 @@ public class OrderingEventServiceImpl implements OrderingEventService {
             ordering.setAddress(messaging.getMessage().getText());
             customerOrderingRepositoryService.saveAndFlush(ordering);
             userEventService.changeStatus(messaging,ORDERING.name());
-            user.setAddress(ordering.getAddress());
-            userRepositoryService.saveAndFlush(user);
+            MUser.setAddress(ordering.getAddress());
+            userRepositoryService.saveAndFlush(MUser);
 
             orderingFinalist(messaging);
 
@@ -187,14 +187,14 @@ public class OrderingEventServiceImpl implements OrderingEventService {
     }
 
 
-    private void parsePhoneNumber(Messaging messaging, CustomerOrdering ordering,User user) {
-        if(user.getPhoneNumber()!=null){
-            ordering.setPhoneNumber(user.getPhoneNumber());
+    private void parsePhoneNumber(Messaging messaging, CustomerOrdering ordering,MUser MUser) {
+        if(MUser.getPhoneNumber()!=null){
+            ordering.setPhoneNumber(MUser.getPhoneNumber());
             customerOrderingRepositoryService.saveAndFlush(ordering);
             orderingFinalist(messaging);
 
         }
-        else if(!user.getStatus().equals(ASK_PHONE_NUMBER.name())) {
+        else if(!MUser.getStatus().equals(ASK_PHONE_NUMBER.name())) {
             messageSenderService.sendSimpleMessage(recognizeService.recognize(NUMBER_OF_PHONE.name(), messaging.getSender().getId()), messaging.getSender().getId());
             userEventService.changeStatus(messaging,ASK_PHONE_NUMBER.name());
         }
@@ -202,9 +202,9 @@ public class OrderingEventServiceImpl implements OrderingEventService {
             ordering.setPhoneNumber(messaging.getMessage().getText());
             customerOrderingRepositoryService.saveAndFlush(ordering);
             userEventService.changeStatus(messaging,ORDERING.name());
-            if(user.getPhoneNumber()==null) {
-                user.setPhoneNumber(ordering.getPhoneNumber());
-                userRepositoryService.saveAndFlush(user);
+            if(MUser.getPhoneNumber()==null) {
+                MUser.setPhoneNumber(ordering.getPhoneNumber());
+                userRepositoryService.saveAndFlush(MUser);
             }
             orderingFinalist(messaging);
 

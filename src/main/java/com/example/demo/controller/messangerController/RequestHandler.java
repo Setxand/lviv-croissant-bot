@@ -1,7 +1,7 @@
 package com.example.demo.controller.messangerController;
 
 import com.example.demo.entity.lvivCroissants.CustomerOrdering;
-import com.example.demo.entity.peopleRegister.User;
+import com.example.demo.entity.peopleRegister.MUser;
 import com.example.demo.dto.messanger.Button;
 import com.example.demo.service.repositoryService.CustomerOrderingRepositoryService;
 import com.example.demo.service.messangerService.MessageSenderService;
@@ -85,10 +85,10 @@ public class RequestHandler {
 
     @RequestMapping(value = "/sendMail")
     public void sendMail(@RequestParam(name = "mark1") String mark,@RequestParam(name = "recipientId")String recipient) throws MessagingException, MalformedURLException {
-        List<User> admins = userRepositoryService.getByRole(ADMIN);
+        List<MUser> admins = userRepositoryService.getByRole(ADMIN);
         Long userId = Long.parseLong(recipient);
-        User user = userRepositoryService.findOnebyRId(userId);
-        emailService.sendMailForAdminAboutMark(user,mark);
+        MUser MUser = userRepositoryService.findOnebyRId(userId);
+        emailService.sendMailForAdminAboutMark(MUser,mark);
         messageSenderService.sendSimpleMessage(recognizeService.recognize(THANK_FOR_RATE.name(),userId),userId);
     }
 

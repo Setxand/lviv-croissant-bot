@@ -1,7 +1,7 @@
 package com.example.demo.service.messangerService.impl;
 
 import com.example.demo.entity.SupportEntity;
-import com.example.demo.entity.peopleRegister.User;
+import com.example.demo.entity.peopleRegister.MUser;
 import com.example.demo.constantEnum.messengerEnums.Cases;
 import com.example.demo.dto.messanger.Messaging;
 import com.example.demo.service.eventService.messengerEventService.*;
@@ -76,11 +76,11 @@ public class MessageParserServiceImpl implements MessageParserService {
         } else {
 
 
-            User user = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+            MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
 
 
-            if (user.getStatus() != null && !(message.equals(ABORT.name()))) {
-                message = user.getStatus();
+            if (MUser.getStatus() != null && !(message.equals(ABORT.name()))) {
+                message = MUser.getStatus();
             }
 
             String userCommand = TextFormatter.toCamelCase(Cases.valueOf(message.toUpperCase()).toString());

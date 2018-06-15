@@ -1,6 +1,6 @@
 package com.example.demo.service.messangerService.impl;
 
-import com.example.demo.entity.peopleRegister.User;
+import com.example.demo.entity.peopleRegister.MUser;
 import com.example.demo.dto.messanger.Entry;
 import com.example.demo.dto.messanger.Event;
 import com.example.demo.dto.messanger.Messaging;
@@ -21,7 +21,6 @@ public class EventParserServiceImpl implements EventParserService {
     private MessageParserService messageParserService;
     @Autowired
     UserRepositoryService userRepositoryService;
-
     @Autowired
     private PayloadParserService payloadParserService;
 
@@ -47,10 +46,10 @@ public class EventParserServiceImpl implements EventParserService {
 
                     }
                 } catch (Exception ex) {
-                    User user = userRepositoryService.findOnebyRId(messaging.getSender().getId());
-                    if(user.getStatus()!=null) {
-                        user.setStatus(null);
-                        userRepositoryService.saveAndFlush(user);
+                    MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+                    if(MUser.getStatus()!=null) {
+                        MUser.setStatus(null);
+                        userRepositoryService.saveAndFlush(MUser);
                     }
                     ex.printStackTrace();
                     logger.warn(ex);

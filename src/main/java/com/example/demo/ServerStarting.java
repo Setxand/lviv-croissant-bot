@@ -44,14 +44,13 @@ public class ServerStarting {
         shell.setWhiteListedDomains(new ArrayList<>(Arrays.asList(SERVER_URL)));
 
 
-
         MessengerProfileApi messengerProfileApi = new MessengerProfileApi(new GetStarted(GET_STARTED_PAYLOAD.name()), new ArrayList<PersistentMenu>());
         PersistentMenu persistentMenu = new PersistentMenu();
-        MenuItem menuItem = new MenuItem(web_url.name(),"Reference");
-        menuItem.setUrl(SERVER_URL+"/reference");
+        MenuItem menuItem = new MenuItem(web_url.name(), "Reference");
+        menuItem.setUrl(SERVER_URL + "/reference");
         persistentMenu.setCallToActions(Arrays.asList(new MenuItem(postback.name(), "Menu of croissants", MENU_PAYLOAD.name())
-        ,new MenuItem(postback.name(),"Navigation menu",NAVIGATION_MENU.name())
-        ,menuItem));
+                , new MenuItem(postback.name(), "Navigation menu", NAVIGATION_MENU.name())
+                , menuItem));
         messengerProfileApi.getPersistentMenu().add(persistentMenu);
 
         try {
@@ -65,22 +64,20 @@ public class ServerStarting {
             logger.debug(responseForWhiteList);
 
         } catch (Exception ex) {
-            logger.warn("Messenger queries: "+ex);
-        }
-        finally {
+            logger.warn("Messenger queries: " + ex);
+        } finally {
             try {
-                ResponseEntity<?>responseEntity = new RestTemplate().getForEntity(TELEGRAM_URL+"/setWebhook?url="+SERVER_URL+"/telegramWebHook",Object.class);
-                logger.debug("Telegram`s bot webhook: "+responseEntity.getBody().toString());
+                ResponseEntity<?> responseEntity = new RestTemplate().getForEntity(TELEGRAM_URL + "/setWebhook?url=" + SERVER_URL + "/telegramWebHook", Object.class);
+                logger.debug("Telegram`s bot webhook: " + responseEntity.getBody().toString());
 
-                ResponseEntity<?>adminPanelReg = new RestTemplate().getForEntity(ADMIN_TELEGRAM_URL+"/setWebhook?url="+SERVER_URL+"/adminPanel",Object.class);
-                logger.debug("Admin panel webhook: "+ adminPanelReg.getBody().toString());
+                ResponseEntity<?> adminPanelReg = new RestTemplate().getForEntity(ADMIN_TELEGRAM_URL + "/setWebhook?url=" + SERVER_URL + "/adminPanel", Object.class);
+                logger.debug("Admin panel webhook: " + adminPanelReg.getBody().toString());
 
 
                 Message message = new Message();
                 message.setChat(new Chat(388073901));
-                telegramMessageSenderService.simpleMessage("Server has ran",message);
-            }
-            catch (Exception e){
+                telegramMessageSenderService.simpleMessage("Server has ran", message);
+            } catch (Exception e) {
                 logger.warn(e);
             }
         }

@@ -1,13 +1,14 @@
 package com.example.demo.repository;
 
 import com.example.demo.entity.peopleRegister.User;
-import com.example.demo.constantEnum.messengerEnums.Roles;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User,Long> {
-    public User findTopByOrderByIdDesc();
-    public User findByRecipientId(Long recipientId);
-    public List<User> findAllByRole(Roles roles);
+    Optional<User> findByTelegramId(Integer id);
+
+    Optional<User> findByMessengerId(Long id);
+
+    Optional<User> findByPhoneNumber(String phoneNumber);
 }

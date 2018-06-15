@@ -2,7 +2,7 @@ package com.example.demo.service.repositoryService.impl;
 
 import com.example.demo.entity.lvivCroissants.CustomerOrdering;
 import com.example.demo.entity.peopleRegister.TUser;
-import com.example.demo.entity.peopleRegister.User;
+import com.example.demo.entity.peopleRegister.MUser;
 import com.example.demo.repository.CustomerOrderingRepository;
 import com.example.demo.service.repositoryService.CustomerOrderingRepositoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,8 +50,8 @@ public class CustomerOrderingRepositoryServiceImpl implements CustomerOrderingRe
     }
 
     @Override
-    public CustomerOrdering findTopByUser(User user) {
-        return customerOrderingRepository.findTopByUserOrderByIdDesc(user);
+    public CustomerOrdering findTopByUser(MUser MUser) {
+        return customerOrderingRepository.findTopByMUserOrderByIdDesc(MUser);
     }
 
     @Override

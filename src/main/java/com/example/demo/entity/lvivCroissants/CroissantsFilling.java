@@ -36,8 +36,5 @@ public class CroissantsFilling {
         this.price = croissantFillingModel.getPrice();
     }
 
-    @Override
-    public String toString() {
-        return name+" ";
-    }
+
 }

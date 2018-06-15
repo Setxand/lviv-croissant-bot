@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CustomLabel {
     private String name;
-    @JsonProperty("user")
+    @JsonProperty("MUser")
     private Long userId;
     private Long id;
     public CustomLabel(String name) {

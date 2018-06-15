@@ -2,9 +2,12 @@ package com.example.demo.service.telegramService.impl;
 
 import com.example.demo.entity.SpeakingMessage;
 import com.example.demo.entity.lvivCroissants.CustomerOrdering;
+import com.example.demo.entity.peopleRegister.MUser;
 import com.example.demo.entity.peopleRegister.TUser;
 import com.example.demo.constantEnum.messengerEnums.Roles;
 import com.example.demo.dto.telegram.Message;
+import com.example.demo.entity.peopleRegister.User;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.service.eventService.telegramEventService.TelegramCreatingOwnCroissantEventService;
 import com.example.demo.service.repositoryService.CustomerOrderingRepositoryService;
 import com.example.demo.service.peopleRegisterService.TelegramUserRepositoryService;
@@ -34,6 +37,8 @@ public class TelegramMessageParserHelperServiceImpl implements TelegramMessagePa
     private TelegramCreatingOwnCroissantEventService telegramCreatingOwnCroissantEventService;
     @Autowired
     private SpeakingMessagesRepositoryService speakingMessagesRepositoryService;
+    @Autowired
+    private UserRepository userRepository;
     private static final Logger logger = Logger.getLogger(TelegramMessageParserHelperServiceImpl.class);
     @Value("${subscription.url}")
     private String SUBSCRIPTION_URL;
@@ -44,20 +49,29 @@ public class TelegramMessageParserHelperServiceImpl implements TelegramMessagePa
     @Override
     public void helpStart(Message message) {
         TUser tUser;
-        if(telegramUserRepositoryService.findByChatId(message.getChat().getId())== null){
-            tUser = new TUser();
 
-            tUser.setLocale(message.getFrom().getLanguageCode());
-            tUser.setRole(Roles.CUSTOMER);
+        User user = userRepository.findByTelegramId(message.getChat().getId()).orElse(new User());
+        if(user.getMUser()==null) {
+            if (telegramUserRepositoryService.findByChatId(message.getChat().getId()) == null) {
+                tUser = new TUser();
+
+                tUser.setLocale(message.getFrom().getLanguageCode());
+                tUser.setRole(Roles.CUSTOMER);
+            } else tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
+
+            tUser.setName(message.getFrom().getFirstName());
+            tUser.setLastName(message.getFrom().getLastName());
+            tUser.setChatId(message.getChat().getId());
+            tUser.setUserName(message.getFrom().getUserName());
+
+
+            telegramUserRepositoryService.saveAndFlush(tUser);
+
         }
-        else tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
+        else {
+            MUser mUser = user.getMUser();
 
-        tUser.setName(message.getFrom().getFirstName());
-        tUser.setLastName(message.getFrom().getLastName());
-        tUser.setChatId(message.getChat().getId());
-        tUser.setUserName(message.getFrom().getUserName());
-
-        telegramUserRepositoryService.saveAndFlush(tUser);
+        }
         SpeakingMessage speakingMessage = speakingMessagesRepositoryService.findByKey(HELLO_MESSAGE.name());
         if(message.getPlatform()==null)
         telegramMessageSenderService.simpleMessage(speakingMessage.getMessage(),message);

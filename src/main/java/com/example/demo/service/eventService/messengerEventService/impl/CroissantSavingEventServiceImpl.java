@@ -2,7 +2,7 @@ package com.example.demo.service.eventService.messengerEventService.impl;
 
 import com.example.demo.entity.lvivCroissants.CroissantEntity;
 import com.example.demo.entity.lvivCroissants.CroissantsFilling;
-import com.example.demo.entity.peopleRegister.User;
+import com.example.demo.entity.peopleRegister.MUser;
 import com.example.demo.dto.messanger.Message;
 import com.example.demo.dto.messanger.Messaging;
 import com.example.demo.dto.messanger.Recipient;
@@ -79,7 +79,7 @@ public class CroissantSavingEventServiceImpl implements CroissantSavingEventServ
 
 
     private void finalizeSavingCroissant(Messaging messaging) {
-        User user = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+        MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
         CroissantEntity croissantEntity = croissantRepositoryService.findLastByCreatorId(messaging.getSender().getId());
 
 
@@ -97,8 +97,8 @@ public class CroissantSavingEventServiceImpl implements CroissantSavingEventServ
              parsePrice(messaging, croissantEntity);
 
         }else {
-            user.setStatus(null);
-            userRepositoryService.saveAndFlush(user);
+            MUser.setStatus(null);
+            userRepositoryService.saveAndFlush(MUser);
              errorAction(messaging, croissantEntity);
 
         }
@@ -109,9 +109,9 @@ public class CroissantSavingEventServiceImpl implements CroissantSavingEventServ
             croissantEntity.setPrice(Integer.parseInt(messaging.getMessage().getText()));
             croissantRepositoryService.saveAndFlush(croissantEntity);
             messageSenderService.sendMessage(new Messaging(new Message(recognizeService.recognize(CROISSANT_SUCCESSFULLY_ADDED.name(),messaging.getSender().getId())), new Recipient(messaging.getSender().getId())));
-            User user = userRepositoryService.findOnebyRId(messaging.getSender().getId());
-            user.setStatus(null);
-            userRepositoryService.saveAndFlush(user);
+            MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+            MUser.setStatus(null);
+            userRepositoryService.saveAndFlush(MUser);
 
         }catch (Exception ex){
             logger.warn(ex);

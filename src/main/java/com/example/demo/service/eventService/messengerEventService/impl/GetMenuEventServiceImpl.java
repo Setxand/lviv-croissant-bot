@@ -3,7 +3,7 @@ package com.example.demo.service.eventService.messengerEventService.impl;
 import com.example.demo.entity.lvivCroissants.CroissantEntity;
 import com.example.demo.entity.lvivCroissants.CroissantsFilling;
 import com.example.demo.entity.SupportEntity;
-import com.example.demo.entity.peopleRegister.User;
+import com.example.demo.entity.peopleRegister.MUser;
 import com.example.demo.constantEnum.messengerEnums.Roles;
 import com.example.demo.dto.messanger.*;
 import com.example.demo.service.eventService.messengerEventService.GetMenuEventService;
@@ -64,10 +64,10 @@ public class GetMenuEventServiceImpl implements GetMenuEventService {
         List<CroissantEntity> croissantEntities;
 
         if (croissantType.equals(OWN.name())) {
-            User user = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+            MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
             List<CroissantEntity> croissants1 = new ArrayList<>();
-            if (user.getOwnCroissantsId() != null)
-                for (Long id : user.getOwnCroissantsId()) {
+            if (MUser.getOwnCroissantsId() != null)
+                for (Long id : MUser.getOwnCroissantsId()) {
                     if (croissantRepositoryService.findOne(id) != null)
                         croissants1.add(croissantRepositoryService.findOne(id));
                 }
@@ -116,7 +116,7 @@ public class GetMenuEventServiceImpl implements GetMenuEventService {
 
             }
 
-        User user = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+        MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
         for (CroissantEntity croissantEntity :croissantsSubList) {
             Element element = new Element();
 
@@ -125,7 +125,7 @@ public class GetMenuEventServiceImpl implements GetMenuEventService {
                 break;
             }
             element = elementInit(element, croissantEntities, messaging, croissantEntity);
-            if(croissantEntity.getType().equals(OWN.name()) || user.getRole() != Roles.CUSTOMER)
+            if(croissantEntity.getType().equals(OWN.name()) || MUser.getRole() != Roles.CUSTOMER)
                 addDeleteButton(element, messaging, croissantEntity);
 
             elements.add(element);

@@ -110,7 +110,7 @@ public class BroadcastServiceImpl implements BroadcastService {
         httpHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
         HttpEntity<CustomLabel>httpEntity  = new HttpEntity<>(customLabel,httpHeaders);
         new RestTemplate().exchange(url, HttpMethod.DELETE,httpEntity,Void.class);
-        logger.debug("Custom label from user id was separated...");
+        logger.debug("Custom label from MUser id was separated...");
     }
 
     @Override

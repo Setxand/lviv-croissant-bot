@@ -3,7 +3,7 @@ package com.example.demo.service.eventService.messengerEventService.impl;
 import com.example.demo.entity.lvivCroissants.CroissantEntity;
 import com.example.demo.entity.lvivCroissants.CroissantsFilling;
 import com.example.demo.entity.SupportEntity;
-import com.example.demo.entity.peopleRegister.User;
+import com.example.demo.entity.peopleRegister.MUser;
 import com.example.demo.constantEnum.messengerEnums.Cases;
 import com.example.demo.dto.messanger.Message;
 import com.example.demo.dto.messanger.Messaging;
@@ -89,10 +89,10 @@ public class CreatingOwnCroissantEventServiceImpl implements CreatingOwnCroissan
         croissantEntity.addSingleFilling(new CroissantsFilling(menuOfFillingRepositoryService.findOne(Long.parseLong(payload))));
         croissantRepositoryService.saveAndFlush(croissantEntity);
 
-        User user = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+        MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
 
-        user.getOwnCroissantsId().add(croissantEntity.getId());
-        userRepositoryService.saveAndFlush(user);
+        MUser.getOwnCroissantsId().add(croissantEntity.getId());
+        userRepositoryService.saveAndFlush(MUser);
         menuOfFillingEventService.getMenuOfFilling(messaging.getSender().getId());
         userEventService.changeStatus(messaging,COMPLETE_CROISSANT_SECOND_STEP.name());
         messageSenderService.sendSimpleMessage(recognizeService.recognize(ID_OF_FILLING.name(),messaging.getSender().getId()),messaging.getSender().getId());
@@ -100,9 +100,9 @@ public class CreatingOwnCroissantEventServiceImpl implements CreatingOwnCroissan
 
     private void finalStepCreating(Messaging messaging, String var) {
         try {
-            User user = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+            MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
             String[]fillings = var.split(",");
-            CroissantEntity croissantEntity = croissantRepositoryService.findOne(user.getOwnCroissantsId().get(user.getOwnCroissantsId().size()-1));
+            CroissantEntity croissantEntity = croissantRepositoryService.findOne(MUser.getOwnCroissantsId().get(MUser.getOwnCroissantsId().size()-1));
             int price = 0;
             for(String filling:fillings){
                 CroissantsFilling croissantsFilling = new CroissantsFilling(menuOfFillingRepositoryService.findOne(Long.parseLong(filling)));
