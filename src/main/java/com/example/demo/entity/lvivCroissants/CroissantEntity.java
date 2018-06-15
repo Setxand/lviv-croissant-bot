@@ -56,13 +56,7 @@ public  class CroissantEntity {
         croissantsFilling.setCroissantEntity(this);
     }
 
-//    public CroissantEntity(CroissantDTO croissantDTO) {
-//        this.id = croissantDTO.getId();
-//        this.name = croissantDTO.getName();
-//        this.type = croissantDTO.getType();
-//        this.price = croissantDTO.getPrice();
-//        this.imageUrl = croissantDTO.getImageAddress();
-//    }
+
 
     @Override
     public String toString() {
@@ -72,44 +66,4 @@ public  class CroissantEntity {
     }
 
 
-    public Optional getId() {
-        return Optional.ofNullable(id);
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Optional getName() {
-        return Optional.ofNullable(name);
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Optional getType() {
-        return Optional.ofNullable(type);
-    }
-
-    public void setType(String type) {
-        this.type = type;
-
-    }
-
-    public Optional getPrice() {
-        return Optional.ofNullable(price);
-    }
-
-    public void setPrice(Integer price) {
-        this.price = price;
-    }
-
-    public Optional getImageUrl() {
-        return Optional.ofNullable(imageUrl);
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
 }

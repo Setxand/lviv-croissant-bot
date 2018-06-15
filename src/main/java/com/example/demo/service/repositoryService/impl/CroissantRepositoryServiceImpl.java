@@ -6,6 +6,7 @@ import com.example.demo.entity.lvivCroissants.CroissantsFilling;
 import com.example.demo.dto.uniRequestModel.CroissantFillingModel;
 import com.example.demo.repository.CroissantEntityRepository;
 import com.example.demo.service.repositoryService.CroissantRepositoryService;
+import com.example.demo.tools.CroissantUtilManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,12 +22,13 @@ public class CroissantRepositoryServiceImpl implements CroissantRepositoryServic
     public List<CroissantDTO> findAll() {
         List<CroissantDTO> croissantDTOS = new ArrayList<>();
         for(CroissantEntity croissantEntity : croissantEntityRepository.findAll()){
-            CroissantDTO croissantDTODTO;
-            croissantDTODTO = new CroissantDTO(croissantEntity);
+            CroissantDTO croissantDTO;
+
+            croissantDTO = CroissantUtilManager.croissantEntityToDTO(croissantEntity);
             for(CroissantsFilling croissantsFilling: croissantEntity.getCroissantsFillings()){
-                croissantDTODTO.getCroissantsFillings().add(new CroissantFillingModel(croissantsFilling));
+                croissantDTO.getCroissantsFillings().add(new CroissantFillingModel(croissantsFilling));
             }
-            croissantDTOS.add(croissantDTODTO);
+            croissantDTOS.add(croissantDTO);
 
         }
         return croissantDTOS;

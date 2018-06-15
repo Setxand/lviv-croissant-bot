@@ -1,16 +1,16 @@
 package com.example.demo.controller.uniController;
 
 import com.example.demo.dto.uniRequestModel.CroissantDTO;
+import com.example.demo.exceptions.ElementNoFoundException;
+import com.example.demo.exceptions.FieldsNotValidException;
 import com.example.demo.service.uniService.CroissantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.SQLException;
+import javax.validation.Valid;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @RestController
 public class UniController {
@@ -21,24 +21,25 @@ public class UniController {
         return croissantService.getCroissants();
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(value = "/croissants",method = RequestMethod.POST)
-    public CroissantDTO postCroissants(@RequestBody CroissantDTO croissantDTO){
+    public CroissantDTO postCroissants(@Valid @RequestBody CroissantDTO croissantDTO, BindingResult bindingResult){
+        if(bindingResult.hasErrors())
+            throw new FieldsNotValidException();
         return croissantService.createCroissant(croissantDTO);
     }
 
     @PutMapping(value = "/croissants/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity putCroissants(@RequestBody CroissantDTO croissantDTO, @PathVariable Long id){
-        croissantService.putCroissant(croissantDTO,id);
-        return ResponseEntity.noContent().build();
+    public void putCroissants(@Valid @RequestBody CroissantDTO croissantDTO, BindingResult bindingResult,@PathVariable Long id){
+        if(bindingResult.hasErrors())
+            throw new FieldsNotValidException();
+        croissantService.putCroissant(croissantDTO, id);
     }
 
     @GetMapping(value = "/croissants/{id}")
-    public CroissantDTO getById(@PathVariable("id") Long id) throws SQLException {
-        Optional<CroissantDTO>croissantDTO = croissantService.findById(id);
-
-        return croissantService.findById(id).get();
-
+    public CroissantDTO getById(@PathVariable Long id) {
+        return croissantService.findById(id).orElseThrow(() -> new ElementNoFoundException());
     }
 
 }

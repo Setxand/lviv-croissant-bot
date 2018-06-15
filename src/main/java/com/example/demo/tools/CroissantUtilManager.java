@@ -6,16 +6,18 @@ import com.example.demo.entity.lvivCroissants.CroissantEntity;
 import com.example.demo.entity.lvivCroissants.CroissantsFilling;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class CroissantUtilManager {
-    public static CroissantDTO CroissantEntityToDTO(CroissantEntity croissantEntity){
+    public static CroissantDTO croissantEntityToDTO(CroissantEntity croissantEntity){
         CroissantDTO croissantDTO = new CroissantDTO();
-        croissantDTO.setName(croissantEntity.getName().get().toString());
-        croissantDTO.setImageAddress(croissantEntity.getImageUrl().get().toString());
-        croissantDTO.setPrice(Integer.parseInt(croissantEntity.getPrice().get().toString()));
-        croissantDTO.setType(croissantEntity.getType().get().toString());
-//        croissantDTO.setCroissantsFillings(fillingsEntityToDTO(croissantEntity.getCroissantsFillings()));
+        croissantDTO.setName(croissantEntity.getName());
+        croissantDTO.setImageAddress(croissantEntity.getImageUrl());
+        croissantDTO.setPrice(croissantEntity.getPrice());
+        croissantDTO.setType(croissantEntity.getType());
+        croissantDTO.setCroissantsFillings(fillingsEntityToDTO(croissantEntity.getCroissantsFillings()));
+
         return croissantDTO;
     }
 
@@ -30,26 +32,30 @@ public class CroissantUtilManager {
         }).collect(Collectors.toList());
     }
 
-    public static CroissantDTO croissantDTOToEntity(CroissantDTO croissantDTO){
+    public static CroissantEntity croissantDTOToEntity(CroissantDTO croissantDTO) {
         CroissantEntity croissantEntity = new CroissantEntity();
-        croissantEntity.setName(croissantDTO.getName().get());
-        croissantEntity.setImageUrl(croissantDTO.getImageAddress().get());
-        croissantEntity.setPrice(croissantDTO.getPrice().get());
-        croissantEntity.setType(croissantDTO.getType().get());
-        croissantEntity.setCroissantsFillings(fillingsDTOToEntity(croissantDTO.getCroissantsFillings()));
-        return croissantDTO;
+        croissantEntity.setName(croissantDTO.getName());
+        croissantEntity.setImageUrl(croissantDTO.getImageAddress());
+        croissantEntity.setPrice(croissantDTO.getPrice());
+        croissantEntity.setType(croissantDTO.getType());
+        List<CroissantsFilling> croissantsFillings = fillingDTOToEntity(croissantDTO.getCroissantsFillings());
+        for (CroissantsFilling filling : croissantsFillings) {
+            croissantEntity.addSingleFilling(filling);
+        }
+        return croissantEntity;
     }
 
-
-    private static List<CroissantsFilling> fillingsDTOToEntity(List<CroissantFillingModel> croissantFillingModels){
-
-        return croissantFillingModels.stream().map(filling ->{
-            CroissantsFilling croissantFilling = new CroissantsFilling();
-            croissantFilling.setName(filling.getName());
-            croissantFilling.setPrice(filling.getPrice());
-            return croissantFilling;
-
+    public static List<CroissantsFilling> fillingDTOToEntity(List<CroissantFillingModel> croissantsFillings) {
+        return croissantsFillings.stream().map(filling -> {
+            CroissantsFilling croissantsFilling = new CroissantsFilling();
+            croissantsFilling.setName(filling.getName());
+            croissantsFilling.setPrice(filling.getPrice());
+            return croissantsFilling;
         }).collect(Collectors.toList());
     }
 
+
 }
+
+
+
