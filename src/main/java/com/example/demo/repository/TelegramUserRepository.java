@@ -1,6 +1,6 @@
 package com.example.demo.repository;
 
-import com.example.demo.entities.peopleRegister.TUser;
+import com.example.demo.entity.peopleRegister.TUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        
+        <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+        <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js}"></script>
+        <script th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+        <title>Updating croissantDTO croissantDTO</title>
+
+	    <script>
+	    	
+	    	        /*<![CDATA[*/
+
+	        $(document).ready(function () {	        	 
+	       	    $.ajax({
+	            	method:"GET",
+	            	url:"/croissantDTOS",
+	            	success:function(croissantDTOS){
+	            		var tr,td,div,img,p;
+	            		for(var i = 0; i  < Object.keys(croissantDTOS).length; i++){
+	            			tr = document.createElement('tr');
+	            			tr.setAttribute("id","tableRow");
+	            			td = document.createElement('td');
+	            			div = document.createElement('div');
+	            			img = document.createElement('img');
+	            			p = document.createElement('p');
+	            			div.innerHTML = croissantDTOS[i].id;
+	            			div.setAttribute("hidden","hidden");
+	            			div.setAttribute("id","croissantId");
+	            			img.setAttribute("src",croissantDTOS[i].imageAddress);
+	            			img.setAttribute("style","height:120px;width:120px;");
+	            			p.innerHTML = croissantDTOS[i].name;
+	            			tr.appendChild(td);
+	            			td.appendChild(div);
+	            			td.appendChild(img);
+
+	            			td.appendChild(p);
+	            			$("tbody").append(tr);
+
+
+
+	            		}
+	            		
+	            		$("tbody tr td").click(function(){
+	            			console.log('hey op');
+	                		var x =$(this).find("#croissantId").text();
+	                		window.location = "/update_croissant_form?id="+x;
+	            		});
+	            	}
+	            });
+
+	        })
+	        	
+	                /*]]>*/
+
+	    </script>
+
+	    <style>
+	        tbody tr:hover{
+	            cursor: pointer;
+	            background-color: #D3D3D3;
+	        }
+	    </style> 
+
+    </head>
+
+	<body>
+		<div class="container">
+		<table class="table">
+			<thead class="thead-light">
+				<tr>
+					<th>Check the croissantDTO for update</th>
+				</tr>
+			</thead>
+			<tbody id="tableBody">
+            	
+			</tbody>
+		</table>
+		</div>
+
+	</body>
+</html>

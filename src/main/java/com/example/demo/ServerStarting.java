@@ -1,9 +1,9 @@
 package com.example.demo;
 
-import com.example.demo.models.messanger.*;
-import com.example.demo.models.telegram.Chat;
-import com.example.demo.models.telegram.Message;
-import com.example.demo.services.telegramService.TelegramMessageSenderService;
+import com.example.demo.dto.messanger.*;
+import com.example.demo.dto.telegram.Chat;
+import com.example.demo.dto.telegram.Message;
+import com.example.demo.service.telegramService.TelegramMessageSenderService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,9 +15,9 @@ import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static com.example.demo.enums.messengerEnums.payloads.Payloads.*;
-import static com.example.demo.enums.messengerEnums.types.ButtonType.postback;
-import static com.example.demo.enums.messengerEnums.types.ButtonType.web_url;
+import static com.example.demo.constantEnum.messengerEnums.payloads.Payloads.*;
+import static com.example.demo.constantEnum.messengerEnums.types.ButtonType.postback;
+import static com.example.demo.constantEnum.messengerEnums.types.ButtonType.web_url;
 
 @Component
 public class ServerStarting {

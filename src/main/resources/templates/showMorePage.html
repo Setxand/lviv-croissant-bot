@@ -76,8 +76,8 @@
         <label><p th:text="'Phone number:  '+${ordering.phoneNumber}"></p></label>
         <label><p th:text="'Address:       '+${ordering.address}"></p></label>
         <label><p th:text="'Time:          '+${ordering.time}"></p></label>
-        <label><ul>croissants:
-                <li th:each="croissant:${croissants}" th:text="${croissant}"></li>
+        <label><ul>croissantDTOS:
+                <li th:each="croissantDTO:${croissantDTOS}" th:text="${croissantDTO}"></li>
         </ul></label>
     </div>
     <div id="footer">
