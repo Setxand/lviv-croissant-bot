@@ -3,7 +3,7 @@ package com.example.demo.service.adminPanelService.impl;
 import com.example.demo.entity.lvivCroissants.CroissantEntity;
 import com.example.demo.entity.lvivCroissants.CustomerOrdering;
 import com.example.demo.entity.peopleRegister.TUser;
-import com.example.demo.constantEnum.messengerEnums.Roles;
+import com.example.demo.constantEnum.messengerEnums.Role;
 import com.example.demo.constantEnum.telegramEnums.CallBackData;
 import com.example.demo.constantEnum.telegramEnums.TelegramUserStatus;
 import com.example.demo.dto.telegram.CallBackQuery;
@@ -140,16 +140,16 @@ public class AdminCallBackParserServiceImpl implements AdminCallBackParserServic
         if(answer.equals(QUESTION_YES.name())){
             switch (telegramUserRepositoryService.findByChatId(callBackQuery.getMessage().getChat().getId()).getStatus()){
                 case SETTING_ADMIN_STATUS:
-                    tUser.setRole(Roles.ADMIN);
+                    tUser.setRole(Role.ADMIN);
                     break;
                 case SETTING_COURIER_STATUS:
-                    tUser.setRole(Roles.COURIER);
+                    tUser.setRole(Role.COURIER);
                     break;
                 case SETTING_PERSONAL_STATUS:
-                    tUser.setRole(Roles.PERSONAL);
+                    tUser.setRole(Role.PERSONAL);
                     break;
                 case SETTING_CUSTOMER_STATUS:
-                    tUser.setRole(Roles.CUSTOMER);
+                    tUser.setRole(Role.CUSTOMER);
                     break;
                     default:
                         telegramMessageSenderService.errorMessage(callBackQuery.getMessage());
@@ -239,7 +239,7 @@ public class AdminCallBackParserServiceImpl implements AdminCallBackParserServic
     public void settingRoleData1(CallBackQuery callBackQuery) {
         String context = TextFormatter.ejectContext(callBackQuery.getData());
         TUser tUser = telegramUserRepositoryService.findByChatId(callBackQuery.getMessage().getChat().getId());
-        switch (Roles.valueOf(context)){
+        switch (Role.valueOf(context)){
             case ADMIN:
                 settingRole(callBackQuery,tUser,SETTING_ADMIN_STATUS);
                 break;

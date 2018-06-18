@@ -19,7 +19,7 @@ public  class CroissantEntity {
     private Long id;
     private String name;
     private String type;
-    private Integer price;
+    private int price;
     private String imageUrl;
     private Long creatorId;
     @OneToMany(mappedBy = "croissantEntity", cascade = CascadeType.ALL)
@@ -42,14 +42,6 @@ public  class CroissantEntity {
 
     }
 
-
-
-    public void setCroissantsFillings(List<CroissantsFilling> croissantsFillings) {
-        for(CroissantsFilling croissantsFilling : croissantsFillings){
-            croissantsFilling.setCroissantEntity(this);
-        }
-        this.croissantsFillings = croissantsFillings;
-    }
 
     public void addSingleFilling(CroissantsFilling croissantsFilling){
         this.getCroissantsFillings().add(croissantsFilling);

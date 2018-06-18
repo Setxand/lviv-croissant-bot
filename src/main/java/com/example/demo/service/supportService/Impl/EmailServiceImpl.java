@@ -12,7 +12,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.net.MalformedURLException;
 
-import static com.example.demo.constantEnum.messengerEnums.Roles.ADMIN;
+import static com.example.demo.constantEnum.messengerEnums.Role.ADMIN;
 
 
     @Service

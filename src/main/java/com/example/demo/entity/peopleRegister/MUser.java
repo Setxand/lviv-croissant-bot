@@ -1,7 +1,7 @@
 package com.example.demo.entity.peopleRegister;
 
 import com.example.demo.entity.lvivCroissants.CustomerOrdering;
-import com.example.demo.constantEnum.messengerEnums.Roles;
+import com.example.demo.constantEnum.messengerEnums.Role;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,7 +22,7 @@ public class MUser {
     private String lastName;
     private String phoneNumber;
     private String address;
-    private Roles role;
+    private Role role;
     private String status;
     private String email;
     private Locale locale;

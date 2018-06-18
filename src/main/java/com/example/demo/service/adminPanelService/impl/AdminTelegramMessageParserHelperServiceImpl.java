@@ -2,7 +2,7 @@ package com.example.demo.service.adminPanelService.impl;
 
 import com.example.demo.entity.SpeakingMessage;
 import com.example.demo.entity.peopleRegister.TUser;
-import com.example.demo.constantEnum.messengerEnums.Roles;
+import com.example.demo.constantEnum.messengerEnums.Role;
 import com.example.demo.dto.telegram.Message;
 import com.example.demo.dto.telegram.button.InlineKeyboardButton;
 import com.example.demo.service.adminPanelService.AdminTelegramMessageParserHelperService;
@@ -48,10 +48,10 @@ public class AdminTelegramMessageParserHelperServiceImpl implements AdminTelegra
             telegramMessageSenderService.simpleMessage(text,message);
         }
         telegramMessageSenderService.removeKeyboardButtons(message);
-        List<InlineKeyboardButton>buttons = Arrays.asList(new InlineKeyboardButton("Admin", SETTING_ROLE_DATA_1.name()+"?"+Roles.ADMIN.name()+"&"+message.getText()),
-                new InlineKeyboardButton("Personal",SETTING_ROLE_DATA_1.name()+"?"+Roles.PERSONAL.name()+"&"+message.getText()),
-                new InlineKeyboardButton("Courier",SETTING_ROLE_DATA_1.name()+"?"+Roles.COURIER.name()+"&"+message.getText()),
-                new InlineKeyboardButton("Customer",SETTING_ROLE_DATA_1.name()+"?"+Roles.CUSTOMER.name()+"&"+message.getText()));
+        List<InlineKeyboardButton>buttons = Arrays.asList(new InlineKeyboardButton("Admin", SETTING_ROLE_DATA_1.name()+"?"+Role.ADMIN.name()+"&"+message.getText()),
+                new InlineKeyboardButton("Personal",SETTING_ROLE_DATA_1.name()+"?"+Role.PERSONAL.name()+"&"+message.getText()),
+                new InlineKeyboardButton("Courier",SETTING_ROLE_DATA_1.name()+"?"+Role.COURIER.name()+"&"+message.getText()),
+                new InlineKeyboardButton("Customer",SETTING_ROLE_DATA_1.name()+"?"+Role.CUSTOMER.name()+"&"+message.getText()));
         telegramMessageSenderService.sendInlineButtons(Arrays.asList(buttons),"Choose role for " + message.getText()+":",message);
     }
 

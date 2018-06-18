@@ -4,7 +4,7 @@ import com.example.demo.entity.lvivCroissants.CroissantEntity;
 import com.example.demo.entity.lvivCroissants.CroissantsFilling;
 import com.example.demo.entity.SupportEntity;
 import com.example.demo.entity.peopleRegister.MUser;
-import com.example.demo.constantEnum.messengerEnums.Roles;
+import com.example.demo.constantEnum.messengerEnums.Role;
 import com.example.demo.dto.messanger.*;
 import com.example.demo.service.eventService.messengerEventService.GetMenuEventService;
 import com.example.demo.service.repositoryService.CroissantRepositoryService;
@@ -125,7 +125,7 @@ public class GetMenuEventServiceImpl implements GetMenuEventService {
                 break;
             }
             element = elementInit(element, croissantEntities, messaging, croissantEntity);
-            if(croissantEntity.getType().equals(OWN.name()) || MUser.getRole() != Roles.CUSTOMER)
+            if(croissantEntity.getType().equals(OWN.name()) || MUser.getRole() != Role.CUSTOMER)
                 addDeleteButton(element, messaging, croissantEntity);
 
             elements.add(element);

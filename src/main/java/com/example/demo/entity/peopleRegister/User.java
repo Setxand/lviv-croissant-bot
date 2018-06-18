@@ -1,16 +1,12 @@
 package com.example.demo.entity.peopleRegister;
 
 import com.example.demo.constantEnum.Status;
+import com.example.demo.constantEnum.messengerEnums.Role;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.management.relation.Role;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.validation.constraints.NotNull;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -24,9 +20,9 @@ public class User {
     private Status status;
     private Role role;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private TUser tUser;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private MUser mUser;
 }

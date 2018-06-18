@@ -72,7 +72,7 @@ public class MessageSenderServiceImpl implements MessageSenderService {
 
     @Override
     public void errorMessage(Long recipient) {
-        Message message = new Message(recognizeService.recognize(ERROR_MESSAGE.name(),recipient));
+        Message message = new Message(recognizeService.recognize(ERROR_MESSAGE.name(), recipient));
         Messaging messaging = new Messaging(message, new Recipient(recipient));
         sendMessage(messaging);
     }
@@ -80,84 +80,84 @@ public class MessageSenderServiceImpl implements MessageSenderService {
     @Override
     public void sendSimpleMessage(String text, Long recipient) {
         Message message = new Message(text);
-        Messaging messaging = new Messaging(message,new Recipient(recipient));
+        Messaging messaging = new Messaging(message, new Recipient(recipient));
 
         sendMessage(messaging);
     }
 
     @Override
     public void askForCourierActions(Long recipient) {
-        List<QuickReply>quickReplies = new ArrayList<>();
-        quickReplies.add(new QuickReply(ContentType.text.name(),recognizeService.recognize(ORDERING_LIST.name(),recipient), GET_LIST_OF_ORDERING.name()));
-        quickReplies.add(new QuickReply(ContentType.text.name(),recognizeService.recognize(COMPLETE_ORDERING.name(),recipient), COMPLETING_ORDERINGS.name()));
-        Message message = new Message(recognizeService.recognize(CHOOSE_ACTIONS.name(),recipient));
+        List<QuickReply> quickReplies = new ArrayList<>();
+        quickReplies.add(new QuickReply(ContentType.text.name(), recognizeService.recognize(ORDERING_LIST.name(), recipient), GET_LIST_OF_ORDERING.name()));
+        quickReplies.add(new QuickReply(ContentType.text.name(), recognizeService.recognize(COMPLETE_ORDERING.name(), recipient), COMPLETING_ORDERINGS.name()));
+        Message message = new Message(recognizeService.recognize(CHOOSE_ACTIONS.name(), recipient));
         message.setQuickReplies(quickReplies);
-        Messaging messaging1 = new Messaging(message,new Recipient(recipient));
+        Messaging messaging1 = new Messaging(message, new Recipient(recipient));
         sendMessage(messaging1);
     }
 
     @Override
-    public void sendSimpleQuestion(Long recipient,String text, String payload,String splitter) {
-        List<QuickReply> quickReplies = Arrays.asList(new QuickReply(ContentType.text.name(),recognizeService.recognize(ServerSideSpeaker.YES.name(),recipient),payload+splitter+QUESTION_YES.name())
-                , new QuickReply(ContentType.text.name(),recognizeService.recognize(NO.name(),recipient),payload+splitter+QUESTION_NO.name()));
+    public void sendSimpleQuestion(Long recipient, String text, String payload, String splitter) {
+        List<QuickReply> quickReplies = Arrays.asList(new QuickReply(ContentType.text.name(), recognizeService.recognize(ServerSideSpeaker.YES.name(), recipient), payload + splitter + QUESTION_YES.name())
+                , new QuickReply(ContentType.text.name(), recognizeService.recognize(NO.name(), recipient), payload + splitter + QUESTION_NO.name()));
         Message message = new Message(text);
         message.setQuickReplies(quickReplies);
-        Messaging messaging1 = new Messaging(message,new Recipient(recipient));
+        Messaging messaging1 = new Messaging(message, new Recipient(recipient));
         sendMessage(messaging1);
     }
 
     @Override
-    public void askTypeOfCroissants(Long recipient, String payload ) {
-        Message message = new Message(recognizeService.recognize(CHOOSE_TYPE_CROISSANT.name(),recipient));
-        List<QuickReply>quickReplies = new ArrayList<>();
-        quickReplies.add(new QuickReply(ContentType.text.name(),recognizeService.recognize(ServerSideSpeaker.SWEET.name(),recipient),payload+SWEET.name()));
-        quickReplies.add(new QuickReply(ContentType.text.name(),recognizeService.recognize(ServerSideSpeaker.SANDWICH.name(),recipient),payload+SANDWICH.name()));
-        if(payload.equals(CROISSANT_TYPE_PAYLOAD.name()+"?")){
-            quickReplies.add(new QuickReply(ContentType.text.name(),recognizeService.recognize(ServerSideSpeaker.OWN.name(),recipient),payload+ CroissantsTypes.OWN.name()));
+    public void askTypeOfCroissants(Long recipient, String payload) {
+        Message message = new Message(recognizeService.recognize(CHOOSE_TYPE_CROISSANT.name(), recipient));
+        List<QuickReply> quickReplies = new ArrayList<>();
+        quickReplies.add(new QuickReply(ContentType.text.name(), recognizeService.recognize(ServerSideSpeaker.SWEET.name(), recipient), payload + SWEET.name()));
+        quickReplies.add(new QuickReply(ContentType.text.name(), recognizeService.recognize(ServerSideSpeaker.SANDWICH.name(), recipient), payload + SANDWICH.name()));
+        if (payload.equals(CROISSANT_TYPE_PAYLOAD.name() + "?")) {
+            quickReplies.add(new QuickReply(ContentType.text.name(), recognizeService.recognize(ServerSideSpeaker.OWN.name(), recipient), payload + CroissantsTypes.OWN.name()));
         }
 
         message.setQuickReplies(quickReplies);
-        sendMessage(new Messaging(message,new Recipient(recipient)));
+        sendMessage(new Messaging(message, new Recipient(recipient)));
     }
 
     @Override
     public void askCroissantName(Messaging messaging) {
-        Message message = new Message(recognizeService.recognize(NAMING_CROISSANT.name(),messaging.getSender().getId()));
-        sendMessage(new Messaging(message,new Recipient(messaging.getSender().getId())));
+        Message message = new Message(recognizeService.recognize(NAMING_CROISSANT.name(), messaging.getSender().getId()));
+        sendMessage(new Messaging(message, new Recipient(messaging.getSender().getId())));
     }
 
     @Override
     public void askSelectLanguage(Long recipient) {
-        List<QuickReply>quickReplies = Arrays.asList(new QuickReply(ContentType.text.name(),"Українська", LANGUAGE_PAYLOAD.name()+"?"+ UA.name())
-                ,new QuickReply(ContentType.text.name(),"English",LANGUAGE_PAYLOAD.name()+"?"+EN.name()));
+        List<QuickReply> quickReplies = Arrays.asList(new QuickReply(ContentType.text.name(), "Українська", LANGUAGE_PAYLOAD.name() + "?" + UA.name())
+                , new QuickReply(ContentType.text.name(), "English", LANGUAGE_PAYLOAD.name() + "?" + EN.name()));
         Message message = new Message("Select language:");
         message.setQuickReplies(quickReplies);
-        sendMessage(new Messaging(message,new Recipient(recipient)));
+        sendMessage(new Messaging(message, new Recipient(recipient)));
     }
 
     @Override
     public UserData sendFacebookRequest(Long recipient) {
-        ResponseEntity<UserData> response = new RestTemplate().getForEntity(USER_DATA_URL+recipient+DATA_FIELDS+PAGE_ACCESS_TOKEN, UserData.class);
+        ResponseEntity<UserData> response = new RestTemplate().getForEntity(USER_DATA_URL + recipient + DATA_FIELDS + PAGE_ACCESS_TOKEN, UserData.class);
         UserData userData = response.getBody();
-        logger.debug("The message for Facebook was sent successfully"+response);
+        logger.debug("The message for Facebook was sent successfully" + response);
         return userData;
     }
 
     @Override
-    public void sendUserActions(Long recipient ) {
+    public void sendUserActions(Long recipient) {
         Attachment attachment = new Attachment();
         attachment.setType(template.name());
-            Payload payload = new Payload();
-            attachment.setPayload(payload);
-            payload.setTemplateType(button.name());
-            payload.setText(recognizeService.recognize(CHOOSE_ACtIONS.name(),recipient));
-            payload.setButtons(new ArrayList<Button>(Arrays.asList(new Button(postback.name(),recognizeService.recognize(ServerSideSpeaker.MENU_OF_CROISSANTS.name(),recipient),MENU_PAYLOAD.name())
-                    ,new Button(postback.name(),recognizeService.recognize(ServerSideSpeaker.CREATE_OWN_CROISSANT.name(),recipient), CREATE_OWN_CROISSANT_PAYLOAD.name()))));
-            payload.setElements(null);
-            Message message = new Message();
-            message.setAttachment(attachment);
+        Payload payload = new Payload();
+        attachment.setPayload(payload);
+        payload.setTemplateType(button.name());
+        payload.setText(recognizeService.recognize(CHOOSE_ACtIONS.name(), recipient));
+        payload.setButtons(new ArrayList<Button>(Arrays.asList(new Button(postback.name(), recognizeService.recognize(ServerSideSpeaker.MENU_OF_CROISSANTS.name(), recipient), MENU_PAYLOAD.name())
+                , new Button(postback.name(), recognizeService.recognize(ServerSideSpeaker.CREATE_OWN_CROISSANT.name(), recipient), CREATE_OWN_CROISSANT_PAYLOAD.name()))));
+        payload.setElements(null);
+        Message message = new Message();
+        message.setAttachment(attachment);
 
-            sendMessage(new Messaging(message,new Recipient(recipient)));
+        sendMessage(new Messaging(message, new Recipient(recipient)));
     }
 
     @Override
@@ -171,25 +171,23 @@ public class MessageSenderServiceImpl implements MessageSenderService {
         attachment.setPayload(payload);
         Message message = new Message();
         message.setAttachment(attachment);
-        sendMessage(new Messaging(message,new Recipient(recipient)));
+        sendMessage(new Messaging(message, new Recipient(recipient)));
     }
 
     @Override
-    public void sendQuickReplies(List<QuickReply> quickReplies,String text, Long recipient) {
+    public void sendQuickReplies(List<QuickReply> quickReplies, String text, Long recipient) {
         Message message = new Message();
         message.setQuickReplies(quickReplies);
         message.setText(text);
-        sendMessage(new Messaging(message,new Recipient(recipient)));
+        sendMessage(new Messaging(message, new Recipient(recipient)));
     }
 
-@Autowired
-    TestController testController;
     @Override
-        public @ResponseBody void sendMessage(Messaging messaging) {
-        testController.setObject(messaging);
-        new RestTemplate().postForEntity(FACEBOOK_SEND_URL+PAGE_ACCESS_TOKEN, messaging, Void.class);
+    public @ResponseBody
+    void sendMessage(Messaging messaging) {
+        new RestTemplate().postForEntity(FACEBOOK_SEND_URL + PAGE_ACCESS_TOKEN, messaging, Void.class);
 
-}
+    }
 
 
 }

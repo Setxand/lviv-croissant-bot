@@ -76,11 +76,11 @@ public class MessageParserServiceImpl implements MessageParserService {
         } else {
 
 
-            MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+            MUser mUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
 
 
-            if (MUser.getStatus() != null && !(message.equals(ABORT.name()))) {
-                message = MUser.getStatus();
+            if (mUser.getStatus() != null && !(message.equals(ABORT.name()))) {
+                message = mUser.getStatus();
             }
 
             String userCommand = TextFormatter.toCamelCase(Cases.valueOf(message.toUpperCase()).toString());

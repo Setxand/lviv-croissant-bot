@@ -2,7 +2,7 @@ package com.example.demo.service.adminPanelService.impl;
 
 import com.example.demo.entity.peopleRegister.TUser;
 import com.example.demo.constantEnum.BotCommands;
-import com.example.demo.constantEnum.messengerEnums.Roles;
+import com.example.demo.constantEnum.messengerEnums.Role;
 import com.example.demo.constantEnum.telegramEnums.TelegramUserStatus;
 import com.example.demo.dto.telegram.Message;
 import com.example.demo.dto.telegram.button.InlineKeyboardButton;
@@ -21,8 +21,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static com.example.demo.constantEnum.messengerEnums.Roles.ADMIN;
-import static com.example.demo.constantEnum.messengerEnums.Roles.COURIER;
+import static com.example.demo.constantEnum.messengerEnums.Role.ADMIN;
+import static com.example.demo.constantEnum.messengerEnums.Role.COURIER;
 import static com.example.demo.constantEnum.messengerEnums.speaking.ServerSideSpeaker.*;
 import static com.example.demo.constantEnum.telegramEnums.CallBackData.*;
 import static com.example.demo.constantEnum.telegramEnums.TelegramUserStatus.ASKING_TYPE_STATUS;
@@ -109,7 +109,7 @@ public class BotCommandsParserServiceImpl implements BotCommandsParserService {
     private void deleteCroissant(Message message) {
 
         TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
-        if (tUser.getRole() != ADMIN && tUser.getRole() != Roles.PERSONAL) {
+        if (tUser.getRole() != ADMIN && tUser.getRole() != Role.PERSONAL) {
             telegramMessageSenderService.noEnoughPermissions(message);
             return;
         }
@@ -128,7 +128,7 @@ public class BotCommandsParserServiceImpl implements BotCommandsParserService {
 
     private void add(Message message) {
         TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
-        if (tUser.getRole() != Roles.COURIER) {
+        if (tUser.getRole() != Role.COURIER) {
             telegramUserRepositoryService.changeStatus(tUser, TelegramUserStatus.ADDING_CROISSANT_STATUS);
             telegramAddingRecordingsEventService.addCroissant(message);
         } else
@@ -139,7 +139,7 @@ public class BotCommandsParserServiceImpl implements BotCommandsParserService {
     private void filling(Message message) {
 
         TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
-        if (tUser.getRole() != Roles.COURIER) {
+        if (tUser.getRole() != Role.COURIER) {
             telegramUserRepositoryService.changeStatus(tUser, TelegramUserStatus.ADDING_FILLING_STATUS);
             telegramAddingRecordingsEventService.addFilling(message);
         } else

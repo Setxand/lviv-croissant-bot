@@ -2,7 +2,7 @@ package com.example.demo.service.adminPanelService.impl;
 
 import com.example.demo.entity.peopleRegister.TUser;
 import com.example.demo.constantEnum.Platform;
-import com.example.demo.constantEnum.messengerEnums.Roles;
+import com.example.demo.constantEnum.messengerEnums.Role;
 import com.example.demo.dto.telegram.Update;
 import com.example.demo.service.adminPanelService.AdminCallBackParserService;
 import com.example.demo.service.adminPanelService.AdminPanelUpdateParserService;
@@ -35,7 +35,7 @@ public class AdminPanelUpdateParserServiceImpl implements AdminPanelUpdateParser
                 update.getCallBackQuery().getMessage().setPlatform(Platform.TELEGRAM_ADMIN_PANEL_BOT);
 
                 tUser = telegramUserRepositoryService.findByChatId(update.getCallBackQuery().getMessage().getChat().getId());
-                if(tUser.getRole()==Roles.CUSTOMER){
+                if(tUser.getRole()==Role.CUSTOMER){
                     telegramMessageSenderService.simpleMessage("U are not a personal of Lviv croissants!",update.getCallBackQuery().getMessage());
                     return;
                 }
@@ -44,7 +44,7 @@ public class AdminPanelUpdateParserServiceImpl implements AdminPanelUpdateParser
                 update.getMessage().setPlatform(Platform.TELEGRAM_ADMIN_PANEL_BOT);
 
                 tUser = telegramUserRepositoryService.findByChatId(update.getMessage().getChat().getId());
-                if(tUser.getRole()==Roles.CUSTOMER && !update.getMessage().getText().equals("/start")){
+                if(tUser.getRole()==Role.CUSTOMER && !update.getMessage().getText().equals("/start")){
                     telegramMessageSenderService.simpleMessage("U are not a personal of Lviv croissants!",update.getMessage());
                     return;
                 }

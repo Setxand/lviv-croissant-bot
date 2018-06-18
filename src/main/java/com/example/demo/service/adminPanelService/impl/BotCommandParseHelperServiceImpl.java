@@ -5,7 +5,7 @@ import com.example.demo.entity.lvivCroissants.CustomerOrdering;
 import com.example.demo.entity.peopleRegister.TUser;
 import com.example.demo.constantEnum.messengerEnums.Objects;
 import com.example.demo.constantEnum.BotCommands;
-import com.example.demo.constantEnum.messengerEnums.Roles;
+import com.example.demo.constantEnum.messengerEnums.Role;
 import com.example.demo.dto.messanger.Shell;
 import com.example.demo.dto.telegram.CallBackQuery;
 import com.example.demo.dto.telegram.Message;
@@ -66,7 +66,7 @@ public class BotCommandParseHelperServiceImpl implements BotCommandParseHelperSe
     @Override
     public void helpSetUpMessenger(Message message) {
         TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
-        if(tUser.getRole()!= Roles.ADMIN){
+        if(tUser.getRole()!= Role.ADMIN){
             telegramMessageSenderService.noEnoughPermissions(message);
             return;
         }

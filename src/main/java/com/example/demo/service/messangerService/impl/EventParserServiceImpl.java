@@ -46,11 +46,7 @@ public class EventParserServiceImpl implements EventParserService {
 
                     }
                 } catch (Exception ex) {
-                    MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
-                    if(MUser.getStatus()!=null) {
-                        MUser.setStatus(null);
-                        userRepositoryService.saveAndFlush(MUser);
-                    }
+
                     ex.printStackTrace();
                     logger.warn(ex);
                     messageSenderService.errorMessage(messaging.getSender().getId());

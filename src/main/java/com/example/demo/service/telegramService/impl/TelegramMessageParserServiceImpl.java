@@ -79,12 +79,20 @@ public class TelegramMessageParserServiceImpl implements TelegramMessageParserSe
             case INPUTTING_FILLINGS_IN_OWN_CROISSANT_STATUS:
                 createOwn(message);
                 break;
+            case PHONE_ENTERING_IN_START_STATUS:
+                phoneEnteringInStartStatus(message);
+                break;
 
             default:
                 telegramMessageSenderService.errorMessage(message);
                 break;
         }
     }
+
+    private void phoneEnteringInStartStatus(Message message) {
+        telegramMessageParserHelperService.helpEnterPhoneInStart(message);
+    }
+
     private void deleteOrderings(Message message, TUser tUser) {
         telegramMessageParserHelperService.helpDeleteOrderings(message);
     }
@@ -104,6 +112,5 @@ public class TelegramMessageParserServiceImpl implements TelegramMessageParserSe
     private void start(Message message) {
             telegramMessageParserHelperService.helpStart(message);
 
-        telegramMessageSenderService.sendActions(message);
     }
 }

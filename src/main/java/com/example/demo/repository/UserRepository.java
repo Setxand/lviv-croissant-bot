@@ -1,14 +1,16 @@
 package com.example.demo.repository;
 
+import com.example.demo.entity.peopleRegister.MUser;
+import com.example.demo.entity.peopleRegister.TUser;
 import com.example.demo.entity.peopleRegister.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User,Long> {
-    Optional<User> findByTelegramId(Integer id);
+    User findByTUser(TUser tUser);
 
-    Optional<User> findByMessengerId(Long id);
+    User findByMUser(MUser muser);
 
-    Optional<User> findByPhoneNumber(String phoneNumber);
+    User findByPhoneNumber(String phoneNumber);
 }

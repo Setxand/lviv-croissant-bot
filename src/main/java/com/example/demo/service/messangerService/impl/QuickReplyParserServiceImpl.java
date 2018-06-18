@@ -1,11 +1,17 @@
 package com.example.demo.service.messangerService.impl;
 
+import com.example.demo.dto.telegram.Chat;
 import com.example.demo.entity.lvivCroissants.CroissantEntity;
 import com.example.demo.entity.lvivCroissants.CustomerOrdering;
 import com.example.demo.entity.SupportEntity;
 import com.example.demo.entity.peopleRegister.MUser;
 import com.example.demo.dto.messanger.*;
+import com.example.demo.entity.peopleRegister.TUser;
+import com.example.demo.entity.peopleRegister.User;
+import com.example.demo.repository.MUserRepository;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.service.eventService.messengerEventService.*;
+import com.example.demo.service.peopleRegisterService.TelegramUserRepositoryService;
 import com.example.demo.service.repositoryService.CroissantRepositoryService;
 import com.example.demo.service.repositoryService.CustomerOrderingRepositoryService;
 import com.example.demo.service.repositoryService.MenuOfFillingRepositoryService;
@@ -16,6 +22,7 @@ import com.example.demo.service.messangerService.QuickReplyParserService;
 import com.example.demo.service.peopleRegisterService.UserRepositoryService;
 import com.example.demo.service.supportService.RecognizeService;
 import com.example.demo.service.supportService.TextFormatter;
+import com.example.demo.service.telegramService.TelegramMessageSenderService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,8 +38,8 @@ import static com.example.demo.constantEnum.messengerEnums.PayloadCases.QUESTION
 import static com.example.demo.constantEnum.messengerEnums.PayloadCases.UA;
 import static com.example.demo.constantEnum.messengerEnums.PaymentWay.CARD;
 import static com.example.demo.constantEnum.messengerEnums.PaymentWay.CASH;
-import static com.example.demo.constantEnum.messengerEnums.Roles.ADMIN;
-import static com.example.demo.constantEnum.messengerEnums.Roles.PERSONAL;
+import static com.example.demo.constantEnum.messengerEnums.Role.ADMIN;
+import static com.example.demo.constantEnum.messengerEnums.Role.PERSONAL;
 import static com.example.demo.constantEnum.messengerEnums.payloads.Payloads.CREATE_OWN_CROISSANT_PAYLOAD;
 import static com.example.demo.constantEnum.messengerEnums.payloads.QuickReplyPayloads.*;
 import static com.example.demo.constantEnum.messengerEnums.speaking.ServerSideSpeaker.*;
@@ -40,6 +47,7 @@ import static com.example.demo.constantEnum.messengerEnums.speaking.ServerSideSp
 import static com.example.demo.constantEnum.messengerEnums.types.ButtonType.web_url;
 import static com.example.demo.constantEnum.messengerEnums.types.ContentType.text;
 import static com.example.demo.constantEnum.messengerEnums.types.CroissantsTypes.SWEET;
+import static com.example.demo.constantEnum.telegramEnums.TelegramUserStatus.PHONE_ENTERING_IN_START_STATUS;
 
 @Service
 public class QuickReplyParserServiceImpl implements QuickReplyParserService {
@@ -71,8 +79,16 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
     private UserEventService userEventService;
     @Autowired
     private CroissantSavingEventService croissantSavingEventService;
+    @Autowired
+    private TelegramUserRepositoryService telegramUserRepositoryService;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private MUserRepository mUserRepository;
+    @Autowired
+    private TelegramMessageSenderService telegramMessageSenderService;
     private static Logger logger = Logger.getLogger(QuickReplyParserServiceImpl.class);
-    private static Map<String,Method> methodsMap;
+    private static Map<String, Method> methodsMap;
 
     @Value("${server.url}")
     private String SERVER_URL;
@@ -85,10 +101,9 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
         if (singlePayload.equals(CREATE_OWN_CROISSANT_PAYLOAD.name())) {
             creatingOwnCroissantEventService.CreateOwnCroissant(messaging);
         } else {
-            invokeByRef(messaging,singlePayload);
+            invokeByRef(messaging, singlePayload);
 
         }
-
 
 
     }
@@ -96,11 +111,9 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
     private void invokeByRef(Messaging messaging, String singlePayload) {
         try {
             String invoking = TextFormatter.toCamelCase(singlePayload);
-            if(methodsMap.get(invoking)!=null) {
+            if (methodsMap.get(invoking) != null) {
                 methodsMap.get(invoking).invoke(this, messaging);
-            }
-            else
-            {
+            } else {
                 logger.info("Can`t find method...");
                 messaging.getMessage().setText(singlePayload);
                 messaging.getMessage().setQuickReply(null);
@@ -115,14 +128,46 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
     }
 
     @PostConstruct
-    private void methodsMapInit(){
+    private void methodsMapInit() {
         Method[] methods = QuickReplyParserServiceImpl.class.getDeclaredMethods();
-        methodsMap = new HashMap<String,Method>();
-        for(Method method: methods){
-            methodsMap.put(method.getName(),method);
+        methodsMap = new HashMap<String, Method>();
+        for (Method method : methods) {
+            methodsMap.put(method.getName(), method);
         }
 
     }
+
+    private void questionApproving(Messaging messaging) {
+        String context = TextFormatter.ejectContext(messaging.getMessage().getQuickReply().getPayload());
+        String answer = TextFormatter.ejectVariableWithContext(messaging.getMessage().getQuickReply().getPayload());
+        if (answer.equals(QUESTION_YES.name())) {
+            synchWithTelegram(messaging, context, answer);
+        } else {
+            notApproved(context);
+        }
+    }
+
+    private void notApproved(String context) {
+        com.example.demo.dto.telegram.Message message = new com.example.demo.dto.telegram.Message();
+        message.setChat(new Chat(Integer.parseInt(context)));
+        telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(NOT_APPROVED.name()), message);
+        telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(NUMBER_OF_PHONE.name()),message);
+        telegramUserRepositoryService.changeStatus(telegramUserRepositoryService.findByChatId(message.getChat().getId()),PHONE_ENTERING_IN_START_STATUS);
+    }
+
+    private void synchWithTelegram(Messaging messaging, String context, String answer) {
+        TUser tUser = telegramUserRepositoryService.findByChatId(Integer.parseInt(context));
+        User user = mUserRepository.findByRecipientId(messaging.getSender().getId()).getUser();
+        user.setTUser(tUser);
+        tUser.setUser(user);
+        userRepository.saveAndFlush(user);
+        messageSenderService.sendSimpleMessage(ResourceBundle.getBundle("dictionary").getString(SYNCH.name()), messaging.getSender().getId());
+        com.example.demo.dto.telegram.Message message = new com.example.demo.dto.telegram.Message();
+        message.setChat(new Chat(tUser.getChatId()));
+        telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(SYNCH.name()), message);
+        telegramMessageSenderService.sendActions(message);
+    }
+
 
     private void typePayload(Messaging messaging) {
         String payload = messaging.getMessage().getQuickReply().getPayload();
@@ -133,31 +178,31 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
         croissantRepositoryService.saveAndFlush(croissantEntity);
 
         SupportEntity supportEntity = null;
-        logicTypePayload(messaging,supportEntity,type);
+        logicTypePayload(messaging, supportEntity, type);
 
         messageSenderService.askCroissantName(messaging);
     }
-    private void paymentWay(Messaging messaging){
+
+    private void paymentWay(Messaging messaging) {
         String payload = messaging.getMessage().getQuickReply().getPayload();
         String var = TextFormatter.ejectSingleVariable(payload);
         CustomerOrdering customerOrdering = customerOrderingRepositoryService.findTopByUser(userRepositoryService.findOnebyRId(messaging.getSender().getId()));
 
-        if(!var.equalsIgnoreCase(CASH.name())){
-            paymentWayCard(messaging,customerOrdering);
+        if (!var.equalsIgnoreCase(CASH.name())) {
+            paymentWayCard(messaging, customerOrdering);
 
-        }
-        else {
-            paymentWayCash(messaging,customerOrdering);
+        } else {
+            paymentWayCash(messaging, customerOrdering);
         }
     }
 
     private void paymentWayCard(Messaging messaging, CustomerOrdering customerOrdering) {
         customerOrdering.setPaymentWay(CARD);
         customerOrderingRepositoryService.saveAndFlush(customerOrdering);
-        Button button = new Button(web_url.name(),recognizeService.recognize(PAYMENT.name(),messaging.getSender().getId()));
+        Button button = new Button(web_url.name(), recognizeService.recognize(PAYMENT.name(), messaging.getSender().getId()));
         button.setMesExtentions(true);
-        button.setUrl(SERVER_URL+"/payment/"+messaging.getSender().getId());
-        messageSenderService.sendButtons(new ArrayList<Button>(Arrays.asList(button)),recognizeService.recognize(TAP_CREATE_CHARGE.name(),messaging.getSender().getId()),messaging.getSender().getId());
+        button.setUrl(SERVER_URL + "/payment/" + messaging.getSender().getId());
+        messageSenderService.sendButtons(new ArrayList<Button>(Arrays.asList(button)), recognizeService.recognize(TAP_CREATE_CHARGE.name(), messaging.getSender().getId()), messaging.getSender().getId());
     }
 
     private void paymentWayCash(Messaging messaging, CustomerOrdering customerOrdering) {
@@ -179,15 +224,7 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
         parseRoleRequest(messaging);
 
     }
-//    private void typePayload(Messaging messaging){
-//        Message message = messaging.getMessage();
-//        String payload = TextFormatter.ejectSingleVariable(message.getQuickReply().getPayload());
-//        CroissantDTO croissantEntity = new CroissantDTO();
-//        croissantEntity.setType(payload);
-//        croissantEntity.setCreatorId(messaging.getSender().getId());
-//        croissantRepositoryService.saveAndFlush(croissantEntity);
-//        messageSenderService.sendSimpleMessage(recognizeService.recognize(NAMING_CROISSANT.name(),messaging.getSender().getId()),messaging.getSender().getId());
-//    }
+
     private void adminRequestPayload(Messaging messaging) {
         parseRoleRequest(messaging);
     }
@@ -197,7 +234,7 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
         String var = TextFormatter.ejectVariableWithContext(messaging.getMessage().getQuickReply().getPayload());
         MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
         if (var.equals(QUESTION_YES.name())) {
-            acceptOrderingYes(messaging,context, MUser);
+            acceptOrderingYes(messaging, context, MUser);
 
         } else {
             messageSenderService.sendSimpleMessage(recognizeService.recognize(DONE.name(), messaging.getSender().getId()), messaging.getSender().getId());
@@ -221,9 +258,9 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
         String var = TextFormatter.ejectSingleVariable(messaging.getMessage().getQuickReply().getPayload());
         SupportEntity supportEntity = supportEntityRepositoryService.getByUserId(messaging.getSender().getId());
         if (var.equals(QUESTION_YES.name())) {
-            oneMoreOrderingYes(messaging,supportEntity);
+            oneMoreOrderingYes(messaging, supportEntity);
         } else {
-            oneMoreOrderingNo(messaging,supportEntity);
+            oneMoreOrderingNo(messaging, supportEntity);
 
         }
 
@@ -244,9 +281,9 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
         userEventService.changeStatus(messaging, null);
         supportEntityRepositoryService.saveAndFlush(supportEntity);
 
-        List<QuickReply>quickReplies = Arrays.asList(new QuickReply(text.name(),recognizeService.recognize(CASH_BUTTON.name(),messaging.getSender().getId()),PAYMENT_WAY.name()+"?"+CASH.name())
-                ,new QuickReply(text.name(),recognizeService.recognize(CARD_BUTTON.name(),messaging.getSender().getId()),PAYMENT_WAY.name()+"?"+ CARD.name()));
-        messageSenderService.sendQuickReplies(quickReplies,recognizeService.recognize(PAYMENT_WAY_CHOICE.name(),messaging.getSender().getId()),messaging.getSender().getId());
+        List<QuickReply> quickReplies = Arrays.asList(new QuickReply(text.name(), recognizeService.recognize(CASH_BUTTON.name(), messaging.getSender().getId()), PAYMENT_WAY.name() + "?" + CASH.name())
+                , new QuickReply(text.name(), recognizeService.recognize(CARD_BUTTON.name(), messaging.getSender().getId()), PAYMENT_WAY.name() + "?" + CARD.name()));
+        messageSenderService.sendQuickReplies(quickReplies, recognizeService.recognize(PAYMENT_WAY_CHOICE.name(), messaging.getSender().getId()), messaging.getSender().getId());
 
     }
 
@@ -372,8 +409,6 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
         messageSenderService.sendSimpleQuestion(MUser.getRecipientId(), recognizeService.recognize(ACCEPT_THIS_DEADLY_AS_COURIER.name(), messaging.getSender().getId()), COURIER_QUESTION_PAYLOAD.name(), "?");
 
     }
-
-
 
 
     private void logicTypePayload(Messaging messaging, SupportEntity supportEntity, String type) {

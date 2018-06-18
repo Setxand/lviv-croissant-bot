@@ -18,7 +18,7 @@ import java.util.List;
 
 import static com.example.demo.constantEnum.messengerEnums.Cases.*;
 import static com.example.demo.constantEnum.messengerEnums.Cases.PERSONAL_REQUEST;
-import static com.example.demo.constantEnum.messengerEnums.Roles.ADMIN;
+import static com.example.demo.constantEnum.messengerEnums.Role.ADMIN;
 import static com.example.demo.constantEnum.messengerEnums.payloads.QuickReplyPayloads.*;
 import static com.example.demo.constantEnum.messengerEnums.payloads.QuickReplyPayloads.COMPLETING_ORDERINGS;
 import static com.example.demo.constantEnum.messengerEnums.payloads.QuickReplyPayloads.GET_LIST_OF_ORDERING;

@@ -1,7 +1,7 @@
 package com.example.demo.service.eventService.messengerEventService.impl;
 
 import com.example.demo.entity.peopleRegister.MUser;
-import com.example.demo.constantEnum.messengerEnums.Roles;
+import com.example.demo.constantEnum.messengerEnums.Role;
 import com.example.demo.dto.messanger.Messaging;
 import com.example.demo.dto.messanger.UserData;
 import com.example.demo.service.eventService.messengerEventService.UserEventService;
@@ -61,7 +61,7 @@ public class UserEventServiceImpl implements UserEventService {
             MUser.setName(userData.getFirstName());
             MUser.setLastName(userData.getLastName());
             MUser.setPicture(userData.getPicture());
-            MUser.setRole(Roles.CUSTOMER);
+            MUser.setRole(Role.CUSTOMER);
             userRepositoryService.saveAndFlush(MUser);
             payloadParserService.parsePayload(messaging);
     }
@@ -85,7 +85,7 @@ public class UserEventServiceImpl implements UserEventService {
 
 
             MUser.setName(messaging.getMessage().getText());
-            MUser.setRole(Roles.CUSTOMER);
+            MUser.setRole(Role.CUSTOMER);
             userRepositoryService.saveAndFlush(MUser);
             messageSenderService.sendSimpleMessage(recognizeService.recognize(ADDRESS_OF_CUSTOMER.name(),messaging.getSender().getId()), messaging.getSender().getId());
 

@@ -1,5 +1,7 @@
 package com.example.demo.service.telegramService.impl;
 
+import com.example.demo.constantEnum.Status;
+import com.example.demo.constantEnum.messengerEnums.Role;
 import com.example.demo.entity.lvivCroissants.CroissantEntity;
 import com.example.demo.entity.lvivCroissants.CustomerOrdering;
 import com.example.demo.entity.peopleRegister.TUser;
@@ -9,6 +11,8 @@ import com.example.demo.constantEnum.telegramEnums.TelegramUserStatus;
 import com.example.demo.dto.telegram.CallBackQuery;
 import com.example.demo.dto.telegram.Chat;
 import com.example.demo.dto.telegram.Message;
+import com.example.demo.entity.peopleRegister.User;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.service.eventService.telegramEventService.TelegramCreatingOwnCroissantEventService;
 import com.example.demo.service.eventService.telegramEventService.TelegramGetMenuEventService;
 import com.example.demo.service.eventService.telegramEventService.TelegramOrderingEventService;
@@ -26,9 +30,7 @@ import java.util.ResourceBundle;
 
 import static com.example.demo.constantEnum.Platform.TELEGRAM_ADMIN_PANEL_BOT;
 import static com.example.demo.constantEnum.messengerEnums.PayloadCases.QUESTION_YES;
-import static com.example.demo.constantEnum.messengerEnums.speaking.ServerSideSpeaker.DONE;
-import static com.example.demo.constantEnum.messengerEnums.speaking.ServerSideSpeaker.TECHNICAL_TROUBLE;
-import static com.example.demo.constantEnum.messengerEnums.speaking.ServerSideSpeaker.THANKS;
+import static com.example.demo.constantEnum.messengerEnums.speaking.ServerSideSpeaker.*;
 import static com.example.demo.constantEnum.telegramEnums.TelegramUserStatus.*;
 
 @Service
@@ -49,6 +51,8 @@ public class CallBackParserServiceImpl implements CallBackParserService {
     private TelegramCreatingOwnCroissantEventService telegramCreatingOwnCroissantEventService;
     @Autowired
     private CustomerOrderingRepositoryService customerOrderingRepositoryService;
+    @Autowired
+    private UserRepository userRepository;
     @Override
     public void parseCallBackQuery(CallBackQuery callBackQuery) {
         switch (CallBackData.valueOf(TextFormatter.ejectPaySinglePayload(callBackQuery.getData()))){
@@ -79,9 +83,36 @@ public class CallBackParserServiceImpl implements CallBackParserService {
             case QUESTION_COMPLETE_DATA:
                 questionCompleteData(callBackQuery);
                 break;
+            case QUESTION_HAVING_MESSENGER_DATA:
+                questionHavingMessengerData(callBackQuery);
+                break;
             default:
-                telegramMessageSenderService.errorMessage(callBackQuery.getMessage());                break;
+                telegramMessageSenderService.errorMessage(callBackQuery.getMessage());
+                break;
         }
+    }
+
+    private void questionHavingMessengerData(CallBackQuery callBackQuery) {
+        String ans = TextFormatter.ejectSingleVariable(callBackQuery.getData());
+        if(ans.equalsIgnoreCase(QUESTION_YES.name())){
+            telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(NUMBER_OF_PHONE.name()),callBackQuery.getMessage());
+            telegramUserRepositoryService.changeStatus(telegramUserRepositoryService.findByChatId(callBackQuery.getMessage().getChat().getId()),PHONE_ENTERING_IN_START_STATUS);
+        }
+        else {
+            telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(NEW_USER.name()),callBackQuery.getMessage());
+            userCreating(callBackQuery);
+            telegramMessageSenderService.sendActions(callBackQuery.getMessage());
+        }
+    }
+
+    private void userCreating(CallBackQuery callBackQuery) {
+        TUser tUser = telegramUserRepositoryService.findByChatId(callBackQuery.getMessage().getChat().getId());
+        User user = new User();
+        user.setTUser(tUser);
+        tUser.setUser(user);
+        user.setRole(Role.CUSTOMER);
+        user.setStatus(Status.ACTIVE);
+        userRepository.saveAndFlush(user);
     }
 
     private void questionCompleteData(CallBackQuery callBackQuery) {

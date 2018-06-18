@@ -1,6 +1,6 @@
 package com.example.demo.constantEnum.messengerEnums;
 
-public enum Roles {
+public enum Role {
     ADMIN,
     PERSONAL,
     CUSTOMER,

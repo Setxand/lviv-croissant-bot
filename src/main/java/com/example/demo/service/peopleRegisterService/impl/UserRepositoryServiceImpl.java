@@ -1,7 +1,7 @@
 package com.example.demo.service.peopleRegisterService.impl;
 
 import com.example.demo.entity.peopleRegister.MUser;
-import com.example.demo.constantEnum.messengerEnums.Roles;
+import com.example.demo.constantEnum.messengerEnums.Role;
 import com.example.demo.repository.MUserRepository;
 import com.example.demo.service.peopleRegisterService.UserRepositoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +41,7 @@ public class UserRepositoryServiceImpl implements UserRepositoryService {
     }
 
     @Override
-    public List<MUser> getByRole(Roles roles) {
-        return MUserRepository.findAllByRole(roles);
+    public List<MUser> getByRole(Role role) {
+        return MUserRepository.findAllByRole(role);
     }
 }

@@ -2,7 +2,7 @@ package com.example.demo.entity.peopleRegister;
 
 import com.example.demo.entity.lvivCroissants.CroissantEntity;
 import com.example.demo.entity.lvivCroissants.CustomerOrdering;
-import com.example.demo.constantEnum.messengerEnums.Roles;
+import com.example.demo.constantEnum.messengerEnums.Role;
 import com.example.demo.constantEnum.telegramEnums.TelegramUserStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,8 +27,9 @@ public class TUser {
     private String userName;
     private TelegramUserStatus status;
     private String phoneNumber;
-    private Roles role;
+    private Role role;
     private Integer countCompletingOrderingsForCourier;
+
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -56,4 +57,23 @@ public class TUser {
         customerOrdering.setCourier(this);
     }
 
+    @Override
+    public String toString() {
+        return "TUser{" +
+                "id=" + id +
+                ", chatId=" + chatId +
+                ", name='" + name + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", locale='" + locale + '\'' +
+                ", userName='" + userName + '\'' +
+                ", status=" + status +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", role=" + role +
+                ", countCompletingOrderingsForCourier=" + countCompletingOrderingsForCourier +
+                ", user=" + user +
+                ", customerOrderings=" + customerOrderings +
+                ", ownCroissantEntities=" + ownCroissantEntities +
+                ", courierCustomerOrderings=" + courierCustomerOrderings +
+                '}';
+    }
 }

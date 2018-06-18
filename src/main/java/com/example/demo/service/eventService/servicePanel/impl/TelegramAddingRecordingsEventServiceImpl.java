@@ -96,7 +96,7 @@ public class TelegramAddingRecordingsEventServiceImpl implements TelegramAddingR
             addingImageForCroissant(message, croissantEntity, tUser);
         } else if (croissantEntity.getCroissantsFillings().isEmpty()) {
             addingCroissantsFillings(message, croissantEntity, tUser);
-        } else if (croissantEntity.getPrice() == 0) {
+        } else if (croissantEntity.getPrice()==0) {
             settingCroissantPrice(message, croissantEntity, tUser);
         } else {
             finalSavingCroissant(message, tUser);

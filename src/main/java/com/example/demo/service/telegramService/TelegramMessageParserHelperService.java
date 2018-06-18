@@ -3,8 +3,11 @@ package com.example.demo.service.telegramService;
 import com.example.demo.dto.telegram.Message;
 
 public interface TelegramMessageParserHelperService {
-    public void helpStart(Message message);
-    public void helpDeleteOrderings(Message message);
-    public void helpCreateOwnCroissant(Message message);
+    void helpStart(Message message);
 
+    void helpDeleteOrderings(Message message);
+
+    void helpCreateOwnCroissant(Message message);
+
+    void helpEnterPhoneInStart(Message message);
 }

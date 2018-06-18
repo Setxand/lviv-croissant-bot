@@ -21,7 +21,7 @@ import javax.mail.MessagingException;
 import java.net.MalformedURLException;
 import java.util.*;
 
-import static com.example.demo.constantEnum.messengerEnums.Roles.ADMIN;
+import static com.example.demo.constantEnum.messengerEnums.Role.ADMIN;
 import static com.example.demo.constantEnum.messengerEnums.speaking.ServerSideSpeaker.*;
 import static com.example.demo.constantEnum.messengerEnums.types.ButtonType.web_url;
 
