@@ -11,7 +11,7 @@ import com.example.demo.service.repositoryService.CroissantRepositoryService;
 import com.example.demo.service.repositoryService.CustomerOrderingRepositoryService;
 import com.example.demo.service.repositoryService.SupportEntityRepositoryService;
 import com.example.demo.service.messangerService.MessageSenderService;
-import com.example.demo.service.peopleRegisterService.UserRepositoryService;
+import com.example.demo.service.peopleRegisterService.MUserRepositoryService;
 import com.example.demo.service.supportService.RecognizeService;
 import com.example.demo.service.supportService.TextFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class OrderingEventServiceImpl implements OrderingEventService {
     @Autowired
     private CroissantRepositoryService croissantRepositoryService;
     @Autowired
-    private UserRepositoryService userRepositoryService;
+    private MUserRepositoryService MUserRepositoryService;
     @Autowired
     private MessageSenderService messageSenderService;
     @Autowired
@@ -48,7 +48,7 @@ public class OrderingEventServiceImpl implements OrderingEventService {
 
 
     private void orderingCreator(Messaging messaging) {
-        MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+        MUser MUser = MUserRepositoryService.findOnebyRId(messaging.getSender().getId());
         String croissantId = TextFormatter.ejectSingleVariable(messaging.getPostback().getPayload());
         CroissantEntity croissantEntity = croissantRepositoryService.findOne(Long.parseLong(croissantId));
 
@@ -72,7 +72,7 @@ public class OrderingEventServiceImpl implements OrderingEventService {
         customerOrdering.setName(MUser.getName() + " " + MUser.getLastName());
         MUser.addCustomerOrdering(customerOrdering);
         customerOrderingRepositoryService.saveAndFlush(customerOrdering);
-        userRepositoryService.saveAndFlush(MUser);
+        MUserRepositoryService.saveAndFlush(MUser);
         if (userEventService.isUser(MUser)) {
 
             isExistsUser(customerOrdering, messaging);
@@ -83,7 +83,7 @@ public class OrderingEventServiceImpl implements OrderingEventService {
 
 
     private void orderingFinalist(Messaging messaging) {
-        MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+        MUser MUser = MUserRepositoryService.findOnebyRId(messaging.getSender().getId());
         CustomerOrdering ordering = customerOrderingRepositoryService.findTopByUser(MUser);
 
 
@@ -108,8 +108,8 @@ public class OrderingEventServiceImpl implements OrderingEventService {
 
     private void isExistsUser(CustomerOrdering customerOrdering, Messaging messaging) {
 
-            MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
-            customerOrdering.setPhoneNumber(MUser.getPhoneNumber());
+            MUser MUser = MUserRepositoryService.findOnebyRId(messaging.getSender().getId());
+            customerOrdering.setPhoneNumber(MUser.getUser().getPhoneNumber());
             customerOrdering.setAddress(MUser.getAddress());
             customerOrderingRepositoryService.saveAndFlush(customerOrdering);
             String text = MUser.getName()+", "+recognizeService.recognize(ADDRESS_LOCATION_QUESTION.name(),messaging.getSender().getId())+": ("+ MUser.getAddress()+")?";
@@ -121,9 +121,9 @@ public class OrderingEventServiceImpl implements OrderingEventService {
 
 
     private void errorAction(Messaging messaging) {
-        MUser customer1 = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+        MUser customer1 = MUserRepositoryService.findOnebyRId(messaging.getSender().getId());
         customer1.setStatus(null);
-        userRepositoryService.saveAndFlush(customer1);
+        MUserRepositoryService.saveAndFlush(customer1);
         messageSenderService.errorMessage(messaging.getSender().getId());
         if (customerOrderingRepositoryService.findTop().getCroissants().isEmpty()) {
             customerOrderingRepositoryService.delete(customerOrderingRepositoryService.findTop());
@@ -174,7 +174,7 @@ public class OrderingEventServiceImpl implements OrderingEventService {
             customerOrderingRepositoryService.saveAndFlush(ordering);
             userEventService.changeStatus(messaging,ORDERING.name());
             MUser.setAddress(ordering.getAddress());
-            userRepositoryService.saveAndFlush(MUser);
+            MUserRepositoryService.saveAndFlush(MUser);
 
             orderingFinalist(messaging);
 
@@ -188,8 +188,8 @@ public class OrderingEventServiceImpl implements OrderingEventService {
 
 
     private void parsePhoneNumber(Messaging messaging, CustomerOrdering ordering,MUser MUser) {
-        if(MUser.getPhoneNumber()!=null){
-            ordering.setPhoneNumber(MUser.getPhoneNumber());
+        if(MUser.getUser().getPhoneNumber()!=null){
+            ordering.setPhoneNumber(MUser.getUser().getPhoneNumber());
             customerOrderingRepositoryService.saveAndFlush(ordering);
             orderingFinalist(messaging);
 
@@ -202,9 +202,9 @@ public class OrderingEventServiceImpl implements OrderingEventService {
             ordering.setPhoneNumber(messaging.getMessage().getText());
             customerOrderingRepositoryService.saveAndFlush(ordering);
             userEventService.changeStatus(messaging,ORDERING.name());
-            if(MUser.getPhoneNumber()==null) {
-                MUser.setPhoneNumber(ordering.getPhoneNumber());
-                userRepositoryService.saveAndFlush(MUser);
+            if(MUser.getUser().getPhoneNumber()==null) {
+                MUser.getUser().setPhoneNumber(ordering.getPhoneNumber());
+                MUserRepositoryService.saveAndFlush(MUser);
             }
             orderingFinalist(messaging);
 

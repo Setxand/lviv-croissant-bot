@@ -20,9 +20,7 @@ public class MUser {
     private Long recipientId;
     private String name;
     private String lastName;
-    private String phoneNumber;
     private String address;
-    private Role role;
     private String status;
     private String email;
     private Locale locale;
@@ -36,10 +34,9 @@ public class MUser {
     @OneToMany(mappedBy = "mUser", cascade = CascadeType.ALL)
     private List<CustomerOrdering> customerOrderings = new ArrayList<>();
 
-    public MUser(Long recipientId, String name, String phoneNumber, String address) {
+    public MUser(Long recipientId, String name, String address) {
         this.recipientId = recipientId;
         this.name = name;
-        this.phoneNumber = phoneNumber;
         this.address = address;
     }
 

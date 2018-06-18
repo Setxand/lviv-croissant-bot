@@ -79,7 +79,7 @@ public class BotCommandsParserServiceImpl implements BotCommandsParserService {
 
     private void courierActions(Message message) {
         TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
-        if (tUser.getRole() == ADMIN || tUser.getRole() == COURIER) {
+        if (tUser.getUser().getRole() == ADMIN || tUser.getUser().getRole() == COURIER) {
             String listOfOrdering = ResourceBundle.getBundle("dictionary").getString(ORDERING_LIST.name());
             String listOfOwnOrdering = ResourceBundle.getBundle("dictionary").getString(COMPLETE_ORDERING.name().toUpperCase());
             List<InlineKeyboardButton> buttons = Arrays.asList(new InlineKeyboardButton(listOfOrdering, LIST_OF_ORDERING_DATA.name()),
@@ -96,7 +96,7 @@ public class BotCommandsParserServiceImpl implements BotCommandsParserService {
 
     private void adminPanel(Message message) {
         TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
-        if (tUser.getRole() != ADMIN) {
+        if (tUser.getUser().getRole() != ADMIN) {
             telegramMessageSenderService.noEnoughPermissions(message);
             return;
         }
@@ -109,7 +109,7 @@ public class BotCommandsParserServiceImpl implements BotCommandsParserService {
     private void deleteCroissant(Message message) {
 
         TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
-        if (tUser.getRole() != ADMIN && tUser.getRole() != Role.PERSONAL) {
+        if (tUser.getUser().getRole() != ADMIN && tUser.getUser().getRole() != Role.PERSONAL) {
             telegramMessageSenderService.noEnoughPermissions(message);
             return;
         }
@@ -128,7 +128,7 @@ public class BotCommandsParserServiceImpl implements BotCommandsParserService {
 
     private void add(Message message) {
         TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
-        if (tUser.getRole() != Role.COURIER) {
+        if (tUser.getUser().getRole() != Role.COURIER) {
             telegramUserRepositoryService.changeStatus(tUser, TelegramUserStatus.ADDING_CROISSANT_STATUS);
             telegramAddingRecordingsEventService.addCroissant(message);
         } else
@@ -139,7 +139,7 @@ public class BotCommandsParserServiceImpl implements BotCommandsParserService {
     private void filling(Message message) {
 
         TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
-        if (tUser.getRole() != Role.COURIER) {
+        if (tUser.getUser().getRole() != Role.COURIER) {
             telegramUserRepositoryService.changeStatus(tUser, TelegramUserStatus.ADDING_FILLING_STATUS);
             telegramAddingRecordingsEventService.addFilling(message);
         } else

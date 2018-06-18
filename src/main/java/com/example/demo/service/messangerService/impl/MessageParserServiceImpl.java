@@ -9,7 +9,7 @@ import com.example.demo.service.repositoryService.CustomerOrderingRepositoryServ
 import com.example.demo.service.repositoryService.SupportEntityRepositoryService;
 import com.example.demo.service.messangerService.*;
 import com.example.demo.service.peopleRegisterService.CourierRegisterService;
-import com.example.demo.service.peopleRegisterService.UserRepositoryService;
+import com.example.demo.service.peopleRegisterService.MUserRepositoryService;
 import com.example.demo.service.supportService.RecognizeService;
 import com.example.demo.service.supportService.TextFormatter;
 import com.example.demo.service.supportService.VerifyService;
@@ -32,7 +32,7 @@ public class MessageParserServiceImpl implements MessageParserService {
     @Autowired
     private MessageSenderService messageSenderService;
     @Autowired
-    private UserRepositoryService userRepositoryService;
+    private MUserRepositoryService MUserRepositoryService;
     @Autowired
     private CourierRegisterService courierRegisterService;
     @Autowired
@@ -76,7 +76,7 @@ public class MessageParserServiceImpl implements MessageParserService {
         } else {
 
 
-            MUser mUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+            MUser mUser = MUserRepositoryService.findOnebyRId(messaging.getSender().getId());
 
 
             if (mUser.getStatus() != null && !(message.equals(ABORT.name()))) {

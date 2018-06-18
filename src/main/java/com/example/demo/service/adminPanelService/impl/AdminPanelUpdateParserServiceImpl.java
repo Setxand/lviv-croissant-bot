@@ -35,7 +35,7 @@ public class AdminPanelUpdateParserServiceImpl implements AdminPanelUpdateParser
                 update.getCallBackQuery().getMessage().setPlatform(Platform.TELEGRAM_ADMIN_PANEL_BOT);
 
                 tUser = telegramUserRepositoryService.findByChatId(update.getCallBackQuery().getMessage().getChat().getId());
-                if(tUser.getRole()==Role.CUSTOMER){
+                if(tUser.getUser().getRole()==Role.CUSTOMER){
                     telegramMessageSenderService.simpleMessage("U are not a personal of Lviv croissants!",update.getCallBackQuery().getMessage());
                     return;
                 }
@@ -44,7 +44,7 @@ public class AdminPanelUpdateParserServiceImpl implements AdminPanelUpdateParser
                 update.getMessage().setPlatform(Platform.TELEGRAM_ADMIN_PANEL_BOT);
 
                 tUser = telegramUserRepositoryService.findByChatId(update.getMessage().getChat().getId());
-                if(tUser.getRole()==Role.CUSTOMER && !update.getMessage().getText().equals("/start")){
+                if(tUser.getUser().getRole()==Role.CUSTOMER && !update.getMessage().getText().equals("/start")){
                     telegramMessageSenderService.simpleMessage("U are not a personal of Lviv croissants!",update.getMessage());
                     return;
                 }

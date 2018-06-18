@@ -1,6 +1,6 @@
 package com.example.demo.entity.peopleRegister;
 
-import com.example.demo.constantEnum.Status;
+import com.example.demo.constantEnum.AccountStatus;
 import com.example.demo.constantEnum.messengerEnums.Role;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +17,7 @@ public class User {
     @GeneratedValue
     private Long id;
     private String phoneNumber;
-    private Status status;
+    private AccountStatus status;
     private Role role;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)

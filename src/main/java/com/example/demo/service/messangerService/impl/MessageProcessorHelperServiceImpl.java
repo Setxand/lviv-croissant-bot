@@ -4,17 +4,20 @@ import com.example.demo.entity.lvivCroissants.CustomerOrdering;
 import com.example.demo.entity.peopleRegister.MUser;
 import com.example.demo.dto.messanger.Messaging;
 import com.example.demo.dto.messanger.QuickReply;
+import com.example.demo.entity.peopleRegister.User;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.service.eventService.messengerEventService.UserEventService;
 import com.example.demo.service.repositoryService.CustomerOrderingRepositoryService;
 import com.example.demo.service.messangerService.MessageProcessorHelperService;
 import com.example.demo.service.messangerService.MessageSenderService;
-import com.example.demo.service.peopleRegisterService.UserRepositoryService;
+import com.example.demo.service.peopleRegisterService.MUserRepositoryService;
 import com.example.demo.service.supportService.RecognizeService;
 import com.example.demo.service.supportService.VerifyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.example.demo.constantEnum.messengerEnums.Cases.*;
 import static com.example.demo.constantEnum.messengerEnums.Cases.PERSONAL_REQUEST;
@@ -31,13 +34,15 @@ public class MessageProcessorHelperServiceImpl implements MessageProcessorHelper
     @Autowired
     private VerifyService verifyService;
     @Autowired
-    private UserRepositoryService userRepositoryService;
+    private MUserRepositoryService MUserRepositoryService;
     @Autowired
     private MessageSenderService messageSenderService;
     @Autowired
     private RecognizeService recognizeService;
     @Autowired
     private CustomerOrderingRepositoryService customerOrderingRepositoryService;
+    @Autowired
+    private UserRepository userRepository;
     @Override
     public void helpCompleteCroissantSecondStep(Messaging messaging) {
         userEventService.changeStatus(messaging,COMPLETE_CROISSANT_SECOND_STEP.name());
@@ -75,8 +80,8 @@ public class MessageProcessorHelperServiceImpl implements MessageProcessorHelper
 
         if(verifyService.isCustomer(messaging) || text.equalsIgnoreCase(COURIER_REQUEST.name())) {
 
-            List<MUser> admins = userRepositoryService.getByRole(ADMIN);
-            MUser customer = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+            List<MUser> admins = userRepository.findAllByRole(ADMIN).stream().map(User::getMUser).collect(Collectors.toList());
+            MUser customer = MUserRepositoryService.findOnebyRId(messaging.getSender().getId());
             for (MUser admin : admins) {
                 if (text.toUpperCase().equals(ADMIN_REQUEST.name())) {
                     messageSenderService.sendSimpleQuestion(admin.getRecipientId(), recognizeService.recognize(ADMIN_REQ.name(),messaging.getSender().getId()) + customer.getName(), ADMIN_REQUEST_PAYLOAD.name() + "?" + messaging.getSender().getId(), "&");
@@ -117,7 +122,7 @@ public class MessageProcessorHelperServiceImpl implements MessageProcessorHelper
         for(CustomerOrdering customerOrdering: customerOrderings){
             if(customerOrdering.getMUser()!=null){
                 customerOrdering.getMUser().getCustomerOrderings().remove(customerOrdering);
-                userRepositoryService.saveAndFlush(customerOrdering.getMUser());
+                MUserRepositoryService.saveAndFlush(customerOrdering.getMUser());
                 customerOrderingRepositoryService.delete(customerOrdering);
             }
         }

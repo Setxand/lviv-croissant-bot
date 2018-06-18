@@ -5,11 +5,10 @@ import com.example.demo.constantEnum.messengerEnums.Role;
 
 import java.util.List;
 
-public interface UserRepositoryService {
+public interface MUserRepositoryService {
     public List<MUser> findAll();
     public MUser findOnebyRId(Long id);
     public MUser findTop();
     public void saveAndFlush(MUser MUser);
     public void remove(MUser MUser);
-    public List<MUser> getByRole(Role role);
 }

@@ -9,5 +9,4 @@ import java.util.List;
 public interface MUserRepository extends JpaRepository<MUser,Long> {
     public MUser findTopByOrderByIdDesc();
     public MUser findByRecipientId(Long recipientId);
-    public List<MUser> findAllByRole(Role role);
 }

@@ -13,7 +13,7 @@ import com.example.demo.service.messangerService.MessageParserService;
 import com.example.demo.service.messangerService.MessageSenderService;
 import com.example.demo.service.messangerService.QuickReplyParserService;
 import com.example.demo.service.peopleRegisterService.CourierRegisterService;
-import com.example.demo.service.peopleRegisterService.UserRepositoryService;
+import com.example.demo.service.peopleRegisterService.MUserRepositoryService;
 import com.example.demo.service.supportService.RecognizeService;
 import com.example.demo.service.supportService.TextFormatter;
 import org.apache.log4j.Logger;
@@ -43,7 +43,7 @@ public class CroissantSavingEventServiceImpl implements CroissantSavingEventServ
     @Autowired
     private CustomerOrderingRepositoryService customerOrderingRepositoryService;
     @Autowired
-    private UserRepositoryService userRepositoryService;
+    private MUserRepositoryService MUserRepositoryService;
     @Autowired
     private CourierRegisterService courierRegisterService;
     @Autowired
@@ -79,7 +79,7 @@ public class CroissantSavingEventServiceImpl implements CroissantSavingEventServ
 
 
     private void finalizeSavingCroissant(Messaging messaging) {
-        MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+        MUser MUser = MUserRepositoryService.findOnebyRId(messaging.getSender().getId());
         CroissantEntity croissantEntity = croissantRepositoryService.findLastByCreatorId(messaging.getSender().getId());
 
 
@@ -98,7 +98,7 @@ public class CroissantSavingEventServiceImpl implements CroissantSavingEventServ
 
         }else {
             MUser.setStatus(null);
-            userRepositoryService.saveAndFlush(MUser);
+            MUserRepositoryService.saveAndFlush(MUser);
              errorAction(messaging, croissantEntity);
 
         }
@@ -109,9 +109,9 @@ public class CroissantSavingEventServiceImpl implements CroissantSavingEventServ
             croissantEntity.setPrice(Integer.parseInt(messaging.getMessage().getText()));
             croissantRepositoryService.saveAndFlush(croissantEntity);
             messageSenderService.sendMessage(new Messaging(new Message(recognizeService.recognize(CROISSANT_SUCCESSFULLY_ADDED.name(),messaging.getSender().getId())), new Recipient(messaging.getSender().getId())));
-            MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+            MUser MUser = MUserRepositoryService.findOnebyRId(messaging.getSender().getId());
             MUser.setStatus(null);
-            userRepositoryService.saveAndFlush(MUser);
+            MUserRepositoryService.saveAndFlush(MUser);
 
         }catch (Exception ex){
             logger.warn(ex);

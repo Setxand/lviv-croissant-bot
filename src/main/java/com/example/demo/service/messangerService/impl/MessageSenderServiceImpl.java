@@ -1,6 +1,5 @@
 package com.example.demo.service.messangerService.impl;
 
-import com.example.demo.controller.TestController;
 import com.example.demo.constantEnum.messengerEnums.speaking.ServerSideSpeaker;
 import com.example.demo.constantEnum.messengerEnums.types.ContentType;
 import com.example.demo.constantEnum.messengerEnums.types.CroissantsTypes;
@@ -9,7 +8,7 @@ import com.example.demo.service.repositoryService.CroissantRepositoryService;
 import com.example.demo.service.repositoryService.CroissantsFillingEntityRepositoryService;
 import com.example.demo.service.repositoryService.MenuOfFillingRepositoryService;
 import com.example.demo.service.messangerService.MessageSenderService;
-import com.example.demo.service.peopleRegisterService.UserRepositoryService;
+import com.example.demo.service.peopleRegisterService.MUserRepositoryService;
 import com.example.demo.service.supportService.RecognizeService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +49,7 @@ public class MessageSenderServiceImpl implements MessageSenderService {
     private RecognizeService recognizeService;
 
     @Autowired
-    UserRepositoryService userRepositoryService;
+    MUserRepositoryService MUserRepositoryService;
 
     @Value("${page.access.token}")
     private String PAGE_ACCESS_TOKEN;

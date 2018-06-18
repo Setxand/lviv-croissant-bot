@@ -1,6 +1,6 @@
 package com.example.demo.constantEnum;
 
-public enum Status {
+public enum AccountStatus {
     BANNED,
     ACTIVE
 }

@@ -140,16 +140,16 @@ public class AdminCallBackParserServiceImpl implements AdminCallBackParserServic
         if(answer.equals(QUESTION_YES.name())){
             switch (telegramUserRepositoryService.findByChatId(callBackQuery.getMessage().getChat().getId()).getStatus()){
                 case SETTING_ADMIN_STATUS:
-                    tUser.setRole(Role.ADMIN);
+                    tUser.getUser().setRole(Role.ADMIN);
                     break;
                 case SETTING_COURIER_STATUS:
-                    tUser.setRole(Role.COURIER);
+                    tUser.getUser().setRole(Role.COURIER);
                     break;
                 case SETTING_PERSONAL_STATUS:
-                    tUser.setRole(Role.PERSONAL);
+                    tUser.getUser().setRole(Role.PERSONAL);
                     break;
                 case SETTING_CUSTOMER_STATUS:
-                    tUser.setRole(Role.CUSTOMER);
+                    tUser.getUser().setRole(Role.CUSTOMER);
                     break;
                     default:
                         telegramMessageSenderService.errorMessage(callBackQuery.getMessage());
@@ -159,7 +159,7 @@ public class AdminCallBackParserServiceImpl implements AdminCallBackParserServic
             Message message1 = new Message();
             message1.setChat(new Chat(tUser.getChatId()));
             message1.setPlatform(TELEGRAM_ADMIN_PANEL_BOT);
-            telegramMessageSenderService.simpleMessage(String.format(ResourceBundle.getBundle("dictionary").getString(ROLE_SET.name()),tUser.getRole().name()),message1);
+            telegramMessageSenderService.simpleMessage(String.format(ResourceBundle.getBundle("dictionary").getString(ROLE_SET.name()),tUser.getUser().getRole().name()),message1);
             telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(DONE.name()),callBackQuery.getMessage());
         }
         else{

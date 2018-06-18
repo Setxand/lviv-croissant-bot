@@ -26,8 +26,6 @@ public class TUser {
     private String locale;
     private String userName;
     private TelegramUserStatus status;
-    private String phoneNumber;
-    private Role role;
     private Integer countCompletingOrderingsForCourier;
 
     @OneToOne
@@ -57,23 +55,5 @@ public class TUser {
         customerOrdering.setCourier(this);
     }
 
-    @Override
-    public String toString() {
-        return "TUser{" +
-                "id=" + id +
-                ", chatId=" + chatId +
-                ", name='" + name + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", locale='" + locale + '\'' +
-                ", userName='" + userName + '\'' +
-                ", status=" + status +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", role=" + role +
-                ", countCompletingOrderingsForCourier=" + countCompletingOrderingsForCourier +
-                ", user=" + user +
-                ", customerOrderings=" + customerOrderings +
-                ", ownCroissantEntities=" + ownCroissantEntities +
-                ", courierCustomerOrderings=" + courierCustomerOrderings +
-                '}';
-    }
+
 }

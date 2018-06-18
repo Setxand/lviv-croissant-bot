@@ -14,7 +14,7 @@ import com.example.demo.service.repositoryService.SupportEntityRepositoryService
 import com.example.demo.service.messangerService.MessageParserService;
 import com.example.demo.service.messangerService.MessageSenderService;
 import com.example.demo.service.messangerService.PayloadParserService;
-import com.example.demo.service.peopleRegisterService.UserRepositoryService;
+import com.example.demo.service.peopleRegisterService.MUserRepositoryService;
 import com.example.demo.service.supportService.RecognizeService;
 import com.example.demo.service.supportService.TextFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +41,7 @@ public class PayloadParserServiceImpl implements PayloadParserService {
     @Autowired
     private CroissantRepositoryService croissantRepositoryService;
     @Autowired
-    private UserRepositoryService userRepositoryService;
+    private MUserRepositoryService MUserRepositoryService;
     @Autowired
     private UserEventService userEventService;
     @Autowired
@@ -146,9 +146,9 @@ public class PayloadParserServiceImpl implements PayloadParserService {
     private void parseDelButtonPayload(Messaging messaging) {
         String varPayload = TextFormatter.ejectSingleVariable(messaging.getPostback().getPayload());
         croissantRepositoryService.remove(croissantRepositoryService.findOne(Long.parseLong(varPayload)));
-        MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+        MUser MUser = MUserRepositoryService.findOnebyRId(messaging.getSender().getId());
         MUser.getOwnCroissantsId().remove(Long.parseLong(varPayload));
-        userRepositoryService.saveAndFlush(MUser);
+        MUserRepositoryService.saveAndFlush(MUser);
         messageSenderService.sendSimpleMessage(recognizeService.recognize(DONE.name(), messaging.getSender().getId()), messaging.getSender().getId());
     }
 
@@ -165,7 +165,7 @@ public class PayloadParserServiceImpl implements PayloadParserService {
     }
 
     private void parseGetStarted(Messaging messaging) {
-        if(userRepositoryService.findOnebyRId(messaging.getSender().getId())==null)
+        if(MUserRepositoryService.findOnebyRId(messaging.getSender().getId())==null)
             userEventService.customerRegistration(messaging);
         else {
             messageSenderService.askSelectLanguage(messaging.getSender().getId());

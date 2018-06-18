@@ -8,7 +8,7 @@ import com.example.demo.service.eventService.messengerEventService.UserEventServ
 import com.example.demo.service.messangerService.MessageParserService;
 import com.example.demo.service.messangerService.MessageSenderService;
 import com.example.demo.service.messangerService.PayloadParserService;
-import com.example.demo.service.peopleRegisterService.UserRepositoryService;
+import com.example.demo.service.peopleRegisterService.MUserRepositoryService;
 import com.example.demo.service.supportService.RecognizeService;
 import com.example.demo.service.supportService.TextFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class UserEventServiceImpl implements UserEventService {
     @Autowired
     private RecognizeService recognizeService;
     @Autowired
-    private UserRepositoryService userRepositoryService;
+    private MUserRepositoryService MUserRepositoryService;
 
     @Autowired
     private MessageParserService messageParserService;
@@ -42,7 +42,7 @@ public class UserEventServiceImpl implements UserEventService {
         } else {
 
 
-            MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+            MUser MUser = MUserRepositoryService.findOnebyRId(messaging.getSender().getId());
             if (MUser.getStatus() == null) {
                 messaging.getMessage().setText(CUSTOMER_REGISTER_FINALIZE.name());
                 messageParserService.parseMessage(messaging);
@@ -61,37 +61,37 @@ public class UserEventServiceImpl implements UserEventService {
             MUser.setName(userData.getFirstName());
             MUser.setLastName(userData.getLastName());
             MUser.setPicture(userData.getPicture());
-            MUser.setRole(Role.CUSTOMER);
-            userRepositoryService.saveAndFlush(MUser);
+            MUser.getUser().setRole(Role.CUSTOMER);
+            MUserRepositoryService.saveAndFlush(MUser);
             payloadParserService.parsePayload(messaging);
     }
 
     @Override
     public void changeStatus(Messaging messaging, String nextCommand) {
-        MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+        MUser MUser = MUserRepositoryService.findOnebyRId(messaging.getSender().getId());
         MUser.setStatus(nextCommand);
-        userRepositoryService.saveAndFlush(MUser);
+        MUserRepositoryService.saveAndFlush(MUser);
     }
 
     @Override
     public boolean isUser(MUser MUser) {
-        return MUser.getAddress() == null || MUser.getPhoneNumber()==null ;
+        return MUser.getAddress() == null || MUser.getUser().getPhoneNumber()==null ;
 
     }
 
 
     private void parseName(Messaging messaging){
-        MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+        MUser MUser = MUserRepositoryService.findOnebyRId(messaging.getSender().getId());
 
 
             MUser.setName(messaging.getMessage().getText());
-            MUser.setRole(Role.CUSTOMER);
-            userRepositoryService.saveAndFlush(MUser);
+            MUser.getUser().setRole(Role.CUSTOMER);
+            MUserRepositoryService.saveAndFlush(MUser);
             messageSenderService.sendSimpleMessage(recognizeService.recognize(ADDRESS_OF_CUSTOMER.name(),messaging.getSender().getId()), messaging.getSender().getId());
 
     }
     private void secondStep(Messaging messaging) {
-        MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+        MUser MUser = MUserRepositoryService.findOnebyRId(messaging.getSender().getId());
 
         if(MUser.getName()==null) {
             parseName(messaging);
@@ -102,7 +102,7 @@ public class UserEventServiceImpl implements UserEventService {
         else if(MUser.getEmail()==null){
             parseEmail(messaging, MUser);
         }
-        else if (MUser.getPhoneNumber() == null){
+        else if (MUser.getUser().getPhoneNumber() == null){
              parsePhoneNumber(messaging, MUser);
         }
     }
@@ -110,7 +110,7 @@ public class UserEventServiceImpl implements UserEventService {
     private void parseEmail(Messaging messaging, MUser MUser) {
         if(TextFormatter.isEmail(messaging)){
             MUser.setEmail(messaging.getMessage().getText());
-            userRepositoryService.saveAndFlush(MUser);
+            MUserRepositoryService.saveAndFlush(MUser);
             messageSenderService.sendSimpleMessage(recognizeService.recognize(NUMBER_OF_PHONE.name(),messaging.getSender().getId()), messaging.getSender().getId());
         }
         else {
@@ -121,12 +121,12 @@ public class UserEventServiceImpl implements UserEventService {
 
     private void parsePhoneNumber(Messaging messaging, MUser MUser) {
         if(TextFormatter.isPhoneNumber(messaging.getMessage().getText())){
-            MUser.setPhoneNumber(messaging.getMessage().getText());
-            userRepositoryService.saveAndFlush(MUser);
+            MUser.getUser().setPhoneNumber(messaging.getMessage().getText());
+            MUserRepositoryService.saveAndFlush(MUser);
             messageSenderService.sendSimpleMessage(recognizeService.recognize(CUSTOMER_ADDED_TO_DB.name(),messaging.getSender().getId()), messaging.getSender().getId());
             messageSenderService.sendSimpleMessage(recognizeService.recognize(SUCCESS_REGISTER.name(),messaging.getSender().getId()),messaging.getSender().getId());
             MUser.setStatus(null);
-            userRepositoryService.saveAndFlush(MUser);
+            MUserRepositoryService.saveAndFlush(MUser);
         }
         else {
             messageSenderService.sendSimpleMessage(recognizeService.recognize(NON_CORRECT_FORMAT_OF_NUMBER_OF_TELEPHONE.name(),messaging.getSender().getId()), messaging.getSender().getId());
@@ -139,7 +139,7 @@ public class UserEventServiceImpl implements UserEventService {
     private void parseAddress(Messaging messaging, MUser MUser) {
         if(TextFormatter.isCorrectAddress(messaging.getMessage().getText())){
             MUser.setAddress(messaging.getMessage().getText());
-            userRepositoryService.saveAndFlush(MUser);
+            MUserRepositoryService.saveAndFlush(MUser);
             messageSenderService.sendSimpleMessage(recognizeService.recognize(ENTER_EMAIL.name(),messaging.getSender().getId()),messaging.getSender().getId());
 
         }

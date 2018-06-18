@@ -8,7 +8,7 @@ import com.example.demo.dto.messanger.Recipient;
 import com.example.demo.service.eventService.messengerEventService.MenuOfFillingEventService;
 import com.example.demo.service.repositoryService.MenuOfFillingRepositoryService;
 import com.example.demo.service.messangerService.MessageSenderService;
-import com.example.demo.service.peopleRegisterService.UserRepositoryService;
+import com.example.demo.service.peopleRegisterService.MUserRepositoryService;
 import com.example.demo.service.supportService.RecognizeService;
 import com.example.demo.service.supportService.TextFormatter;
 import org.apache.log4j.Logger;
@@ -31,7 +31,7 @@ public class MenuOfFillingEventServiceImpl implements MenuOfFillingEventService 
     @Autowired
     private RecognizeService recognizeService;
     @Autowired
-    private UserRepositoryService userRepositoryService;
+    private MUserRepositoryService MUserRepositoryService;
 
     private static final Logger logger = Logger.getLogger(MenuOfFillingEventServiceImpl.class);
 
@@ -62,9 +62,9 @@ public class MenuOfFillingEventServiceImpl implements MenuOfFillingEventService 
                 menuOfFilling = new MenuOfFilling(str[0],Integer.parseInt(str[1]));
                 menuOfFillingRepositoryService.saveAndFlush(menuOfFilling);
                 messageSenderService.sendMessage(new Messaging(new Message(recognizeService.recognize(FILLING_WAS_ADDED.name(),messaging.getSender().getId())), new Recipient(messaging.getSender().getId())));
-                MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+                MUser MUser = MUserRepositoryService.findOnebyRId(messaging.getSender().getId());
                 MUser.setStatus(null);
-                userRepositoryService.saveAndFlush(MUser);
+                MUserRepositoryService.saveAndFlush(MUser);
             }
             catch (Exception ex){
                 logger.warn(ex);

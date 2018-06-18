@@ -5,7 +5,7 @@ import com.example.demo.entity.lvivCroissants.CustomerOrdering;
 import com.example.demo.service.repositoryService.CroissantRepositoryService;
 import com.example.demo.service.repositoryService.CustomerOrderingRepositoryService;
 import com.example.demo.service.messangerService.MessageSenderService;
-import com.example.demo.service.peopleRegisterService.UserRepositoryService;
+import com.example.demo.service.peopleRegisterService.MUserRepositoryService;
 import com.example.demo.service.supportService.EmailService;
 import com.example.demo.service.supportService.RecognizeService;
 import com.example.demo.service.uniService.CroissantService;
@@ -24,7 +24,7 @@ public class ViewController {
     @Autowired
     private EmailService emailService;
     @Autowired
-    private UserRepositoryService userRepositoryService;
+    private MUserRepositoryService MUserRepositoryService;
     @Autowired
     private MessageSenderService messageSenderService;
     @Autowired
@@ -71,7 +71,7 @@ public class ViewController {
 
     @GetMapping("/payment/{userId}")
     public String getPayment(@PathVariable String userId, Model model){
-        CustomerOrdering customerOrdering = customerOrderingRepositoryService.findTopByUser(userRepositoryService.findOnebyRId(Long.parseLong(userId)));
+        CustomerOrdering customerOrdering = customerOrderingRepositoryService.findTopByUser(MUserRepositoryService.findOnebyRId(Long.parseLong(userId)));
         model.addAttribute("userId",userId);
         model.addAttribute("price",customerOrdering.getPrice());
         return "payment";

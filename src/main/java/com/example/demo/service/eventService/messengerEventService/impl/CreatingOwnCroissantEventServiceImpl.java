@@ -19,7 +19,7 @@ import com.example.demo.service.repositoryService.SupportEntityRepositoryService
 import com.example.demo.service.messangerService.MessageParserService;
 import com.example.demo.service.messangerService.MessageSenderService;
 import com.example.demo.service.messangerService.QuickReplyParserService;
-import com.example.demo.service.peopleRegisterService.UserRepositoryService;
+import com.example.demo.service.peopleRegisterService.MUserRepositoryService;
 import com.example.demo.service.supportService.RecognizeService;
 import com.example.demo.service.supportService.TextFormatter;
 import org.apache.log4j.Logger;
@@ -53,7 +53,7 @@ public class CreatingOwnCroissantEventServiceImpl implements CreatingOwnCroissan
     @Autowired
     private GetMenuEventService getMenuEventService;
     @Autowired
-    private UserRepositoryService userRepositoryService;
+    private MUserRepositoryService MUserRepositoryService;
     @Autowired
     private UserEventService userEventService;
     @Autowired
@@ -89,10 +89,10 @@ public class CreatingOwnCroissantEventServiceImpl implements CreatingOwnCroissan
         croissantEntity.addSingleFilling(new CroissantsFilling(menuOfFillingRepositoryService.findOne(Long.parseLong(payload))));
         croissantRepositoryService.saveAndFlush(croissantEntity);
 
-        MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+        MUser MUser = MUserRepositoryService.findOnebyRId(messaging.getSender().getId());
 
         MUser.getOwnCroissantsId().add(croissantEntity.getId());
-        userRepositoryService.saveAndFlush(MUser);
+        MUserRepositoryService.saveAndFlush(MUser);
         menuOfFillingEventService.getMenuOfFilling(messaging.getSender().getId());
         userEventService.changeStatus(messaging,COMPLETE_CROISSANT_SECOND_STEP.name());
         messageSenderService.sendSimpleMessage(recognizeService.recognize(ID_OF_FILLING.name(),messaging.getSender().getId()),messaging.getSender().getId());
@@ -100,7 +100,7 @@ public class CreatingOwnCroissantEventServiceImpl implements CreatingOwnCroissan
 
     private void finalStepCreating(Messaging messaging, String var) {
         try {
-            MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+            MUser MUser = MUserRepositoryService.findOnebyRId(messaging.getSender().getId());
             String[]fillings = var.split(",");
             CroissantEntity croissantEntity = croissantRepositoryService.findOne(MUser.getOwnCroissantsId().get(MUser.getOwnCroissantsId().size()-1));
             int price = 0;

@@ -103,7 +103,7 @@ public class TelegramOrderingEventServiceImpl implements TelegramOrderingEventSe
 
     private void fillingPhoneNumberStatus(Message message, TUser tUser) {
         if(TextFormatter.isPhoneNumber(message.getText())){
-            tUser.setPhoneNumber(message.getText());
+            tUser.getUser().setPhoneNumber(message.getText());
             CustomerOrdering customerOrdering = customerOrderingRepositoryService.findTopByTUser(tUser);
             customerOrdering.setPhoneNumber(message.getText());
             telegramUserRepositoryService.saveAndFlush(tUser);
@@ -130,12 +130,12 @@ public class TelegramOrderingEventServiceImpl implements TelegramOrderingEventSe
 
         customerOrdering.getCroissants().add(croissantEntity.getId().toString());
         tUser.addCustomerOrdering(customerOrdering);
-        if (tUser.getPhoneNumber() == null) {
+        if (tUser.getUser().getPhoneNumber() == null) {
             tUser = telegramUserRepositoryService.saveAndFlush(tUser);
             telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(NUMBER_OF_PHONE.name()),message);
             telegramUserRepositoryService.changeStatus(tUser,FILLING_PHONE_NUMBER_STATUS);
         } else {
-            customerOrdering.setPhoneNumber(tUser.getPhoneNumber());
+            customerOrdering.setPhoneNumber(tUser.getUser().getPhoneNumber());
             tUser.addCustomerOrdering(customerOrdering);
             telegramUserRepositoryService.saveAndFlush(tUser);
             nullChecking(message);

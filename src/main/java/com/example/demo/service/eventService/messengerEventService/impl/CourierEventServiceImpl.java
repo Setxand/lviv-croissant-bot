@@ -9,7 +9,7 @@ import com.example.demo.service.eventService.messengerEventService.UserEventServ
 import com.example.demo.service.repositoryService.CustomerOrderingRepositoryService;
 import com.example.demo.service.messangerService.MessageSenderService;
 import com.example.demo.service.peopleRegisterService.CourierRegisterService;
-import com.example.demo.service.peopleRegisterService.UserRepositoryService;
+import com.example.demo.service.peopleRegisterService.MUserRepositoryService;
 import com.example.demo.service.supportService.RecognizeService;
 import com.example.demo.service.supportService.TextFormatter;
 import org.apache.log4j.Logger;
@@ -46,7 +46,7 @@ public class CourierEventServiceImpl implements CourierEventService {
     @Autowired
     private RecognizeService recognizeService;
     @Autowired
-    private UserRepositoryService userRepositoryService;
+    private MUserRepositoryService MUserRepositoryService;
     @Autowired
     private UserEventService userEventService;
     private static final org.apache.log4j.Logger logger = Logger.getLogger(CourierEventServiceImpl.class);
@@ -93,9 +93,9 @@ public class CourierEventServiceImpl implements CourierEventService {
             }
         } catch (Exception ex) {
             logger.warn(ex);
-            MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+            MUser MUser = MUserRepositoryService.findOnebyRId(messaging.getSender().getId());
             MUser.setStatus(null);
-            userRepositoryService.saveAndFlush(MUser);
+            MUserRepositoryService.saveAndFlush(MUser);
             messageSenderService.errorMessage(messaging.getSender().getId());
             if (courierRegisterService.findTop().getPhoneNumber() == null)
                 courierRegisterService.remove(courierRegisterService.findTop());
@@ -130,9 +130,9 @@ public class CourierEventServiceImpl implements CourierEventService {
             courierRegister.getCustomerOrderings().remove(customerOrdering);
             customerOrdering.setCourierRegister(null);
             courierRegisterService.saveAndFlush(courierRegister);
-            MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+            MUser MUser = MUserRepositoryService.findOnebyRId(messaging.getSender().getId());
             MUser.getCustomerOrderings().remove(customerOrdering);
-            userRepositoryService.saveAndFlush(MUser);
+            MUserRepositoryService.saveAndFlush(MUser);
             customerOrderingRepositoryService.delete(customerOrdering);
 
 
@@ -246,9 +246,9 @@ public class CourierEventServiceImpl implements CourierEventService {
     private void getOrderingListFirstStepIsEmpty(Messaging messaging) {
         messageSenderService.sendSimpleMessage(recognizeService.recognize(EMPTY_LIST.name(),messaging.getSender().getId()), messaging.getSender().getId());
         askOneMoreAction(messaging.getSender().getId());
-        MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+        MUser MUser = MUserRepositoryService.findOnebyRId(messaging.getSender().getId());
         MUser.setStatus(null);
-        userRepositoryService.saveAndFlush(MUser);
+        MUserRepositoryService.saveAndFlush(MUser);
     }
     @Override
     public void orderingFilling(Messaging messaging,Long orderId) {
@@ -280,9 +280,9 @@ public class CourierEventServiceImpl implements CourierEventService {
             courierRegister.setPhoneNumber(messaging.getMessage().getText());
             courierRegisterService.saveAndFlush(courierRegister);
             messageSenderService.sendSimpleMessage(recognizeService.recognize(ADDED_TO_DB.name(),messaging.getSender().getId()), messaging.getSender().getId());
-            MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+            MUser MUser = MUserRepositoryService.findOnebyRId(messaging.getSender().getId());
             MUser.setStatus(null);
-            userRepositoryService.saveAndFlush(MUser);
+            MUserRepositoryService.saveAndFlush(MUser);
         } else {
             messageSenderService.sendSimpleMessage(recognizeService.recognize(NON_CORRECT_FORMAT_OF_NUMBER_OF_TELEPHONE.name(),messaging.getSender().getId()), messaging.getSender().getId());
             messageSenderService.sendSimpleMessage(recognizeService.recognize(NUMBER_OF_PHONE.name(),messaging.getSender().getId()), messaging.getSender().getId());

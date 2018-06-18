@@ -1,7 +1,9 @@
 package com.example.demo.service.supportService.Impl;
 
 import com.example.demo.entity.peopleRegister.MUser;
-import com.example.demo.service.peopleRegisterService.UserRepositoryService;
+import com.example.demo.entity.peopleRegister.User;
+import com.example.demo.repository.UserRepository;
+import com.example.demo.service.peopleRegisterService.MUserRepositoryService;
 import com.example.demo.service.supportService.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.net.MalformedURLException;
+import java.util.List;
 
 import static com.example.demo.constantEnum.messengerEnums.Role.ADMIN;
 
@@ -20,7 +23,9 @@ import static com.example.demo.constantEnum.messengerEnums.Role.ADMIN;
         @Autowired
         private JavaMailSender emailSender;
         @Autowired
-        UserRepositoryService userRepositoryService;
+        MUserRepositoryService MUserRepositoryService;
+        @Autowired
+        private UserRepository userRepository;
         @Override
         public void sendMailForAdminAboutMark(MUser MUser, String mark) throws MessagingException, MalformedURLException {
             MimeMessage message = emailSender.createMimeMessage();
@@ -30,7 +35,9 @@ import static com.example.demo.constantEnum.messengerEnums.Role.ADMIN;
                     "<img src = 'https://scontent.fiev1-1.fna.fbcdn.net/v/t1.0-1/p80x80/24796344_374868999640694_1149758083912015718_n.png?oh=1012977d613ce748a3dac157c74c6e60&oe=5B4BFC1B'/></a>";
             message.setContent(htmlMsg,"text/html; charset=utf-8");
             helper.setSubject("Lviv - Croissants bot щойно поставили оцінку!");
-            for(MUser admin: userRepositoryService.getByRole(ADMIN)){
+            List<User>users = userRepository.findAllByRole(ADMIN);
+            for(User user: users){
+                MUser admin = user.getMUser();
                 helper.setTo(admin.getEmail());
                 emailSender.send(message);
             }

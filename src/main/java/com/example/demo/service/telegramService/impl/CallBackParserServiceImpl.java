@@ -1,6 +1,6 @@
 package com.example.demo.service.telegramService.impl;
 
-import com.example.demo.constantEnum.Status;
+import com.example.demo.constantEnum.AccountStatus;
 import com.example.demo.constantEnum.messengerEnums.Role;
 import com.example.demo.entity.lvivCroissants.CroissantEntity;
 import com.example.demo.entity.lvivCroissants.CustomerOrdering;
@@ -111,7 +111,7 @@ public class CallBackParserServiceImpl implements CallBackParserService {
         user.setTUser(tUser);
         tUser.setUser(user);
         user.setRole(Role.CUSTOMER);
-        user.setStatus(Status.ACTIVE);
+        user.setStatus(AccountStatus.ACTIVE);
         userRepository.saveAndFlush(user);
     }
 

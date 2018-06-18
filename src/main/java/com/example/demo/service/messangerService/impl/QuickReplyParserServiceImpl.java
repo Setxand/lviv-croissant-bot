@@ -19,7 +19,7 @@ import com.example.demo.service.repositoryService.SupportEntityRepositoryService
 import com.example.demo.service.messangerService.MessageParserService;
 import com.example.demo.service.messangerService.MessageSenderService;
 import com.example.demo.service.messangerService.QuickReplyParserService;
-import com.example.demo.service.peopleRegisterService.UserRepositoryService;
+import com.example.demo.service.peopleRegisterService.MUserRepositoryService;
 import com.example.demo.service.supportService.RecognizeService;
 import com.example.demo.service.supportService.TextFormatter;
 import com.example.demo.service.telegramService.TelegramMessageSenderService;
@@ -32,6 +32,7 @@ import javax.annotation.PostConstruct;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.example.demo.constantEnum.messengerEnums.Cases.*;
 import static com.example.demo.constantEnum.messengerEnums.PayloadCases.QUESTION_YES;
@@ -56,7 +57,7 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
     @Autowired
     private CroissantRepositoryService croissantRepositoryService;
     @Autowired
-    private UserRepositoryService userRepositoryService;
+    private MUserRepositoryService MUserRepositoryService;
     @Autowired
     private CustomerOrderingRepositoryService customerOrderingRepositoryService;
     @Autowired
@@ -186,7 +187,7 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
     private void paymentWay(Messaging messaging) {
         String payload = messaging.getMessage().getQuickReply().getPayload();
         String var = TextFormatter.ejectSingleVariable(payload);
-        CustomerOrdering customerOrdering = customerOrderingRepositoryService.findTopByUser(userRepositoryService.findOnebyRId(messaging.getSender().getId()));
+        CustomerOrdering customerOrdering = customerOrderingRepositoryService.findTopByUser(MUserRepositoryService.findOnebyRId(messaging.getSender().getId()));
 
         if (!var.equalsIgnoreCase(CASH.name())) {
             paymentWayCard(messaging, customerOrdering);
@@ -232,7 +233,7 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
     private void acceptOrderingPayload(Messaging messaging) {
         String context = TextFormatter.ejectContext(messaging.getMessage().getQuickReply().getPayload());
         String var = TextFormatter.ejectVariableWithContext(messaging.getMessage().getQuickReply().getPayload());
-        MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+        MUser MUser = MUserRepositoryService.findOnebyRId(messaging.getSender().getId());
         if (var.equals(QUESTION_YES.name())) {
             acceptOrderingYes(messaging, context, MUser);
 
@@ -274,7 +275,7 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
     }
 
     private void oneMoreOrderingNo(Messaging messaging, SupportEntity supportEntity) {
-        MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+        MUser MUser = MUserRepositoryService.findOnebyRId(messaging.getSender().getId());
         CustomerOrdering customerOrdering = customerOrderingRepositoryService.findTopByUser(MUser);
 
         supportEntity.setOneMore(null);
@@ -332,7 +333,7 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
 
     private void languagePayload(Messaging messaging) {
         String singleVariable = TextFormatter.ejectSingleVariable(messaging.getMessage().getQuickReply().getPayload());
-        MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+        MUser MUser = MUserRepositoryService.findOnebyRId(messaging.getSender().getId());
 
         if (singleVariable.equals(UA.name()))
             MUser.setLocale(new Locale("ua", "UA"));
@@ -344,7 +345,7 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
 
     private void languagePayloadLogic(Messaging messaging, MUser MUser) {
         MUser.setRecipientId(messaging.getSender().getId());
-        userRepositoryService.saveAndFlush(MUser);
+        MUserRepositoryService.saveAndFlush(MUser);
         messageSenderService.sendSimpleMessage(recognizeService.recognize(HELLO_MESSAGE.name(), messaging.getSender().getId()), messaging.getSender().getId());
         messageSenderService.sendSimpleMessage(recognizeService.recognize(IF_CHANGING_LANGUAGE.name(), messaging.getSender().getId()), messaging.getSender().getId());
         messageSenderService.sendUserActions(messaging.getSender().getId());
@@ -359,8 +360,8 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
         String singlePayload = TextFormatter.ejectPaySinglePayload(fullPayload);
         String context = TextFormatter.ejectContext(fullPayload);
         String singleVariable = TextFormatter.ejectVariableWithContext(fullPayload);
-        MUser MUser = userRepositoryService.findOnebyRId(Long.parseLong(context));
-        List<MUser> admins = userRepositoryService.getByRole(ADMIN);
+        MUser MUser = MUserRepositoryService.findOnebyRId(Long.parseLong(context));
+        List<MUser> admins = userRepository.findAllByRole(ADMIN).stream().map(User::getMUser).collect(Collectors.toList());
 
         if (singleVariable.equals(QUESTION_YES.name())) {
             roleRequestQuestionYes(messaging, MUser, singlePayload, admins);
@@ -370,8 +371,8 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
     }
 
     private void roleReqNo(Messaging messaging, MUser MUser) {
-        MUser.setRole(ADMIN);
-        userRepositoryService.saveAndFlush(MUser);
+        MUser.getUser().setRole(ADMIN);
+        MUserRepositoryService.saveAndFlush(MUser);
         messageSenderService.sendSimpleMessage(recognizeService.recognize(ADMIN_ADDED.name(), messaging.getSender().getId()), MUser.getRecipientId());
     }
 
@@ -386,19 +387,19 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
 
 
         for (MUser admin : admins) {
-            messageSenderService.sendSimpleMessage(recognizeService.recognize(ACCEPTED_BY_ONE_OF_ADMINS.name(), messaging.getSender().getId()) + userRepositoryService.findOnebyRId(messaging.getSender().getId()).getName(), admin.getRecipientId());
+            messageSenderService.sendSimpleMessage(recognizeService.recognize(ACCEPTED_BY_ONE_OF_ADMINS.name(), messaging.getSender().getId()) + MUserRepositoryService.findOnebyRId(messaging.getSender().getId()).getName(), admin.getRecipientId());
         }
     }
 
     private void adminQuestionYes(Messaging messaging, MUser MUser) {
-        MUser.setRole(ADMIN);
-        userRepositoryService.saveAndFlush(MUser);
+        MUser.getUser().setRole(ADMIN);
+        MUserRepositoryService.saveAndFlush(MUser);
         messageSenderService.sendSimpleMessage(recognizeService.recognize(ADMIN_ADDED.name(), messaging.getSender().getId()), MUser.getRecipientId());
     }
 
     private void personalRequestYes(Messaging messaging, MUser MUser) {
-        MUser.setRole(PERSONAL);
-        userRepositoryService.saveAndFlush(MUser);
+        MUser.getUser().setRole(PERSONAL);
+        MUserRepositoryService.saveAndFlush(MUser);
         messageSenderService.sendSimpleMessage(recognizeService.recognize(PERSONAL_ADDED.name(), messaging.getSender().getId()), MUser.getRecipientId());
     }
 
@@ -451,7 +452,7 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
     }
 
     private void addressPayload(Messaging messaging) {
-        MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+        MUser MUser = MUserRepositoryService.findOnebyRId(messaging.getSender().getId());
 
         String singleVariable = TextFormatter.ejectSingleVariable(messaging.getMessage().getQuickReply().getPayload());
         if (singleVariable.equals(QUESTION_YES.name())) {

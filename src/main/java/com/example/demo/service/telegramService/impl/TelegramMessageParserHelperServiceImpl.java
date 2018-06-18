@@ -1,6 +1,6 @@
 package com.example.demo.service.telegramService.impl;
 
-import com.example.demo.constantEnum.Status;
+import com.example.demo.constantEnum.AccountStatus;
 import com.example.demo.constantEnum.messengerEnums.speaking.ServerSideSpeaker;
 import com.example.demo.entity.SpeakingMessage;
 import com.example.demo.entity.lvivCroissants.CustomerOrdering;
@@ -20,11 +20,9 @@ import com.example.demo.service.supportService.TextFormatter;
 import com.example.demo.service.telegramService.TelegramMessageParserHelperService;
 import com.example.demo.service.telegramService.TelegramMessageSenderService;
 import org.apache.log4j.Logger;
-import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import sun.print.ServiceDialog;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,7 +32,6 @@ import static com.example.demo.constantEnum.messengerEnums.payloads.QuickReplyPa
 import static com.example.demo.constantEnum.messengerEnums.speaking.ServerSideSpeaker.*;
 import static com.example.demo.constantEnum.telegramEnums.CallBackData.QUESTION_HAVING_MESSENGER_DATA;
 import static com.example.demo.constantEnum.telegramEnums.TelegramUserStatus.OWN_MENU_STATUS;
-import static sun.print.ServiceDialog.APPROVE;
 
 @Service
 public class TelegramMessageParserHelperServiceImpl implements TelegramMessageParserHelperService {
@@ -161,7 +158,7 @@ public class TelegramMessageParserHelperServiceImpl implements TelegramMessagePa
         User user = new User();
         user.setTUser(tUser);
         user.setRole(Role.CUSTOMER);
-        user.setStatus(Status.ACTIVE);
+        user.setStatus(AccountStatus.ACTIVE);
         userRepository.saveAndFlush(user);
         telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(NEW_USER.name()),message);
         telegramMessageSenderService.sendActions(message);

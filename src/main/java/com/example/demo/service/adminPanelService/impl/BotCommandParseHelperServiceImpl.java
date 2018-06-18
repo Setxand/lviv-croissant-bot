@@ -66,7 +66,7 @@ public class BotCommandParseHelperServiceImpl implements BotCommandParseHelperSe
     @Override
     public void helpSetUpMessenger(Message message) {
         TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
-        if(tUser.getRole()!= Role.ADMIN){
+        if(tUser.getUser().getRole()!= Role.ADMIN){
             telegramMessageSenderService.noEnoughPermissions(message);
             return;
         }

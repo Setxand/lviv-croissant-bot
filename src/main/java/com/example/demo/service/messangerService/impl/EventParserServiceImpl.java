@@ -1,11 +1,10 @@
 package com.example.demo.service.messangerService.impl;
 
-import com.example.demo.entity.peopleRegister.MUser;
 import com.example.demo.dto.messanger.Entry;
 import com.example.demo.dto.messanger.Event;
 import com.example.demo.dto.messanger.Messaging;
 import com.example.demo.service.messangerService.*;
-import com.example.demo.service.peopleRegisterService.UserRepositoryService;
+import com.example.demo.service.peopleRegisterService.MUserRepositoryService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,7 @@ public class EventParserServiceImpl implements EventParserService {
     @Autowired
     private MessageParserService messageParserService;
     @Autowired
-    UserRepositoryService userRepositoryService;
+    MUserRepositoryService MUserRepositoryService;
     @Autowired
     private PayloadParserService payloadParserService;
 

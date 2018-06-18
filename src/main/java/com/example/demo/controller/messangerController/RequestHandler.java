@@ -3,9 +3,11 @@ package com.example.demo.controller.messangerController;
 import com.example.demo.entity.lvivCroissants.CustomerOrdering;
 import com.example.demo.entity.peopleRegister.MUser;
 import com.example.demo.dto.messanger.Button;
+import com.example.demo.entity.peopleRegister.User;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.service.repositoryService.CustomerOrderingRepositoryService;
 import com.example.demo.service.messangerService.MessageSenderService;
-import com.example.demo.service.peopleRegisterService.UserRepositoryService;
+import com.example.demo.service.peopleRegisterService.MUserRepositoryService;
 import com.example.demo.service.supportService.EmailService;
 import com.example.demo.service.supportService.RecognizeService;
 import com.stripe.Stripe;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.mail.MessagingException;
 import java.net.MalformedURLException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.example.demo.constantEnum.messengerEnums.Role.ADMIN;
 import static com.example.demo.constantEnum.messengerEnums.speaking.ServerSideSpeaker.*;
@@ -33,11 +36,13 @@ public class RequestHandler {
     @Autowired
     private MessageSenderService messageSenderService;
     @Autowired
-    private UserRepositoryService userRepositoryService;
+    private MUserRepositoryService MUserRepositoryService;
     @Autowired
     private CustomerOrderingRepositoryService customerOrderingRepositoryService;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private UserRepository userRepository;
     @Value("${server.url}")
     private String SERVER_URL;
     @Value("${stripe.secret.key}")
@@ -74,7 +79,7 @@ public class RequestHandler {
     @GetMapping("/successTrans")
     public void successTrans(@RequestParam String userId){
         Long uId = Long.parseLong(userId);
-        CustomerOrdering customerOrdering = customerOrderingRepositoryService.findTopByUser(userRepositoryService.findOnebyRId(uId));
+        CustomerOrdering customerOrdering = customerOrderingRepositoryService.findTopByUser(MUserRepositoryService.findOnebyRId(uId));
         messageSenderService.sendSimpleMessage(recognizeService.recognize(ORDERING_WAS_DONE.name(), uId) + "\n" + customerOrdering.getCroissants() + "\nPrice: " + customerOrdering.getPrice() + recognizeService.recognize(CURRENCY.name(), uId), uId);
         Button button = new Button(web_url.name(), recognizeService.recognize(RATING_BUTTON.name(), uId));
         button.setMesExtentions(true);
@@ -85,9 +90,9 @@ public class RequestHandler {
 
     @RequestMapping(value = "/sendMail")
     public void sendMail(@RequestParam(name = "mark1") String mark,@RequestParam(name = "recipientId")String recipient) throws MessagingException, MalformedURLException {
-        List<MUser> admins = userRepositoryService.getByRole(ADMIN);
+        List<MUser> admins = userRepository.findAllByRole(ADMIN).stream().map(User::getMUser).collect(Collectors.toList());
         Long userId = Long.parseLong(recipient);
-        MUser MUser = userRepositoryService.findOnebyRId(userId);
+        MUser MUser = MUserRepositoryService.findOnebyRId(userId);
         emailService.sendMailForAdminAboutMark(MUser,mark);
         messageSenderService.sendSimpleMessage(recognizeService.recognize(THANK_FOR_RATE.name(),userId),userId);
     }

@@ -1,15 +1,14 @@
 package com.example.demo.service.peopleRegisterService.impl;
 
 import com.example.demo.entity.peopleRegister.MUser;
-import com.example.demo.constantEnum.messengerEnums.Role;
 import com.example.demo.repository.MUserRepository;
-import com.example.demo.service.peopleRegisterService.UserRepositoryService;
+import com.example.demo.service.peopleRegisterService.MUserRepositoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 @Service
-public class UserRepositoryServiceImpl implements UserRepositoryService {
+public class MUserRepositoryServiceImpl implements MUserRepositoryService {
     @Autowired
     private MUserRepository MUserRepository;
     @Override
@@ -40,8 +39,5 @@ public class UserRepositoryServiceImpl implements UserRepositoryService {
         MUserRepository.delete(MUser);
     }
 
-    @Override
-    public List<MUser> getByRole(Role role) {
-        return MUserRepository.findAllByRole(role);
-    }
+
 }

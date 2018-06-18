@@ -10,7 +10,7 @@ import com.example.demo.service.eventService.messengerEventService.GetMenuEventS
 import com.example.demo.service.repositoryService.CroissantRepositoryService;
 import com.example.demo.service.repositoryService.SupportEntityRepositoryService;
 import com.example.demo.service.messangerService.MessageSenderService;
-import com.example.demo.service.peopleRegisterService.UserRepositoryService;
+import com.example.demo.service.peopleRegisterService.MUserRepositoryService;
 import com.example.demo.service.supportService.RecognizeService;
 import com.example.demo.service.supportService.TextFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ public class GetMenuEventServiceImpl implements GetMenuEventService {
     @Autowired
     private RecognizeService recognizeService;
     @Autowired
-    private UserRepositoryService userRepositoryService;
+    private MUserRepositoryService MUserRepositoryService;
     @Autowired
     private SupportEntityRepositoryService supportEntityRepositoryService;
 
@@ -64,7 +64,7 @@ public class GetMenuEventServiceImpl implements GetMenuEventService {
         List<CroissantEntity> croissantEntities;
 
         if (croissantType.equals(OWN.name())) {
-            MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+            MUser MUser = MUserRepositoryService.findOnebyRId(messaging.getSender().getId());
             List<CroissantEntity> croissants1 = new ArrayList<>();
             if (MUser.getOwnCroissantsId() != null)
                 for (Long id : MUser.getOwnCroissantsId()) {
@@ -116,7 +116,7 @@ public class GetMenuEventServiceImpl implements GetMenuEventService {
 
             }
 
-        MUser MUser = userRepositoryService.findOnebyRId(messaging.getSender().getId());
+        MUser MUser = MUserRepositoryService.findOnebyRId(messaging.getSender().getId());
         for (CroissantEntity croissantEntity :croissantsSubList) {
             Element element = new Element();
 
@@ -125,7 +125,7 @@ public class GetMenuEventServiceImpl implements GetMenuEventService {
                 break;
             }
             element = elementInit(element, croissantEntities, messaging, croissantEntity);
-            if(croissantEntity.getType().equals(OWN.name()) || MUser.getRole() != Role.CUSTOMER)
+            if(croissantEntity.getType().equals(OWN.name()) || MUser.getUser().getRole() != Role.CUSTOMER)
                 addDeleteButton(element, messaging, croissantEntity);
 
             elements.add(element);
