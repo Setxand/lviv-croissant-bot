@@ -33,11 +33,7 @@
 		</dependency>
 
 
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.16</version>
-		</dependency>
+
 
 
 
@@ -71,9 +67,15 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.github.messenger4j</groupId>
-			<artifactId>messenger4j</artifactId>
-			<version>0.8.0</version>
+			<groupId>net.logstash.logback</groupId>
+			<artifactId>logstash-logback-encoder</artifactId>
+			<version>4.7</version>
+			<exclusions>
+				<exclusion>
+					<groupId>ch.qos.logback</groupId>
+					<artifactId>logback-core</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
