@@ -6,17 +6,17 @@ import com.bots.lvivCroissantBot.constantEnum.messengerEnum.payload.Payloads;
 import com.bots.lvivCroissantBot.dto.messanger.Message;
 import com.bots.lvivCroissantBot.dto.messanger.Messaging;
 import com.bots.lvivCroissantBot.dto.messanger.QuickReply;
+import com.bots.lvivCroissantBot.repository.SupportEntityRepository;
 import com.bots.lvivCroissantBot.service.messenger.event.CourierService;
 import com.bots.lvivCroissantBot.service.messenger.event.GetMenuService;
 import com.bots.lvivCroissantBot.service.messenger.event.UserService;
-import com.bots.lvivCroissantBot.service.repository.CroissantRepositoryService;
-import com.bots.lvivCroissantBot.service.repository.SupportEntityRepositoryService;
 import com.bots.lvivCroissantBot.service.messenger.MessageParserService;
 import com.bots.lvivCroissantBot.service.messenger.MessageSenderService;
 import com.bots.lvivCroissantBot.service.messenger.PayloadParserService;
 import com.bots.lvivCroissantBot.service.peopleRegister.MUserRepositoryService;
 import com.bots.lvivCroissantBot.service.support.RecognizeService;
 import com.bots.lvivCroissantBot.service.support.TextFormatter;
+import com.bots.lvivCroissantBot.service.uni.CroissantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -39,7 +39,7 @@ public class PayloadParserServiceImpl implements PayloadParserService {
     @Autowired
     private RecognizeService recognizeService;
     @Autowired
-    private CroissantRepositoryService croissantRepositoryService;
+    private CroissantService croissantRepositoryService;
     @Autowired
     private MUserRepositoryService MUserRepositoryService;
     @Autowired
@@ -49,7 +49,7 @@ public class PayloadParserServiceImpl implements PayloadParserService {
     @Autowired
     private CourierService courierService;
     @Autowired
-    private SupportEntityRepositoryService supportEntityRepositoryService;
+    private SupportEntityRepository supportEntityRepositoryService;
     @Value("${server.url}")
     private String SERVER_URL;
 
@@ -127,7 +127,7 @@ public class PayloadParserServiceImpl implements PayloadParserService {
 
 
     private void parseOwnCroissantMenuPayload(Messaging messaging) {
-        Support support = supportEntityRepositoryService.getByUserId(messaging.getSender().getId());
+        Support support = supportEntityRepositoryService.findByUserId(messaging.getSender().getId());
         support.setType(OWN.name());
         QuickReply quickReply = new QuickReply();
         quickReply.setPayload(OWN_CROISSANT_MENU_PAYLOAD.name() + "?" + OWN.name());

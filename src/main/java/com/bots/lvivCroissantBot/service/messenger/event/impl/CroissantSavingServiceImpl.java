@@ -6,6 +6,11 @@ import com.bots.lvivCroissantBot.entity.register.MUser;
 import com.bots.lvivCroissantBot.dto.messanger.Message;
 import com.bots.lvivCroissantBot.dto.messanger.Messaging;
 import com.bots.lvivCroissantBot.dto.messanger.Recipient;
+import com.bots.lvivCroissantBot.exception.ElementNoFoundException;
+import com.bots.lvivCroissantBot.repository.CroisantsFillingEntityRepository;
+import com.bots.lvivCroissantBot.repository.CustomerOrderingRepository;
+import com.bots.lvivCroissantBot.repository.MenuOfFillingRepository;
+import com.bots.lvivCroissantBot.repository.SupportEntityRepository;
 import com.bots.lvivCroissantBot.service.messenger.event.CroissantSavingService;
 import com.bots.lvivCroissantBot.service.messenger.event.MenuOfFillingService;
 import com.bots.lvivCroissantBot.service.repository.*;
@@ -16,6 +21,7 @@ import com.bots.lvivCroissantBot.service.peopleRegister.CourierRegisterService;
 import com.bots.lvivCroissantBot.service.peopleRegister.MUserRepositoryService;
 import com.bots.lvivCroissantBot.service.support.RecognizeService;
 import com.bots.lvivCroissantBot.service.support.TextFormatter;
+import com.bots.lvivCroissantBot.service.uni.CroissantService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,16 +39,17 @@ public class CroissantSavingServiceImpl implements CroissantSavingService {
     @Autowired
     private MessageSenderService messageSenderService;
     @Autowired
-    private MenuOfFillingRepositoryService menuOfFillingRepositoryService;
+    private MenuOfFillingRepository menuOfFillingRepositoryService;
     @Autowired
-    private CroissantRepositoryService croissantRepositoryService;
+    private CroissantService croissantRepositoryService;
+
     @Autowired
     private QuickReplyParserService quickReplyParserService;
     @Autowired
-    private CroissantsFillingEntityRepositoryService croissantsFillingEntityRepositoryService;
+    private CroisantsFillingEntityRepository croissantsFillingEntityRepositoryService;
 
     @Autowired
-    private CustomerOrderingRepositoryService customerOrderingRepositoryService;
+    private CustomerOrderingRepository customerOrderingRepositoryService;
     @Autowired
     private MUserRepositoryService MUserRepositoryService;
     @Autowired
@@ -54,7 +61,7 @@ public class CroissantSavingServiceImpl implements CroissantSavingService {
     @Autowired
     private RecognizeService recognizeService;
     @Autowired
-    private SupportEntityRepositoryService supportEntityRepositoryService;
+    private SupportEntityRepository supportEntityRepositoryService;
 
     private   final static Logger logger = LoggerFactory.getLogger(CroissantSavingServiceImpl.class);
 
@@ -131,10 +138,10 @@ public class CroissantSavingServiceImpl implements CroissantSavingService {
         String[] str = messaging.getMessage().getText().split(",");
         List<CroissantsFilling> croissantsFillingEntities = new ArrayList<>();
             try {
-                croissantsFillingEntities.add(new CroissantsFilling(menuOfFillingRepositoryService.findOne(Long.parseLong(supportEntityRepositoryService.getByUserId(messaging.getSender().getId()).getType()))));
+                croissantsFillingEntities.add(new CroissantsFilling(menuOfFillingRepositoryService.findById(Long.parseLong(supportEntityRepositoryService.findByUserId(messaging.getSender().getId()).getType())).orElseThrow(ElementNoFoundException::new)));
 
                 for (String s : str) {
-                    croissantsFillingEntities.add(new CroissantsFilling(menuOfFillingRepositoryService.findOne(Long.parseLong(s))));
+                    croissantsFillingEntities.add(new CroissantsFilling(menuOfFillingRepositoryService.findById(Long.parseLong(s)).orElseThrow(ElementNoFoundException::new)));
             }
 
                 croissantEntity.setCroissantsFillings(croissantsFillingEntities);

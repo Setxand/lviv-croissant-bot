@@ -3,7 +3,7 @@ package com.bots.lvivCroissantBot.controller.uni;
 import com.bots.lvivCroissantBot.dto.uni.CroissantDTO;
 import com.bots.lvivCroissantBot.exception.ElementNoFoundException;
 import com.bots.lvivCroissantBot.exception.FieldsNotValidException;
-import com.bots.lvivCroissantBot.service.uniService.CroissantService;
+import com.bots.lvivCroissantBot.service.uni.CroissantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;

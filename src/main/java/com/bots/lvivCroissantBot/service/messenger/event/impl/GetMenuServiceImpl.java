@@ -6,13 +6,13 @@ import com.bots.lvivCroissantBot.entity.Support;
 import com.bots.lvivCroissantBot.entity.register.MUser;
 import com.bots.lvivCroissantBot.constantEnum.messengerEnum.Role;
 import com.bots.lvivCroissantBot.dto.messanger.*;
+import com.bots.lvivCroissantBot.repository.SupportEntityRepository;
 import com.bots.lvivCroissantBot.service.messenger.event.GetMenuService;
-import com.bots.lvivCroissantBot.service.repository.CroissantRepositoryService;
-import com.bots.lvivCroissantBot.service.repository.SupportEntityRepositoryService;
 import com.bots.lvivCroissantBot.service.messenger.MessageSenderService;
 import com.bots.lvivCroissantBot.service.peopleRegister.MUserRepositoryService;
 import com.bots.lvivCroissantBot.service.support.RecognizeService;
 import com.bots.lvivCroissantBot.service.support.TextFormatter;
+import com.bots.lvivCroissantBot.service.uni.CroissantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -32,13 +32,13 @@ public class GetMenuServiceImpl implements GetMenuService {
     @Autowired
     private MessageSenderService messageSenderService;
     @Autowired
-    private CroissantRepositoryService croissantRepositoryService;
+    private CroissantService croissantRepositoryService;
     @Autowired
     private RecognizeService recognizeService;
     @Autowired
     private MUserRepositoryService MUserRepositoryService;
     @Autowired
-    private SupportEntityRepositoryService supportEntityRepositoryService;
+    private SupportEntityRepository supportEntityRepositoryService;
 
 
     @Value("${server.url}")
@@ -59,7 +59,7 @@ public class GetMenuServiceImpl implements GetMenuService {
 
 
     private void initAndSendQueryAllCr(Messaging messaging) {
-        Support support = supportEntityRepositoryService.getByUserId(messaging.getSender().getId());
+        Support support = supportEntityRepositoryService.findByUserId(messaging.getSender().getId());
         String croissantType = support.getType();
         List<CroissantEntity> croissantEntities;
 

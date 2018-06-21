@@ -9,12 +9,13 @@ import com.bots.lvivCroissantBot.entity.register.MUser;
 import com.bots.lvivCroissantBot.entity.register.TUser;
 import com.bots.lvivCroissantBot.dto.telegram.Message;
 import com.bots.lvivCroissantBot.entity.register.User;
+import com.bots.lvivCroissantBot.exception.ElementNoFoundException;
+import com.bots.lvivCroissantBot.repository.CustomerOrderingRepository;
+import com.bots.lvivCroissantBot.repository.SpeakingMessagesRepository;
 import com.bots.lvivCroissantBot.repository.UserRepository;
 import com.bots.lvivCroissantBot.service.telegram.event.TelegramCreatingOwnCroissant;
 import com.bots.lvivCroissantBot.service.messenger.MessageSenderService;
-import com.bots.lvivCroissantBot.service.repository.CustomerOrderingRepositoryService;
 import com.bots.lvivCroissantBot.service.peopleRegister.TelegramUserRepositoryService;
-import com.bots.lvivCroissantBot.service.repository.SpeakingMessagesRepositoryService;
 import com.bots.lvivCroissantBot.service.support.RecognizeService;
 import com.bots.lvivCroissantBot.service.support.TextFormatter;
 import com.bots.lvivCroissantBot.service.telegram.TelegramMessageParserHelper;
@@ -42,13 +43,13 @@ public class TelegramMessageParserHelperImpl implements TelegramMessageParserHel
     @Autowired
     private TelegramUserRepositoryService telegramUserRepositoryService;
     @Autowired
-    private CustomerOrderingRepositoryService customerOrderingRepositoryService;
+    private CustomerOrderingRepository customerOrderingRepositoryService;
     @Autowired
     private TelegramMessageSender telegramMessageSender;
     @Autowired
     private TelegramCreatingOwnCroissant telegramCreatingOwnCroissant;
     @Autowired
-    private SpeakingMessagesRepositoryService speakingMessagesRepositoryService;
+    private SpeakingMessagesRepository speakingMessagesRepositoryService;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -87,7 +88,7 @@ public class TelegramMessageParserHelperImpl implements TelegramMessageParserHel
             }
         }
         else userSettings(message);
-        SpeakingMessage speakingMessage = speakingMessagesRepositoryService.findByKey(HELLO_MESSAGE.name());
+        SpeakingMessage speakingMessage = speakingMessagesRepositoryService.findById(HELLO_MESSAGE.name()).orElseThrow(ElementNoFoundException::new);
         if(message.getPlatform()==null)
         telegramMessageSender.simpleMessage(speakingMessage.getMessage(),message);
         else{

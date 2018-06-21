@@ -6,13 +6,14 @@ import com.bots.lvivCroissantBot.entity.lvivCroissants.MenuOfFilling;
 import com.bots.lvivCroissantBot.entity.register.TUser;
 import com.bots.lvivCroissantBot.dto.telegram.Message;
 import com.bots.lvivCroissantBot.dto.telegram.button.InlineKeyboardButton;
+import com.bots.lvivCroissantBot.exception.ElementNoFoundException;
+import com.bots.lvivCroissantBot.repository.MenuOfFillingRepository;
 import com.bots.lvivCroissantBot.service.adminPanel.event.TelegramAddingRecordingsEventService;
 import com.bots.lvivCroissantBot.service.telegram.event.TelegramGetMenu;
-import com.bots.lvivCroissantBot.service.repository.CroissantRepositoryService;
-import com.bots.lvivCroissantBot.service.repository.MenuOfFillingRepositoryService;
 import com.bots.lvivCroissantBot.service.peopleRegister.TelegramUserRepositoryService;
 import com.bots.lvivCroissantBot.service.support.TextFormatter;
 import com.bots.lvivCroissantBot.service.telegram.TelegramMessageSender;
+import com.bots.lvivCroissantBot.service.uni.CroissantService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,11 +33,11 @@ public class TelegramAddingRecordingsEventServiceImpl implements TelegramAddingR
     @Autowired
     private TelegramMessageSender telegramMessageSender;
     @Autowired
-    private MenuOfFillingRepositoryService menuOfFillingRepositoryService;
+    private MenuOfFillingRepository menuOfFillingRepositoryService;
     @Autowired
     private TelegramGetMenu telegramGetMenu;
     @Autowired
-    private CroissantRepositoryService croissantRepositoryService;
+    private CroissantService croissantRepositoryService;
 
 
     private   final static Logger logger = LoggerFactory.getLogger(TelegramAddingRecordingsEventServiceImpl.class);
@@ -146,7 +147,7 @@ public class TelegramAddingRecordingsEventServiceImpl implements TelegramAddingR
         try {
             String[] fillings = message.getText().split(",");
             for (String filling : fillings) {
-                MenuOfFilling menuOfFilling = menuOfFillingRepositoryService.findOne(Long.parseLong(filling));
+                MenuOfFilling menuOfFilling = menuOfFillingRepositoryService.findById(Long.parseLong(filling)).orElseThrow(ElementNoFoundException::new);
                 croissantEntity.addSingleFilling(new CroissantsFilling(menuOfFilling));
             }
             croissantRepositoryService.saveAndFlush(croissantEntity);

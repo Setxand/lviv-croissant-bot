@@ -5,15 +5,15 @@ import com.bots.lvivCroissantBot.entity.lvivCroissants.CustomerOrdering;
 import com.bots.lvivCroissantBot.entity.Support;
 import com.bots.lvivCroissantBot.entity.register.MUser;
 import com.bots.lvivCroissantBot.dto.messanger.Messaging;
+import com.bots.lvivCroissantBot.repository.CustomerOrderingRepository;
+import com.bots.lvivCroissantBot.repository.SupportEntityRepository;
 import com.bots.lvivCroissantBot.service.messenger.event.OrderingService;
 import com.bots.lvivCroissantBot.service.messenger.event.UserService;
-import com.bots.lvivCroissantBot.service.repository.CroissantRepositoryService;
-import com.bots.lvivCroissantBot.service.repository.CustomerOrderingRepositoryService;
-import com.bots.lvivCroissantBot.service.repository.SupportEntityRepositoryService;
 import com.bots.lvivCroissantBot.service.messenger.MessageSenderService;
 import com.bots.lvivCroissantBot.service.peopleRegister.MUserRepositoryService;
 import com.bots.lvivCroissantBot.service.support.RecognizeService;
 import com.bots.lvivCroissantBot.service.support.TextFormatter;
+import com.bots.lvivCroissantBot.service.uni.CroissantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,19 +25,19 @@ import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.speaking.Serv
 @Service
 public class OrderingServiceImpl implements OrderingService {
     @Autowired
-    private CroissantRepositoryService croissantRepositoryService;
+    private CroissantService croissantRepositoryService;
     @Autowired
     private MUserRepositoryService MUserRepositoryService;
     @Autowired
     private MessageSenderService messageSenderService;
     @Autowired
-    private CustomerOrderingRepositoryService customerOrderingRepositoryService;
+    private CustomerOrderingRepository customerOrderingRepositoryService;
     @Autowired
     private RecognizeService recognizeService;
     @Autowired
     private UserService userService;
     @Autowired
-    private SupportEntityRepositoryService supportEntityRepositoryService;
+    private SupportEntityRepository supportEntityRepositoryService;
     @Override
     public void parseOrdering(Messaging messaging) {
         if(messaging.getPostback()!=null)
@@ -52,8 +52,8 @@ public class OrderingServiceImpl implements OrderingService {
         String croissantId = TextFormatter.ejectSingleVariable(messaging.getPostback().getPayload());
         CroissantEntity croissantEntity = croissantRepositoryService.findOne(Long.parseLong(croissantId));
 
-        if(supportEntityRepositoryService.getByUserId(messaging.getSender().getId())!=null ){
-            if(supportEntityRepositoryService.getByUserId(messaging.getSender().getId()).getOneMore()!=null) {
+        if(supportEntityRepositoryService.findByUserId(messaging.getSender().getId())!=null ){
+            if(supportEntityRepositoryService.findByUserId(messaging.getSender().getId()).getOneMore()!=null) {
                 messageSenderService.sendSimpleQuestion(messaging.getSender().getId(),recognizeService.recognize(ACCEPTING_ORDERING.name(),messaging.getSender().getId())+ croissantEntity.getName()+"?",ACCEPT_ORDERING_PAYLOAD.name()+"?"+croissantId,"&");
                 return;
 
@@ -66,7 +66,7 @@ public class OrderingServiceImpl implements OrderingService {
     private void createOrdering(MUser MUser, CroissantEntity croissantEntity, Messaging messaging) {
         CustomerOrdering customerOrdering = new CustomerOrdering();
         customerOrdering.setPrice(0);
-        Support support = supportEntityRepositoryService.getByUserId(messaging.getSender().getId());
+        Support support = supportEntityRepositoryService.findByUserId(messaging.getSender().getId());
         support.setCount(Integer.parseInt(croissantEntity.getId().toString()));
         supportEntityRepositoryService.saveAndFlush(support);
         customerOrdering.setName(MUser.getName() + " " + MUser.getLastName());
@@ -84,7 +84,7 @@ public class OrderingServiceImpl implements OrderingService {
 
     private void orderingFinalist(Messaging messaging) {
         MUser MUser = MUserRepositoryService.findOnebyRId(messaging.getSender().getId());
-        CustomerOrdering ordering = customerOrderingRepositoryService.findTopByUser(MUser);
+        CustomerOrdering ordering = customerOrderingRepositoryService.findTopByMUserOrderByIdDesc(MUser);
 
 
         if (ordering.getPhoneNumber() == null) {
@@ -125,8 +125,8 @@ public class OrderingServiceImpl implements OrderingService {
         customer1.setStatus(null);
         MUserRepositoryService.saveAndFlush(customer1);
         messageSenderService.errorMessage(messaging.getSender().getId());
-        if (customerOrderingRepositoryService.findTop().getCroissants().isEmpty()) {
-            customerOrderingRepositoryService.delete(customerOrderingRepositoryService.findTop());
+        if (customerOrderingRepositoryService.findTopByOrderByIdDesc().getCroissants().isEmpty()) {
+            customerOrderingRepositoryService.delete(customerOrderingRepositoryService.findTopByOrderByIdDesc());
         }
     }
 
@@ -144,7 +144,7 @@ public class OrderingServiceImpl implements OrderingService {
             userService.changeStatus(messaging,null);
 
 
-            Support support = supportEntityRepositoryService.getByUserId(messaging.getSender().getId());
+            Support support = supportEntityRepositoryService.findByUserId(messaging.getSender().getId());
             CroissantEntity croissantEntity = croissantRepositoryService.findOne(Long.parseLong(support.getCount().toString()));
             messageSenderService.sendSimpleQuestion(messaging.getSender().getId(),recognizeService.recognize(ACCEPTING_ORDERING.name(),messaging.getSender().getId())+ croissantEntity.getName()+"?",ACCEPT_ORDERING_PAYLOAD.name()+"?"+ croissantEntity.getId(),"&");
             support.setCount(null);

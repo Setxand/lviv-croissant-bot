@@ -5,8 +5,8 @@ import com.bots.lvivCroissantBot.entity.register.MUser;
 import com.bots.lvivCroissantBot.dto.messanger.Message;
 import com.bots.lvivCroissantBot.dto.messanger.Messaging;
 import com.bots.lvivCroissantBot.dto.messanger.Recipient;
+import com.bots.lvivCroissantBot.repository.MenuOfFillingRepository;
 import com.bots.lvivCroissantBot.service.messenger.event.MenuOfFillingService;
-import com.bots.lvivCroissantBot.service.repository.MenuOfFillingRepositoryService;
 import com.bots.lvivCroissantBot.service.messenger.MessageSenderService;
 import com.bots.lvivCroissantBot.service.peopleRegister.MUserRepositoryService;
 import com.bots.lvivCroissantBot.service.support.RecognizeService;
@@ -25,7 +25,7 @@ import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.speaking.Serv
 @Service
 public class MenuOfFillingServiceImpl implements MenuOfFillingService {
     @Autowired
-    private MenuOfFillingRepositoryService menuOfFillingRepositoryService;
+    private MenuOfFillingRepository menuOfFillingRepositoryService;
     @Autowired
     private MessageSenderService messageSenderService;
 
@@ -39,7 +39,7 @@ public class MenuOfFillingServiceImpl implements MenuOfFillingService {
 
     @Override
     public void getMenuOfFilling(Long recipient) {
-        List<MenuOfFilling> menuOfFillings = menuOfFillingRepositoryService.getAll();
+        List<MenuOfFilling> menuOfFillings = menuOfFillingRepositoryService.findAll();
         String listStr = "";
         Iterator<MenuOfFilling> iterator = menuOfFillings.iterator();
         while(iterator.hasNext()){
@@ -72,7 +72,7 @@ public class MenuOfFillingServiceImpl implements MenuOfFillingService {
                 messageSenderService.sendSimpleMessage(recognizeService.recognize(NON_CORRECT_FORMAT_OF_FILLING.name(),messaging.getSender().getId()),messaging.getSender().getId());
                 messageSenderService.sendMessage(new Messaging(new Message(recognizeService.recognize(NAME_OF_FILLING.name(),messaging.getSender().getId())), new Recipient(messaging.getSender().getId())));
                 if(menuOfFilling!=null)
-                    menuOfFillingRepositoryService.remove(menuOfFilling);
+                    menuOfFillingRepositoryService.delete(menuOfFilling);
                     messageSenderService.errorMessage(messaging.getSender().getId());
             }
 

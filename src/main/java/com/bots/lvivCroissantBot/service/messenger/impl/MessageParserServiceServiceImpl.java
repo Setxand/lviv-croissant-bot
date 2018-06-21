@@ -4,9 +4,9 @@ import com.bots.lvivCroissantBot.entity.Support;
 import com.bots.lvivCroissantBot.entity.register.MUser;
 import com.bots.lvivCroissantBot.constantEnum.messengerEnum.Cases;
 import com.bots.lvivCroissantBot.dto.messanger.Messaging;
+import com.bots.lvivCroissantBot.repository.CustomerOrderingRepository;
+import com.bots.lvivCroissantBot.repository.SupportEntityRepository;
 import com.bots.lvivCroissantBot.service.messenger.event.*;
-import com.bots.lvivCroissantBot.service.repository.CustomerOrderingRepositoryService;
-import com.bots.lvivCroissantBot.service.repository.SupportEntityRepositoryService;
 import com.bots.lvivCroissantBot.service.messenger.*;
 import com.bots.lvivCroissantBot.service.peopleRegister.CourierRegisterService;
 import com.bots.lvivCroissantBot.service.peopleRegister.MUserRepositoryService;
@@ -59,11 +59,11 @@ public class MessageParserServiceServiceImpl implements MessageParserService {
     @Autowired
     private BroadcastService broadcastService;
     @Autowired
-    private CustomerOrderingRepositoryService customerOrderingRepositoryService;
+    private CustomerOrderingRepository customerOrderingRepositoryService;
     @Autowired
     private MessageProcessorHelperService messageProcessorHelperService;
     @Autowired
-    private SupportEntityRepositoryService supportEntityRepositoryService;
+    private SupportEntityRepository supportEntityRepositoryService;
 
     private   final static Logger logger = LoggerFactory.getLogger(MessageParserServiceServiceImpl.class);
 
@@ -188,8 +188,8 @@ public class MessageParserServiceServiceImpl implements MessageParserService {
 
     private void abort(Messaging messaging) {
         userService.changeStatus(messaging, null);
-        if(supportEntityRepositoryService.getByUserId(messaging.getSender().getId())!=null) {
-            Support support = supportEntityRepositoryService.getByUserId(messaging.getSender().getId());
+        if(supportEntityRepositoryService.findByUserId(messaging.getSender().getId())!=null) {
+            Support support = supportEntityRepositoryService.findByUserId(messaging.getSender().getId());
             support.setOneMore(null);
             supportEntityRepositoryService.saveAndFlush(support);
         }

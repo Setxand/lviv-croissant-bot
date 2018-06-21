@@ -5,13 +5,14 @@ import com.bots.lvivCroissantBot.entity.lvivCroissants.CroissantsFilling;
 import com.bots.lvivCroissantBot.entity.register.TUser;
 import com.bots.lvivCroissantBot.constantEnum.messengerEnum.type.CroissantsTypes;
 import com.bots.lvivCroissantBot.dto.telegram.Message;
+import com.bots.lvivCroissantBot.exception.ElementNoFoundException;
+import com.bots.lvivCroissantBot.repository.CroisantsFillingEntityRepository;
+import com.bots.lvivCroissantBot.repository.MenuOfFillingRepository;
 import com.bots.lvivCroissantBot.service.telegram.event.TelegramCreatingOwnCroissant;
 import com.bots.lvivCroissantBot.service.telegram.event.TelegramGetMenu;
-import com.bots.lvivCroissantBot.service.repository.CroissantRepositoryService;
-import com.bots.lvivCroissantBot.service.repository.CroissantsFillingEntityRepositoryService;
-import com.bots.lvivCroissantBot.service.repository.MenuOfFillingRepositoryService;
 import com.bots.lvivCroissantBot.service.peopleRegister.TelegramUserRepositoryService;
 import com.bots.lvivCroissantBot.service.telegram.TelegramMessageSender;
+import com.bots.lvivCroissantBot.service.uni.CroissantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -31,11 +32,11 @@ public class TelegramCreatingOwnCroissantImpl implements TelegramCreatingOwnCroi
     @Autowired
     private TelegramUserRepositoryService telegramUserRepositoryService;
     @Autowired
-    private MenuOfFillingRepositoryService menuOfFillingRepositoryService;
+    private MenuOfFillingRepository menuOfFillingRepositoryService;
     @Autowired
-    private CroissantRepositoryService croissantRepositoryService;
+    private CroissantService croissantRepositoryService;
     @Autowired
-    private CroissantsFillingEntityRepositoryService croissantsFillingEntityRepositoryService;
+    private CroisantsFillingEntityRepository croissantsFillingEntityRepositoryService;
     @Override
     public void createOwn(Message message) {
         TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
@@ -63,7 +64,7 @@ public class TelegramCreatingOwnCroissantImpl implements TelegramCreatingOwnCroi
         try {
             String[] fillings = text.split(",");
             for(String filling:fillings) {
-                CroissantsFilling croissantsFilling = new CroissantsFilling(menuOfFillingRepositoryService.findOne(Long.parseLong(filling)));
+                CroissantsFilling croissantsFilling = new CroissantsFilling(menuOfFillingRepositoryService.findById(Long.parseLong(filling)).orElseThrow(ElementNoFoundException::new));
                 croissantEntity.addSingleFilling(croissantsFilling);
                 croissantEntity.setPrice(croissantEntity.getPrice()+ croissantsFilling.getPrice());
                 croissantsFillingEntityRepositoryService.saveAndFlush(croissantsFilling);

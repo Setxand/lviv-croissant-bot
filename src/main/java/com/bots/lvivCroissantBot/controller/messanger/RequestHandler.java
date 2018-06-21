@@ -4,8 +4,8 @@ import com.bots.lvivCroissantBot.entity.lvivCroissants.CustomerOrdering;
 import com.bots.lvivCroissantBot.entity.register.MUser;
 import com.bots.lvivCroissantBot.dto.messanger.Button;
 import com.bots.lvivCroissantBot.entity.register.User;
+import com.bots.lvivCroissantBot.repository.CustomerOrderingRepository;
 import com.bots.lvivCroissantBot.repository.UserRepository;
-import com.bots.lvivCroissantBot.service.repository.CustomerOrderingRepositoryService;
 import com.bots.lvivCroissantBot.service.messenger.MessageSenderService;
 import com.bots.lvivCroissantBot.service.peopleRegister.MUserRepositoryService;
 import com.bots.lvivCroissantBot.service.support.EmailService;
@@ -38,7 +38,7 @@ public class RequestHandler {
     @Autowired
     private MUserRepositoryService MUserRepositoryService;
     @Autowired
-    private CustomerOrderingRepositoryService customerOrderingRepositoryService;
+    private CustomerOrderingRepository customerOrderingRepositoryService;
     @Autowired
     private EmailService emailService;
     @Autowired
@@ -79,7 +79,7 @@ public class RequestHandler {
     @GetMapping("/successTrans")
     public void successTrans(@RequestParam String userId){
         Long uId = Long.parseLong(userId);
-        CustomerOrdering customerOrdering = customerOrderingRepositoryService.findTopByUser(MUserRepositoryService.findOnebyRId(uId));
+        CustomerOrdering customerOrdering = customerOrderingRepositoryService.findTopByMUserOrderByIdDesc(MUserRepositoryService.findOnebyRId(uId));
         messageSenderService.sendSimpleMessage(recognizeService.recognize(ORDERING_WAS_DONE.name(), uId) + "\n" + customerOrdering.getCroissants() + "\nPrice: " + customerOrdering.getPrice() + recognizeService.recognize(CURRENCY.name(), uId), uId);
         Button button = new Button(web_url.name(), recognizeService.recognize(RATING_BUTTON.name(), uId));
         button.setMesExtentions(true);

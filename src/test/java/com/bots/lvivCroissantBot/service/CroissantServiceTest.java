@@ -2,7 +2,7 @@ package com.bots.lvivCroissantBot.service;
 
 import com.bots.lvivCroissantBot.dto.uni.CroissantDTO;
 import com.bots.lvivCroissantBot.repository.CroissantEntityRepository;
-import com.bots.lvivCroissantBot.service.uniService.CroissantService;
+import com.bots.lvivCroissantBot.service.uni.CroissantService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

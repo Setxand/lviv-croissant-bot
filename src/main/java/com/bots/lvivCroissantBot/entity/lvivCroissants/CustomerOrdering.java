@@ -31,6 +31,8 @@ public class CustomerOrdering {
 
     @ElementCollection
     private List<String>croissants = new ArrayList<>();
+
+
     @ManyToOne
     @JoinColumn(name = "customer_ordering_id")
     private Courier userCourier;

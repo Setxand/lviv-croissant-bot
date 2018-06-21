@@ -12,18 +12,19 @@ import com.bots.lvivCroissantBot.dto.telegram.CallBackQuery;
 import com.bots.lvivCroissantBot.dto.telegram.Chat;
 import com.bots.lvivCroissantBot.dto.telegram.Message;
 import com.bots.lvivCroissantBot.entity.register.User;
+import com.bots.lvivCroissantBot.exception.ElementNoFoundException;
+import com.bots.lvivCroissantBot.repository.CustomerOrderingRepository;
 import com.bots.lvivCroissantBot.repository.UserRepository;
 import com.bots.lvivCroissantBot.service.telegram.event.TelegramCreatingOwnCroissant;
 import com.bots.lvivCroissantBot.service.telegram.event.TelegramGetMenu;
 import com.bots.lvivCroissantBot.service.telegram.event.TelegramOrdering;
-import com.bots.lvivCroissantBot.service.repository.CroissantRepositoryService;
 import com.bots.lvivCroissantBot.service.peopleRegister.TelegramUserRepositoryService;
-import com.bots.lvivCroissantBot.service.repository.CustomerOrderingRepositoryService;
 import com.bots.lvivCroissantBot.service.support.TextFormatter;
 import com.bots.lvivCroissantBot.service.telegram.CallBackParser;
 import com.bots.lvivCroissantBot.service.telegram.TelegramMessageParserHelper;
 import com.bots.lvivCroissantBot.service.telegram.TelegramMessageParser;
 import com.bots.lvivCroissantBot.service.telegram.TelegramMessageSender;
+import com.bots.lvivCroissantBot.service.uni.CroissantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +40,7 @@ public class CallBackParserServiceImpl implements CallBackParser {
     @Autowired
     private TelegramMessageSender telegramMessageSender;
     @Autowired
-    private CroissantRepositoryService croissantRepositoryService;
+    private CroissantService croissantRepositoryService;
     @Autowired
     private TelegramGetMenu telegramGetMenu;
     @Autowired
@@ -51,7 +52,7 @@ public class CallBackParserServiceImpl implements CallBackParser {
     @Autowired
     private TelegramCreatingOwnCroissant telegramCreatingOwnCroissant;
     @Autowired
-    private CustomerOrderingRepositoryService customerOrderingRepositoryService;
+    private CustomerOrderingRepository customerOrderingRepositoryService;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -150,7 +151,7 @@ public class CallBackParserServiceImpl implements CallBackParser {
     }
 
     private void finishingOrdering(CallBackQuery callBackQuery, long orderId) {
-        CustomerOrdering customerOrdering = customerOrderingRepositoryService.findOne(orderId);
+        CustomerOrdering customerOrdering = customerOrderingRepositoryService.findById(orderId).orElseThrow(ElementNoFoundException::new);
         customerOrdering.setCompletedTime(new java.util.Date().toString());
         customerOrderingRepositoryService.saveAndFlush(customerOrdering);
         String done = ResourceBundle.getBundle("dictionary").getString(DONE.name());
@@ -166,7 +167,7 @@ public class CallBackParserServiceImpl implements CallBackParser {
     private void cancelData(CallBackQuery callBackQuery) {
         String id = TextFormatter.ejectSingleVariable(callBackQuery.getData());
         Long idL = Long.parseLong(id);
-        CustomerOrdering customerOrdering = customerOrderingRepositoryService.findOne(idL);
+        CustomerOrdering customerOrdering = customerOrderingRepositoryService.findById(idL).orElseThrow(ElementNoFoundException::new);
         TUser tUser = telegramUserRepositoryService.findByChatId(callBackQuery.getMessage().getChat().getId());
         tUser.getCustomerOrderings().remove(customerOrdering);
         customerOrderingRepositoryService.delete(customerOrdering);

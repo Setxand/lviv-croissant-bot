@@ -7,13 +7,13 @@ import com.bots.lvivCroissantBot.constantEnum.messengerEnum.speaking.ServerSideS
 import com.bots.lvivCroissantBot.constantEnum.telegramEnum.CallBackData;
 import com.bots.lvivCroissantBot.dto.telegram.Message;
 import com.bots.lvivCroissantBot.dto.telegram.button.InlineKeyboardButton;
+import com.bots.lvivCroissantBot.repository.CustomerOrderingRepository;
 import com.bots.lvivCroissantBot.service.telegram.event.TelegramGetMenu;
 import com.bots.lvivCroissantBot.service.telegram.event.TelegramOrdering;
-import com.bots.lvivCroissantBot.service.repository.CroissantRepositoryService;
-import com.bots.lvivCroissantBot.service.repository.CustomerOrderingRepositoryService;
 import com.bots.lvivCroissantBot.service.peopleRegister.TelegramUserRepositoryService;
 import com.bots.lvivCroissantBot.service.support.TextFormatter;
 import com.bots.lvivCroissantBot.service.telegram.TelegramMessageSender;
+import com.bots.lvivCroissantBot.service.uni.CroissantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,9 +32,9 @@ public class TelegramOrderingImpl implements TelegramOrdering {
     @Autowired
     private TelegramMessageSender telegramMessageSender;
     @Autowired
-    private CroissantRepositoryService croissantRepositoryService;
+    private CroissantService croissantRepositoryService;
     @Autowired
-    private CustomerOrderingRepositoryService customerOrderingRepositoryService;
+    private CustomerOrderingRepository customerOrderingRepositoryService;
     @Autowired
     private TelegramGetMenu telegramGetMenu;
     @Override
@@ -72,7 +72,7 @@ public class TelegramOrderingImpl implements TelegramOrdering {
 
     private void timeStatus(Message message, TUser tUser) {
         if(TextFormatter.isCorrectTime(message.getText())){
-            CustomerOrdering customerOrdering = customerOrderingRepositoryService.findTopByTUser(tUser);
+            CustomerOrdering customerOrdering = customerOrderingRepositoryService.findTopByTUserOrderByIdDesc(tUser);
             customerOrdering.setTime(message.getText());
             telegramUserRepositoryService.saveAndFlush(tUser);
             nullChecking(message);
@@ -87,7 +87,7 @@ public class TelegramOrderingImpl implements TelegramOrdering {
 
     private void addressStatus(Message message, TUser tUser) {
         if(TextFormatter.isCorrectAddress(message.getText())){
-            CustomerOrdering customerOrdering = customerOrderingRepositoryService.findTopByTUser(tUser);
+            CustomerOrdering customerOrdering = customerOrderingRepositoryService.findTopByTUserOrderByIdDesc(tUser);
             customerOrdering.setAddress(message.getText());
             telegramUserRepositoryService.saveAndFlush(tUser);
             nullChecking(message);
@@ -104,7 +104,7 @@ public class TelegramOrderingImpl implements TelegramOrdering {
     private void fillingPhoneNumberStatus(Message message, TUser tUser) {
         if(TextFormatter.isPhoneNumber(message.getText())){
             tUser.getUser().setPhoneNumber(message.getText());
-            CustomerOrdering customerOrdering = customerOrderingRepositoryService.findTopByTUser(tUser);
+            CustomerOrdering customerOrdering = customerOrderingRepositoryService.findTopByTUserOrderByIdDesc(tUser);
             customerOrdering.setPhoneNumber(message.getText());
             telegramUserRepositoryService.saveAndFlush(tUser);
             customerOrderingRepositoryService.saveAndFlush(customerOrdering);
@@ -145,7 +145,7 @@ public class TelegramOrderingImpl implements TelegramOrdering {
     }
 
     private void oneMoreAddingCroissant(Message message, TUser tUser) {
-        CustomerOrdering customerOrdering = customerOrderingRepositoryService.findTopByTUser(tUser);
+        CustomerOrdering customerOrdering = customerOrderingRepositoryService.findTopByTUserOrderByIdDesc(tUser);
         CroissantEntity croissantEntity = croissantRepositoryService.findOne(Long.parseLong(message.getText()));
         customerOrdering.getCroissants().add(croissantEntity.getId().toString());
         customerOrdering.setPrice(customerOrdering.getPrice()+ croissantEntity.getPrice());
@@ -156,7 +156,7 @@ public class TelegramOrderingImpl implements TelegramOrdering {
 
     private void nullChecking(Message message) {
         TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
-        CustomerOrdering customerOrdering = customerOrderingRepositoryService.findTopByTUser(tUser);
+        CustomerOrdering customerOrdering = customerOrderingRepositoryService.findTopByTUserOrderByIdDesc(tUser);
 
         if(customerOrdering.getAddress()==null){
             telegramUserRepositoryService.changeStatus(tUser,ADDRESS_STATUS);
@@ -179,7 +179,7 @@ public class TelegramOrderingImpl implements TelegramOrdering {
     @Override
     public void ifNoMore(Message message){
         TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId()) ;
-        CustomerOrdering customerOrdering = customerOrderingRepositoryService.findTopByTUser(tUser);
+        CustomerOrdering customerOrdering = customerOrderingRepositoryService.findTopByTUserOrderByIdDesc(tUser);
         telegramUserRepositoryService.changeStatus(tUser,null);
         String done = ResourceBundle.getBundle("dictionary").getString(ORDERING_WAS_DONE.name());
         telegramMessageSender.simpleMessage(done,message);

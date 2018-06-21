@@ -16,4 +16,8 @@ public class SpeakingMessage {
     @Id
     private String id;
     private String message;
+
+    public SpeakingMessage(String id) {
+        this.id = id;
+    }
 }

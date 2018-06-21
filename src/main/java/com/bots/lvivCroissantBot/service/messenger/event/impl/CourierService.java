@@ -3,8 +3,9 @@ package com.bots.lvivCroissantBot.service.messenger.event.impl;
 import com.bots.lvivCroissantBot.entity.lvivCroissants.CustomerOrdering;
 import com.bots.lvivCroissantBot.entity.register.MUser;
 import com.bots.lvivCroissantBot.dto.messanger.*;
+import com.bots.lvivCroissantBot.exception.ElementNoFoundException;
+import com.bots.lvivCroissantBot.repository.CustomerOrderingRepository;
 import com.bots.lvivCroissantBot.service.messenger.event.UserService;
-import com.bots.lvivCroissantBot.service.repository.CustomerOrderingRepositoryService;
 import com.bots.lvivCroissantBot.service.messenger.MessageSenderService;
 import com.bots.lvivCroissantBot.service.peopleRegister.CourierRegisterService;
 import com.bots.lvivCroissantBot.service.peopleRegister.MUserRepositoryService;
@@ -41,7 +42,7 @@ public class CourierService implements com.bots.lvivCroissantBot.service.messeng
     @Autowired
     private MessageSenderService messageSenderService;
     @Autowired
-    private CustomerOrderingRepositoryService customerOrderingRepositoryService;
+    private CustomerOrderingRepository customerOrderingRepositoryService;
     @Autowired
     private RecognizeService recognizeService;
     @Autowired
@@ -126,7 +127,7 @@ public class CourierService implements com.bots.lvivCroissantBot.service.messeng
             com.bots.lvivCroissantBot.entity.register.Courier courier = courierRegisterService.findByRecipientId(messaging.getSender().getId());
 
 
-            CustomerOrdering customerOrdering = customerOrderingRepositoryService.findOne(orderId);
+            CustomerOrdering customerOrdering = customerOrderingRepositoryService.findById(orderId).orElseThrow(ElementNoFoundException::new);
             courier.getCustomerOrderings().remove(customerOrdering);
             customerOrdering.setCourier(null);
             courierRegisterService.saveAndFlush(courier);
@@ -258,7 +259,7 @@ public class CourierService implements com.bots.lvivCroissantBot.service.messeng
             com.bots.lvivCroissantBot.entity.register.Courier courier = courierRegisterService.findByRecipientId(messaging.getSender().getId());
 
 
-            CustomerOrdering customerOrdering = customerOrderingRepositoryService.findOne(orderId);
+            CustomerOrdering customerOrdering = customerOrderingRepositoryService.findById(orderId).orElseThrow(ElementNoFoundException::new);
             courier.addOne(customerOrdering);
             courierRegisterService.saveAndFlush(courier);
             customerOrderingRepositoryService.saveAndFlush(customerOrdering);

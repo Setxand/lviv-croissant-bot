@@ -12,12 +12,13 @@ import com.bots.lvivCroissantBot.dto.telegram.Message;
 import com.bots.lvivCroissantBot.dto.telegram.button.InlineKeyboardButton;
 import com.bots.lvivCroissantBot.dto.telegram.button.InlineKeyboardMarkup;
 import com.bots.lvivCroissantBot.dto.telegram.button.Markup;
+import com.bots.lvivCroissantBot.exception.ElementNoFoundException;
+import com.bots.lvivCroissantBot.repository.CustomerOrderingRepository;
 import com.bots.lvivCroissantBot.service.adminPanel.BotCommandParseHelper;
 import com.bots.lvivCroissantBot.service.peopleRegister.TelegramUserRepositoryService;
-import com.bots.lvivCroissantBot.service.repository.CroissantRepositoryService;
-import com.bots.lvivCroissantBot.service.repository.CustomerOrderingRepositoryService;
 import com.bots.lvivCroissantBot.service.support.TextFormatter;
 import com.bots.lvivCroissantBot.service.telegram.TelegramMessageSender;
+import com.bots.lvivCroissantBot.service.uni.CroissantService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,9 +41,9 @@ public class BotCommandParseHelperImpl implements BotCommandParseHelper {
     @Autowired
     private TelegramUserRepositoryService telegramUserRepositoryService;
     @Autowired
-    private CustomerOrderingRepositoryService customerOrderingRepositoryService;
+    private CustomerOrderingRepository customerOrderingRepositoryService;
     @Autowired
-    private CroissantRepositoryService croissantRepositoryService;
+    private CroissantService croissantRepositoryService;
     @Value("${server.url}")
     private String SERVER_URL;
     @Value("${app.verify.token}")
@@ -117,7 +118,7 @@ public class BotCommandParseHelperImpl implements BotCommandParseHelper {
     @Override
     public void helpCompleteOrderData(CallBackQuery callBackQuery) {
         String orderId = TextFormatter.ejectSingleVariable(callBackQuery.getData());
-        CustomerOrdering customerOrdering = customerOrderingRepositoryService.findOne(Long.parseLong(orderId));
+        CustomerOrdering customerOrdering = customerOrderingRepositoryService.findById(Long.parseLong(orderId)).orElseThrow(ElementNoFoundException::new);
         TUser tUser = customerOrdering.getTUser();
         callBackQuery.getMessage().getChat().setId(tUser.getChatId());
         callBackQuery.getMessage().setPlatform(null);

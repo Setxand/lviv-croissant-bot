@@ -1,4 +1,4 @@
-package com.bots.lvivCroissantBot.service.uniService;
+package com.bots.lvivCroissantBot.service.uni;
 
 import com.bots.lvivCroissantBot.dto.uni.CroissantDTO;
 import com.bots.lvivCroissantBot.entity.lvivCroissants.CroissantEntity;
@@ -51,4 +51,34 @@ public class CroissantService {
         return Optional.ofNullable(croissantEntity).map(CroissantUtilManager::croissantEntityToDTO);
     }
 
+    public List<CroissantEntity> findAllByType(String type) {
+        return croissantEntityRepository.findAllByTypeOrderByIdDesc(type);
+    }
+
+    public CroissantEntity findLastRecord() {
+        return croissantEntityRepository.findTopByOrderByIdDesc();
+    }
+
+
+
+    public CroissantEntity findOne(Long id) {
+        return croissantEntityRepository.findById(id).orElseThrow(ElementNoFoundException::new);
+    }
+
+    public CroissantEntity getCroissantByName(String name) {
+        return this.croissantEntityRepository.getCroissantByName(name);
+    }
+
+    public CroissantEntity saveAndFlush(CroissantEntity croissantEntity) {
+        return croissantEntityRepository.saveAndFlush(croissantEntity);
+    }
+
+
+    public void remove(CroissantEntity croissantEntity) {
+        croissantEntityRepository.delete(croissantEntity);
+    }
+
+    public CroissantEntity findLastByCreatorId(Long creatorId) {
+        return croissantEntityRepository.findTopByCreatorIdOrderByIdDesc(creatorId);
+    }
 }

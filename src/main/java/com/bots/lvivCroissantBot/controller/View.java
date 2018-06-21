@@ -2,13 +2,13 @@ package com.bots.lvivCroissantBot.controller;
 
 import com.bots.lvivCroissantBot.entity.lvivCroissants.CroissantEntity;
 import com.bots.lvivCroissantBot.entity.lvivCroissants.CustomerOrdering;
-import com.bots.lvivCroissantBot.service.repository.CroissantRepositoryService;
-import com.bots.lvivCroissantBot.service.repository.CustomerOrderingRepositoryService;
+import com.bots.lvivCroissantBot.exception.ElementNoFoundException;
+import com.bots.lvivCroissantBot.repository.CustomerOrderingRepository;
 import com.bots.lvivCroissantBot.service.messenger.MessageSenderService;
 import com.bots.lvivCroissantBot.service.peopleRegister.MUserRepositoryService;
 import com.bots.lvivCroissantBot.service.support.EmailService;
 import com.bots.lvivCroissantBot.service.support.RecognizeService;
-import com.bots.lvivCroissantBot.service.uniService.CroissantService;
+import com.bots.lvivCroissantBot.service.uni.CroissantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,9 +30,9 @@ public class View {
     @Autowired
     private RecognizeService recognizeService;
     @Autowired
-    private CustomerOrderingRepositoryService customerOrderingRepositoryService;
+    private CustomerOrderingRepository customerOrderingRepositoryService;
     @Autowired
-    private CroissantRepositoryService croissantRepositoryService;
+    private CroissantService croissantRepositoryService;
     @Autowired
     private CroissantService croissantService;
     @RequestMapping(value = "/req/{customerId}",method = RequestMethod.GET)
@@ -45,7 +45,7 @@ public class View {
 
     @RequestMapping(value = "/showMore/{orderId}")
     public String showMoreForOrderings(@PathVariable String orderId,Model model){
-        CustomerOrdering customerOrdering = customerOrderingRepositoryService.findOne(Long.parseLong(orderId));
+        CustomerOrdering customerOrdering = customerOrderingRepositoryService.findById(Long.parseLong(orderId)).orElseThrow(ElementNoFoundException::new);
         List<String> orderings = new ArrayList<>();
         for(String cr: customerOrdering.getCroissants()){
             try {
@@ -71,7 +71,7 @@ public class View {
 
     @GetMapping("/payment/{userId}")
     public String getPayment(@PathVariable String userId, Model model){
-        CustomerOrdering customerOrdering = customerOrderingRepositoryService.findTopByUser(MUserRepositoryService.findOnebyRId(Long.parseLong(userId)));
+        CustomerOrdering customerOrdering = customerOrderingRepositoryService.findTopByMUserOrderByIdDesc(MUserRepositoryService.findOnebyRId(Long.parseLong(userId)));
         model.addAttribute("userId",userId);
         model.addAttribute("price",customerOrdering.getPrice());
         return "payment";

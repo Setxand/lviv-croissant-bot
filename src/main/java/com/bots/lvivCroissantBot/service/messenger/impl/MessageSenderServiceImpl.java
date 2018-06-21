@@ -4,12 +4,12 @@ import com.bots.lvivCroissantBot.constantEnum.messengerEnum.speaking.ServerSideS
 import com.bots.lvivCroissantBot.constantEnum.messengerEnum.type.ContentType;
 import com.bots.lvivCroissantBot.constantEnum.messengerEnum.type.CroissantsTypes;
 import com.bots.lvivCroissantBot.dto.messanger.*;
-import com.bots.lvivCroissantBot.service.repository.CroissantRepositoryService;
-import com.bots.lvivCroissantBot.service.repository.CroissantsFillingEntityRepositoryService;
-import com.bots.lvivCroissantBot.service.repository.MenuOfFillingRepositoryService;
+import com.bots.lvivCroissantBot.repository.CroisantsFillingEntityRepository;
+import com.bots.lvivCroissantBot.repository.MenuOfFillingRepository;
 import com.bots.lvivCroissantBot.service.messenger.MessageSenderService;
 import com.bots.lvivCroissantBot.service.peopleRegister.MUserRepositoryService;
 import com.bots.lvivCroissantBot.service.support.RecognizeService;
+import com.bots.lvivCroissantBot.service.uni.CroissantService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,11 +41,12 @@ import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.type.Template
 public class MessageSenderServiceImpl implements MessageSenderService {
 
     @Autowired
-    private CroissantRepositoryService croissantRepositoryService;
+    private CroissantService croissantRepositoryService;
     @Autowired
-    private CroissantsFillingEntityRepositoryService croissantsFillingEntityRepositoryService;
+    private CroisantsFillingEntityRepository croisantsFillingEntityRepository;
+
     @Autowired
-    private MenuOfFillingRepositoryService menuOfFillingRepositoryService;
+    private MenuOfFillingRepository menuOfFillingRepositoryService;
     @Autowired
     private RecognizeService recognizeService;
 

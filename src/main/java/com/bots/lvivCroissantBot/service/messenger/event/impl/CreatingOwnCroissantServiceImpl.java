@@ -8,19 +8,20 @@ import com.bots.lvivCroissantBot.constantEnum.messengerEnum.Cases;
 import com.bots.lvivCroissantBot.dto.messanger.Message;
 import com.bots.lvivCroissantBot.dto.messanger.Messaging;
 import com.bots.lvivCroissantBot.dto.messanger.QuickReply;
+import com.bots.lvivCroissantBot.exception.ElementNoFoundException;
+import com.bots.lvivCroissantBot.repository.CroisantsFillingEntityRepository;
+import com.bots.lvivCroissantBot.repository.MenuOfFillingRepository;
+import com.bots.lvivCroissantBot.repository.SupportEntityRepository;
 import com.bots.lvivCroissantBot.service.messenger.event.CreatingOwnCroissantService;
 import com.bots.lvivCroissantBot.service.messenger.event.GetMenuService;
 import com.bots.lvivCroissantBot.service.messenger.event.MenuOfFillingService;
 import com.bots.lvivCroissantBot.service.messenger.event.UserService;
-import com.bots.lvivCroissantBot.service.repository.CroissantRepositoryService;
-import com.bots.lvivCroissantBot.service.repository.CroissantsFillingEntityRepositoryService;
-import com.bots.lvivCroissantBot.service.repository.MenuOfFillingRepositoryService;
-import com.bots.lvivCroissantBot.service.repository.SupportEntityRepositoryService;
 import com.bots.lvivCroissantBot.service.messenger.MessageParserService;
 import com.bots.lvivCroissantBot.service.messenger.MessageSenderService;
 import com.bots.lvivCroissantBot.service.peopleRegister.MUserRepositoryService;
 import com.bots.lvivCroissantBot.service.support.RecognizeService;
 import com.bots.lvivCroissantBot.service.support.TextFormatter;
+import com.bots.lvivCroissantBot.service.uni.CroissantService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.type.Croissan
 public class CreatingOwnCroissantServiceImpl implements CreatingOwnCroissantService {
 
     @Autowired
-    private CroissantRepositoryService croissantRepositoryService;
+    private CroissantService croissantRepositoryService;
     @Autowired
     private MessageSenderService messageSenderService;
     @Autowired
@@ -47,9 +48,9 @@ public class CreatingOwnCroissantServiceImpl implements CreatingOwnCroissantServ
     @Autowired
     private MenuOfFillingService menuOfFillingService;
     @Autowired
-    private MenuOfFillingRepositoryService menuOfFillingRepositoryService;
+    private MenuOfFillingRepository menuOfFillingRepositoryService;
     @Autowired
-    private CroissantsFillingEntityRepositoryService croissantsFillingEntityRepositoryService;
+    private CroisantsFillingEntityRepository croissantsFillingEntityRepositoryService;
     @Autowired
     private GetMenuService getMenuService;
     @Autowired
@@ -57,7 +58,7 @@ public class CreatingOwnCroissantServiceImpl implements CreatingOwnCroissantServ
     @Autowired
     private UserService userService;
     @Autowired
-    private SupportEntityRepositoryService supportEntityRepositoryService;
+    private SupportEntityRepository supportEntityRepositoryService;
     private   final static Logger logger = LoggerFactory.getLogger(CreatingOwnCroissantServiceImpl.class);
 
     @Override
@@ -81,13 +82,13 @@ public class CreatingOwnCroissantServiceImpl implements CreatingOwnCroissantServ
 
     private void firstStepCreating(Messaging messaging) {
         CroissantEntity croissantEntity = new CroissantEntity("Власний круасан", OWN.name());
-        Support support = supportEntityRepositoryService.getByUserId(messaging.getSender().getId());
+        Support support = supportEntityRepositoryService.findByUserId(messaging.getSender().getId());
         support.setType(OWN.name());
         supportEntityRepositoryService.saveAndFlush(support);
         croissantEntity.setImageUrl("http://www.mlinar.hr/wp-content/uploads/2013/06/mlinar-proizvodi-croissantEntity-600x380.png");
         String payload = messaging.getPostback().getPayload();
         croissantEntity.setCroissantsFillings(new ArrayList<CroissantsFilling>());
-        croissantEntity.addSingleFilling(new CroissantsFilling(menuOfFillingRepositoryService.findOne(Long.parseLong(payload))));
+        croissantEntity.addSingleFilling(new CroissantsFilling(menuOfFillingRepositoryService.findById(Long.parseLong(payload)).orElseThrow(ElementNoFoundException::new)));
         croissantRepositoryService.saveAndFlush(croissantEntity);
 
         MUser MUser = MUserRepositoryService.findOnebyRId(messaging.getSender().getId());
@@ -106,7 +107,7 @@ public class CreatingOwnCroissantServiceImpl implements CreatingOwnCroissantServ
             CroissantEntity croissantEntity = croissantRepositoryService.findOne(MUser.getOwnCroissantsId().get(MUser.getOwnCroissantsId().size()-1));
             int price = 0;
             for(String filling:fillings){
-                CroissantsFilling croissantsFilling = new CroissantsFilling(menuOfFillingRepositoryService.findOne(Long.parseLong(filling)));
+                CroissantsFilling croissantsFilling = new CroissantsFilling(menuOfFillingRepositoryService.findById(Long.parseLong(filling)).orElseThrow(ElementNoFoundException::new));
                 croissantEntity.addSingleFilling(croissantsFilling);
                 price+= croissantsFilling.getPrice();
             }

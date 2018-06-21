@@ -5,9 +5,9 @@ import com.bots.lvivCroissantBot.entity.register.MUser;
 import com.bots.lvivCroissantBot.dto.messanger.Messaging;
 import com.bots.lvivCroissantBot.dto.messanger.QuickReply;
 import com.bots.lvivCroissantBot.entity.register.User;
+import com.bots.lvivCroissantBot.repository.CustomerOrderingRepository;
 import com.bots.lvivCroissantBot.repository.UserRepository;
 import com.bots.lvivCroissantBot.service.messenger.event.UserService;
-import com.bots.lvivCroissantBot.service.repository.CustomerOrderingRepositoryService;
 import com.bots.lvivCroissantBot.service.messenger.MessageProcessorHelperService;
 import com.bots.lvivCroissantBot.service.messenger.MessageSenderService;
 import com.bots.lvivCroissantBot.service.peopleRegister.MUserRepositoryService;
@@ -40,7 +40,7 @@ public class MessageProcessorHelperServiceImpl implements MessageProcessorHelper
     @Autowired
     private RecognizeService recognizeService;
     @Autowired
-    private CustomerOrderingRepositoryService customerOrderingRepositoryService;
+    private CustomerOrderingRepository customerOrderingRepositoryService;
     @Autowired
     private UserRepository userRepository;
     @Override

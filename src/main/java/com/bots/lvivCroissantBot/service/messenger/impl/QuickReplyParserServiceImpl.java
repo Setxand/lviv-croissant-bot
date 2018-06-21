@@ -8,14 +8,9 @@ import com.bots.lvivCroissantBot.entity.register.MUser;
 import com.bots.lvivCroissantBot.dto.messanger.*;
 import com.bots.lvivCroissantBot.entity.register.TUser;
 import com.bots.lvivCroissantBot.entity.register.User;
-import com.bots.lvivCroissantBot.repository.MUserRepository;
-import com.bots.lvivCroissantBot.repository.UserRepository;
+import com.bots.lvivCroissantBot.repository.*;
 import com.bots.lvivCroissantBot.service.messenger.event.*;
 import com.bots.lvivCroissantBot.service.peopleRegister.TelegramUserRepositoryService;
-import com.bots.lvivCroissantBot.service.repository.CroissantRepositoryService;
-import com.bots.lvivCroissantBot.service.repository.CustomerOrderingRepositoryService;
-import com.bots.lvivCroissantBot.service.repository.MenuOfFillingRepositoryService;
-import com.bots.lvivCroissantBot.service.repository.SupportEntityRepositoryService;
 import com.bots.lvivCroissantBot.service.messenger.MessageParserService;
 import com.bots.lvivCroissantBot.service.messenger.MessageSenderService;
 import com.bots.lvivCroissantBot.service.messenger.QuickReplyParserService;
@@ -23,6 +18,7 @@ import com.bots.lvivCroissantBot.service.peopleRegister.MUserRepositoryService;
 import com.bots.lvivCroissantBot.service.support.RecognizeService;
 import com.bots.lvivCroissantBot.service.support.TextFormatter;
 import com.bots.lvivCroissantBot.service.telegram.TelegramMessageSender;
+import com.bots.lvivCroissantBot.service.uni.CroissantService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,11 +52,11 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
     @Autowired
     private MessageSenderService messageSenderService;
     @Autowired
-    private CroissantRepositoryService croissantRepositoryService;
+    private CroissantService croissantRepositoryService;
     @Autowired
     private MUserRepositoryService MUserRepositoryService;
     @Autowired
-    private CustomerOrderingRepositoryService customerOrderingRepositoryService;
+    private CustomerOrderingRepository customerOrderingRepositoryService;
     @Autowired
     private MessageParserService messageParserServiceService;
     @Autowired
@@ -68,15 +64,15 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
     @Autowired
     private RecognizeService recognizeService;
     @Autowired
-    private MenuOfFillingRepositoryService menuOfFillingRepositoryService;
+    private MenuOfFillingRepository menuOfFillingRepositoryService;
     @Autowired
     private CreatingOwnCroissantService creatingOwnCroissantService;
     @Autowired
     private GetMenuService getMenuService;
     @Autowired
-    OrderingService orderingService;
+    private OrderingService orderingService;
     @Autowired
-    private SupportEntityRepositoryService supportEntityRepositoryService;
+    private SupportEntityRepository supportEntityRepositoryService;
     @Autowired
     private UserService userService;
     @Autowired
@@ -189,7 +185,7 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
     private void paymentWay(Messaging messaging) {
         String payload = messaging.getMessage().getQuickReply().getPayload();
         String var = TextFormatter.ejectSingleVariable(payload);
-        CustomerOrdering customerOrdering = customerOrderingRepositoryService.findTopByUser(MUserRepositoryService.findOnebyRId(messaging.getSender().getId()));
+        CustomerOrdering customerOrdering = customerOrderingRepositoryService.findTopByMUserOrderByIdDesc(MUserRepositoryService.findOnebyRId(messaging.getSender().getId()));
 
         if (!var.equalsIgnoreCase(CASH.name())) {
             paymentWayCard(messaging, customerOrdering);
@@ -248,7 +244,7 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
 
     private void acceptOrderingYes(Messaging messaging, String context, MUser MUser) {
         CroissantEntity croissantEntity = croissantRepositoryService.findOne(Long.parseLong(context));
-        CustomerOrdering ordering = customerOrderingRepositoryService.findTopByUser(MUser);
+        CustomerOrdering ordering = customerOrderingRepositoryService.findTopByMUserOrderByIdDesc(MUser);
         ordering.getCroissants().add(croissantEntity.toString());
         int price = ordering.getPrice() + croissantEntity.getPrice();
         ordering.setPrice(price);
@@ -259,7 +255,7 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
 
     private void oneMoreOrdering(Messaging messaging) {
         String var = TextFormatter.ejectSingleVariable(messaging.getMessage().getQuickReply().getPayload());
-        Support support = supportEntityRepositoryService.getByUserId(messaging.getSender().getId());
+        Support support = supportEntityRepositoryService.findByUserId(messaging.getSender().getId());
         if (var.equals(QUESTION_YES.name())) {
             oneMoreOrderingYes(messaging, support);
         } else {
@@ -278,7 +274,7 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
 
     private void oneMoreOrderingNo(Messaging messaging, Support support) {
         MUser MUser = MUserRepositoryService.findOnebyRId(messaging.getSender().getId());
-        CustomerOrdering customerOrdering = customerOrderingRepositoryService.findTopByUser(MUser);
+        CustomerOrdering customerOrdering = customerOrderingRepositoryService.findTopByMUserOrderByIdDesc(MUser);
 
         support.setOneMore(null);
         userService.changeStatus(messaging, null);
@@ -292,11 +288,11 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
 
     private void croissantTypePayload(Messaging messaging) {
         Support support;
-        if (supportEntityRepositoryService.getByUserId(messaging.getSender().getId()) == null) {
+        if (supportEntityRepositoryService.findByUserId(messaging.getSender().getId()) == null) {
             support = new Support();
             support.setUserId(messaging.getSender().getId());
         } else
-            support = supportEntityRepositoryService.getByUserId(messaging.getSender().getId());
+            support = supportEntityRepositoryService.findByUserId(messaging.getSender().getId());
 
         support.setType(TextFormatter.ejectSingleVariable(messaging.getMessage().getQuickReply().getPayload()));
         supportEntityRepositoryService.saveAndFlush(support);
@@ -415,8 +411,8 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
 
 
     private void logicTypePayload(Messaging messaging, Support support, String type) {
-        if (supportEntityRepositoryService.getByUserId(messaging.getSender().getId()) != null)
-            support = supportEntityRepositoryService.getByUserId(messaging.getSender().getId());
+        if (supportEntityRepositoryService.findByUserId(messaging.getSender().getId()) != null)
+            support = supportEntityRepositoryService.findByUserId(messaging.getSender().getId());
         else {
             support = new Support();
             support.setUserId(messaging.getSender().getId());
@@ -460,7 +456,7 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
         if (singleVariable.equals(QUESTION_YES.name())) {
             orderingService.parseOrdering(messaging);
         } else {
-            CustomerOrdering ordering = customerOrderingRepositoryService.findTopByUser(MUser);
+            CustomerOrdering ordering = customerOrderingRepositoryService.findTopByMUserOrderByIdDesc(MUser);
             ordering.setAddress(null);
             customerOrderingRepositoryService.saveAndFlush(ordering);
             this.orderingService.parseOrdering(messaging);

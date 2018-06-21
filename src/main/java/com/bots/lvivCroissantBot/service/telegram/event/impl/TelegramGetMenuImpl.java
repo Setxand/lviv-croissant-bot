@@ -11,11 +11,11 @@ import com.bots.lvivCroissantBot.dto.telegram.Message;
 import com.bots.lvivCroissantBot.dto.telegram.button.InlineKeyboardButton;
 import com.bots.lvivCroissantBot.dto.telegram.button.InlineKeyboardMarkup;
 import com.bots.lvivCroissantBot.dto.telegram.button.Markup;
+import com.bots.lvivCroissantBot.repository.MenuOfFillingRepository;
 import com.bots.lvivCroissantBot.service.telegram.event.TelegramGetMenu;
-import com.bots.lvivCroissantBot.service.repository.CroissantRepositoryService;
-import com.bots.lvivCroissantBot.service.repository.MenuOfFillingRepositoryService;
 import com.bots.lvivCroissantBot.service.peopleRegister.TelegramUserRepositoryService;
 import com.bots.lvivCroissantBot.service.telegram.TelegramMessageSender;
+import com.bots.lvivCroissantBot.service.uni.CroissantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -36,9 +36,9 @@ public class TelegramGetMenuImpl implements TelegramGetMenu {
     @Autowired
     private TelegramMessageSender telegramMessageSender;
     @Autowired
-    private CroissantRepositoryService croissantRepositoryService;
+    private CroissantService croissantRepositoryService;
     @Autowired
-    private MenuOfFillingRepositoryService menuOfFillingRepositoryService;
+    private MenuOfFillingRepository menuOfFillingRepositoryService;
     @Value("${server.url}")
     private String SERVER_URL;
 
@@ -70,7 +70,7 @@ public class TelegramGetMenuImpl implements TelegramGetMenu {
 
     @Override
     public void getMenuOfFillings(Message message) {
-        List<MenuOfFilling> menuOfFillings = menuOfFillingRepositoryService.getAll();
+        List<MenuOfFilling> menuOfFillings = menuOfFillingRepositoryService.findAll();
         String fillings = new String();
         for (MenuOfFilling menuOfFilling : menuOfFillings) {
             fillings += menuOfFilling.getId() + ". " + menuOfFilling.getName() + "\n";

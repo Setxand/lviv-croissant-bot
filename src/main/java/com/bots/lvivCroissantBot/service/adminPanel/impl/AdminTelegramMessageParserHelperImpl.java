@@ -5,9 +5,9 @@ import com.bots.lvivCroissantBot.entity.register.TUser;
 import com.bots.lvivCroissantBot.constantEnum.messengerEnum.Role;
 import com.bots.lvivCroissantBot.dto.telegram.Message;
 import com.bots.lvivCroissantBot.dto.telegram.button.InlineKeyboardButton;
+import com.bots.lvivCroissantBot.repository.SpeakingMessagesRepository;
 import com.bots.lvivCroissantBot.service.adminPanel.AdminTelegramMessageParserHelper;
 import com.bots.lvivCroissantBot.service.peopleRegister.TelegramUserRepositoryService;
-import com.bots.lvivCroissantBot.service.repository.SpeakingMessagesRepositoryService;
 import com.bots.lvivCroissantBot.service.telegram.TelegramMessageSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +28,7 @@ public class AdminTelegramMessageParserHelperImpl implements AdminTelegramMessag
     @Autowired
     private TelegramMessageSender telegramMessageSender;
     @Autowired
-    private SpeakingMessagesRepositoryService speakingMessagesRepositoryService;
+    private SpeakingMessagesRepository speakingMessagesRepositoryService;
     @Override
     public void helpSetRole(Message message) {
         TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
@@ -57,12 +57,7 @@ public class AdminTelegramMessageParserHelperImpl implements AdminTelegramMessag
 
     @Override
     public void helpChangeHelloMessage(Message message) {
-        SpeakingMessage speakingMessage;
-        if(speakingMessagesRepositoryService.findByKey(HELLO_MESSAGE.name())==null){
-            speakingMessage = new SpeakingMessage();
-            speakingMessage.setId(HELLO_MESSAGE.name());
-        }
-        else speakingMessage = speakingMessagesRepositoryService.findByKey(HELLO_MESSAGE.name());
+        SpeakingMessage speakingMessage = speakingMessagesRepositoryService.findById(HELLO_MESSAGE.name()).orElse(new SpeakingMessage(HELLO_MESSAGE.name()));
         speakingMessage.setMessage(message.getText());
         speakingMessagesRepositoryService.saveAndFlush(speakingMessage);
         String text = String.format(ResourceBundle.getBundle("dictionary").getString(NEW_TEXT_HAS_SET.name()),message.getText());
