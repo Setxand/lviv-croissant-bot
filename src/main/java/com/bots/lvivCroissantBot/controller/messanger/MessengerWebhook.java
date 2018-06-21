@@ -2,8 +2,8 @@ package com.bots.lvivCroissantBot.controller.messanger;
 
 
 import com.bots.lvivCroissantBot.dto.messanger.Event;
-import com.bots.lvivCroissantBot.service.supportService.VerifyService;
-import com.bots.lvivCroissantBot.service.messangerService.EventParserService;
+import com.bots.lvivCroissantBot.service.support.VerifyService;
+import com.bots.lvivCroissantBot.service.messenger.EventParserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

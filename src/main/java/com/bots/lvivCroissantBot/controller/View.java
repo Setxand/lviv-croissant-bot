@@ -2,12 +2,12 @@ package com.bots.lvivCroissantBot.controller;
 
 import com.bots.lvivCroissantBot.entity.lvivCroissants.CroissantEntity;
 import com.bots.lvivCroissantBot.entity.lvivCroissants.CustomerOrdering;
-import com.bots.lvivCroissantBot.service.repositoryService.CroissantRepositoryService;
-import com.bots.lvivCroissantBot.service.repositoryService.CustomerOrderingRepositoryService;
-import com.bots.lvivCroissantBot.service.messangerService.MessageSenderService;
-import com.bots.lvivCroissantBot.service.peopleRegisterService.MUserRepositoryService;
-import com.bots.lvivCroissantBot.service.supportService.EmailService;
-import com.bots.lvivCroissantBot.service.supportService.RecognizeService;
+import com.bots.lvivCroissantBot.service.repository.CroissantRepositoryService;
+import com.bots.lvivCroissantBot.service.repository.CustomerOrderingRepositoryService;
+import com.bots.lvivCroissantBot.service.messenger.MessageSenderService;
+import com.bots.lvivCroissantBot.service.peopleRegister.MUserRepositoryService;
+import com.bots.lvivCroissantBot.service.support.EmailService;
+import com.bots.lvivCroissantBot.service.support.RecognizeService;
 import com.bots.lvivCroissantBot.service.uniService.CroissantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

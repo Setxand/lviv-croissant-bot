@@ -1,7 +1,7 @@
 package com.bots.lvivCroissantBot.controller.telegram;
 
 import com.bots.lvivCroissantBot.dto.telegram.Update;
-import com.bots.lvivCroissantBot.service.adminPanelService.AdminPanelUpdateParserService;
+import com.bots.lvivCroissantBot.service.adminPanel.AdminPanelUpdateParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/adminPanel")
 public class TelegramAdminPanelWebhook {
     @Autowired
-    private AdminPanelUpdateParserService adminPanelUpdateParserService;
+    private AdminPanelUpdateParser adminPanelUpdateParser;
     @PostMapping
     public void getUpdate(@RequestBody Update update){
-        adminPanelUpdateParserService.parseUpdate(update);
+        adminPanelUpdateParser.parseUpdate(update);
     }
 }

@@ -33,14 +33,14 @@ public class CustomerOrdering {
     private List<String>croissants = new ArrayList<>();
     @ManyToOne
     @JoinColumn(name = "customer_ordering_id")
-    private Courier courier;
+    private Courier userCourier;
 
     @ManyToOne
     @JoinColumn(name = "tUser_id")
     private TUser tUser;
     @ManyToOne
     @JoinColumn(name = "courier_id")
-    private TUser userCourier;
+    private TUser courier;
     @Override
     public String toString() {
         return "Замовлення № "+id+"\nзамовник: "+name+"\nНомер телефону: "+phoneNumber+"\nAddress: "+address+"\nTime: "+time+"\nprice: "+price+"\nOrder: "+croissants+"\n\n\n";
