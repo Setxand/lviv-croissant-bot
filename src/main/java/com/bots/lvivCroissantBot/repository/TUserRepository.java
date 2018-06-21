@@ -1,6 +1,6 @@
 package com.bots.lvivCroissantBot.repository;
 
-import com.bots.lvivCroissantBot.entity.peopleRegister.TUser;
+import com.bots.lvivCroissantBot.entity.register.TUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

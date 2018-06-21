@@ -1,6 +1,6 @@
 package com.bots.lvivCroissantBot.entity.lvivCroissants;
 
-import com.bots.lvivCroissantBot.entity.peopleRegister.TUser;
+import com.bots.lvivCroissantBot.entity.register.TUser;
 import lombok.Getter;
 import lombok.Setter;
 

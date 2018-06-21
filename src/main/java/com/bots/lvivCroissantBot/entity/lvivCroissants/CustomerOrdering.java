@@ -1,9 +1,9 @@
 package com.bots.lvivCroissantBot.entity.lvivCroissants;
 
-import com.bots.lvivCroissantBot.entity.peopleRegister.CourierRegister;
-import com.bots.lvivCroissantBot.entity.peopleRegister.TUser;
-import com.bots.lvivCroissantBot.entity.peopleRegister.MUser;
-import com.bots.lvivCroissantBot.constantEnum.messengerEnums.PaymentWay;
+import com.bots.lvivCroissantBot.entity.register.Courier;
+import com.bots.lvivCroissantBot.entity.register.TUser;
+import com.bots.lvivCroissantBot.entity.register.MUser;
+import com.bots.lvivCroissantBot.constantEnum.messengerEnum.PaymentWay;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -33,14 +33,14 @@ public class CustomerOrdering {
     private List<String>croissants = new ArrayList<>();
     @ManyToOne
     @JoinColumn(name = "customer_ordering_id")
-    private CourierRegister courierRegister;
+    private Courier courier;
 
     @ManyToOne
     @JoinColumn(name = "tUser_id")
     private TUser tUser;
     @ManyToOne
     @JoinColumn(name = "courier_id")
-    private TUser courier;
+    private TUser userCourier;
     @Override
     public String toString() {
         return "Замовлення № "+id+"\nзамовник: "+name+"\nНомер телефону: "+phoneNumber+"\nAddress: "+address+"\nTime: "+time+"\nprice: "+price+"\nOrder: "+croissants+"\n\n\n";

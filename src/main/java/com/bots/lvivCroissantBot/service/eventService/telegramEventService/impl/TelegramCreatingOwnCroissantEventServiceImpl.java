@@ -2,8 +2,8 @@ package com.bots.lvivCroissantBot.service.eventService.telegramEventService.impl
 
 import com.bots.lvivCroissantBot.entity.lvivCroissants.CroissantEntity;
 import com.bots.lvivCroissantBot.entity.lvivCroissants.CroissantsFilling;
-import com.bots.lvivCroissantBot.entity.peopleRegister.TUser;
-import com.bots.lvivCroissantBot.constantEnum.messengerEnums.types.CroissantsTypes;
+import com.bots.lvivCroissantBot.entity.register.TUser;
+import com.bots.lvivCroissantBot.constantEnum.messengerEnum.type.CroissantsTypes;
 import com.bots.lvivCroissantBot.dto.telegram.Message;
 import com.bots.lvivCroissantBot.service.eventService.telegramEventService.TelegramCreatingOwnCroissantEventService;
 import com.bots.lvivCroissantBot.service.eventService.telegramEventService.TelegramGetMenuEventService;
@@ -18,9 +18,9 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.ResourceBundle;
 
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.speaking.ServerSideSpeaker.*;
-import static com.bots.lvivCroissantBot.constantEnum.telegramEnums.TelegramUserStatus.GETTING_MENU_STATUS;
-import static com.bots.lvivCroissantBot.constantEnum.telegramEnums.TelegramUserStatus.INPUTTING_FILLINGS_IN_OWN_CROISSANT_STATUS;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.speaking.ServerSideSpeaker.*;
+import static com.bots.lvivCroissantBot.constantEnum.telegramEnum.TelegramUserStatus.GETTING_MENU_STATUS;
+import static com.bots.lvivCroissantBot.constantEnum.telegramEnum.TelegramUserStatus.INPUTTING_FILLINGS_IN_OWN_CROISSANT_STATUS;
 
 @Service
 public class TelegramCreatingOwnCroissantEventServiceImpl implements TelegramCreatingOwnCroissantEventService {

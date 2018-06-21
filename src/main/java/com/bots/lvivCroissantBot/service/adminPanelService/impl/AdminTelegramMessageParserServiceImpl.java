@@ -1,6 +1,6 @@
 package com.bots.lvivCroissantBot.service.adminPanelService.impl;
 
-import com.bots.lvivCroissantBot.entity.peopleRegister.TUser;
+import com.bots.lvivCroissantBot.entity.register.TUser;
 
 import com.bots.lvivCroissantBot.dto.telegram.Message;
 import com.bots.lvivCroissantBot.service.adminPanelService.AdminTelegramMessageParserHelperService;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import com.bots.lvivCroissantBot.dto.telegram.TelegramEntity;
 import java.util.List;
 
-import static com.bots.lvivCroissantBot.constantEnum.telegramEnums.TelegramUserStatus.ADDING_FILLING_STATUS_1;
+import static com.bots.lvivCroissantBot.constantEnum.telegramEnum.TelegramUserStatus.ADDING_FILLING_STATUS_1;
 
 @Service
 public class AdminTelegramMessageParserServiceImpl implements AdminTelegramMessageParserService {

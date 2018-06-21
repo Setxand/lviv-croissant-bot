@@ -4,7 +4,8 @@ import com.bots.lvivCroissantBot.dto.messanger.*;
 import com.bots.lvivCroissantBot.dto.telegram.Chat;
 import com.bots.lvivCroissantBot.dto.telegram.Message;
 import com.bots.lvivCroissantBot.service.telegramService.TelegramMessageSenderService;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +16,9 @@ import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.payloads.Payloads.*;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.types.ButtonType.postback;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.types.ButtonType.web_url;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.payload.Payloads.*;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.type.ButtonType.postback;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.type.ButtonType.web_url;
 
 @Component
 public class ServerStarting {
@@ -36,10 +37,12 @@ public class ServerStarting {
     @Value("${telegran.admins.url}")
     private String ADMIN_TELEGRAM_URL;
 
-    private static final Logger logger = Logger.getLogger(ServerStarting.class);
+    private   final static Logger logger = LoggerFactory.getLogger(ServerStarting.class);
+    private RestTemplate restTemplate;
 
     @PostConstruct
     public void getStarted() throws Exception {
+        restTemplate = new RestTemplate();
         Shell shell = new Shell();
         shell.setWhiteListedDomains(new ArrayList<>(Arrays.asList(SERVER_URL)));
 
@@ -56,21 +59,21 @@ public class ServerStarting {
         try {
 
 
-            ResponseEntity<?> responseEntity = new RestTemplate()
+            ResponseEntity<?> responseEntity = restTemplate
                     .postForEntity(FACEBOOK_PROFILE_URI + PAGE_ACCESS_TOKEN, messengerProfileApi, MessengerProfileApi.class);
-            logger.debug(responseEntity);
-            ResponseEntity<?> responseForWhiteList = new RestTemplate()
+            logger.debug(responseEntity.toString());
+            ResponseEntity<?> responseForWhiteList = restTemplate
                     .postForEntity(FACEBOOK_PROFILE_URI + PAGE_ACCESS_TOKEN, shell, Shell.class);
-            logger.debug(responseForWhiteList);
+            logger.debug(responseForWhiteList.toString());
 
         } catch (Exception ex) {
             logger.warn("Messenger queries: " + ex);
         } finally {
             try {
-                ResponseEntity<?> responseEntity = new RestTemplate().getForEntity(TELEGRAM_URL + "/setWebhook?url=" + SERVER_URL + "/telegramWebHook", Object.class);
+                ResponseEntity<?> responseEntity = restTemplate.getForEntity(TELEGRAM_URL + "/setWebhook?url=" + SERVER_URL + "/telegramWebHook", Object.class);
                 logger.debug("Telegram`s bot webhook: " + responseEntity.getBody().toString());
 
-                ResponseEntity<?> adminPanelReg = new RestTemplate().getForEntity(ADMIN_TELEGRAM_URL + "/setWebhook?url=" + SERVER_URL + "/adminPanel", Object.class);
+                ResponseEntity<?> adminPanelReg = restTemplate.getForEntity(ADMIN_TELEGRAM_URL + "/setWebhook?url=" + SERVER_URL + "/adminPanel", Object.class);
                 logger.debug("Admin panel webhook: " + adminPanelReg.getBody().toString());
 
 
@@ -78,7 +81,7 @@ public class ServerStarting {
                 message.setChat(new Chat(388073901));
                 telegramMessageSenderService.simpleMessage("Server has ran", message);
             } catch (Exception e) {
-                logger.warn(e);
+                logger.error(e.getStackTrace().toString());
             }
         }
     }

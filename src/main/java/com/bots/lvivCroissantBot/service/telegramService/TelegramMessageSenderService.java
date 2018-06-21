@@ -1,7 +1,7 @@
 package com.bots.lvivCroissantBot.service.telegramService;
 
 import com.bots.lvivCroissantBot.constantEnum.Platform;
-import com.bots.lvivCroissantBot.constantEnum.telegramEnums.CallBackData;
+import com.bots.lvivCroissantBot.constantEnum.telegramEnum.CallBackData;
 import com.bots.lvivCroissantBot.dto.telegram.Message;
 import com.bots.lvivCroissantBot.dto.telegram.TelegramRequest;
 import com.bots.lvivCroissantBot.dto.telegram.button.InlineKeyboardButton;

@@ -1,6 +1,6 @@
 package com.bots.lvivCroissantBot.service.supportService;
 
-import com.bots.lvivCroissantBot.entity.peopleRegister.MUser;
+import com.bots.lvivCroissantBot.entity.register.MUser;
 
 import javax.mail.MessagingException;
 import java.net.MalformedURLException;

@@ -3,8 +3,8 @@ package com.bots.lvivCroissantBot.service.eventService.messengerEventService.imp
 import com.bots.lvivCroissantBot.entity.lvivCroissants.CroissantEntity;
 import com.bots.lvivCroissantBot.entity.lvivCroissants.CroissantsFilling;
 import com.bots.lvivCroissantBot.entity.SupportEntity;
-import com.bots.lvivCroissantBot.entity.peopleRegister.MUser;
-import com.bots.lvivCroissantBot.constantEnum.messengerEnums.Role;
+import com.bots.lvivCroissantBot.entity.register.MUser;
+import com.bots.lvivCroissantBot.constantEnum.messengerEnum.Role;
 import com.bots.lvivCroissantBot.dto.messanger.*;
 import com.bots.lvivCroissantBot.service.eventService.messengerEventService.GetMenuEventService;
 import com.bots.lvivCroissantBot.service.repositoryService.CroissantRepositoryService;
@@ -19,13 +19,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.payloads.Payloads.*;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.payloads.QuickReplyPayloads.CROISSANT_TYPE_PAYLOAD;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.speaking.ServerSideSpeaker.*;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.types.AttachmentType.template;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.types.ButtonType.postback;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.types.ButtonType.web_url;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.types.CroissantsTypes.OWN;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.payload.Payloads.*;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.payload.QuickReplyPayloads.CROISSANT_TYPE_PAYLOAD;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.speaking.ServerSideSpeaker.*;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.type.AttachmentType.template;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.type.ButtonType.postback;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.type.ButtonType.web_url;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.type.CroissantsTypes.OWN;
 
 @Service
 public class GetMenuEventServiceImpl implements GetMenuEventService {

@@ -1,6 +1,6 @@
 package com.bots.lvivCroissantBot.dto.messanger;
 
-import com.bots.lvivCroissantBot.constantEnum.messengerEnums.Objects;
+import com.bots.lvivCroissantBot.constantEnum.messengerEnum.Objects;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

@@ -1,6 +1,6 @@
 package com.bots.lvivCroissantBot.entity.lvivCroissants;
 
-import com.bots.lvivCroissantBot.dto.uniRequestModel.CroissantFillingModel;
+import com.bots.lvivCroissantBot.dto.uni.CroissantFillingModel;
 import lombok.Getter;
 import lombok.Setter;
 

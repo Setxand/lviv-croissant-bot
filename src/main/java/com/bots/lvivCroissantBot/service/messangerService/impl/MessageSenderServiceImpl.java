@@ -1,8 +1,8 @@
 package com.bots.lvivCroissantBot.service.messangerService.impl;
 
-import com.bots.lvivCroissantBot.constantEnum.messengerEnums.speaking.ServerSideSpeaker;
-import com.bots.lvivCroissantBot.constantEnum.messengerEnums.types.ContentType;
-import com.bots.lvivCroissantBot.constantEnum.messengerEnums.types.CroissantsTypes;
+import com.bots.lvivCroissantBot.constantEnum.messengerEnum.speaking.ServerSideSpeaker;
+import com.bots.lvivCroissantBot.constantEnum.messengerEnum.type.ContentType;
+import com.bots.lvivCroissantBot.constantEnum.messengerEnum.type.CroissantsTypes;
 import com.bots.lvivCroissantBot.dto.messanger.*;
 import com.bots.lvivCroissantBot.service.repositoryService.CroissantRepositoryService;
 import com.bots.lvivCroissantBot.service.repositoryService.CroissantsFillingEntityRepositoryService;
@@ -10,7 +10,8 @@ import com.bots.lvivCroissantBot.service.repositoryService.MenuOfFillingReposito
 import com.bots.lvivCroissantBot.service.messangerService.MessageSenderService;
 import com.bots.lvivCroissantBot.service.peopleRegisterService.MUserRepositoryService;
 import com.bots.lvivCroissantBot.service.supportService.RecognizeService;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -22,19 +23,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.CasesCourierActions.COMPLETING_ORDERINGS;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.CasesCourierActions.GET_LIST_OF_ORDERING;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.PayloadCases.*;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.payloads.Payloads.CREATE_OWN_CROISSANT_PAYLOAD;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.payloads.Payloads.MENU_PAYLOAD;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.payloads.QuickReplyPayloads.CROISSANT_TYPE_PAYLOAD;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.payloads.QuickReplyPayloads.LANGUAGE_PAYLOAD;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.speaking.ServerSideSpeaker.*;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.types.AttachmentType.template;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.types.ButtonType.postback;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.types.CroissantsTypes.SANDWICH;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.types.CroissantsTypes.SWEET;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.types.TemplateType.button;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.CasesCourierActions.COMPLETING_ORDERINGS;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.CasesCourierActions.GET_LIST_OF_ORDERING;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.PayloadCases.*;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.payload.Payloads.CREATE_OWN_CROISSANT_PAYLOAD;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.payload.Payloads.MENU_PAYLOAD;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.payload.QuickReplyPayloads.CROISSANT_TYPE_PAYLOAD;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.payload.QuickReplyPayloads.LANGUAGE_PAYLOAD;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.speaking.ServerSideSpeaker.*;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.type.AttachmentType.template;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.type.ButtonType.postback;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.type.CroissantsTypes.SANDWICH;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.type.CroissantsTypes.SWEET;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.type.TemplateType.button;
 
 @Service
 public class MessageSenderServiceImpl implements MessageSenderService {
@@ -66,7 +67,8 @@ public class MessageSenderServiceImpl implements MessageSenderService {
     @Value("${server.url}")
     private String SERVER_URL;
 
-    private static final Logger logger = Logger.getLogger(MessageSenderServiceImpl.class);
+    private   final static Logger logger = LoggerFactory.getLogger(MessageSenderServiceImpl.class);
+
 
 
     @Override

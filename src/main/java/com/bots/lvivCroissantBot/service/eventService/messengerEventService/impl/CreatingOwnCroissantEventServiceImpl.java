@@ -3,8 +3,8 @@ package com.bots.lvivCroissantBot.service.eventService.messengerEventService.imp
 import com.bots.lvivCroissantBot.entity.lvivCroissants.CroissantEntity;
 import com.bots.lvivCroissantBot.entity.lvivCroissants.CroissantsFilling;
 import com.bots.lvivCroissantBot.entity.SupportEntity;
-import com.bots.lvivCroissantBot.entity.peopleRegister.MUser;
-import com.bots.lvivCroissantBot.constantEnum.messengerEnums.Cases;
+import com.bots.lvivCroissantBot.entity.register.MUser;
+import com.bots.lvivCroissantBot.constantEnum.messengerEnum.Cases;
 import com.bots.lvivCroissantBot.dto.messanger.Message;
 import com.bots.lvivCroissantBot.dto.messanger.Messaging;
 import com.bots.lvivCroissantBot.dto.messanger.QuickReply;
@@ -18,20 +18,20 @@ import com.bots.lvivCroissantBot.service.repositoryService.MenuOfFillingReposito
 import com.bots.lvivCroissantBot.service.repositoryService.SupportEntityRepositoryService;
 import com.bots.lvivCroissantBot.service.messangerService.MessageParserService;
 import com.bots.lvivCroissantBot.service.messangerService.MessageSenderService;
-import com.bots.lvivCroissantBot.service.messangerService.QuickReplyParserService;
 import com.bots.lvivCroissantBot.service.peopleRegisterService.MUserRepositoryService;
 import com.bots.lvivCroissantBot.service.supportService.RecognizeService;
 import com.bots.lvivCroissantBot.service.supportService.TextFormatter;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.Cases.COMPLETE_CROISSANT_SECOND_STEP;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.Cases.MENU;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.speaking.ServerSideSpeaker.*;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.types.CroissantsTypes.OWN;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.Cases.COMPLETE_CROISSANT_SECOND_STEP;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.Cases.MENU;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.speaking.ServerSideSpeaker.*;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.type.CroissantsTypes.OWN;
 
 @Service
 public class CreatingOwnCroissantEventServiceImpl implements CreatingOwnCroissantEventService {
@@ -58,7 +58,8 @@ public class CreatingOwnCroissantEventServiceImpl implements CreatingOwnCroissan
     private UserEventService userEventService;
     @Autowired
     private SupportEntityRepositoryService supportEntityRepositoryService;
-    private static final Logger logger = Logger.getLogger(QuickReplyParserService.class);
+    private   final static Logger logger = LoggerFactory.getLogger(CreatingOwnCroissantEventServiceImpl.class);
+
     @Override
     public void CreateOwnCroissant(Messaging messaging) {
         String message = messaging.getMessage().getText();
@@ -130,7 +131,7 @@ public class CreatingOwnCroissantEventServiceImpl implements CreatingOwnCroissan
             getMenuEventService.getMenu(messaging);
 
         }catch (Exception ex){
-            logger.warn(ex);
+            logger.error("Error",ex);
             messageSenderService.sendSimpleMessage(recognizeService.recognize(NON_CORRECT_FORMAT_OF_FILLING.name(),messaging.getSender().getId()),messaging.getSender().getId());
             menuOfFillingEventService.getMenuOfFilling(messaging.getSender().getId());
             messageSenderService.sendSimpleMessage(recognizeService.recognize(ID_OF_FILLING.name(),messaging.getSender().getId()),messaging.getSender().getId());

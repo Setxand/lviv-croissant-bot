@@ -1,8 +1,8 @@
 package com.bots.lvivCroissantBot.service.messangerService.impl;
 
 import com.bots.lvivCroissantBot.entity.SupportEntity;
-import com.bots.lvivCroissantBot.entity.peopleRegister.MUser;
-import com.bots.lvivCroissantBot.constantEnum.messengerEnums.Cases;
+import com.bots.lvivCroissantBot.entity.register.MUser;
+import com.bots.lvivCroissantBot.constantEnum.messengerEnum.Cases;
 import com.bots.lvivCroissantBot.dto.messanger.Messaging;
 import com.bots.lvivCroissantBot.service.eventService.messengerEventService.*;
 import com.bots.lvivCroissantBot.service.repositoryService.CustomerOrderingRepositoryService;
@@ -13,7 +13,8 @@ import com.bots.lvivCroissantBot.service.peopleRegisterService.MUserRepositorySe
 import com.bots.lvivCroissantBot.service.supportService.RecognizeService;
 import com.bots.lvivCroissantBot.service.supportService.TextFormatter;
 import com.bots.lvivCroissantBot.service.supportService.VerifyService;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,9 +24,9 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.Cases.*;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.speaking.ServerSideSpeaker.ABORTED;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.speaking.ServerSideSpeaker.U_ARE_NOT_A_COURIER;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.Cases.*;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.speaking.ServerSideSpeaker.ABORTED;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.speaking.ServerSideSpeaker.U_ARE_NOT_A_COURIER;
 
 @Service
 public class MessageParserServiceImpl implements MessageParserService {
@@ -64,7 +65,8 @@ public class MessageParserServiceImpl implements MessageParserService {
     @Autowired
     private SupportEntityRepositoryService supportEntityRepositoryService;
 
-    private static final Logger logger = Logger.getLogger(MessageParserServiceImpl.class);
+    private   final static Logger logger = LoggerFactory.getLogger(MessageParserServiceImpl.class);
+
     private  static Map<String,Method> methodsHashMap;
 
     @Override
@@ -88,12 +90,12 @@ public class MessageParserServiceImpl implements MessageParserService {
             try {
                 methodsHashMap.get(userCommand).invoke(this,messaging);
             } catch (IllegalAccessException e) {
-                logger.warn(e);
+                logger.error("Error",e);
             } catch (InvocationTargetException e) {
-                logger.warn(e);
+                logger.error("Error",e);
                 e.printStackTrace();
             } catch (Exception ex) {
-                logger.warn(ex);
+                logger.error("Error",ex);
                 ex.printStackTrace();
             }
 

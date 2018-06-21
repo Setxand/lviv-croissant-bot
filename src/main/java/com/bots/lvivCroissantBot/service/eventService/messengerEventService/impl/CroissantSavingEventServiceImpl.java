@@ -2,7 +2,7 @@ package com.bots.lvivCroissantBot.service.eventService.messengerEventService.imp
 
 import com.bots.lvivCroissantBot.entity.lvivCroissants.CroissantEntity;
 import com.bots.lvivCroissantBot.entity.lvivCroissants.CroissantsFilling;
-import com.bots.lvivCroissantBot.entity.peopleRegister.MUser;
+import com.bots.lvivCroissantBot.entity.register.MUser;
 import com.bots.lvivCroissantBot.dto.messanger.Message;
 import com.bots.lvivCroissantBot.dto.messanger.Messaging;
 import com.bots.lvivCroissantBot.dto.messanger.Recipient;
@@ -16,16 +16,17 @@ import com.bots.lvivCroissantBot.service.peopleRegisterService.CourierRegisterSe
 import com.bots.lvivCroissantBot.service.peopleRegisterService.MUserRepositoryService;
 import com.bots.lvivCroissantBot.service.supportService.RecognizeService;
 import com.bots.lvivCroissantBot.service.supportService.TextFormatter;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.Cases.ADD;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.payloads.QuickReplyPayloads.TYPE_PAYLOAD;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.speaking.ServerSideSpeaker.*;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.Cases.ADD;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.payload.QuickReplyPayloads.TYPE_PAYLOAD;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.speaking.ServerSideSpeaker.*;
 
 @Service
 public class CroissantSavingEventServiceImpl implements CroissantSavingEventService {
@@ -55,7 +56,8 @@ public class CroissantSavingEventServiceImpl implements CroissantSavingEventServ
     @Autowired
     private SupportEntityRepositoryService supportEntityRepositoryService;
 
-    private static final Logger logger = Logger.getLogger(CroissantSavingEventServiceImpl.class);
+    private   final static Logger logger = LoggerFactory.getLogger(CroissantSavingEventServiceImpl.class);
+
     @Override
     public void saveCroissant(Messaging messaging) {
 
@@ -72,7 +74,7 @@ public class CroissantSavingEventServiceImpl implements CroissantSavingEventServ
             if(croissantEntity.getCroissantsFillings().isEmpty())
                 croissantRepositoryService.remove(croissantEntity);
             messageSenderService.errorMessage(messaging.getSender().getId());
-            logger.warn(ex);
+            logger.error("Error",ex);
         }
     }
 
@@ -114,7 +116,7 @@ public class CroissantSavingEventServiceImpl implements CroissantSavingEventServ
             MUserRepositoryService.saveAndFlush(MUser);
 
         }catch (Exception ex){
-            logger.warn(ex);
+            logger.error("Error",ex);
             messageSenderService.sendSimpleMessage(recognizeService.recognize(NON_CORRECT_FORMAT_OF_PRICE.name(),messaging.getSender().getId()),messaging.getSender().getId());
         }
     }
@@ -145,7 +147,7 @@ public class CroissantSavingEventServiceImpl implements CroissantSavingEventServ
             messageSenderService.sendSimpleMessage(recognizeService.recognize(ASK_PRICE.name(),messaging.getSender().getId()),messaging.getSender().getId());
         }
         catch (Exception ex){
-            logger.warn(ex);
+            logger.error("Error",ex);
             messageSenderService.sendSimpleMessage(recognizeService.recognize(NON_CORRECT_FORMAT_OF_FILLING.name(),messaging.getSender().getId()), messaging.getSender().getId());
             menuOfFillingEventService.getMenuOfFilling(messaging.getSender().getId());
         }

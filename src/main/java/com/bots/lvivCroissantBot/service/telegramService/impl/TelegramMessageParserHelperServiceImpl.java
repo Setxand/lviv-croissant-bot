@@ -1,14 +1,14 @@
 package com.bots.lvivCroissantBot.service.telegramService.impl;
 
-import com.bots.lvivCroissantBot.constantEnum.messengerEnums.speaking.ServerSideSpeaker;
+import com.bots.lvivCroissantBot.constantEnum.messengerEnum.speaking.ServerSideSpeaker;
 import com.bots.lvivCroissantBot.dto.telegram.CallBackQuery;
 import com.bots.lvivCroissantBot.dto.telegram.button.InlineKeyboardButton;
 import com.bots.lvivCroissantBot.entity.SpeakingMessage;
 import com.bots.lvivCroissantBot.entity.lvivCroissants.CustomerOrdering;
-import com.bots.lvivCroissantBot.entity.peopleRegister.MUser;
-import com.bots.lvivCroissantBot.entity.peopleRegister.TUser;
+import com.bots.lvivCroissantBot.entity.register.MUser;
+import com.bots.lvivCroissantBot.entity.register.TUser;
 import com.bots.lvivCroissantBot.dto.telegram.Message;
-import com.bots.lvivCroissantBot.entity.peopleRegister.User;
+import com.bots.lvivCroissantBot.entity.register.User;
 import com.bots.lvivCroissantBot.repository.UserRepository;
 import com.bots.lvivCroissantBot.service.eventService.telegramEventService.TelegramCreatingOwnCroissantEventService;
 import com.bots.lvivCroissantBot.service.messangerService.MessageSenderService;
@@ -19,22 +19,23 @@ import com.bots.lvivCroissantBot.service.supportService.RecognizeService;
 import com.bots.lvivCroissantBot.service.supportService.TextFormatter;
 import com.bots.lvivCroissantBot.service.telegramService.TelegramMessageParserHelperService;
 import com.bots.lvivCroissantBot.service.telegramService.TelegramMessageSenderService;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.payloads.QuickReplyPayloads.QUESTION_APPROVING;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.speaking.ServerSideSpeaker.*;
-import static com.bots.lvivCroissantBot.constantEnum.telegramEnums.Buttons.CANCEL_INLINE_BUTTON;
-import static com.bots.lvivCroissantBot.constantEnum.telegramEnums.Buttons.REINPUT_INLINE_BUTTON;
-import static com.bots.lvivCroissantBot.constantEnum.telegramEnums.CallBackData.CANCEL_INPUT_NUMBER_DATA;
-import static com.bots.lvivCroissantBot.constantEnum.telegramEnums.CallBackData.QUESTION_HAVING_MESSENGER_DATA;
-import static com.bots.lvivCroissantBot.constantEnum.telegramEnums.CallBackData.RERINPUT_NUMBER_DATA;
-import static com.bots.lvivCroissantBot.constantEnum.telegramEnums.TelegramUserStatus.OWN_MENU_STATUS;
-import static com.bots.lvivCroissantBot.constantEnum.telegramEnums.TelegramUserStatus.PHONE_ENTERING_IN_START_STATUS;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.payload.QuickReplyPayloads.QUESTION_APPROVING;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.speaking.ServerSideSpeaker.*;
+import static com.bots.lvivCroissantBot.constantEnum.telegramEnum.Buttons.CANCEL_INLINE_BUTTON;
+import static com.bots.lvivCroissantBot.constantEnum.telegramEnum.Buttons.REINPUT_INLINE_BUTTON;
+import static com.bots.lvivCroissantBot.constantEnum.telegramEnum.CallBackData.CANCEL_INPUT_NUMBER_DATA;
+import static com.bots.lvivCroissantBot.constantEnum.telegramEnum.CallBackData.QUESTION_HAVING_MESSENGER_DATA;
+import static com.bots.lvivCroissantBot.constantEnum.telegramEnum.CallBackData.RERINPUT_NUMBER_DATA;
+import static com.bots.lvivCroissantBot.constantEnum.telegramEnum.TelegramUserStatus.OWN_MENU_STATUS;
+import static com.bots.lvivCroissantBot.constantEnum.telegramEnum.TelegramUserStatus.PHONE_ENTERING_IN_START_STATUS;
 
 @Service
 public class TelegramMessageParserHelperServiceImpl implements TelegramMessageParserHelperService {
@@ -54,7 +55,7 @@ public class TelegramMessageParserHelperServiceImpl implements TelegramMessagePa
     private MessageSenderService messageSenderService;
     @Autowired
     private RecognizeService recognizeService;
-    private static final Logger logger = Logger.getLogger(TelegramMessageParserHelperServiceImpl.class);
+    final static Logger logger = LoggerFactory.getLogger(TelegramMessageParserHelperServiceImpl.class);
     @Value("${subscription.url}")
     private String SUBSCRIPTION_URL;
     @Value("${app.verify.token}")

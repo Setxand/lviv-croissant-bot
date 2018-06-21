@@ -1,9 +1,9 @@
 package com.bots.lvivCroissantBot.service.adminPanelService.impl;
 
-import com.bots.lvivCroissantBot.entity.peopleRegister.TUser;
+import com.bots.lvivCroissantBot.entity.register.TUser;
 import com.bots.lvivCroissantBot.constantEnum.BotCommands;
-import com.bots.lvivCroissantBot.constantEnum.messengerEnums.Role;
-import com.bots.lvivCroissantBot.constantEnum.telegramEnums.TelegramUserStatus;
+import com.bots.lvivCroissantBot.constantEnum.messengerEnum.Role;
+import com.bots.lvivCroissantBot.constantEnum.telegramEnum.TelegramUserStatus;
 import com.bots.lvivCroissantBot.dto.telegram.Message;
 import com.bots.lvivCroissantBot.dto.telegram.button.InlineKeyboardButton;
 import com.bots.lvivCroissantBot.service.adminPanelService.BotCommandsParserService;
@@ -21,11 +21,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.Role.ADMIN;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.Role.COURIER;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.speaking.ServerSideSpeaker.*;
-import static com.bots.lvivCroissantBot.constantEnum.telegramEnums.CallBackData.*;
-import static com.bots.lvivCroissantBot.constantEnum.telegramEnums.TelegramUserStatus.ASKING_TYPE_STATUS;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.Role.ADMIN;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.Role.COURIER;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.speaking.ServerSideSpeaker.*;
+import static com.bots.lvivCroissantBot.constantEnum.telegramEnum.CallBackData.*;
+import static com.bots.lvivCroissantBot.constantEnum.telegramEnum.TelegramUserStatus.ASKING_TYPE_STATUS;
 
 @Service
 public class BotCommandsParserServiceImpl implements BotCommandsParserService {

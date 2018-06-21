@@ -1,7 +1,7 @@
 package com.bots.lvivCroissantBot.tools;
 
-import com.bots.lvivCroissantBot.dto.uniRequestModel.CroissantDTO;
-import com.bots.lvivCroissantBot.dto.uniRequestModel.CroissantFillingModel;
+import com.bots.lvivCroissantBot.dto.uni.CroissantDTO;
+import com.bots.lvivCroissantBot.dto.uni.CroissantFillingModel;
 import com.bots.lvivCroissantBot.entity.lvivCroissants.CroissantEntity;
 import com.bots.lvivCroissantBot.entity.lvivCroissants.CroissantsFilling;
 

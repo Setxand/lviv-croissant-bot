@@ -1,6 +1,6 @@
 package com.bots.lvivCroissantBot.service.peopleRegisterService;
 
-import com.bots.lvivCroissantBot.entity.peopleRegister.MUser;
+import com.bots.lvivCroissantBot.entity.register.MUser;
 
 import java.util.List;
 

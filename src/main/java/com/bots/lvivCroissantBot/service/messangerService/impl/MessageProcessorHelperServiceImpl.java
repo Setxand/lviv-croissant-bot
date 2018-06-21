@@ -1,10 +1,10 @@
 package com.bots.lvivCroissantBot.service.messangerService.impl;
 
 import com.bots.lvivCroissantBot.entity.lvivCroissants.CustomerOrdering;
-import com.bots.lvivCroissantBot.entity.peopleRegister.MUser;
+import com.bots.lvivCroissantBot.entity.register.MUser;
 import com.bots.lvivCroissantBot.dto.messanger.Messaging;
 import com.bots.lvivCroissantBot.dto.messanger.QuickReply;
-import com.bots.lvivCroissantBot.entity.peopleRegister.User;
+import com.bots.lvivCroissantBot.entity.register.User;
 import com.bots.lvivCroissantBot.repository.UserRepository;
 import com.bots.lvivCroissantBot.service.eventService.messengerEventService.UserEventService;
 import com.bots.lvivCroissantBot.service.repositoryService.CustomerOrderingRepositoryService;
@@ -19,13 +19,13 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.Cases.*;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.Cases.PERSONAL_REQUEST;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.Role.ADMIN;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.payloads.QuickReplyPayloads.*;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.payloads.QuickReplyPayloads.COMPLETING_ORDERINGS;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.payloads.QuickReplyPayloads.GET_LIST_OF_ORDERING;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.speaking.ServerSideSpeaker.*;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.Cases.*;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.Cases.PERSONAL_REQUEST;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.Role.ADMIN;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.payload.QuickReplyPayloads.*;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.payload.QuickReplyPayloads.COMPLETING_ORDERINGS;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.payload.QuickReplyPayloads.GET_LIST_OF_ORDERING;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.speaking.ServerSideSpeaker.*;
 
 @Service
 public class MessageProcessorHelperServiceImpl implements MessageProcessorHelperService {

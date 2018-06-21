@@ -1,8 +1,8 @@
 package com.bots.lvivCroissantBot.service.telegramService.impl;
 
-import com.bots.lvivCroissantBot.entity.peopleRegister.TUser;
-import com.bots.lvivCroissantBot.constantEnum.telegramEnums.MessageCases;
-import com.bots.lvivCroissantBot.constantEnum.telegramEnums.TelegramUserStatus;
+import com.bots.lvivCroissantBot.entity.register.TUser;
+import com.bots.lvivCroissantBot.constantEnum.telegramEnum.MessageCases;
+import com.bots.lvivCroissantBot.constantEnum.telegramEnum.TelegramUserStatus;
 import com.bots.lvivCroissantBot.dto.telegram.Message;
 import com.bots.lvivCroissantBot.service.eventService.telegramEventService.TelegramCreatingOwnCroissantEventService;
 import com.bots.lvivCroissantBot.service.eventService.telegramEventService.TelegramGetMenuEventService;

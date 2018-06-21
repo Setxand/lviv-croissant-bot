@@ -1,8 +1,9 @@
 package com.bots.lvivCroissantBot.service.repositoryService.impl;
 
 import com.bots.lvivCroissantBot.entity.lvivCroissants.CustomerOrdering;
-import com.bots.lvivCroissantBot.entity.peopleRegister.TUser;
-import com.bots.lvivCroissantBot.entity.peopleRegister.MUser;
+import com.bots.lvivCroissantBot.entity.register.TUser;
+import com.bots.lvivCroissantBot.entity.register.MUser;
+import com.bots.lvivCroissantBot.exception.ElementNoFoundException;
 import com.bots.lvivCroissantBot.repository.CustomerOrderingRepository;
 import com.bots.lvivCroissantBot.service.repositoryService.CustomerOrderingRepositoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class CustomerOrderingRepositoryServiceImpl implements CustomerOrderingRe
 
     @Override
     public CustomerOrdering findOne(Long id) {
-        return customerOrderingRepository.findOne(id);
+        return customerOrderingRepository.findById(id).orElseThrow(ElementNoFoundException::new);
     }
 
     @Override

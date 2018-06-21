@@ -1,9 +1,9 @@
 package com.bots.lvivCroissantBot.repository;
 
-import com.bots.lvivCroissantBot.constantEnum.messengerEnums.Role;
-import com.bots.lvivCroissantBot.entity.peopleRegister.MUser;
-import com.bots.lvivCroissantBot.entity.peopleRegister.TUser;
-import com.bots.lvivCroissantBot.entity.peopleRegister.User;
+import com.bots.lvivCroissantBot.constantEnum.messengerEnum.Role;
+import com.bots.lvivCroissantBot.entity.register.MUser;
+import com.bots.lvivCroissantBot.entity.register.TUser;
+import com.bots.lvivCroissantBot.entity.register.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

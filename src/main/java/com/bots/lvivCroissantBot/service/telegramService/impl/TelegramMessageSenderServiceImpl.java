@@ -1,8 +1,8 @@
 package com.bots.lvivCroissantBot.service.telegramService.impl;
 
 import com.bots.lvivCroissantBot.constantEnum.Platform;
-import com.bots.lvivCroissantBot.constantEnum.messengerEnums.speaking.ServerSideSpeaker;
-import com.bots.lvivCroissantBot.constantEnum.telegramEnums.CallBackData;
+import com.bots.lvivCroissantBot.constantEnum.messengerEnum.speaking.ServerSideSpeaker;
+import com.bots.lvivCroissantBot.constantEnum.telegramEnum.CallBackData;
 import com.bots.lvivCroissantBot.dto.telegram.Message;
 import com.bots.lvivCroissantBot.dto.telegram.ReplyKeyboardRemove;
 import com.bots.lvivCroissantBot.dto.telegram.TelegramRequest;
@@ -20,11 +20,11 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import static com.bots.lvivCroissantBot.constantEnum.Platform.TELEGRAM_ADMIN_PANEL_BOT;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.PayloadCases.QUESTION_NO;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.PayloadCases.QUESTION_YES;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.speaking.ServerSideSpeaker.*;
-import static com.bots.lvivCroissantBot.constantEnum.telegramEnums.CallBackData.CREATE_OWN_CROISSANT_DATA;
-import static com.bots.lvivCroissantBot.constantEnum.telegramEnums.CallBackData.MENU_DATA;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.PayloadCases.QUESTION_NO;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.PayloadCases.QUESTION_YES;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.speaking.ServerSideSpeaker.*;
+import static com.bots.lvivCroissantBot.constantEnum.telegramEnum.CallBackData.CREATE_OWN_CROISSANT_DATA;
+import static com.bots.lvivCroissantBot.constantEnum.telegramEnum.CallBackData.MENU_DATA;
 
 @Service
 public class TelegramMessageSenderServiceImpl implements TelegramMessageSenderService {

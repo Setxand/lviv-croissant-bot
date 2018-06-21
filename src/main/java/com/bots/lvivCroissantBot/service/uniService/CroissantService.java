@@ -1,11 +1,10 @@
 package com.bots.lvivCroissantBot.service.uniService;
 
-import com.bots.lvivCroissantBot.dto.uniRequestModel.CroissantDTO;
+import com.bots.lvivCroissantBot.dto.uni.CroissantDTO;
 import com.bots.lvivCroissantBot.entity.lvivCroissants.CroissantEntity;
-import com.bots.lvivCroissantBot.exceptions.ElementNoFoundException;
+import com.bots.lvivCroissantBot.exception.ElementNoFoundException;
 import com.bots.lvivCroissantBot.repository.CroissantEntityRepository;
 import com.bots.lvivCroissantBot.tools.CroissantUtilManager;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,8 +13,14 @@ import java.util.stream.Collectors;
 
 @Service
 public class CroissantService {
-    @Autowired
-    private CroissantEntityRepository croissantEntityRepository;
+
+    private final CroissantEntityRepository croissantEntityRepository;
+
+
+
+    public CroissantService(CroissantEntityRepository croissantEntityRepository) {
+        this.croissantEntityRepository = croissantEntityRepository;
+    }
 
     public List<CroissantDTO> getCroissants() {
         List<CroissantEntity> croissantEntities = croissantEntityRepository.findAll();
@@ -32,10 +37,7 @@ public class CroissantService {
 
 
     public void putCroissant(CroissantDTO croissantDTO, Long id) {
-        CroissantEntity croissantEntity = croissantEntityRepository.findOne(id);
-        if (croissantEntity == null) {
-            throw new ElementNoFoundException();
-        }
+        CroissantEntity croissantEntity = croissantEntityRepository.findById(id).orElseThrow(ElementNoFoundException::new);
         croissantEntity.setName(croissantDTO.getName());
         croissantEntity.setImageUrl(croissantDTO.getImageAddress());
         croissantEntity.setPrice(croissantDTO.getPrice());
@@ -45,7 +47,7 @@ public class CroissantService {
     }
 
     public Optional<CroissantDTO> findById(Long id) {
-        CroissantEntity croissantEntity = croissantEntityRepository.findOne(id);
+        CroissantEntity croissantEntity = croissantEntityRepository.findById(id).orElseThrow(ElementNoFoundException::new);
         return Optional.ofNullable(croissantEntity).map(CroissantUtilManager::croissantEntityToDTO);
     }
 

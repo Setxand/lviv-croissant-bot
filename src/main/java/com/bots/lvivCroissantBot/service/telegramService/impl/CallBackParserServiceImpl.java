@@ -1,17 +1,17 @@
 package com.bots.lvivCroissantBot.service.telegramService.impl;
 
 import com.bots.lvivCroissantBot.constantEnum.AccountStatus;
-import com.bots.lvivCroissantBot.constantEnum.messengerEnums.Role;
+import com.bots.lvivCroissantBot.constantEnum.messengerEnum.Role;
 import com.bots.lvivCroissantBot.entity.lvivCroissants.CroissantEntity;
 import com.bots.lvivCroissantBot.entity.lvivCroissants.CustomerOrdering;
-import com.bots.lvivCroissantBot.entity.peopleRegister.TUser;
-import com.bots.lvivCroissantBot.constantEnum.messengerEnums.PayloadCases;
-import com.bots.lvivCroissantBot.constantEnum.telegramEnums.CallBackData;
-import com.bots.lvivCroissantBot.constantEnum.telegramEnums.TelegramUserStatus;
+import com.bots.lvivCroissantBot.entity.register.TUser;
+import com.bots.lvivCroissantBot.constantEnum.messengerEnum.PayloadCases;
+import com.bots.lvivCroissantBot.constantEnum.telegramEnum.CallBackData;
+import com.bots.lvivCroissantBot.constantEnum.telegramEnum.TelegramUserStatus;
 import com.bots.lvivCroissantBot.dto.telegram.CallBackQuery;
 import com.bots.lvivCroissantBot.dto.telegram.Chat;
 import com.bots.lvivCroissantBot.dto.telegram.Message;
-import com.bots.lvivCroissantBot.entity.peopleRegister.User;
+import com.bots.lvivCroissantBot.entity.register.User;
 import com.bots.lvivCroissantBot.repository.UserRepository;
 import com.bots.lvivCroissantBot.service.eventService.telegramEventService.TelegramCreatingOwnCroissantEventService;
 import com.bots.lvivCroissantBot.service.eventService.telegramEventService.TelegramGetMenuEventService;
@@ -30,9 +30,9 @@ import org.springframework.stereotype.Service;
 import java.util.ResourceBundle;
 
 import static com.bots.lvivCroissantBot.constantEnum.Platform.TELEGRAM_ADMIN_PANEL_BOT;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.PayloadCases.QUESTION_YES;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.speaking.ServerSideSpeaker.*;
-import static com.bots.lvivCroissantBot.constantEnum.telegramEnums.TelegramUserStatus.*;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.PayloadCases.QUESTION_YES;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.speaking.ServerSideSpeaker.*;
+import static com.bots.lvivCroissantBot.constantEnum.telegramEnum.TelegramUserStatus.*;
 
 @Service
 public class CallBackParserServiceImpl implements CallBackParserService {

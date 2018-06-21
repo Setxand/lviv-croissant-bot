@@ -1,8 +1,8 @@
 package com.bots.lvivCroissantBot.service.messangerService.impl;
 
 import com.bots.lvivCroissantBot.entity.SupportEntity;
-import com.bots.lvivCroissantBot.entity.peopleRegister.MUser;
-import com.bots.lvivCroissantBot.constantEnum.messengerEnums.payloads.Payloads;
+import com.bots.lvivCroissantBot.entity.register.MUser;
+import com.bots.lvivCroissantBot.constantEnum.messengerEnum.payload.Payloads;
 import com.bots.lvivCroissantBot.dto.messanger.Message;
 import com.bots.lvivCroissantBot.dto.messanger.Messaging;
 import com.bots.lvivCroissantBot.dto.messanger.QuickReply;
@@ -21,14 +21,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.Cases.MENU;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.Cases.NAVI;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.Cases.ORDERING;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.payloads.Payloads.FOR_GETTING_MENU;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.payloads.Payloads.OWN_CROISSANT_MENU_PAYLOAD;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.payloads.QuickReplyPayloads.CREATING_OWN_CROISSANT_PAYLOAD;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.speaking.ServerSideSpeaker.DONE;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.types.CroissantsTypes.OWN;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.Cases.MENU;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.Cases.NAVI;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.Cases.ORDERING;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.payload.Payloads.FOR_GETTING_MENU;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.payload.Payloads.OWN_CROISSANT_MENU_PAYLOAD;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.payload.QuickReplyPayloads.CREATING_OWN_CROISSANT_PAYLOAD;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.speaking.ServerSideSpeaker.DONE;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.type.CroissantsTypes.OWN;
 
 @Service
 public class PayloadParserServiceImpl implements PayloadParserService {

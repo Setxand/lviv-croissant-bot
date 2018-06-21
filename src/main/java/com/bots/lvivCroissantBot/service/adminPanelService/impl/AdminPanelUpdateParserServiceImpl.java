@@ -1,8 +1,8 @@
 package com.bots.lvivCroissantBot.service.adminPanelService.impl;
 
-import com.bots.lvivCroissantBot.entity.peopleRegister.TUser;
+import com.bots.lvivCroissantBot.entity.register.TUser;
 import com.bots.lvivCroissantBot.constantEnum.Platform;
-import com.bots.lvivCroissantBot.constantEnum.messengerEnums.Role;
+import com.bots.lvivCroissantBot.constantEnum.messengerEnum.Role;
 import com.bots.lvivCroissantBot.dto.telegram.Update;
 import com.bots.lvivCroissantBot.service.adminPanelService.AdminCallBackParserService;
 import com.bots.lvivCroissantBot.service.adminPanelService.AdminPanelUpdateParserService;

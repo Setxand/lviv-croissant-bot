@@ -2,10 +2,10 @@ package com.bots.lvivCroissantBot.service.adminPanelService.impl;
 
 import com.bots.lvivCroissantBot.entity.lvivCroissants.CroissantEntity;
 import com.bots.lvivCroissantBot.entity.lvivCroissants.CustomerOrdering;
-import com.bots.lvivCroissantBot.entity.peopleRegister.TUser;
-import com.bots.lvivCroissantBot.constantEnum.messengerEnums.Objects;
+import com.bots.lvivCroissantBot.entity.register.TUser;
+import com.bots.lvivCroissantBot.constantEnum.messengerEnum.Objects;
 import com.bots.lvivCroissantBot.constantEnum.BotCommands;
-import com.bots.lvivCroissantBot.constantEnum.messengerEnums.Role;
+import com.bots.lvivCroissantBot.constantEnum.messengerEnum.Role;
 import com.bots.lvivCroissantBot.dto.messanger.Shell;
 import com.bots.lvivCroissantBot.dto.telegram.CallBackQuery;
 import com.bots.lvivCroissantBot.dto.telegram.Message;
@@ -18,7 +18,8 @@ import com.bots.lvivCroissantBot.service.repositoryService.CroissantRepositorySe
 import com.bots.lvivCroissantBot.service.repositoryService.CustomerOrderingRepositoryService;
 import com.bots.lvivCroissantBot.service.supportService.TextFormatter;
 import com.bots.lvivCroissantBot.service.telegramService.TelegramMessageSenderService;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -29,8 +30,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.speaking.ServerSideSpeaker.*;
-import static com.bots.lvivCroissantBot.constantEnum.telegramEnums.CallBackData.*;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.speaking.ServerSideSpeaker.*;
+import static com.bots.lvivCroissantBot.constantEnum.telegramEnum.CallBackData.*;
 
 @Service
 public class BotCommandParseHelperServiceImpl implements BotCommandParseHelperService {
@@ -50,7 +51,8 @@ public class BotCommandParseHelperServiceImpl implements BotCommandParseHelperSe
     private String SUBSCRIPTION_URL;
     @Value("${picture.ordering}")
     private String PICTURE_ORDERING;
-    private static final Logger logger = Logger.getLogger(BotCommandParseHelperServiceImpl.class);
+    private   final static Logger logger = LoggerFactory.getLogger(BotCommandParseHelperServiceImpl.class);
+
 
 
     @Override
@@ -86,7 +88,7 @@ public class BotCommandParseHelperServiceImpl implements BotCommandParseHelperSe
             telegramMessageSenderService.simpleMessage("Facebook messenger: "+messengerWebhook.getBody().toString()+" /help",message);
         }
         catch (Exception ex){
-            logger.warn(ex);
+            logger.error("Error",ex);
             telegramMessageSenderService.simpleMessage(ex.getMessage(),message);
         }
     }

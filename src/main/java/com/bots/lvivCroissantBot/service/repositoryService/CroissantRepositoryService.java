@@ -1,6 +1,6 @@
 package com.bots.lvivCroissantBot.service.repositoryService;
 
-import com.bots.lvivCroissantBot.dto.uniRequestModel.CroissantDTO;
+import com.bots.lvivCroissantBot.dto.uni.CroissantDTO;
 import com.bots.lvivCroissantBot.entity.lvivCroissants.CroissantEntity;
 
 import java.util.List;

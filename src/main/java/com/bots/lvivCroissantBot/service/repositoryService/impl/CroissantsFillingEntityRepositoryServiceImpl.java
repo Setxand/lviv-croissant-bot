@@ -1,6 +1,7 @@
 package com.bots.lvivCroissantBot.service.repositoryService.impl;
 
 import com.bots.lvivCroissantBot.entity.lvivCroissants.CroissantsFilling;
+import com.bots.lvivCroissantBot.exception.ElementNoFoundException;
 import com.bots.lvivCroissantBot.repository.CroisantsFillingEntityRepository;
 import com.bots.lvivCroissantBot.service.repositoryService.CroissantsFillingEntityRepositoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class CroissantsFillingEntityRepositoryServiceImpl implements CroissantsF
 
     @Override
     public CroissantsFilling findOne(Long id) {
-        return croisantsFillingEntityRepository.findOne(id);
+        return croisantsFillingEntityRepository.findById(id).orElseThrow(ElementNoFoundException::new);
     }
 
     @Override

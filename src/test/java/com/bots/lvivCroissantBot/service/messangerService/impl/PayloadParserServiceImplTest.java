@@ -7,7 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.payloads.Payloads.NAVIGATION_MENU;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.payload.Payloads.NAVIGATION_MENU;
 
 public class PayloadParserServiceImplTest extends DemoApplicationTests{
     @Autowired

@@ -1,11 +1,11 @@
 package com.bots.lvivCroissantBot.service.peopleRegisterService;
 
-import com.bots.lvivCroissantBot.entity.peopleRegister.CourierRegister;
+import com.bots.lvivCroissantBot.entity.register.Courier;
 
 public interface CourierRegisterService {
-    public CourierRegister findByRecipientId(Long recipientId);
-    public CourierRegister findTop();
+    public Courier findByRecipientId(Long recipientId);
+    public Courier findTop();
 
-    public void saveAndFlush(CourierRegister courierRegister);
-    public void remove(CourierRegister courierRegister);
+    public void saveAndFlush(Courier courier);
+    public void remove(Courier courier);
 }

@@ -1,8 +1,8 @@
 package com.bots.lvivCroissantBot.service.eventService.messengerEventService.impl;
 
 import com.bots.lvivCroissantBot.entity.lvivCroissants.CustomerOrdering;
-import com.bots.lvivCroissantBot.entity.peopleRegister.CourierRegister;
-import com.bots.lvivCroissantBot.entity.peopleRegister.MUser;
+import com.bots.lvivCroissantBot.entity.register.Courier;
+import com.bots.lvivCroissantBot.entity.register.MUser;
 import com.bots.lvivCroissantBot.dto.messanger.*;
 import com.bots.lvivCroissantBot.service.eventService.messengerEventService.CourierEventService;
 import com.bots.lvivCroissantBot.service.eventService.messengerEventService.UserEventService;
@@ -12,7 +12,8 @@ import com.bots.lvivCroissantBot.service.peopleRegisterService.CourierRegisterSe
 import com.bots.lvivCroissantBot.service.peopleRegisterService.MUserRepositoryService;
 import com.bots.lvivCroissantBot.service.supportService.RecognizeService;
 import com.bots.lvivCroissantBot.service.supportService.TextFormatter;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -20,19 +21,19 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.Cases.COMPLETE_ORDERINGS_LIST;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.Cases.ORDERING_LIST_FILLING;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.CasesCourierActions.*;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.payloads.Payloads.COMPLETE_ORDER;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.payloads.Payloads.GET_ORDER;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.payloads.Payloads.SHOW_MORE_PAYLOAD;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.payloads.QuickReplyPayloads.COURIER_QUESTION_PAYLOAD;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.payloads.QuickReplyPayloads.ONE_MORE_ACTION_COURIER_PAYLOAD;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.speaking.ServerSideSpeaker.*;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.types.AttachmentType.template;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.types.ButtonType.postback;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.types.ButtonType.web_url;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.types.TemplateType.generic;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.Cases.COMPLETE_ORDERINGS_LIST;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.Cases.ORDERING_LIST_FILLING;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.CasesCourierActions.*;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.payload.Payloads.COMPLETE_ORDER;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.payload.Payloads.GET_ORDER;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.payload.Payloads.SHOW_MORE_PAYLOAD;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.payload.QuickReplyPayloads.COURIER_QUESTION_PAYLOAD;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.payload.QuickReplyPayloads.ONE_MORE_ACTION_COURIER_PAYLOAD;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.speaking.ServerSideSpeaker.*;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.type.AttachmentType.template;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.type.ButtonType.postback;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.type.ButtonType.web_url;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.type.TemplateType.generic;
 
 @Service
 public class CourierEventServiceImpl implements CourierEventService {
@@ -49,7 +50,8 @@ public class CourierEventServiceImpl implements CourierEventService {
     private MUserRepositoryService MUserRepositoryService;
     @Autowired
     private UserEventService userEventService;
-    private static final org.apache.log4j.Logger logger = Logger.getLogger(CourierEventServiceImpl.class);
+    private   final static Logger logger = LoggerFactory.getLogger(CourierEventServiceImpl.class);
+
     @Value("${server.url}")
     private String SERVER_URL;
     @Override
@@ -82,17 +84,17 @@ public class CourierEventServiceImpl implements CourierEventService {
                 }
             }
             else {
-                CourierRegister courierRegister = courierRegisterService.findByRecipientId(messaging.getSender().getId());
-                if (courierRegister.getName() == null) {
-                    parseName(messaging, courierRegister);
-                } else if (courierRegister.getPhoneNumber() == null) {
-                    parsePhoneNumber(messaging, courierRegister);
+                Courier courier = courierRegisterService.findByRecipientId(messaging.getSender().getId());
+                if (courier.getName() == null) {
+                    parseName(messaging, courier);
+                } else if (courier.getPhoneNumber() == null) {
+                    parsePhoneNumber(messaging, courier);
                 }
 
 
             }
         } catch (Exception ex) {
-            logger.warn(ex);
+            logger.error("Error",ex);
             MUser MUser = MUserRepositoryService.findOnebyRId(messaging.getSender().getId());
             MUser.setStatus(null);
             MUserRepositoryService.saveAndFlush(MUser);
@@ -105,9 +107,9 @@ public class CourierEventServiceImpl implements CourierEventService {
 
 
     private void completeOrderings(Messaging messaging) {
-        CourierRegister courierRegister = courierRegisterService.findByRecipientId(messaging.getSender().getId());
+        Courier courier = courierRegisterService.findByRecipientId(messaging.getSender().getId());
 
-        if (!courierRegister.getCustomerOrderings().isEmpty()) {
+        if (!courier.getCustomerOrderings().isEmpty()) {
 
             if (!messaging.getMessage().getQuickReply().getPayload().equals(COMPLETE_ORDERINGS_LIST.name())) {
                 getOwnOrderingList(messaging);
@@ -123,13 +125,13 @@ public class CourierEventServiceImpl implements CourierEventService {
     @Override
     public void completeOrderingsFinalize(Messaging messaging,Long orderId) {
         try {
-            CourierRegister courierRegister = courierRegisterService.findByRecipientId(messaging.getSender().getId());
+            Courier courier = courierRegisterService.findByRecipientId(messaging.getSender().getId());
 
 
             CustomerOrdering customerOrdering = customerOrderingRepositoryService.findOne(orderId);
-            courierRegister.getCustomerOrderings().remove(customerOrdering);
-            customerOrdering.setCourierRegister(null);
-            courierRegisterService.saveAndFlush(courierRegister);
+            courier.getCustomerOrderings().remove(customerOrdering);
+            customerOrdering.setCourier(null);
+            courierRegisterService.saveAndFlush(courier);
             MUser MUser = MUserRepositoryService.findOnebyRId(messaging.getSender().getId());
             MUser.getCustomerOrderings().remove(customerOrdering);
             MUserRepositoryService.saveAndFlush(MUser);
@@ -140,15 +142,15 @@ public class CourierEventServiceImpl implements CourierEventService {
 
             askOneMoreAction(messaging.getSender().getId());
         } catch (Exception ex) {
-            logger.warn(ex);
+            logger.error("Error",ex);
         }
     }
 
 
     private void getOwnOrderingList(Messaging messaging) {
-        CourierRegister courierRegister = courierRegisterService.findByRecipientId(messaging.getSender().getId());
-        if (!courierRegister.getCustomerOrderings().isEmpty()) {
-            messageSenderService.sendMessage(makeGeneric(messaging,courierRegister.getCustomerOrderings()));
+        Courier courier = courierRegisterService.findByRecipientId(messaging.getSender().getId());
+        if (!courier.getCustomerOrderings().isEmpty()) {
+            messageSenderService.sendMessage(makeGeneric(messaging, courier.getCustomerOrderings()));
 
         } else {
             messageSenderService.sendSimpleMessage(recognizeService.recognize(EMPTY_LIST.name(),messaging.getSender().getId()), messaging.getSender().getId());
@@ -178,7 +180,7 @@ public class CourierEventServiceImpl implements CourierEventService {
         List<CustomerOrdering> customerOrderings = customerOrderingRepositoryService.findAll();
         List<CustomerOrdering> customerOrderings1 = new ArrayList<>();
         for (CustomerOrdering customerOrdering : customerOrderings) {
-            if (customerOrdering.getCourierRegister() == null) {
+            if (customerOrdering.getCourier() == null) {
                 customerOrderings1.add(customerOrdering);
             }
         }
@@ -255,12 +257,12 @@ public class CourierEventServiceImpl implements CourierEventService {
         try {
 
 
-            CourierRegister courierRegister = courierRegisterService.findByRecipientId(messaging.getSender().getId());
+            Courier courier = courierRegisterService.findByRecipientId(messaging.getSender().getId());
 
 
             CustomerOrdering customerOrdering = customerOrderingRepositoryService.findOne(orderId);
-            courierRegister.addOne(customerOrdering);
-            courierRegisterService.saveAndFlush(courierRegister);
+            courier.addOne(customerOrdering);
+            courierRegisterService.saveAndFlush(courier);
             customerOrderingRepositoryService.saveAndFlush(customerOrdering);
 
             messageSenderService.sendSimpleMessage(recognizeService.recognize(ADDED_TO_DB.name(), messaging.getSender().getId()), messaging.getSender().getId());
@@ -268,17 +270,17 @@ public class CourierEventServiceImpl implements CourierEventService {
             askOneMoreAction(messaging.getSender().getId());
 
         } catch (Exception ex) {
-            logger.warn(ex);
+            logger.error("Error",ex);
 
         }
 
     }
 
 
-    private void parsePhoneNumber(Messaging messaging, CourierRegister courierRegister) {
+    private void parsePhoneNumber(Messaging messaging, Courier courier) {
         if (TextFormatter.isPhoneNumber(messaging.getMessage().getText())) {
-            courierRegister.setPhoneNumber(messaging.getMessage().getText());
-            courierRegisterService.saveAndFlush(courierRegister);
+            courier.setPhoneNumber(messaging.getMessage().getText());
+            courierRegisterService.saveAndFlush(courier);
             messageSenderService.sendSimpleMessage(recognizeService.recognize(ADDED_TO_DB.name(),messaging.getSender().getId()), messaging.getSender().getId());
             MUser MUser = MUserRepositoryService.findOnebyRId(messaging.getSender().getId());
             MUser.setStatus(null);
@@ -291,17 +293,17 @@ public class CourierEventServiceImpl implements CourierEventService {
     }
 
 
-    private void parseName(Messaging messaging, CourierRegister courierRegister) {
-        courierRegister.setName(messaging.getMessage().getText());
-        courierRegisterService.saveAndFlush(courierRegister);
+    private void parseName(Messaging messaging, Courier courier) {
+        courier.setName(messaging.getMessage().getText());
+        courierRegisterService.saveAndFlush(courier);
         messageSenderService.sendSimpleMessage(recognizeService.recognize(NUMBER_OF_PHONE.name(),messaging.getSender().getId()), messaging.getSender().getId());
 
     }
 
     private void courierRegisterCreator(Messaging messaging) {
-        CourierRegister courierRegister = new CourierRegister();
-        courierRegister.setRecipientId(messaging.getSender().getId());
-        courierRegisterService.saveAndFlush(courierRegister);
+        Courier courier = new Courier();
+        courier.setRecipientId(messaging.getSender().getId());
+        courierRegisterService.saveAndFlush(courier);
         messageSenderService.sendSimpleMessage(recognizeService.recognize(NAME_LASTNAME.name(),messaging.getSender().getId()), messaging.getSender().getId());
     }
 

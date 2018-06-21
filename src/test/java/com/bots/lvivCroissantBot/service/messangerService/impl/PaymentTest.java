@@ -14,7 +14,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.types.ButtonType.web_url;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.type.ButtonType.web_url;
 
 public class PaymentTest extends DemoApplicationTests {
     List<Button> buttons;

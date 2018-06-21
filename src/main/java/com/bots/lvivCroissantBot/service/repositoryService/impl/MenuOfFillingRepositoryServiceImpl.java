@@ -1,12 +1,15 @@
 package com.bots.lvivCroissantBot.service.repositoryService.impl;
 
 import com.bots.lvivCroissantBot.entity.lvivCroissants.MenuOfFilling;
+import com.bots.lvivCroissantBot.exception.ElementNoFoundException;
 import com.bots.lvivCroissantBot.repository.MenuOfFillingRepository;
 import com.bots.lvivCroissantBot.service.repositoryService.MenuOfFillingRepositoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class MenuOfFillingRepositoryServiceImpl implements MenuOfFillingRepositoryService {
     @Autowired
@@ -23,7 +26,7 @@ public class MenuOfFillingRepositoryServiceImpl implements MenuOfFillingReposito
 
     @Override
     public MenuOfFilling findOne(Long id) {
-        return menuOfFillingRepository.findOne(id);
+         return  menuOfFillingRepository.findById(id).orElseThrow(ElementNoFoundException::new);
     }
 
     @Override

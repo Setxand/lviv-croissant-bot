@@ -1,8 +1,8 @@
 package com.bots.lvivCroissantBot.service.adminPanelService.impl;
 
 import com.bots.lvivCroissantBot.entity.SpeakingMessage;
-import com.bots.lvivCroissantBot.entity.peopleRegister.TUser;
-import com.bots.lvivCroissantBot.constantEnum.messengerEnums.Role;
+import com.bots.lvivCroissantBot.entity.register.TUser;
+import com.bots.lvivCroissantBot.constantEnum.messengerEnum.Role;
 import com.bots.lvivCroissantBot.dto.telegram.Message;
 import com.bots.lvivCroissantBot.dto.telegram.button.InlineKeyboardButton;
 import com.bots.lvivCroissantBot.service.adminPanelService.AdminTelegramMessageParserHelperService;
@@ -16,10 +16,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.speaking.ServerSideSpeaker.HELLO_MESSAGE;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.speaking.ServerSideSpeaker.NEW_TEXT_HAS_SET;
-import static com.bots.lvivCroissantBot.constantEnum.telegramEnums.CallBackData.SETTING_ROLE_DATA_1;
-import static com.bots.lvivCroissantBot.constantEnum.telegramEnums.CallBackData.SETTING_ROLE_DATA_2;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.speaking.ServerSideSpeaker.HELLO_MESSAGE;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.speaking.ServerSideSpeaker.NEW_TEXT_HAS_SET;
+import static com.bots.lvivCroissantBot.constantEnum.telegramEnum.CallBackData.SETTING_ROLE_DATA_1;
+import static com.bots.lvivCroissantBot.constantEnum.telegramEnum.CallBackData.SETTING_ROLE_DATA_2;
 
 @Service
 public class AdminTelegramMessageParserHelperServiceImpl implements AdminTelegramMessageParserHelperService {

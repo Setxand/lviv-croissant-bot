@@ -1,7 +1,7 @@
 package com.bots.lvivCroissantBot.service.peopleRegisterService;
 
-import com.bots.lvivCroissantBot.entity.peopleRegister.TUser;
-import com.bots.lvivCroissantBot.constantEnum.telegramEnums.TelegramUserStatus;
+import com.bots.lvivCroissantBot.entity.register.TUser;
+import com.bots.lvivCroissantBot.constantEnum.telegramEnum.TelegramUserStatus;
 
 import java.util.List;
 

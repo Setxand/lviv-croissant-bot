@@ -1,6 +1,6 @@
 package com.bots.lvivCroissantBot.service.eventService.messengerEventService;
 
-import com.bots.lvivCroissantBot.entity.peopleRegister.MUser;
+import com.bots.lvivCroissantBot.entity.register.MUser;
 import com.bots.lvivCroissantBot.dto.messanger.Messaging;
 
 public interface UserEventService {

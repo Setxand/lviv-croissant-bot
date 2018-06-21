@@ -3,7 +3,7 @@ package com.bots.lvivCroissantBot.service.eventService.servicePanel.impl;
 import com.bots.lvivCroissantBot.entity.lvivCroissants.CroissantEntity;
 import com.bots.lvivCroissantBot.entity.lvivCroissants.CroissantsFilling;
 import com.bots.lvivCroissantBot.entity.lvivCroissants.MenuOfFilling;
-import com.bots.lvivCroissantBot.entity.peopleRegister.TUser;
+import com.bots.lvivCroissantBot.entity.register.TUser;
 import com.bots.lvivCroissantBot.dto.telegram.Message;
 import com.bots.lvivCroissantBot.dto.telegram.button.InlineKeyboardButton;
 import com.bots.lvivCroissantBot.service.eventService.servicePanel.TelegramAddingRecordingsEventService;
@@ -13,16 +13,17 @@ import com.bots.lvivCroissantBot.service.repositoryService.MenuOfFillingReposito
 import com.bots.lvivCroissantBot.service.peopleRegisterService.TelegramUserRepositoryService;
 import com.bots.lvivCroissantBot.service.supportService.TextFormatter;
 import com.bots.lvivCroissantBot.service.telegramService.TelegramMessageSenderService;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.speaking.ServerSideSpeaker.*;
-import static com.bots.lvivCroissantBot.constantEnum.telegramEnums.CallBackData.CROISSANT_TYPE_ADDING_DATA;
-import static com.bots.lvivCroissantBot.constantEnum.telegramEnums.TelegramUserStatus.NULL_CHECKING_ADDING_CROISSANT_STATUS;
-import static com.bots.lvivCroissantBot.constantEnum.telegramEnums.TelegramUserStatus.NULL_CHECKING_ADDING_CROISSANT_STATUS_1;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.speaking.ServerSideSpeaker.*;
+import static com.bots.lvivCroissantBot.constantEnum.telegramEnum.CallBackData.CROISSANT_TYPE_ADDING_DATA;
+import static com.bots.lvivCroissantBot.constantEnum.telegramEnum.TelegramUserStatus.NULL_CHECKING_ADDING_CROISSANT_STATUS;
+import static com.bots.lvivCroissantBot.constantEnum.telegramEnum.TelegramUserStatus.NULL_CHECKING_ADDING_CROISSANT_STATUS_1;
 
 @Service
 public class TelegramAddingRecordingsEventServiceImpl implements TelegramAddingRecordingsEventService {
@@ -38,7 +39,8 @@ public class TelegramAddingRecordingsEventServiceImpl implements TelegramAddingR
     private CroissantRepositoryService croissantRepositoryService;
 
 
-    private static final Logger logger = Logger.getLogger(TelegramAddingRecordingsEventServiceImpl.class);
+    private   final static Logger logger = LoggerFactory.getLogger(TelegramAddingRecordingsEventServiceImpl.class);
+
 
     @Override
     public void addFilling(Message message) {

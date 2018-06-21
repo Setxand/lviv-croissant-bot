@@ -4,10 +4,10 @@ import com.bots.lvivCroissantBot.dto.telegram.Chat;
 import com.bots.lvivCroissantBot.entity.lvivCroissants.CroissantEntity;
 import com.bots.lvivCroissantBot.entity.lvivCroissants.CustomerOrdering;
 import com.bots.lvivCroissantBot.entity.SupportEntity;
-import com.bots.lvivCroissantBot.entity.peopleRegister.MUser;
+import com.bots.lvivCroissantBot.entity.register.MUser;
 import com.bots.lvivCroissantBot.dto.messanger.*;
-import com.bots.lvivCroissantBot.entity.peopleRegister.TUser;
-import com.bots.lvivCroissantBot.entity.peopleRegister.User;
+import com.bots.lvivCroissantBot.entity.register.TUser;
+import com.bots.lvivCroissantBot.entity.register.User;
 import com.bots.lvivCroissantBot.repository.MUserRepository;
 import com.bots.lvivCroissantBot.repository.UserRepository;
 import com.bots.lvivCroissantBot.service.eventService.messengerEventService.*;
@@ -23,7 +23,8 @@ import com.bots.lvivCroissantBot.service.peopleRegisterService.MUserRepositorySe
 import com.bots.lvivCroissantBot.service.supportService.RecognizeService;
 import com.bots.lvivCroissantBot.service.supportService.TextFormatter;
 import com.bots.lvivCroissantBot.service.telegramService.TelegramMessageSenderService;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -34,21 +35,21 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.Cases.*;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.PayloadCases.QUESTION_YES;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.PayloadCases.UA;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.PaymentWay.CARD;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.PaymentWay.CASH;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.Role.ADMIN;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.Role.PERSONAL;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.payloads.Payloads.CREATE_OWN_CROISSANT_PAYLOAD;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.payloads.QuickReplyPayloads.*;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.speaking.ServerSideSpeaker.*;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.speaking.ServerSideSpeaker.CREATE_OWN_CROISSANT;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.types.ButtonType.web_url;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.types.ContentType.text;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.types.CroissantsTypes.SWEET;
-import static com.bots.lvivCroissantBot.constantEnum.telegramEnums.TelegramUserStatus.PHONE_ENTERING_IN_START_STATUS;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.Cases.*;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.PayloadCases.QUESTION_YES;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.PayloadCases.UA;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.PaymentWay.CARD;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.PaymentWay.CASH;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.Role.ADMIN;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.Role.PERSONAL;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.payload.Payloads.CREATE_OWN_CROISSANT_PAYLOAD;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.payload.QuickReplyPayloads.*;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.speaking.ServerSideSpeaker.*;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.speaking.ServerSideSpeaker.CREATE_OWN_CROISSANT;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.type.ButtonType.web_url;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.type.ContentType.text;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.type.CroissantsTypes.SWEET;
+import static com.bots.lvivCroissantBot.constantEnum.telegramEnum.TelegramUserStatus.PHONE_ENTERING_IN_START_STATUS;
 
 @Service
 public class QuickReplyParserServiceImpl implements QuickReplyParserService {
@@ -88,7 +89,8 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
     private MUserRepository mUserRepository;
     @Autowired
     private TelegramMessageSenderService telegramMessageSenderService;
-    private static Logger logger = Logger.getLogger(QuickReplyParserServiceImpl.class);
+    private   final static Logger logger = LoggerFactory.getLogger(QuickReplyParserServiceImpl.class);
+
     private static Map<String, Method> methodsMap;
 
     @Value("${server.url}")
@@ -121,9 +123,9 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
                 messageParserService.parseMessage(messaging);
             }
         } catch (IllegalAccessException e) {
-            logger.warn(e);
+            logger.error("Error",e);
         } catch (InvocationTargetException e) {
-            logger.warn(e);
+            logger.error("Error",e);
             e.printStackTrace();
         }
     }

@@ -1,6 +1,0 @@
-package com.bots.lvivCroissantBot.constantEnum.messengerEnums.types;
-
-public enum ButtonType {
-    postback,
-    web_url
-}

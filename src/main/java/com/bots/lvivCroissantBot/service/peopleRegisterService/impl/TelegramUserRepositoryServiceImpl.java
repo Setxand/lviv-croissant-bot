@@ -1,7 +1,7 @@
 package com.bots.lvivCroissantBot.service.peopleRegisterService.impl;
 
-import com.bots.lvivCroissantBot.entity.peopleRegister.TUser;
-import com.bots.lvivCroissantBot.constantEnum.telegramEnums.TelegramUserStatus;
+import com.bots.lvivCroissantBot.entity.register.TUser;
+import com.bots.lvivCroissantBot.constantEnum.telegramEnum.TelegramUserStatus;
 import com.bots.lvivCroissantBot.repository.TUserRepository;
 import com.bots.lvivCroissantBot.service.peopleRegisterService.TelegramUserRepositoryService;
 import org.springframework.beans.factory.annotation.Autowired;

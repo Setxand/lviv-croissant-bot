@@ -1,8 +1,8 @@
 package com.bots.lvivCroissantBot.service.repositoryService;
 
 import com.bots.lvivCroissantBot.entity.lvivCroissants.CustomerOrdering;
-import com.bots.lvivCroissantBot.entity.peopleRegister.MUser;
-import com.bots.lvivCroissantBot.entity.peopleRegister.TUser;
+import com.bots.lvivCroissantBot.entity.register.MUser;
+import com.bots.lvivCroissantBot.entity.register.TUser;
 
 import java.util.List;
 

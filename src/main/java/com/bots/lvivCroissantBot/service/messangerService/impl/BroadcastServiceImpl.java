@@ -1,10 +1,11 @@
 package com.bots.lvivCroissantBot.service.messangerService.impl;
 
-import com.bots.lvivCroissantBot.controller.TestController;
+import com.bots.lvivCroissantBot.controller.Test;
 import com.bots.lvivCroissantBot.dto.messanger.Message;
 import com.bots.lvivCroissantBot.dto.messanger.broadcast.*;
 import com.bots.lvivCroissantBot.service.messangerService.BroadcastService;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -43,7 +44,8 @@ public class BroadcastServiceImpl implements BroadcastService {
     private String TOKEN_ARG;
 
 
-    private static final Logger logger = Logger.getLogger(BroadcastServiceImpl.class);
+    private   final static Logger logger = LoggerFactory.getLogger(BroadcastServiceImpl.class);
+
     @Override
     public Long createBroadCastMessage(List<Message> messages) {
         String url = BROADCAST_MESSAGE_CREATIVES+PAGE_ACCESS_TOKEN;
@@ -100,7 +102,7 @@ public class BroadcastServiceImpl implements BroadcastService {
 
 
 @Autowired
-    TestController testController;
+Test test;
     @Override
     public void deleteCustomLabelFromUserId(Long customLabelId, Long userId) {
         String url = DOMAIN_BROADCAST+customLabelId+"/label?access_token="+PAGE_ACCESS_TOKEN;

@@ -5,7 +5,8 @@ import com.bots.lvivCroissantBot.dto.messanger.Event;
 import com.bots.lvivCroissantBot.dto.messanger.Messaging;
 import com.bots.lvivCroissantBot.service.messangerService.*;
 import com.bots.lvivCroissantBot.service.peopleRegisterService.MUserRepositoryService;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,8 @@ public class EventParserServiceImpl implements EventParserService {
     private PayloadParserService payloadParserService;
 
 
-    private static final Logger logger = Logger.getLogger(EventParserServiceImpl.class);
+    private   final static Logger logger = LoggerFactory.getLogger(EventParserService.class);
+
 
     @Override
     public boolean parseEvent(Event event) {
@@ -47,7 +49,7 @@ public class EventParserServiceImpl implements EventParserService {
                 } catch (Exception ex) {
 
                     ex.printStackTrace();
-                    logger.warn(ex);
+                    logger.error("Error",ex);
                     messageSenderService.errorMessage(messaging.getSender().getId());
                     return true;
                 }

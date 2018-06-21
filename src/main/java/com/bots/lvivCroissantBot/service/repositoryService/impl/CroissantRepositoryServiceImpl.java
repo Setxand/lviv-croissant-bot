@@ -1,9 +1,10 @@
 package com.bots.lvivCroissantBot.service.repositoryService.impl;
 
-import com.bots.lvivCroissantBot.dto.uniRequestModel.CroissantDTO;
+import com.bots.lvivCroissantBot.dto.uni.CroissantDTO;
 import com.bots.lvivCroissantBot.entity.lvivCroissants.CroissantEntity;
 import com.bots.lvivCroissantBot.entity.lvivCroissants.CroissantsFilling;
-import com.bots.lvivCroissantBot.dto.uniRequestModel.CroissantFillingModel;
+import com.bots.lvivCroissantBot.dto.uni.CroissantFillingModel;
+import com.bots.lvivCroissantBot.exception.ElementNoFoundException;
 import com.bots.lvivCroissantBot.repository.CroissantEntityRepository;
 import com.bots.lvivCroissantBot.service.repositoryService.CroissantRepositoryService;
 import com.bots.lvivCroissantBot.tools.CroissantUtilManager;
@@ -50,7 +51,7 @@ public class CroissantRepositoryServiceImpl implements CroissantRepositoryServic
 
     @Override
     public CroissantEntity findOne(Long id) {
-        return croissantEntityRepository.findOne(id);
+        return croissantEntityRepository.findById(id).orElseThrow(ElementNoFoundException::new);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.bots.lvivCroissantBot.service.eventService.messengerEventService.impl;
 
-import com.bots.lvivCroissantBot.entity.peopleRegister.MUser;
-import com.bots.lvivCroissantBot.constantEnum.messengerEnums.Role;
+import com.bots.lvivCroissantBot.entity.register.MUser;
+import com.bots.lvivCroissantBot.constantEnum.messengerEnum.Role;
 import com.bots.lvivCroissantBot.dto.messanger.Messaging;
 import com.bots.lvivCroissantBot.dto.messanger.UserData;
 import com.bots.lvivCroissantBot.service.eventService.messengerEventService.UserEventService;
@@ -14,10 +14,10 @@ import com.bots.lvivCroissantBot.service.supportService.TextFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.Cases.CUSTOMER_REGISTER;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.Cases.CUSTOMER_REGISTER_FINALIZE;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.payloads.Payloads.GET_STARTED_PAYLOAD;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.speaking.ServerSideSpeaker.*;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.Cases.CUSTOMER_REGISTER;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.Cases.CUSTOMER_REGISTER_FINALIZE;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.payload.Payloads.GET_STARTED_PAYLOAD;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.speaking.ServerSideSpeaker.*;
 
 @Service
 public class UserEventServiceImpl implements UserEventService {

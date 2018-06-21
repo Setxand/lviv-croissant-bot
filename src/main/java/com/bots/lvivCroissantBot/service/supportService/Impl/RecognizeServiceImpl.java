@@ -1,6 +1,6 @@
 package com.bots.lvivCroissantBot.service.supportService.Impl;
 
-import com.bots.lvivCroissantBot.entity.peopleRegister.MUser;
+import com.bots.lvivCroissantBot.entity.register.MUser;
 import com.bots.lvivCroissantBot.service.peopleRegisterService.MUserRepositoryService;
 import com.bots.lvivCroissantBot.service.supportService.RecognizeService;
 import org.springframework.beans.factory.annotation.Autowired;

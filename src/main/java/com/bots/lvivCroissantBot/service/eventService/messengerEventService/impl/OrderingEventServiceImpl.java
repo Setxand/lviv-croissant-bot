@@ -3,7 +3,7 @@ package com.bots.lvivCroissantBot.service.eventService.messengerEventService.imp
 import com.bots.lvivCroissantBot.entity.lvivCroissants.CroissantEntity;
 import com.bots.lvivCroissantBot.entity.lvivCroissants.CustomerOrdering;
 import com.bots.lvivCroissantBot.entity.SupportEntity;
-import com.bots.lvivCroissantBot.entity.peopleRegister.MUser;
+import com.bots.lvivCroissantBot.entity.register.MUser;
 import com.bots.lvivCroissantBot.dto.messanger.Messaging;
 import com.bots.lvivCroissantBot.service.eventService.messengerEventService.OrderingEventService;
 import com.bots.lvivCroissantBot.service.eventService.messengerEventService.UserEventService;
@@ -17,10 +17,10 @@ import com.bots.lvivCroissantBot.service.supportService.TextFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.Cases.*;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.payloads.QuickReplyPayloads.ACCEPT_ORDERING_PAYLOAD;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.payloads.QuickReplyPayloads.ADDRESS_PAYLOAD;
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.speaking.ServerSideSpeaker.*;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.Cases.*;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.payload.QuickReplyPayloads.ACCEPT_ORDERING_PAYLOAD;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.payload.QuickReplyPayloads.ADDRESS_PAYLOAD;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.speaking.ServerSideSpeaker.*;
 
 @Service
 public class OrderingEventServiceImpl implements OrderingEventService {

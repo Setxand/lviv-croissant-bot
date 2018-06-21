@@ -2,9 +2,9 @@ package com.bots.lvivCroissantBot.service.eventService.telegramEventService.impl
 
 import com.bots.lvivCroissantBot.entity.lvivCroissants.CroissantEntity;
 import com.bots.lvivCroissantBot.entity.lvivCroissants.CustomerOrdering;
-import com.bots.lvivCroissantBot.entity.peopleRegister.TUser;
-import com.bots.lvivCroissantBot.constantEnum.messengerEnums.speaking.ServerSideSpeaker;
-import com.bots.lvivCroissantBot.constantEnum.telegramEnums.CallBackData;
+import com.bots.lvivCroissantBot.entity.register.TUser;
+import com.bots.lvivCroissantBot.constantEnum.messengerEnum.speaking.ServerSideSpeaker;
+import com.bots.lvivCroissantBot.constantEnum.telegramEnum.CallBackData;
 import com.bots.lvivCroissantBot.dto.telegram.Message;
 import com.bots.lvivCroissantBot.dto.telegram.button.InlineKeyboardButton;
 import com.bots.lvivCroissantBot.service.eventService.telegramEventService.TelegramGetMenuEventService;
@@ -21,9 +21,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.speaking.ServerSideSpeaker.*;
-import static com.bots.lvivCroissantBot.constantEnum.telegramEnums.CallBackData.ONE_MORE_ORDERING_DATA;
-import static com.bots.lvivCroissantBot.constantEnum.telegramEnums.TelegramUserStatus.*;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.speaking.ServerSideSpeaker.*;
+import static com.bots.lvivCroissantBot.constantEnum.telegramEnum.CallBackData.ONE_MORE_ORDERING_DATA;
+import static com.bots.lvivCroissantBot.constantEnum.telegramEnum.TelegramUserStatus.*;
 
 @Service
 public class TelegramOrderingEventServiceImpl implements TelegramOrderingEventService {

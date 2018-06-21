@@ -1,7 +1,7 @@
 package com.bots.lvivCroissantBot.service.supportService.Impl;
 
-import com.bots.lvivCroissantBot.entity.peopleRegister.MUser;
-import com.bots.lvivCroissantBot.entity.peopleRegister.User;
+import com.bots.lvivCroissantBot.entity.register.MUser;
+import com.bots.lvivCroissantBot.entity.register.User;
 import com.bots.lvivCroissantBot.repository.UserRepository;
 import com.bots.lvivCroissantBot.service.peopleRegisterService.MUserRepositoryService;
 import com.bots.lvivCroissantBot.service.supportService.EmailService;
@@ -15,7 +15,7 @@ import javax.mail.internet.MimeMessage;
 import java.net.MalformedURLException;
 import java.util.List;
 
-import static com.bots.lvivCroissantBot.constantEnum.messengerEnums.Role.ADMIN;
+import static com.bots.lvivCroissantBot.constantEnum.messengerEnum.Role.ADMIN;
 
 
     @Service
