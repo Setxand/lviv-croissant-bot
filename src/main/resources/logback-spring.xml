@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="30 seconds">
 
-    <!--<contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">-->
-        <!--<resetJUL>true</resetJUL>-->
-    <!--</contextListener>-->
-    <!--<jmxConfigurator/>-->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
 
         <encoder>
             <springProfile name="dev">
-                <pattern> %-5p %c{1}:%L - %m%n</pattern>
+                <pattern>%d{HH:mm} %-5p %c{1}:%L - %m%n</pattern>
             </springProfile>
             <springProfile name="prod">
                 <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n</pattern>
@@ -17,17 +13,22 @@
         </encoder>
     </appender>
     <springProfile name="dev">
-
-        <logger name="org.hibernate.SQL" level="DEBUG" >
-            |<appender-ref ref="console"/>
+        <logger name="com.bots.lvivCroissantBot" level="DEBUG" >
+            <appender-ref ref="console"/>
         </logger>
-        <logger name="org.hibernate.type" level="TRACE" ><appender-ref ref="console"/></logger>
-
+        <logger name="org.hibernate.SQL" level="DEBUG" >
+            <appender-ref ref="console"/>
+        </logger>
+        <logger name="org.hibernate.type" level="TRACE" >
+            <appender-ref ref="console"/>
+        </logger>
     </springProfile>
     <springProfile name="prod">
-        <root level="info">
+        <logger name="com.bots.lvivCroissantBot" level="DEBUG" />
+        <root level="INFO">
             <appender-ref ref="console"/>
         </root>
+
     </springProfile>
 
 </configuration>
