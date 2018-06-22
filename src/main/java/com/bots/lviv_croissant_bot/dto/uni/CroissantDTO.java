@@ -1,6 +1,7 @@
 package com.bots.lviv_croissant_bot.dto.uni;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,9 +12,7 @@ import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class CroissantDTO {
     private Long id;

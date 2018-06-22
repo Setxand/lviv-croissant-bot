@@ -61,10 +61,10 @@ public class ServerStarting {
 
             ResponseEntity<?> responseEntity = restTemplate
                     .postForEntity(FACEBOOK_PROFILE_URI + PAGE_ACCESS_TOKEN, messengerProfileApi, MessengerProfileApi.class);
-            logger.info(responseEntity.toString());
+            logger.info("Messenger: persistence menu - "+responseEntity.toString());
             ResponseEntity<?> responseForWhiteList = restTemplate
                     .postForEntity(FACEBOOK_PROFILE_URI + PAGE_ACCESS_TOKEN, shell, Shell.class);
-            logger.info(responseForWhiteList.toString());
+            logger.info("Messenger: WhiteList domain - "+responseForWhiteList.toString());
 
         } catch (Exception ex) {
             logger.warn("Messenger queries: " + ex);
