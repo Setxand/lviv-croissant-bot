@@ -9,10 +9,10 @@ import com.bots.lviv_croissant_bot.dto.telegram.button.InlineKeyboardButton;
 import com.bots.lviv_croissant_bot.exception.ElementNoFoundException;
 import com.bots.lviv_croissant_bot.repository.MenuOfFillingRepository;
 import com.bots.lviv_croissant_bot.service.adminPanel.event.TelegramAddingRecordingsEventService;
-import com.bots.lviv_croissant_bot.service.telegram.event.TelegramGetMenu;
+import com.bots.lviv_croissant_bot.service.telegram.event.TelegramGetMenuService;
 import com.bots.lviv_croissant_bot.service.peopleRegister.TelegramUserRepositoryService;
 import com.bots.lviv_croissant_bot.service.support.TextFormatter;
-import com.bots.lviv_croissant_bot.service.telegram.TelegramMessageSender;
+import com.bots.lviv_croissant_bot.service.telegram.TelegramMessageSenderService;
 import com.bots.lviv_croissant_bot.service.uni.CroissantService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,11 +31,11 @@ public class TelegramAddingRecordingsEventServiceImpl implements TelegramAddingR
     @Autowired
     private TelegramUserRepositoryService telegramUserRepositoryService;
     @Autowired
-    private TelegramMessageSender telegramMessageSender;
+    private TelegramMessageSenderService telegramMessageSenderService;
     @Autowired
     private MenuOfFillingRepository menuOfFillingRepositoryService;
     @Autowired
-    private TelegramGetMenu telegramGetMenu;
+    private TelegramGetMenuService telegramGetMenuService;
     @Autowired
     private CroissantService croissantRepositoryService;
 
@@ -55,7 +55,7 @@ public class TelegramAddingRecordingsEventServiceImpl implements TelegramAddingR
                 addingFillingStatus1(message, tUser);
                 break;
             default:
-                telegramMessageSender.errorMessage(message);
+                telegramMessageSenderService.errorMessage(message);
                 break;
 
         }
@@ -109,7 +109,7 @@ public class TelegramAddingRecordingsEventServiceImpl implements TelegramAddingR
     private void finalSavingCroissant(Message message, TUser tUser) {
         String text = ResourceBundle.getBundle("dictionary").getString(CROISSANT_SUCCESSFULLY_ADDED.name());
         telegramUserRepositoryService.changeStatus(tUser, null);
-        telegramMessageSender.simpleMessage(text + " /help", message);
+        telegramMessageSenderService.simpleMessage(text + " /help", message);
     }
 
     private void settingCroissantPrice(Message message, CroissantEntity croissantEntity, TUser tUser) {
@@ -131,12 +131,12 @@ public class TelegramAddingRecordingsEventServiceImpl implements TelegramAddingR
     private void nullCheckingStatus(Message message, TUser tUser, String rBString) {
         telegramUserRepositoryService.changeStatus(tUser, NULL_CHECKING_ADDING_CROISSANT_STATUS_1);
         String text = ResourceBundle.getBundle("dictionary").getString(rBString);
-        telegramMessageSender.simpleMessage(text, message);
+        telegramMessageSenderService.simpleMessage(text, message);
     }
 
     private void addingCroissantsFillings(Message message, CroissantEntity croissantEntity, TUser tUser) {
         if (tUser.getStatus() == NULL_CHECKING_ADDING_CROISSANT_STATUS) {
-            telegramGetMenu.getMenuOfFillings(message);
+            telegramGetMenuService.getMenuOfFillings(message);
             nullCheckingStatus(message, tUser, ID_OF_FILLING.name());
         } else if (tUser.getStatus() == NULL_CHECKING_ADDING_CROISSANT_STATUS_1) {
             addingFillings(message, croissantEntity, tUser);
@@ -162,8 +162,8 @@ public class TelegramAddingRecordingsEventServiceImpl implements TelegramAddingR
     private void nonCorrectInputInCroissantSaving(Message message, String nonCorrectMessage, String directions) {
         String nonCorrect = ResourceBundle.getBundle("dictionary").getString(nonCorrectMessage);
         String fillingId = ResourceBundle.getBundle("dictionary").getString(directions);
-        telegramMessageSender.simpleMessage(nonCorrect, message);
-        telegramMessageSender.simpleMessage(fillingId, message);
+        telegramMessageSenderService.simpleMessage(nonCorrect, message);
+        telegramMessageSenderService.simpleMessage(fillingId, message);
     }
 
     private void addingImageForCroissant(Message message, CroissantEntity croissantEntity, TUser tUser) {
@@ -196,7 +196,7 @@ public class TelegramAddingRecordingsEventServiceImpl implements TelegramAddingR
         String sandwich = ResourceBundle.getBundle("dictionary").getString(SANDWICH.name());
         List<InlineKeyboardButton> buttons = new ArrayList<>(Arrays.asList(new InlineKeyboardButton(sweet, CROISSANT_TYPE_ADDING_DATA.name() + "?" + SWEET.name()),
                 new InlineKeyboardButton(sandwich, CROISSANT_TYPE_ADDING_DATA.name() + "?" + SANDWICH.name())));
-        telegramMessageSender.sendInlineButtons(new ArrayList<>(Arrays.asList(buttons)), text, message);
+        telegramMessageSenderService.sendInlineButtons(new ArrayList<>(Arrays.asList(buttons)), text, message);
     }
 
     private void addingFillingStatus1(Message message, TUser tUser) {
@@ -219,13 +219,13 @@ public class TelegramAddingRecordingsEventServiceImpl implements TelegramAddingR
 
     private void finalSaving(Message message, TUser tUser) {
         String addingDone = ResourceBundle.getBundle("dictionary").getString(FILLING_WAS_ADDED.name());
-        telegramMessageSender.simpleMessage(addingDone+" /help", message);
-        telegramGetMenu.getMenuOfFillings(message);
+        telegramMessageSenderService.simpleMessage(addingDone+" /help", message);
+        telegramGetMenuService.getMenuOfFillings(message);
         telegramUserRepositoryService.changeStatus(tUser, null);
     }
 
     private void addingFillingStatus(Message message) {
         String text = ResourceBundle.getBundle("dictionary").getString(NAME_OF_FILLING.name());
-        telegramMessageSender.simpleMessage(text, message);
+        telegramMessageSenderService.simpleMessage(text, message);
     }
 }

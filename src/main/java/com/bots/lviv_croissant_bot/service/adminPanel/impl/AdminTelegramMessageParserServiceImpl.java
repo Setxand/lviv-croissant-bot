@@ -3,12 +3,12 @@ package com.bots.lviv_croissant_bot.service.adminPanel.impl;
 import com.bots.lviv_croissant_bot.entity.register.TUser;
 
 import com.bots.lviv_croissant_bot.dto.telegram.Message;
-import com.bots.lviv_croissant_bot.service.adminPanel.AdminTelegramMessageParserHelper;
-import com.bots.lviv_croissant_bot.service.adminPanel.AdminTelegramMessageParser;
-import com.bots.lviv_croissant_bot.service.adminPanel.BotCommandsParser;
+import com.bots.lviv_croissant_bot.service.adminPanel.AdminTelegramMessageParserHelperService;
+import com.bots.lviv_croissant_bot.service.adminPanel.AdminTelegramMessageParserService;
+import com.bots.lviv_croissant_bot.service.adminPanel.BotCommandsParserService;
 import com.bots.lviv_croissant_bot.service.adminPanel.event.TelegramAddingRecordingsEventService;
 import com.bots.lviv_croissant_bot.service.peopleRegister.TelegramUserRepositoryService;
-import com.bots.lviv_croissant_bot.service.telegram.TelegramMessageSender;
+import com.bots.lviv_croissant_bot.service.telegram.TelegramMessageSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.bots.lviv_croissant_bot.dto.telegram.TelegramEntity;
@@ -17,17 +17,17 @@ import java.util.List;
 import static com.bots.lviv_croissant_bot.constantEnum.telegramEnum.TelegramUserStatus.ADDING_FILLING_STATUS_1;
 
 @Service
-public class AdminTelegramMessageParserImpl implements AdminTelegramMessageParser {
+public class AdminTelegramMessageParserServiceImpl implements AdminTelegramMessageParserService {
     @Autowired
     private TelegramUserRepositoryService telegramUserRepositoryService;
     @Autowired
-    private BotCommandsParser botCommandsParserService;
+    private BotCommandsParserService botCommandsParserServiceService;
     @Autowired
-    private TelegramMessageSender telegramMessageSender;
+    private TelegramMessageSenderService telegramMessageSenderService;
     @Autowired
     private TelegramAddingRecordingsEventService telegramAddingRecordingsEventService;
     @Autowired
-    private AdminTelegramMessageParserHelper adminTelegramMessageParserHelper;
+    private AdminTelegramMessageParserHelperService adminTelegramMessageParserHelperService;
     @Override
     public void parseMessage(Message message) {
         if (message.getEntities() != null) {
@@ -37,7 +37,7 @@ public class AdminTelegramMessageParserImpl implements AdminTelegramMessageParse
                     checkingByStatus(message);
                     break;
                 }
-                botCommandsParserService.parseBotCommand(message);
+                botCommandsParserServiceService.parseBotCommand(message);
             }
             return;
         }
@@ -61,16 +61,16 @@ public class AdminTelegramMessageParserImpl implements AdminTelegramMessageParse
                 telegramAddingRecordingsEventService.addCroissant(message);
                 break;
             case SETTING_ROLE_STATUS:
-                adminTelegramMessageParserHelper.helpRoleQuestion(message);
+                adminTelegramMessageParserHelperService.helpRoleQuestion(message);
                 break;
             case SETTING_ADMIN_STATUS:
-                adminTelegramMessageParserHelper.helpSetRole(message);
+                adminTelegramMessageParserHelperService.helpSetRole(message);
                 break;
             case NAME_OF_NEW_TEXT_STATUS:
-                adminTelegramMessageParserHelper.helpChangeHelloMessage(message);
+                adminTelegramMessageParserHelperService.helpChangeHelloMessage(message);
                 break;
             default:
-                telegramMessageSender.errorMessage(message);
+                telegramMessageSenderService.errorMessage(message);
                 break;
 
         }

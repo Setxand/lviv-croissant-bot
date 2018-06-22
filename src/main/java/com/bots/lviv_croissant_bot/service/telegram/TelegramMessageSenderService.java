@@ -10,7 +10,7 @@ import com.bots.lviv_croissant_bot.dto.telegram.button.Markup;
 
 import java.util.List;
 
-public interface TelegramMessageSender {
+public interface TelegramMessageSenderService {
     public void sendMessage(TelegramRequest telegramRequest,Platform platform);
     public void helloMessage(Message message);
     public void simpleMessage( String message,Message m);

@@ -4,30 +4,30 @@ import com.bots.lviv_croissant_bot.entity.register.TUser;
 import com.bots.lviv_croissant_bot.constantEnum.telegramEnum.MessageCases;
 import com.bots.lviv_croissant_bot.constantEnum.telegramEnum.TelegramUserStatus;
 import com.bots.lviv_croissant_bot.dto.telegram.Message;
-import com.bots.lviv_croissant_bot.service.telegram.event.TelegramCreatingOwnCroissant;
-import com.bots.lviv_croissant_bot.service.telegram.event.TelegramGetMenu;
-import com.bots.lviv_croissant_bot.service.telegram.event.TelegramOrdering;
+import com.bots.lviv_croissant_bot.service.telegram.event.TelegramCreatingOwnCroissantService;
+import com.bots.lviv_croissant_bot.service.telegram.event.TelegramGetMenuService;
+import com.bots.lviv_croissant_bot.service.telegram.event.TelegramOrderingService;
 import com.bots.lviv_croissant_bot.service.peopleRegister.TelegramUserRepositoryService;
-import com.bots.lviv_croissant_bot.service.telegram.TelegramMessageParserHelper;
-import com.bots.lviv_croissant_bot.service.telegram.TelegramMessageParser;
-import com.bots.lviv_croissant_bot.service.telegram.TelegramMessageSender;
+import com.bots.lviv_croissant_bot.service.telegram.TelegramMessageParserHelperService;
+import com.bots.lviv_croissant_bot.service.telegram.TelegramMessageParserService;
+import com.bots.lviv_croissant_bot.service.telegram.TelegramMessageSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class TelegramMessageParserImpl implements TelegramMessageParser {
+public class TelegramMessageParserServiceImpl implements TelegramMessageParserService {
     @Autowired
-    private TelegramMessageSender telegramMessageSender;
+    private TelegramMessageSenderService telegramMessageSenderService;
     @Autowired
-    private TelegramGetMenu telegramGetMenu;
+    private TelegramGetMenuService telegramGetMenuService;
     @Autowired
-    private TelegramMessageParserHelper telegramMessageParserHelper;
+    private TelegramMessageParserHelperService telegramMessageParserHelperService;
     @Autowired
     private TelegramUserRepositoryService telegramUserRepositoryService;
     @Autowired
-    private TelegramOrdering telegramOrdering;
+    private TelegramOrderingService telegramOrderingService;
     @Autowired
-    private TelegramCreatingOwnCroissant telegramCreatingOwnCroissant;
+    private TelegramCreatingOwnCroissantService telegramCreatingOwnCroissant;
     @Override
     public void parseMessage(Message message) {
         if(message.getText().contains(" "))
@@ -42,7 +42,7 @@ public class TelegramMessageParserImpl implements TelegramMessageParser {
             }
             switch (MessageCases.valueOf(message.getText().toUpperCase())) {
                 case HI:
-                    telegramMessageSender.helloMessage(message);
+                    telegramMessageSenderService.helloMessage(message);
                     break;
                 case MENU:
                     menu(message, tUser);
@@ -51,10 +51,10 @@ public class TelegramMessageParserImpl implements TelegramMessageParser {
                     deleteOrderings(message,tUser);
                     break;
                 case CREATE_OWN_CROISSANT:
-                    telegramMessageParserHelper.helpCreateOwnCroissant(message);
+                    telegramMessageParserHelperService.helpCreateOwnCroissant(message);
                     break;
                 default:
-                    telegramMessageSender.errorMessage(message);
+                    telegramMessageSenderService.errorMessage(message);
                     break;
             }
         }
@@ -84,33 +84,33 @@ public class TelegramMessageParserImpl implements TelegramMessageParser {
                 break;
 
             default:
-                telegramMessageSender.errorMessage(message);
+                telegramMessageSenderService.errorMessage(message);
                 break;
         }
     }
 
     private void phoneEnteringInStartStatus(Message message) {
-        telegramMessageParserHelper.helpEnterPhoneInStart(message);
+        telegramMessageParserHelperService.helpEnterPhoneInStart(message);
     }
 
     private void deleteOrderings(Message message, TUser tUser) {
-        telegramMessageParserHelper.helpDeleteOrderings(message);
+        telegramMessageParserHelperService.helpDeleteOrderings(message);
     }
     private void createOwn(Message message) {
         telegramCreatingOwnCroissant.createOwn(message);
     }
 
     private void makeOrder(Message message) {
-        telegramOrdering.makeOrder(message);
+        telegramOrderingService.makeOrder(message);
     }
 
     private void menu(Message message, TUser tUser) {
         telegramUserRepositoryService.changeStatus(tUser, TelegramUserStatus.ASKING_TYPE_STATUS);
-        telegramGetMenu.getMenu(message);
+        telegramGetMenuService.getMenu(message);
     }
 
     private void start(Message message) {
-            telegramMessageParserHelper.helpStart(message);
+            telegramMessageParserHelperService.helpStart(message);
 
     }
 }

@@ -4,26 +4,26 @@ import com.bots.lviv_croissant_bot.entity.register.TUser;
 import com.bots.lviv_croissant_bot.constantEnum.Platform;
 import com.bots.lviv_croissant_bot.constantEnum.messengerEnum.Role;
 import com.bots.lviv_croissant_bot.dto.telegram.Update;
-import com.bots.lviv_croissant_bot.service.adminPanel.AdminCallBackParser;
-import com.bots.lviv_croissant_bot.service.adminPanel.AdminPanelUpdateParser;
-import com.bots.lviv_croissant_bot.service.adminPanel.AdminTelegramMessageParser;
+import com.bots.lviv_croissant_bot.service.adminPanel.AdminCallBackParserService;
+import com.bots.lviv_croissant_bot.service.adminPanel.AdminPanelUpdateParserService;
+import com.bots.lviv_croissant_bot.service.adminPanel.AdminTelegramMessageParserService;
 import com.bots.lviv_croissant_bot.service.peopleRegister.TelegramUserRepositoryService;
-import com.bots.lviv_croissant_bot.service.telegram.TelegramMessageSender;
+import com.bots.lviv_croissant_bot.service.telegram.TelegramMessageSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AdminPanelUpdateParserImpl implements AdminPanelUpdateParser {
+public class AdminPanelUpdateParserServiceImpl implements AdminPanelUpdateParserService {
 
 
     @Autowired
     private TelegramUserRepositoryService telegramUserRepositoryService;
     @Autowired
-    private AdminCallBackParser adminCallBackParser;
+    private AdminCallBackParserService adminCallBackParserService;
     @Autowired
-    private AdminTelegramMessageParser adminTelegramMessageParser;
+    private AdminTelegramMessageParserService adminTelegramMessageParserService;
     @Autowired
-    private TelegramMessageSender telegramMessageSender;
+    private TelegramMessageSenderService telegramMessageSenderService;
 
     @Override
     public void parseUpdate(Update update) {
@@ -36,25 +36,25 @@ public class AdminPanelUpdateParserImpl implements AdminPanelUpdateParser {
 
                 tUser = telegramUserRepositoryService.findByChatId(update.getCallBackQuery().getMessage().getChat().getId());
                 if(tUser.getUser().getRole()==Role.CUSTOMER){
-                    telegramMessageSender.simpleMessage("U are not a personal of Lviv croissants!",update.getCallBackQuery().getMessage());
+                    telegramMessageSenderService.simpleMessage("U are not a personal of Lviv croissants!",update.getCallBackQuery().getMessage());
                     return;
                 }
-                adminCallBackParser.parseAdminCallBackQuery(update.getCallBackQuery());
+                adminCallBackParserService.parseAdminCallBackQuery(update.getCallBackQuery());
             } else if (update.getMessage() != null) {
                 update.getMessage().setPlatform(Platform.TELEGRAM_ADMIN_PANEL_BOT);
 
                 tUser = telegramUserRepositoryService.findByChatId(update.getMessage().getChat().getId());
                 if(tUser.getUser().getRole()==Role.CUSTOMER && !update.getMessage().getText().equals("/start")){
-                    telegramMessageSender.simpleMessage("U are not a personal of Lviv croissants!",update.getMessage());
+                    telegramMessageSenderService.simpleMessage("U are not a personal of Lviv croissants!",update.getMessage());
                     return;
                 }
-                adminTelegramMessageParser.parseMessage(update.getMessage());
+                adminTelegramMessageParserService.parseMessage(update.getMessage());
 
             }
 
         } catch (Exception ex) {
             try {
-                telegramMessageSender.errorMessage(update.getMessage());
+                telegramMessageSenderService.errorMessage(update.getMessage());
                 telegramUserRepositoryService.changeStatus(telegramUserRepositoryService.findByChatId(update.getMessage().getChat().getId()), null);
             } catch (Exception e) {
                 e.printStackTrace();

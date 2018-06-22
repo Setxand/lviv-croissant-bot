@@ -17,7 +17,7 @@ import com.bots.lviv_croissant_bot.service.messenger.QuickReplyParserService;
 import com.bots.lviv_croissant_bot.service.peopleRegister.MUserRepositoryService;
 import com.bots.lviv_croissant_bot.service.support.RecognizeService;
 import com.bots.lviv_croissant_bot.service.support.TextFormatter;
-import com.bots.lviv_croissant_bot.service.telegram.TelegramMessageSender;
+import com.bots.lviv_croissant_bot.service.telegram.TelegramMessageSenderService;
 import com.bots.lviv_croissant_bot.service.uni.CroissantService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,7 +84,7 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
     @Autowired
     private MUserRepository mUserRepository;
     @Autowired
-    private TelegramMessageSender telegramMessageSender;
+    private TelegramMessageSenderService telegramMessageSenderService;
     private   final static Logger logger = LoggerFactory.getLogger(QuickReplyParserServiceImpl.class);
 
     private static Map<String, Method> methodsMap;
@@ -149,8 +149,8 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
     private void notApproved(String context) {
         com.bots.lviv_croissant_bot.dto.telegram.Message message = new com.bots.lviv_croissant_bot.dto.telegram.Message();
         message.setChat(new Chat(Integer.parseInt(context)));
-        telegramMessageSender.simpleMessage(ResourceBundle.getBundle("dictionary").getString(NOT_APPROVED.name()), message);
-        telegramMessageSender.simpleMessage(ResourceBundle.getBundle("dictionary").getString(NUMBER_OF_PHONE.name()),message);
+        telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(NOT_APPROVED.name()), message);
+        telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(NUMBER_OF_PHONE.name()),message);
         telegramUserRepositoryService.changeStatus(telegramUserRepositoryService.findByChatId(message.getChat().getId()),PHONE_ENTERING_IN_START_STATUS);
     }
 
@@ -163,8 +163,8 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
         messageSenderService.sendSimpleMessage(ResourceBundle.getBundle("dictionary").getString(SYNCH.name()), messaging.getSender().getId());
         com.bots.lviv_croissant_bot.dto.telegram.Message message = new com.bots.lviv_croissant_bot.dto.telegram.Message();
         message.setChat(new Chat(tUser.getChatId()));
-        telegramMessageSender.simpleMessage(ResourceBundle.getBundle("dictionary").getString(SYNCH.name()), message);
-        telegramMessageSender.sendActions(message);
+        telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(SYNCH.name()), message);
+        telegramMessageSenderService.sendActions(message);
     }
 
 

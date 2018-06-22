@@ -3,7 +3,7 @@ package com.bots.lviv_croissant_bot;
 import com.bots.lviv_croissant_bot.dto.messanger.*;
 import com.bots.lviv_croissant_bot.dto.telegram.Chat;
 import com.bots.lviv_croissant_bot.dto.telegram.Message;
-import com.bots.lviv_croissant_bot.service.telegram.TelegramMessageSender;
+import com.bots.lviv_croissant_bot.service.telegram.TelegramMessageSenderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ import static com.bots.lviv_croissant_bot.constantEnum.messengerEnum.type.Button
 @Component
 public class ServerStarting {
     @Autowired
-    private TelegramMessageSender telegramMessageSender;
+    private TelegramMessageSenderService telegramMessageSenderService;
     @Value("${messenger.page.access.token}")
     private String PAGE_ACCESS_TOKEN;
 
@@ -79,7 +79,7 @@ public class ServerStarting {
 
                 Message message = new Message();
                 message.setChat(new Chat(388073901));
-                telegramMessageSender.simpleMessage("Server has ran", message);
+                telegramMessageSenderService.simpleMessage("Server has ran", message);
             } catch (Exception e) {
                 logger.error(e.getStackTrace().toString());
             }

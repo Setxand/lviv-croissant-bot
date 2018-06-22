@@ -13,13 +13,13 @@ import com.bots.lviv_croissant_bot.exception.ElementNoFoundException;
 import com.bots.lviv_croissant_bot.repository.CustomerOrderingRepository;
 import com.bots.lviv_croissant_bot.repository.SpeakingMessagesRepository;
 import com.bots.lviv_croissant_bot.repository.UserRepository;
-import com.bots.lviv_croissant_bot.service.telegram.event.TelegramCreatingOwnCroissant;
+import com.bots.lviv_croissant_bot.service.telegram.event.TelegramCreatingOwnCroissantService;
 import com.bots.lviv_croissant_bot.service.messenger.MessageSenderService;
 import com.bots.lviv_croissant_bot.service.peopleRegister.TelegramUserRepositoryService;
 import com.bots.lviv_croissant_bot.service.support.RecognizeService;
 import com.bots.lviv_croissant_bot.service.support.TextFormatter;
-import com.bots.lviv_croissant_bot.service.telegram.TelegramMessageParserHelper;
-import com.bots.lviv_croissant_bot.service.telegram.TelegramMessageSender;
+import com.bots.lviv_croissant_bot.service.telegram.TelegramMessageParserHelperService;
+import com.bots.lviv_croissant_bot.service.telegram.TelegramMessageSenderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,15 +39,15 @@ import static com.bots.lviv_croissant_bot.constantEnum.telegramEnum.TelegramUser
 import static com.bots.lviv_croissant_bot.constantEnum.telegramEnum.TelegramUserStatus.PHONE_ENTERING_IN_START_STATUS;
 
 @Service
-public class TelegramMessageParserHelperImpl implements TelegramMessageParserHelper {
+public class TelegramMessageParserHelperServiceImpl implements TelegramMessageParserHelperService {
     @Autowired
     private TelegramUserRepositoryService telegramUserRepositoryService;
     @Autowired
     private CustomerOrderingRepository customerOrderingRepositoryService;
     @Autowired
-    private TelegramMessageSender telegramMessageSender;
+    private TelegramMessageSenderService telegramMessageSenderService;
     @Autowired
-    private TelegramCreatingOwnCroissant telegramCreatingOwnCroissant;
+    private TelegramCreatingOwnCroissantService telegramCreatingOwnCroissant;
     @Autowired
     private SpeakingMessagesRepository speakingMessagesRepositoryService;
     @Autowired
@@ -56,7 +56,7 @@ public class TelegramMessageParserHelperImpl implements TelegramMessageParserHel
     private MessageSenderService messageSenderService;
     @Autowired
     private RecognizeService recognizeService;
-    final static Logger logger = LoggerFactory.getLogger(TelegramMessageParserHelperImpl.class);
+    final static Logger logger = LoggerFactory.getLogger(TelegramMessageParserHelperServiceImpl.class);
     @Value("${messenger.subscription.url}")
     private String SUBSCRIPTION_URL;
     @Value("${messenger.app.verify.token}")
@@ -90,12 +90,12 @@ public class TelegramMessageParserHelperImpl implements TelegramMessageParserHel
         else userSettings(message);
         SpeakingMessage speakingMessage = speakingMessagesRepositoryService.findById(HELLO_MESSAGE.name()).orElseThrow(ElementNoFoundException::new);
         if(message.getPlatform()==null)
-        telegramMessageSender.simpleMessage(speakingMessage.getMessage(),message);
+        telegramMessageSenderService.simpleMessage(speakingMessage.getMessage(),message);
         else{
             String helloMessage = ResourceBundle.getBundle("dictionary").getString(HELLO_SERVICE.name());
-            telegramMessageSender.simpleMessage(helloMessage,message);
+            telegramMessageSenderService.simpleMessage(helloMessage,message);
         }
-        telegramMessageSender.simpleQuestion(QUESTION_HAVING_MESSENGER_DATA,"?",ResourceBundle.getBundle("dictionary").getString(HAVING_MESSENGER.name()),message);
+        telegramMessageSenderService.simpleQuestion(QUESTION_HAVING_MESSENGER_DATA,"?",ResourceBundle.getBundle("dictionary").getString(HAVING_MESSENGER.name()),message);
 
 
     }
@@ -120,7 +120,7 @@ public class TelegramMessageParserHelperImpl implements TelegramMessageParserHel
           customerOrderingRepositoryService.delete(customerOrdering);
         }
         telegramUserRepositoryService.saveAndFlush(tUser);
-        telegramMessageSender.simpleMessage( ResourceBundle.getBundle("dictionary").getString(DONE.name()),message);
+        telegramMessageSenderService.simpleMessage( ResourceBundle.getBundle("dictionary").getString(DONE.name()),message);
     }
 
     @Override
@@ -137,14 +137,14 @@ public class TelegramMessageParserHelperImpl implements TelegramMessageParserHel
             checkingNumber(message);
         }
         else {
-            telegramMessageSender.simpleMessage(ResourceBundle.getBundle("dictionary").getString(NON_CORRECT_FORMAT_OF_NUMBER_OF_TELEPHONE.name()),message);
-            telegramMessageSender.simpleMessage(ResourceBundle.getBundle("dictionary").getString(NUMBER_OF_PHONE.name()),message);
+            telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(NON_CORRECT_FORMAT_OF_NUMBER_OF_TELEPHONE.name()),message);
+            telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(NUMBER_OF_PHONE.name()),message);
         }
     }
 
     @Override
     public void helpReinputData(CallBackQuery callBackQuery) {
-        telegramMessageSender.simpleMessage(ResourceBundle.getBundle("dictionary").getString(NUMBER_OF_PHONE.name()),callBackQuery.getMessage());
+        telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(NUMBER_OF_PHONE.name()),callBackQuery.getMessage());
         telegramUserRepositoryService.changeStatus(telegramUserRepositoryService.findByChatId(callBackQuery.getMessage().getChat().getId()),PHONE_ENTERING_IN_START_STATUS);
     }
 
@@ -160,7 +160,7 @@ public class TelegramMessageParserHelperImpl implements TelegramMessageParserHel
     }
 
     private void ifUserPresent(Optional<User> userOptional, TUser tUser, Message message) {
-        telegramMessageSender.simpleMessage(ResourceBundle.getBundle("dictionary").getString(FOUND_MESSENGER_USER.name()), message);
+        telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(FOUND_MESSENGER_USER.name()), message);
         MUser mUser = userOptional.get().getMUser();
         messageSenderService.sendSimpleQuestion(mUser.getRecipientId(), recognizeService.recognize(ServerSideSpeaker.APPROVE.name(), mUser.getRecipientId()), QUESTION_APPROVING.name() + "?" + message.getChat().getId(), "&");
     }
@@ -168,7 +168,7 @@ public class TelegramMessageParserHelperImpl implements TelegramMessageParserHel
     private void userCreating(Message message, TUser tUser) {
         List<InlineKeyboardButton>inlineKeyboardButtons = Arrays.asList(new InlineKeyboardButton(ResourceBundle.getBundle("buttons").getString(CANCEL_INLINE_BUTTON.name()),CANCEL_INPUT_NUMBER_DATA.name()+"?"+tUser.getChatId()),
                 new InlineKeyboardButton(ResourceBundle.getBundle("buttons").getString(REINPUT_INLINE_BUTTON.name()), RERINPUT_NUMBER_DATA.name()));
-        telegramMessageSender.sendInlineButtons(Arrays.asList(inlineKeyboardButtons),ResourceBundle.getBundle("dictionary").getString(NO_SUCH_USERS.name()),message);
+        telegramMessageSenderService.sendInlineButtons(Arrays.asList(inlineKeyboardButtons),ResourceBundle.getBundle("dictionary").getString(NO_SUCH_USERS.name()),message);
 
     }
 

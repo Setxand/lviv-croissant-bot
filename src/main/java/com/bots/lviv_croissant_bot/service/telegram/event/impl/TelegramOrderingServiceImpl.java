@@ -8,11 +8,11 @@ import com.bots.lviv_croissant_bot.constantEnum.telegramEnum.CallBackData;
 import com.bots.lviv_croissant_bot.dto.telegram.Message;
 import com.bots.lviv_croissant_bot.dto.telegram.button.InlineKeyboardButton;
 import com.bots.lviv_croissant_bot.repository.CustomerOrderingRepository;
-import com.bots.lviv_croissant_bot.service.telegram.event.TelegramGetMenu;
-import com.bots.lviv_croissant_bot.service.telegram.event.TelegramOrdering;
+import com.bots.lviv_croissant_bot.service.telegram.event.TelegramGetMenuService;
+import com.bots.lviv_croissant_bot.service.telegram.event.TelegramOrderingService;
 import com.bots.lviv_croissant_bot.service.peopleRegister.TelegramUserRepositoryService;
 import com.bots.lviv_croissant_bot.service.support.TextFormatter;
-import com.bots.lviv_croissant_bot.service.telegram.TelegramMessageSender;
+import com.bots.lviv_croissant_bot.service.telegram.TelegramMessageSenderService;
 import com.bots.lviv_croissant_bot.service.uni.CroissantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,17 +26,17 @@ import static com.bots.lviv_croissant_bot.constantEnum.telegramEnum.CallBackData
 import static com.bots.lviv_croissant_bot.constantEnum.telegramEnum.TelegramUserStatus.*;
 
 @Service
-public class TelegramOrderingImpl implements TelegramOrdering {
+public class TelegramOrderingServiceImpl implements TelegramOrderingService {
     @Autowired
     private TelegramUserRepositoryService telegramUserRepositoryService;
     @Autowired
-    private TelegramMessageSender telegramMessageSender;
+    private TelegramMessageSenderService telegramMessageSenderService;
     @Autowired
     private CroissantService croissantRepositoryService;
     @Autowired
     private CustomerOrderingRepository customerOrderingRepositoryService;
     @Autowired
-    private TelegramGetMenu telegramGetMenu;
+    private TelegramGetMenuService telegramGetMenuService;
     @Override
     public void makeOrder(Message message) {
         TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
@@ -58,7 +58,7 @@ public class TelegramOrderingImpl implements TelegramOrdering {
                 oneMoreOrderingGettingMenuStatus(message,tUser);
                 break;
             default:
-                telegramMessageSender.errorMessage(message);
+                telegramMessageSenderService.errorMessage(message);
                 break;
         }
     }
@@ -80,8 +80,8 @@ public class TelegramOrderingImpl implements TelegramOrdering {
         else {
             String nonCorrect = ResourceBundle.getBundle("dictionary").getString(NON_CORRECT_FORMAT_OF_TIME.name());
             String enterAddress = ResourceBundle.getBundle("dictionary").getString(TIME_OF_ORDERING.name());
-            telegramMessageSender.simpleMessage(nonCorrect,message);
-            telegramMessageSender.simpleMessage(enterAddress,message);
+            telegramMessageSenderService.simpleMessage(nonCorrect,message);
+            telegramMessageSenderService.simpleMessage(enterAddress,message);
         }
     }
 
@@ -96,8 +96,8 @@ public class TelegramOrderingImpl implements TelegramOrdering {
         {
             String nonCorrect = ResourceBundle.getBundle("dictionary").getString(NON_CORRECT_FORMAT_OF_ADDRESS.name());
             String enterAddress = ResourceBundle.getBundle("dictionary").getString(ADDRESS_OF_CUSTOMER.name());
-            telegramMessageSender.simpleMessage(nonCorrect,message);
-            telegramMessageSender.simpleMessage(enterAddress,message);
+            telegramMessageSenderService.simpleMessage(nonCorrect,message);
+            telegramMessageSenderService.simpleMessage(enterAddress,message);
         }
     }
 
@@ -113,8 +113,8 @@ public class TelegramOrderingImpl implements TelegramOrdering {
         else {
             String nonCorrect = ResourceBundle.getBundle("dictionary").getString(NON_CORRECT_FORMAT_OF_NUMBER_OF_TELEPHONE.name());
             String enterNumber = ResourceBundle.getBundle("dictionary").getString(NUMBER_OF_PHONE.name());
-            telegramMessageSender.simpleMessage(nonCorrect,message);
-            telegramMessageSender.simpleMessage(enterNumber,message);
+            telegramMessageSenderService.simpleMessage(nonCorrect,message);
+            telegramMessageSenderService.simpleMessage(enterNumber,message);
         }
     }
 
@@ -132,7 +132,7 @@ public class TelegramOrderingImpl implements TelegramOrdering {
         tUser.addCustomerOrdering(customerOrdering);
         if (tUser.getUser().getPhoneNumber() == null) {
             tUser = telegramUserRepositoryService.saveAndFlush(tUser);
-            telegramMessageSender.simpleMessage(ResourceBundle.getBundle("dictionary").getString(NUMBER_OF_PHONE.name()),message);
+            telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(NUMBER_OF_PHONE.name()),message);
             telegramUserRepositoryService.changeStatus(tUser,FILLING_PHONE_NUMBER_STATUS);
         } else {
             customerOrdering.setPhoneNumber(tUser.getUser().getPhoneNumber());
@@ -173,7 +173,7 @@ public class TelegramOrderingImpl implements TelegramOrdering {
 
     private void orderingFinishing(Message message, CustomerOrdering customerOrdering, TUser tUser) {
         String oneMoreOrderingText = ResourceBundle.getBundle("dictionary").getString(ORDER_SOMETHING_YET.name());
-        telegramMessageSender.simpleQuestion(ONE_MORE_ORDERING_DATA,"?",oneMoreOrderingText,message);
+        telegramMessageSenderService.simpleQuestion(ONE_MORE_ORDERING_DATA,"?",oneMoreOrderingText,message);
 
     }
     @Override
@@ -182,29 +182,29 @@ public class TelegramOrderingImpl implements TelegramOrdering {
         CustomerOrdering customerOrdering = customerOrderingRepositoryService.findTopByTUserOrderByIdDesc(tUser);
         telegramUserRepositoryService.changeStatus(tUser,null);
         String done = ResourceBundle.getBundle("dictionary").getString(ORDERING_WAS_DONE.name());
-        telegramMessageSender.simpleMessage(done,message);
+        telegramMessageSenderService.simpleMessage(done,message);
         for(String i: customerOrdering.getCroissants()){
             CroissantEntity croissantEntity = croissantRepositoryService.findOne(Long.parseLong(i));
-            telegramMessageSender.sendPhoto(croissantEntity.getImageUrl(), croissantEntity.getName()+"\n"+ croissantEntity.getCroissantsFillings().toString(),null,message);
+            telegramMessageSenderService.sendPhoto(croissantEntity.getImageUrl(), croissantEntity.getName()+"\n"+ croissantEntity.getCroissantsFillings().toString(),null,message);
 
         }
-        telegramMessageSender.simpleMessage("price:"+customerOrdering.getPrice(),message);
+        telegramMessageSenderService.simpleMessage("price:"+customerOrdering.getPrice(),message);
         sendCancelButton(message,customerOrdering);
-        telegramMessageSender.sendActions(message);
+        telegramMessageSenderService.sendActions(message);
     }
 
     private void sendCancelButton(Message message, CustomerOrdering customerOrdering) {
         String text = ResourceBundle.getBundle("dictionary").getString(ServerSideSpeaker.CANCEL.name());
         List<InlineKeyboardButton> buttons = Arrays.asList(new InlineKeyboardButton(text, CallBackData.CANCEL_DATA.name()+"?"+customerOrdering.getId()));
         String mes = ResourceBundle.getBundle("dictionary").getString(ServerSideSpeaker.CANCEL_TEXT.name());
-        telegramMessageSender.sendInlineButtons(Arrays.asList(buttons),mes,message);
+        telegramMessageSenderService.sendInlineButtons(Arrays.asList(buttons),mes,message);
     }
 
     private void timeReq(Message message) {
-        telegramMessageSender.simpleMessage(ResourceBundle.getBundle("dictionary").getString(TIME_OF_ORDERING.name()),message);
+        telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(TIME_OF_ORDERING.name()),message);
     }
 
     private void addressReq(Message message) {
-        telegramMessageSender.simpleMessage( ResourceBundle.getBundle("dictionary").getString(ADDRESS_OF_CUSTOMER.name()),message);
+        telegramMessageSenderService.simpleMessage( ResourceBundle.getBundle("dictionary").getString(ADDRESS_OF_CUSTOMER.name()),message);
     }
 }

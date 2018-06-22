@@ -8,10 +8,10 @@ import com.bots.lviv_croissant_bot.dto.telegram.Message;
 import com.bots.lviv_croissant_bot.exception.ElementNoFoundException;
 import com.bots.lviv_croissant_bot.repository.CroisantsFillingEntityRepository;
 import com.bots.lviv_croissant_bot.repository.MenuOfFillingRepository;
-import com.bots.lviv_croissant_bot.service.telegram.event.TelegramCreatingOwnCroissant;
-import com.bots.lviv_croissant_bot.service.telegram.event.TelegramGetMenu;
+import com.bots.lviv_croissant_bot.service.telegram.event.TelegramCreatingOwnCroissantService;
+import com.bots.lviv_croissant_bot.service.telegram.event.TelegramGetMenuService;
 import com.bots.lviv_croissant_bot.service.peopleRegister.TelegramUserRepositoryService;
-import com.bots.lviv_croissant_bot.service.telegram.TelegramMessageSender;
+import com.bots.lviv_croissant_bot.service.telegram.TelegramMessageSenderService;
 import com.bots.lviv_croissant_bot.service.uni.CroissantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,11 +24,11 @@ import static com.bots.lviv_croissant_bot.constantEnum.telegramEnum.TelegramUser
 import static com.bots.lviv_croissant_bot.constantEnum.telegramEnum.TelegramUserStatus.INPUTTING_FILLINGS_IN_OWN_CROISSANT_STATUS;
 
 @Service
-public class TelegramCreatingOwnCroissantImpl implements TelegramCreatingOwnCroissant {
+public class TelegramCreatingOwnCroissantServiceImpl implements TelegramCreatingOwnCroissantService {
     @Autowired
-    private TelegramMessageSender telegramMessageSender;
+    private TelegramMessageSenderService telegramMessageSenderService;
     @Autowired
-    private TelegramGetMenu telegramGetMenu;
+    private TelegramGetMenuService telegramGetMenuService;
     @Autowired
     private TelegramUserRepositoryService telegramUserRepositoryService;
     @Autowired
@@ -48,7 +48,7 @@ public class TelegramCreatingOwnCroissantImpl implements TelegramCreatingOwnCroi
                 inputtingFillingsIfOnwCroissant(message,tUser);
                 break;
             default:
-                telegramMessageSender.errorMessage(message);                break;
+                telegramMessageSenderService.errorMessage(message);                break;
         }
 
 
@@ -81,24 +81,24 @@ public class TelegramCreatingOwnCroissantImpl implements TelegramCreatingOwnCroi
         }
         catch (Exception ex){
             ex.printStackTrace();
-            telegramMessageSender.simpleMessage(ResourceBundle.getBundle("dictionary").getString(NON_CORRECT_FORMAT_OF_FILLING.name()),message);
-            telegramMessageSender.simpleMessage(ResourceBundle.getBundle("dictionary").getString(ID_OF_FILLING.name()),message);
+            telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(NON_CORRECT_FORMAT_OF_FILLING.name()),message);
+            telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(ID_OF_FILLING.name()),message);
         }
 
 
     }
 
     private void finalCreating(Message message, TUser tUser) {
-        telegramMessageSender.simpleMessage(ResourceBundle.getBundle("dictionary").getString(CREATED_CROISSANT.name()),message);
+        telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(CREATED_CROISSANT.name()),message);
         telegramUserRepositoryService.changeStatus(tUser,GETTING_MENU_STATUS);
         message.setText(CroissantsTypes.OWN.name());
-        telegramGetMenu.getMenu(message);
+        telegramGetMenuService.getMenu(message);
     }
 
     private void startCreatingOwnCroissant(Message message, TUser tUser) {
-        telegramMessageSender.simpleMessage("Here you can to create your own croissantEntity!!!",message);
-        telegramGetMenu.getMenuOfFillings(message);
-        telegramMessageSender.simpleMessage( ResourceBundle.getBundle("dictionary").getString(ID_OF_FILLING.name()),message);
+        telegramMessageSenderService.simpleMessage("Here you can to create your own croissantEntity!!!",message);
+        telegramGetMenuService.getMenuOfFillings(message);
+        telegramMessageSenderService.simpleMessage( ResourceBundle.getBundle("dictionary").getString(ID_OF_FILLING.name()),message);
         telegramUserRepositoryService.changeStatus(tUser, INPUTTING_FILLINGS_IN_OWN_CROISSANT_STATUS);
     }
 }

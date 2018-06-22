@@ -3,7 +3,7 @@ package com.bots.lviv_croissant_bot.service.messenger.impl;
 import com.bots.lviv_croissant_bot.DemoApplicationTests;
 import org.junit.Test;
 
-public class TelegramMessageSenderImplTest extends DemoApplicationTests{
+public class TelegramMessageSenderServiceImplTest extends DemoApplicationTests{
 
 
     @Test

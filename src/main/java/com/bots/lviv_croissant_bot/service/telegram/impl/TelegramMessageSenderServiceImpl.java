@@ -8,7 +8,7 @@ import com.bots.lviv_croissant_bot.dto.telegram.ReplyKeyboardRemove;
 import com.bots.lviv_croissant_bot.dto.telegram.TelegramRequest;
 import com.bots.lviv_croissant_bot.dto.telegram.button.*;
 import com.bots.lviv_croissant_bot.repository.SpeakingMessagesRepository;
-import com.bots.lviv_croissant_bot.service.telegram.TelegramMessageSender;
+import com.bots.lviv_croissant_bot.service.telegram.TelegramMessageSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ import static com.bots.lviv_croissant_bot.constantEnum.telegramEnum.CallBackData
 import static com.bots.lviv_croissant_bot.constantEnum.telegramEnum.CallBackData.MENU_DATA;
 
 @Service
-public class TelegramMessageSenderImpl implements TelegramMessageSender {
+public class TelegramMessageSenderServiceImpl implements TelegramMessageSenderService {
     @Autowired
     private SpeakingMessagesRepository speakingMessagesRepositoryService;
     @Value("${telegram.url}")

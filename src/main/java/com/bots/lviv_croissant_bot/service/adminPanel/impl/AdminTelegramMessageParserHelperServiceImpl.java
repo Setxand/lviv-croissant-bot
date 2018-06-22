@@ -6,9 +6,9 @@ import com.bots.lviv_croissant_bot.constantEnum.messengerEnum.Role;
 import com.bots.lviv_croissant_bot.dto.telegram.Message;
 import com.bots.lviv_croissant_bot.dto.telegram.button.InlineKeyboardButton;
 import com.bots.lviv_croissant_bot.repository.SpeakingMessagesRepository;
-import com.bots.lviv_croissant_bot.service.adminPanel.AdminTelegramMessageParserHelper;
+import com.bots.lviv_croissant_bot.service.adminPanel.AdminTelegramMessageParserHelperService;
 import com.bots.lviv_croissant_bot.service.peopleRegister.TelegramUserRepositoryService;
-import com.bots.lviv_croissant_bot.service.telegram.TelegramMessageSender;
+import com.bots.lviv_croissant_bot.service.telegram.TelegramMessageSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,11 +22,11 @@ import static com.bots.lviv_croissant_bot.constantEnum.telegramEnum.CallBackData
 import static com.bots.lviv_croissant_bot.constantEnum.telegramEnum.CallBackData.SETTING_ROLE_DATA_2;
 
 @Service
-public class AdminTelegramMessageParserHelperImpl implements AdminTelegramMessageParserHelper {
+public class AdminTelegramMessageParserHelperServiceImpl implements AdminTelegramMessageParserHelperService {
     @Autowired
     private TelegramUserRepositoryService telegramUserRepositoryService;
     @Autowired
-    private TelegramMessageSender telegramMessageSender;
+    private TelegramMessageSenderService telegramMessageSenderService;
     @Autowired
     private SpeakingMessagesRepository speakingMessagesRepositoryService;
     @Override
@@ -45,14 +45,14 @@ public class AdminTelegramMessageParserHelperImpl implements AdminTelegramMessag
         catch (Exception ex){
             telegramUserRepositoryService.changeStatus(telegramUserRepositoryService.findByChatId(message.getChat().getId()),null);
             String text = "MUser with username "+message.getText()+" is not exists in our database! He needs to enter command /start!!!";
-            telegramMessageSender.simpleMessage(text,message);
+            telegramMessageSenderService.simpleMessage(text,message);
         }
-        telegramMessageSender.removeKeyboardButtons(message);
+        telegramMessageSenderService.removeKeyboardButtons(message);
         List<InlineKeyboardButton>buttons = Arrays.asList(new InlineKeyboardButton("Admin", SETTING_ROLE_DATA_1.name()+"?"+Role.ADMIN.name()+"&"+message.getText()),
                 new InlineKeyboardButton("Personal",SETTING_ROLE_DATA_1.name()+"?"+Role.PERSONAL.name()+"&"+message.getText()),
                 new InlineKeyboardButton("CourierService",SETTING_ROLE_DATA_1.name()+"?"+Role.COURIER.name()+"&"+message.getText()),
                 new InlineKeyboardButton("Customer",SETTING_ROLE_DATA_1.name()+"?"+Role.CUSTOMER.name()+"&"+message.getText()));
-        telegramMessageSender.sendInlineButtons(Arrays.asList(buttons),"Choose role for " + message.getText()+":",message);
+        telegramMessageSenderService.sendInlineButtons(Arrays.asList(buttons),"Choose role for " + message.getText()+":",message);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class AdminTelegramMessageParserHelperImpl implements AdminTelegramMessag
         speakingMessage.setMessage(message.getText());
         speakingMessagesRepositoryService.saveAndFlush(speakingMessage);
         String text = String.format(ResourceBundle.getBundle("dictionary").getString(NEW_TEXT_HAS_SET.name()),message.getText());
-        telegramMessageSender.simpleMessage(text,message);
+        telegramMessageSenderService.simpleMessage(text,message);
         TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
         telegramUserRepositoryService.changeStatus(tUser,null);
     }
@@ -71,7 +71,7 @@ public class AdminTelegramMessageParserHelperImpl implements AdminTelegramMessag
 
             TUser tUser = telegramUserRepositoryService.findByUserName(message.getText());
             String text = "Are you sure you want to set this role for"+tUser.getName()+" "+tUser.getLastName()+" with username \""+tUser.getUserName()+"\"?";
-            telegramMessageSender.simpleQuestion(SETTING_ROLE_DATA_2,"?"+tUser.getUserName()+"&",text,message);
+            telegramMessageSenderService.simpleQuestion(SETTING_ROLE_DATA_2,"?"+tUser.getUserName()+"&",text,message);
 
 
 

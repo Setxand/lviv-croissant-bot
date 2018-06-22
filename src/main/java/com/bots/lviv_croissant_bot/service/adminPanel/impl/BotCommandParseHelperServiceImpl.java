@@ -14,10 +14,10 @@ import com.bots.lviv_croissant_bot.dto.telegram.button.InlineKeyboardMarkup;
 import com.bots.lviv_croissant_bot.dto.telegram.button.Markup;
 import com.bots.lviv_croissant_bot.exception.ElementNoFoundException;
 import com.bots.lviv_croissant_bot.repository.CustomerOrderingRepository;
-import com.bots.lviv_croissant_bot.service.adminPanel.BotCommandParseHelper;
+import com.bots.lviv_croissant_bot.service.adminPanel.BotCommandParseHelperService;
 import com.bots.lviv_croissant_bot.service.peopleRegister.TelegramUserRepositoryService;
 import com.bots.lviv_croissant_bot.service.support.TextFormatter;
-import com.bots.lviv_croissant_bot.service.telegram.TelegramMessageSender;
+import com.bots.lviv_croissant_bot.service.telegram.TelegramMessageSenderService;
 import com.bots.lviv_croissant_bot.service.uni.CroissantService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,9 +35,9 @@ import static com.bots.lviv_croissant_bot.constantEnum.messengerEnum.speaking.Se
 import static com.bots.lviv_croissant_bot.constantEnum.telegramEnum.CallBackData.*;
 
 @Service
-public class BotCommandParseHelperImpl implements BotCommandParseHelper {
+public class BotCommandParseHelperServiceImpl implements BotCommandParseHelperService {
     @Autowired
-    private TelegramMessageSender telegramMessageSender;
+    private TelegramMessageSenderService telegramMessageSenderService;
     @Autowired
     private TelegramUserRepositoryService telegramUserRepositoryService;
     @Autowired
@@ -52,7 +52,7 @@ public class BotCommandParseHelperImpl implements BotCommandParseHelper {
     private String SUBSCRIPTION_URL;
     @Value("${picture.ordering}")
     private String PICTURE_ORDERING;
-    private   final static Logger logger = LoggerFactory.getLogger(BotCommandParseHelperImpl.class);
+    private   final static Logger logger = LoggerFactory.getLogger(BotCommandParseHelperServiceImpl.class);
 
 
 
@@ -63,14 +63,14 @@ public class BotCommandParseHelperImpl implements BotCommandParseHelper {
             if(command!=BotCommands.HELP && command!=BotCommands.START)
             helpMessage.append("/"+command.name().toLowerCase()+" - "+ResourceBundle.getBundle("botCommands").getString(command.name())+"\n");
         }
-        telegramMessageSender.simpleMessage(helpMessage.toString(),message);
+        telegramMessageSenderService.simpleMessage(helpMessage.toString(),message);
     }
 
     @Override
     public void helpSetUpMessenger(Message message) {
         TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
         if(tUser.getUser().getRole()!= Role.ADMIN){
-            telegramMessageSender.noEnoughPermissions(message);
+            telegramMessageSenderService.noEnoughPermissions(message);
             return;
         }
         Shell setMessengerWebHook = new Shell();
@@ -86,11 +86,11 @@ public class BotCommandParseHelperImpl implements BotCommandParseHelper {
         try {
             ResponseEntity<?> messengerWebhook = new RestTemplate().postForEntity(SUBSCRIPTION_URL,setMessengerWebHook,Object.class);
             logger.debug("Messenger webhook:"+messengerWebhook.getBody());
-            telegramMessageSender.simpleMessage("Facebook messenger: "+messengerWebhook.getBody().toString()+" /help",message);
+            telegramMessageSenderService.simpleMessage("Facebook messenger: "+messengerWebhook.getBody().toString()+" /help",message);
         }
         catch (Exception ex){
             logger.error("Error",ex);
-            telegramMessageSender.simpleMessage(ex.getMessage(),message);
+            telegramMessageSenderService.simpleMessage(ex.getMessage(),message);
         }
     }
 
@@ -123,7 +123,7 @@ public class BotCommandParseHelperImpl implements BotCommandParseHelper {
         callBackQuery.getMessage().getChat().setId(tUser.getChatId());
         callBackQuery.getMessage().setPlatform(null);
         String text = ResourceBundle.getBundle("dictionary").getString(RECEiVE_ORDER.name());
-        telegramMessageSender.simpleQuestion(QUESTION_COMPLETE_DATA,"?"+orderId+"&",text,callBackQuery.getMessage());
+        telegramMessageSenderService.simpleQuestion(QUESTION_COMPLETE_DATA,"?"+orderId+"&",text,callBackQuery.getMessage());
     }
 
     private void getListOfOrderings(CallBackQuery callBackQuery, CustomerOrdering customerOrdering, String uah, Markup markup, StringBuilder croissants) {
@@ -140,6 +140,6 @@ public class BotCommandParseHelperImpl implements BotCommandParseHelper {
         String caption = customerOrdering.getId() + ". " + "time: " + customerOrdering.getTime() + "\naddress: " + customerOrdering.getAddress() + "" +
                 "\nphone number: " + customerOrdering.getPhoneNumber() + "\n" + croissants + "\n" +
                 customerOrdering.getPrice() + uah;
-        telegramMessageSender.sendPhoto(PICTURE_ORDERING, caption, markup, callBackQuery.getMessage());
+        telegramMessageSenderService.sendPhoto(PICTURE_ORDERING, caption, markup, callBackQuery.getMessage());
     }
 }
