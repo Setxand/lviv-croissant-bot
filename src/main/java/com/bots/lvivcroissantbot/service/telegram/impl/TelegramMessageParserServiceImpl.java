@@ -1,16 +1,16 @@
 package com.bots.lvivcroissantbot.service.telegram.impl;
 
-import com.bots.lvivcroissantbot.entity.register.TUser;
 import com.bots.lvivcroissantbot.constantenum.telegram.MessageCases;
 import com.bots.lvivcroissantbot.constantenum.telegram.TelegramUserStatus;
 import com.bots.lvivcroissantbot.dto.telegram.Message;
-import com.bots.lvivcroissantbot.service.telegram.event.TelegramCreatingOwnCroissantService;
-import com.bots.lvivcroissantbot.service.telegram.event.TelegramGetMenuService;
-import com.bots.lvivcroissantbot.service.telegram.event.TelegramOrderingService;
+import com.bots.lvivcroissantbot.entity.register.TUser;
 import com.bots.lvivcroissantbot.service.peopleregister.TelegramUserRepositoryService;
 import com.bots.lvivcroissantbot.service.telegram.TelegramMessageParserHelperService;
 import com.bots.lvivcroissantbot.service.telegram.TelegramMessageParserService;
 import com.bots.lvivcroissantbot.service.telegram.TelegramMessageSenderService;
+import com.bots.lvivcroissantbot.service.telegram.event.TelegramCreatingOwnCroissantService;
+import com.bots.lvivcroissantbot.service.telegram.event.TelegramGetMenuService;
+import com.bots.lvivcroissantbot.service.telegram.event.TelegramOrderingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,10 +28,11 @@ public class TelegramMessageParserServiceImpl implements TelegramMessageParserSe
     private TelegramOrderingService telegramOrderingService;
     @Autowired
     private TelegramCreatingOwnCroissantService telegramCreatingOwnCroissant;
+
     @Override
     public void parseMessage(Message message) {
-        if(message.getText().contains(" "))
-            message.setText(message.getText().replaceAll(" ","_"));
+        if (message.getText().contains(" "))
+            message.setText(message.getText().replaceAll(" ", "_"));
         if (message.getText().equals("/start")) {
             start(message);
         } else {
@@ -48,7 +49,7 @@ public class TelegramMessageParserServiceImpl implements TelegramMessageParserSe
                     menu(message, tUser);
                     break;
                 case DELETE_ORDERINGS:
-                    deleteOrderings(message,tUser);
+                    deleteOrderings(message, tUser);
                     break;
                 case CREATE_OWN_CROISSANT:
                     telegramMessageParserHelperService.helpCreateOwnCroissant(message);
@@ -59,7 +60,6 @@ public class TelegramMessageParserServiceImpl implements TelegramMessageParserSe
             }
         }
     }
-
 
 
     private void parseByStatus(Message message, TUser tUser) {
@@ -96,6 +96,7 @@ public class TelegramMessageParserServiceImpl implements TelegramMessageParserSe
     private void deleteOrderings(Message message, TUser tUser) {
         telegramMessageParserHelperService.helpDeleteOrderings(message);
     }
+
     private void createOwn(Message message) {
         telegramCreatingOwnCroissant.createOwn(message);
     }
@@ -110,7 +111,7 @@ public class TelegramMessageParserServiceImpl implements TelegramMessageParserSe
     }
 
     private void start(Message message) {
-            telegramMessageParserHelperService.helpStart(message);
+        telegramMessageParserHelperService.helpStart(message);
 
     }
 }

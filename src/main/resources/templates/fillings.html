@@ -2,13 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js}"></script>
     <script th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
     <title>Fillings</title>
 </head>
-    <script th:inline="javascript">
+<script th:inline="javascript">
         (function(d, s, id){
             var js, fjs = d.getElementsByTagName(s)[0];
             if (d.getElementById(id)) {return;}
@@ -28,7 +28,8 @@
                 })
             })
         }
-    </script>
+
+</script>
 <style>
 
     #btn-style{
@@ -63,20 +64,21 @@
         width:100%;
         height:60px;   /* Height of the footer */
     }
+
 </style>
 
 
 <body>
 <div id="container">
-<div id="body">
-<h3>Fillings:</h3>
-<ul>
-    <li th:each="fs:${fillings}" th:text="${fs.name}"></li>
-</ul>
-</div>
+    <div id="body">
+        <h3>Fillings:</h3>
+        <ul>
+            <li th:each="fs:${fillings}" th:text="${fs.name}"></li>
+        </ul>
+    </div>
 </div>
 <div id="footer">
-<button type = "button" class = "btn btn-primary btn-lg" id = "btn-style">OK</button>
+    <button type="button" class="btn btn-primary btn-lg" id="btn-style">OK</button>
 </div>
 
 

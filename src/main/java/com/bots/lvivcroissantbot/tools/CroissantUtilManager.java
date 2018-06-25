@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class CroissantUtilManager {
-    public static CroissantDTO croissantEntityToDTO(CroissantEntity croissantEntity){
+    public static CroissantDTO croissantEntityToDTO(CroissantEntity croissantEntity) {
         CroissantDTO croissantDTO = new CroissantDTO();
         croissantDTO.setName(croissantEntity.getName());
         croissantDTO.setImageAddress(croissantEntity.getImageUrl());
@@ -21,9 +21,9 @@ public class CroissantUtilManager {
     }
 
 
-    private static List<CroissantFillingModel> fillingsEntityToDTO(List<CroissantsFilling> croissantsFillings){
+    private static List<CroissantFillingModel> fillingsEntityToDTO(List<CroissantsFilling> croissantsFillings) {
 
-        return croissantsFillings.stream().map(filling ->{
+        return croissantsFillings.stream().map(filling -> {
             CroissantFillingModel croissantFillingModel = new CroissantFillingModel();
             croissantFillingModel.setName(filling.getName());
             croissantFillingModel.setPrice(filling.getPrice());

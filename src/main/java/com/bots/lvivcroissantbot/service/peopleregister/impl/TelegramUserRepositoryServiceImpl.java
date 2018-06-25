@@ -1,7 +1,7 @@
 package com.bots.lvivcroissantbot.service.peopleregister.impl;
 
-import com.bots.lvivcroissantbot.entity.register.TUser;
 import com.bots.lvivcroissantbot.constantenum.telegram.TelegramUserStatus;
+import com.bots.lvivcroissantbot.entity.register.TUser;
 import com.bots.lvivcroissantbot.repository.TUserRepository;
 import com.bots.lvivcroissantbot.service.peopleregister.TelegramUserRepositoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +13,7 @@ import java.util.List;
 public class TelegramUserRepositoryServiceImpl implements TelegramUserRepositoryService {
     @Autowired
     private TUserRepository tUserRepository;
+
     @Override
     public void delete(TUser tUser) {
         tUserRepository.delete(tUser);
@@ -20,7 +21,7 @@ public class TelegramUserRepositoryServiceImpl implements TelegramUserRepository
 
     @Override
     public TUser saveAndFlush(TUser tUser) {
-       return tUserRepository.saveAndFlush(tUser);
+        return tUserRepository.saveAndFlush(tUser);
     }
 
     @Override

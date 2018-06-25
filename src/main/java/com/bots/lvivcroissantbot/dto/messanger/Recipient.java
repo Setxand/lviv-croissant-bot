@@ -13,9 +13,11 @@ public class Recipient {
     private UserData name;
     @JsonProperty("phone_number")
     private String phoneNumber;
+
     public Recipient() {
     }
-    public Recipient(Long id){
+
+    public Recipient(Long id) {
         this.id = id;
     }
 

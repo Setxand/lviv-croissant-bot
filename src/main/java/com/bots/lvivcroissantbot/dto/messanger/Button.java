@@ -10,16 +10,18 @@ import lombok.Setter;
 @Setter
 public class Button {
 
-     private String type;
-     private String url;
-     private String title;
-     private String payload;
+    private String type;
+    private String url;
+    private String title;
+    private String payload;
     @JsonProperty("webview_height_ratio")
-     private String heightRatio;
+    private String heightRatio;
     @JsonProperty("messenger_extensions")
-     private Boolean mesExtentions;
+    private Boolean mesExtentions;
 
-    public Button(){}
+    public Button() {
+    }
+
     public Button(String type, String title) {
         this.type = type;
         this.title = title;

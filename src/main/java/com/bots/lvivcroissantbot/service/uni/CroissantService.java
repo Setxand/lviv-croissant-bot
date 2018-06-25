@@ -17,7 +17,6 @@ public class CroissantService {
     private final CroissantEntityRepository croissantEntityRepository;
 
 
-
     public CroissantService(CroissantEntityRepository croissantEntityRepository) {
         this.croissantEntityRepository = croissantEntityRepository;
     }
@@ -58,7 +57,6 @@ public class CroissantService {
     public CroissantEntity findLastRecord() {
         return croissantEntityRepository.findTopByOrderByIdDesc();
     }
-
 
 
     public CroissantEntity findOne(Long id) {

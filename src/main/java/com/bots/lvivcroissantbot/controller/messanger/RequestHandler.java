@@ -1,8 +1,8 @@
 package com.bots.lvivcroissantbot.controller.messanger;
 
+import com.bots.lvivcroissantbot.dto.messanger.Button;
 import com.bots.lvivcroissantbot.entity.lvivcroissants.CustomerOrdering;
 import com.bots.lvivcroissantbot.entity.register.MUser;
-import com.bots.lvivcroissantbot.dto.messanger.Button;
 import com.bots.lvivcroissantbot.entity.register.User;
 import com.bots.lvivcroissantbot.repository.CustomerOrderingRepository;
 import com.bots.lvivcroissantbot.repository.UserRepository;
@@ -49,7 +49,7 @@ public class RequestHandler {
     private String STRIPE_API_KEY;
 
     @RequestMapping(value = "/charge", method = RequestMethod.POST)
-    public ResponseEntity charge(@RequestParam String stripeToken, @RequestParam String price){
+    public ResponseEntity charge(@RequestParam String stripeToken, @RequestParam String price) {
         Stripe.apiKey = STRIPE_API_KEY;
 
         Map<String, Object> params = new HashMap<String, Object>();
@@ -73,11 +73,11 @@ public class RequestHandler {
             e.printStackTrace();
         }
 
-        return  ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @GetMapping("/successTrans")
-    public void successTrans(@RequestParam String userId){
+    public void successTrans(@RequestParam String userId) {
         Long uId = Long.parseLong(userId);
         CustomerOrdering customerOrdering = customerOrderingRepositoryService.findTopByMUserOrderByIdDesc(MUserRepositoryService.findOnebyRId(uId));
         messageSenderService.sendSimpleMessage(recognizeService.recognize(ORDERING_WAS_DONE.name(), uId) + "\n" + customerOrdering.getCroissants() + "\nPrice: " + customerOrdering.getPrice() + recognizeService.recognize(CURRENCY.name(), uId), uId);
@@ -89,12 +89,12 @@ public class RequestHandler {
     }
 
     @RequestMapping(value = "/sendMail")
-    public void sendMail(@RequestParam(name = "mark1") String mark,@RequestParam(name = "recipientId")String recipient) throws MessagingException, MalformedURLException {
+    public void sendMail(@RequestParam(name = "mark1") String mark, @RequestParam(name = "recipientId") String recipient) throws MessagingException, MalformedURLException {
         List<MUser> admins = userRepository.findAllByRole(ADMIN).stream().map(User::getMUser).collect(Collectors.toList());
         Long userId = Long.parseLong(recipient);
         MUser MUser = MUserRepositoryService.findOnebyRId(userId);
-        emailService.sendMailForAdminAboutMark(MUser,mark);
-        messageSenderService.sendSimpleMessage(recognizeService.recognize(THANK_FOR_RATE.name(),userId),userId);
+        emailService.sendMailForAdminAboutMark(MUser, mark);
+        messageSenderService.sendSimpleMessage(recognizeService.recognize(THANK_FOR_RATE.name(), userId), userId);
     }
 
 

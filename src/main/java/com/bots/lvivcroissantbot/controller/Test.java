@@ -9,10 +9,11 @@ public class Test {
     private Object object;
 
 
-    @RequestMapping(value = "/test",method = RequestMethod.GET)
-    public Object getObj(){
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    public Object getObj() {
         return object;
     }
+
     public void setObject(Object object) {
         this.object = object;
     }

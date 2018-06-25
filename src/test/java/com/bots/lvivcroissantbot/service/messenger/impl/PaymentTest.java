@@ -24,20 +24,21 @@ public class PaymentTest extends DemoApplicationTests {
     RestTemplate restTemplate;
     @Autowired
     MessageSenderService messageSenderService;
+
     @Before
-    public void setUp(){
+    public void setUp() {
         buttons = new ArrayList<>();
-        Button button = new Button(web_url.name(),"payment");
+        Button button = new Button(web_url.name(), "payment");
         button.setMesExtentions(true);
-        button.setUrl(SERVER_URL+"/payment");
+        button.setUrl(SERVER_URL + "/payment");
         buttons.add(button);
 
     }
 
 
     @Test
-    public void paymentTesting(){
-        messageSenderService.sendButtons(buttons,"payment",userId);
+    public void paymentTesting() {
+        messageSenderService.sendButtons(buttons, "payment", userId);
         logger.info("payment button has bet sent");
         HttpHeaders httpHeaders = new HttpHeaders();
 

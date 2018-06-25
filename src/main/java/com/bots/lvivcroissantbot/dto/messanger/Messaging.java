@@ -17,6 +17,7 @@ public class Messaging {
     private Message message;
     private PostBack postback;
     private String tag;
+
     public Messaging() {
     }
 
@@ -26,7 +27,7 @@ public class Messaging {
         this.recipient = recipient;
     }
 
-    public Messaging(Message message,Recipient recipient) {
+    public Messaging(Message message, Recipient recipient) {
         this.messagingType = "RESPONSE";
         this.message = message;
         this.recipient = recipient;

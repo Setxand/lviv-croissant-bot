@@ -1,7 +1,7 @@
 package com.bots.lvivcroissantbot.constantenum.messenger;
 
 public enum Cases {
-    ADD,MENU, ADD_FILLING,
+    ADD, MENU, ADD_FILLING,
     FILLING_MENU,
     ORDERING,
     COURIER_REQUEST,

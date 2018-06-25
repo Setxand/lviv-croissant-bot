@@ -1,20 +1,20 @@
 package com.bots.lvivcroissantbot.service.messenger.impl;
 
+import com.bots.lvivcroissantbot.dto.messanger.*;
 import com.bots.lvivcroissantbot.dto.telegram.Chat;
+import com.bots.lvivcroissantbot.entity.Support;
 import com.bots.lvivcroissantbot.entity.lvivcroissants.CroissantEntity;
 import com.bots.lvivcroissantbot.entity.lvivcroissants.CustomerOrdering;
-import com.bots.lvivcroissantbot.entity.Support;
 import com.bots.lvivcroissantbot.entity.register.MUser;
-import com.bots.lvivcroissantbot.dto.messanger.*;
 import com.bots.lvivcroissantbot.entity.register.TUser;
 import com.bots.lvivcroissantbot.entity.register.User;
 import com.bots.lvivcroissantbot.repository.*;
-import com.bots.lvivcroissantbot.service.messenger.event.*;
-import com.bots.lvivcroissantbot.service.peopleregister.TelegramUserRepositoryService;
 import com.bots.lvivcroissantbot.service.messenger.MessageParserService;
 import com.bots.lvivcroissantbot.service.messenger.MessageSenderService;
 import com.bots.lvivcroissantbot.service.messenger.QuickReplyParserService;
+import com.bots.lvivcroissantbot.service.messenger.event.*;
 import com.bots.lvivcroissantbot.service.peopleregister.MUserRepositoryService;
+import com.bots.lvivcroissantbot.service.peopleregister.TelegramUserRepositoryService;
 import com.bots.lvivcroissantbot.service.support.RecognizeService;
 import com.bots.lvivcroissantbot.service.support.TextFormatter;
 import com.bots.lvivcroissantbot.service.telegram.TelegramMessageSenderService;
@@ -49,6 +49,8 @@ import static com.bots.lvivcroissantbot.constantenum.telegram.TelegramUserStatus
 
 @Service
 public class QuickReplyParserServiceImpl implements QuickReplyParserService {
+    private final static Logger logger = LoggerFactory.getLogger(QuickReplyParserServiceImpl.class);
+    private static Map<String, Method> methodsMap;
     @Autowired
     private MessageSenderService messageSenderService;
     @Autowired
@@ -85,10 +87,6 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
     private MUserRepository mUserRepository;
     @Autowired
     private TelegramMessageSenderService telegramMessageSenderService;
-    private   final static Logger logger = LoggerFactory.getLogger(QuickReplyParserServiceImpl.class);
-
-    private static Map<String, Method> methodsMap;
-
     @Value("${server.url}")
     private String SERVER_URL;
 
@@ -119,9 +117,9 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
                 messageParserServiceService.parseMessage(messaging);
             }
         } catch (IllegalAccessException e) {
-            logger.error("Error",e);
+            logger.error("Error", e);
         } catch (InvocationTargetException e) {
-            logger.error("Error",e);
+            logger.error("Error", e);
             e.printStackTrace();
         }
     }
@@ -150,8 +148,8 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
         com.bots.lvivcroissantbot.dto.telegram.Message message = new com.bots.lvivcroissantbot.dto.telegram.Message();
         message.setChat(new Chat(Integer.parseInt(context)));
         telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(NOT_APPROVED.name()), message);
-        telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(NUMBER_OF_PHONE.name()),message);
-        telegramUserRepositoryService.changeStatus(telegramUserRepositoryService.findByChatId(message.getChat().getId()),PHONE_ENTERING_IN_START_STATUS);
+        telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(NUMBER_OF_PHONE.name()), message);
+        telegramUserRepositoryService.changeStatus(telegramUserRepositoryService.findByChatId(message.getChat().getId()), PHONE_ENTERING_IN_START_STATUS);
     }
 
     private void synchWithTelegram(Messaging messaging, String context, String answer) {

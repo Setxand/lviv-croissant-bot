@@ -1,18 +1,18 @@
 package com.bots.lvivcroissantbot.service.messenger.impl;
 
-import com.bots.lvivcroissantbot.entity.Support;
-import com.bots.lvivcroissantbot.entity.register.MUser;
 import com.bots.lvivcroissantbot.constantenum.messenger.payload.Payloads;
 import com.bots.lvivcroissantbot.dto.messanger.Message;
 import com.bots.lvivcroissantbot.dto.messanger.Messaging;
 import com.bots.lvivcroissantbot.dto.messanger.QuickReply;
+import com.bots.lvivcroissantbot.entity.Support;
+import com.bots.lvivcroissantbot.entity.register.MUser;
 import com.bots.lvivcroissantbot.repository.SupportEntityRepository;
-import com.bots.lvivcroissantbot.service.messenger.event.CourierService;
-import com.bots.lvivcroissantbot.service.messenger.event.GetMenuService;
-import com.bots.lvivcroissantbot.service.messenger.event.UserService;
 import com.bots.lvivcroissantbot.service.messenger.MessageParserService;
 import com.bots.lvivcroissantbot.service.messenger.MessageSenderService;
 import com.bots.lvivcroissantbot.service.messenger.PayloadParserService;
+import com.bots.lvivcroissantbot.service.messenger.event.CourierService;
+import com.bots.lvivcroissantbot.service.messenger.event.GetMenuService;
+import com.bots.lvivcroissantbot.service.messenger.event.UserService;
 import com.bots.lvivcroissantbot.service.peopleregister.MUserRepositoryService;
 import com.bots.lvivcroissantbot.service.support.RecognizeService;
 import com.bots.lvivcroissantbot.service.support.TextFormatter;
@@ -21,9 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import static com.bots.lvivcroissantbot.constantenum.messenger.Cases.MENU;
-import static com.bots.lvivcroissantbot.constantenum.messenger.Cases.NAVI;
-import static com.bots.lvivcroissantbot.constantenum.messenger.Cases.ORDERING;
+import static com.bots.lvivcroissantbot.constantenum.messenger.Cases.*;
 import static com.bots.lvivcroissantbot.constantenum.messenger.payload.Payloads.FOR_GETTING_MENU;
 import static com.bots.lvivcroissantbot.constantenum.messenger.payload.Payloads.OWN_CROISSANT_MENU_PAYLOAD;
 import static com.bots.lvivcroissantbot.constantenum.messenger.payload.QuickReplyPayloads.CREATING_OWN_CROISSANT_PAYLOAD;
@@ -96,21 +94,20 @@ public class PayloadParserServiceImpl implements PayloadParserService {
     }
 
 
-
     private void navigationMenu(Messaging messaging) {
-        userService.changeStatus(messaging,NAVI.name());
+        userService.changeStatus(messaging, NAVI.name());
         messaging.setMessage(new Message(""));
         messageParserServiceService.parseMessage(messaging);
     }
 
     private void parseCompleteOrder(Messaging messaging) {
         String var = TextFormatter.ejectSingleVariable(messaging.getPostback().getPayload());
-        courierService.completeOrderingsFinalize(messaging,Long.parseLong(var));
+        courierService.completeOrderingsFinalize(messaging, Long.parseLong(var));
     }
 
     private void parseGetOrder(Messaging messaging) {
         String var = TextFormatter.ejectSingleVariable(messaging.getPostback().getPayload());
-        courierService.orderingFilling(messaging,Long.parseLong(var));
+        courierService.orderingFilling(messaging, Long.parseLong(var));
     }
 
     private void parseShowMorePayload(Messaging messaging) {
@@ -153,7 +150,7 @@ public class PayloadParserServiceImpl implements PayloadParserService {
     }
 
     private void parseOwnCroissant(Messaging messaging) {
-        messageSenderService.askTypeOfCroissants(messaging.getSender().getId(),CREATING_OWN_CROISSANT_PAYLOAD.name()+"?");
+        messageSenderService.askTypeOfCroissants(messaging.getSender().getId(), CREATING_OWN_CROISSANT_PAYLOAD.name() + "?");
 
     }
 
@@ -165,7 +162,7 @@ public class PayloadParserServiceImpl implements PayloadParserService {
     }
 
     private void parseGetStarted(Messaging messaging) {
-        if(MUserRepositoryService.findOnebyRId(messaging.getSender().getId())==null)
+        if (MUserRepositoryService.findOnebyRId(messaging.getSender().getId()) == null)
             userService.customerRegistration(messaging);
         else {
             messageSenderService.askSelectLanguage(messaging.getSender().getId());

@@ -13,15 +13,13 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.Optional;
 
-import static net.bytebuddy.matcher.ElementMatchers.is;
-import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CroissantServiceTest {
@@ -29,7 +27,6 @@ public class CroissantServiceTest {
     private CroissantService croissantService;
     @Mock
     private CroissantEntityRepository croissantEntityRepository;
-
     private static final Long testId = 1L;
 
     @Before
@@ -74,14 +71,25 @@ public class CroissantServiceTest {
 
     @Test
     public void test3GetCroissants() {
-    //    when(croissantEntityRepository.findAll()).thenReturn(Arrays.asList(croissantEntity));
-      //  assertEquals(Arrays.asList(croissantDTO), croissantService.getCroissants());
+        //    when(croissantEntityRepository.findAll()).thenReturn(Arrays.asList(croissantEntity));
+        //  assertEquals(Arrays.asList(croissantDTO), croissantService.getCroissants());
     }
-    @Test
-    public void test4PutCroissant(){
 
-        croissantService.putCroissant(croissantDtoInit(),testId);
-        }
+    @Test
+    public void test4PutCroissant() {
+        //Given
+        CroissantDTO croissantDTO = croissantDtoInit();
+        //When
+        when(croissantEntityRepository.findById(any(Long.class))).thenReturn(Optional.ofNullable(croissantEntityInit()));
+        croissantService.putCroissant(croissantDTO, testId);
+        //Then
+        ArgumentCaptor<CroissantEntity> captor = ArgumentCaptor.forClass(CroissantEntity.class);
+        verify(croissantEntityRepository).saveAndFlush(captor.capture());
+        CroissantEntity passer = captor.getValue();
+
+        assertEquals(croissantDTO.getName(),passer.getName());
+        assertEquals(croissantDTO.getPrice().intValue(), passer.getPrice());
+    }
 
 
 

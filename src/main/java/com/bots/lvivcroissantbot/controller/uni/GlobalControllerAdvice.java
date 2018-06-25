@@ -14,15 +14,16 @@ public class GlobalControllerAdvice {
 
 
     @ExceptionHandler(ElementNoFoundException.class)
-    public @ResponseBody JsonResponse error(ElementNoFoundException ex) {
+    public @ResponseBody
+    JsonResponse error(ElementNoFoundException ex) {
         return new JsonResponse(Error.ELEMENT_NOT_FOUND.name(), HttpStatus.NOT_FOUND.value(), ex.getMessage());
     }
 
     @ExceptionHandler(FieldsNotValidException.class)
-    public @ResponseBody JsonResponse error(FieldsNotValidException ex) {
+    public @ResponseBody
+    JsonResponse error(FieldsNotValidException ex) {
         return new JsonResponse(Error.FIELDS_NOT_VALID.name(), HttpStatus.BAD_REQUEST.value(), ex.getMessage());
     }
-
 
 
 }

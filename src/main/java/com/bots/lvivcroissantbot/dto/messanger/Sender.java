@@ -10,11 +10,13 @@ import lombok.Setter;
 public class Sender {
     private Long id;
     private UserData name;
+
     public Sender(Long id) {
         this.id = id;
     }
-    public Sender(){}
 
+    public Sender() {
+    }
 
 
 }

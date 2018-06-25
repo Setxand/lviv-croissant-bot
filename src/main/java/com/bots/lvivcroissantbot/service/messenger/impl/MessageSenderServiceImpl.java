@@ -39,35 +39,22 @@ import static com.bots.lvivcroissantbot.constantenum.messenger.type.TemplateType
 @Service
 public class MessageSenderServiceImpl implements MessageSenderService {
 
-//    @Autowired
-    private CroissantService croissantRepositoryService;
-//    @Autowired
-    private CroisantsFillingEntityRepository croisantsFillingEntityRepository;
-//
-//    @Autowired
-    private MenuOfFillingRepository menuOfFillingRepositoryService;
-//    @Autowired
-    private RecognizeService recognizeService;
-//
-//    @Autowired
+    private final static Logger logger = LoggerFactory.getLogger(MessageSenderServiceImpl.class);
     MUserRepositoryService MUserRepositoryService;
-
+    private CroissantService croissantRepositoryService;
+    private CroisantsFillingEntityRepository croisantsFillingEntityRepository;
+    private MenuOfFillingRepository menuOfFillingRepositoryService;
+    private RecognizeService recognizeService;
     @Value("${messenger.page.access.token}")
     private String PAGE_ACCESS_TOKEN;
-
     @Value("${messenger.send.api.uri}")
     private String FACEBOOK_SEND_URL;
-
     @Value("${messenger.facebook.MUser.data.url}")
     private String USER_DATA_URL;
-
     @Value("${messenger.facebook.MUser.data.uer.fields}")
     private String DATA_FIELDS;
-
     @Value("${server.url}")
     private String SERVER_URL;
-
-    private   final static Logger logger = LoggerFactory.getLogger(MessageSenderServiceImpl.class);
 
     public MessageSenderServiceImpl(CroissantService croissantRepositoryService, CroisantsFillingEntityRepository croisantsFillingEntityRepository, MenuOfFillingRepository menuOfFillingRepositoryService, RecognizeService recognizeService, com.bots.lvivcroissantbot.service.peopleregister.MUserRepositoryService MUserRepositoryService) {
         this.croissantRepositoryService = croissantRepositoryService;

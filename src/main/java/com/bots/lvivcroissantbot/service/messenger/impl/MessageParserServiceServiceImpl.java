@@ -1,13 +1,13 @@
 package com.bots.lvivcroissantbot.service.messenger.impl;
 
-import com.bots.lvivcroissantbot.entity.Support;
-import com.bots.lvivcroissantbot.entity.register.MUser;
 import com.bots.lvivcroissantbot.constantenum.messenger.Cases;
 import com.bots.lvivcroissantbot.dto.messanger.Messaging;
+import com.bots.lvivcroissantbot.entity.Support;
+import com.bots.lvivcroissantbot.entity.register.MUser;
 import com.bots.lvivcroissantbot.repository.CustomerOrderingRepository;
 import com.bots.lvivcroissantbot.repository.SupportEntityRepository;
-import com.bots.lvivcroissantbot.service.messenger.event.*;
 import com.bots.lvivcroissantbot.service.messenger.*;
+import com.bots.lvivcroissantbot.service.messenger.event.*;
 import com.bots.lvivcroissantbot.service.peopleregister.CourierRegisterService;
 import com.bots.lvivcroissantbot.service.peopleregister.MUserRepositoryService;
 import com.bots.lvivcroissantbot.service.support.RecognizeService;
@@ -30,6 +30,8 @@ import static com.bots.lvivcroissantbot.constantenum.messenger.speaking.ServerSi
 
 @Service
 public class MessageParserServiceServiceImpl implements MessageParserService {
+    private final static Logger logger = LoggerFactory.getLogger(MessageParserServiceServiceImpl.class);
+    private static Map<String, Method> methodsHashMap;
     @Autowired
     private MessageSenderService messageSenderService;
     @Autowired
@@ -65,10 +67,6 @@ public class MessageParserServiceServiceImpl implements MessageParserService {
     @Autowired
     private SupportEntityRepository supportEntityRepositoryService;
 
-    private   final static Logger logger = LoggerFactory.getLogger(MessageParserServiceServiceImpl.class);
-
-    private  static Map<String,Method> methodsHashMap;
-
     @Override
     public void parseMessage(Messaging messaging) {
         String message = messaging.getMessage().getText().toUpperCase();
@@ -88,14 +86,14 @@ public class MessageParserServiceServiceImpl implements MessageParserService {
             String userCommand = TextFormatter.toCamelCase(Cases.valueOf(message.toUpperCase()).toString());
 
             try {
-                methodsHashMap.get(userCommand).invoke(this,messaging);
+                methodsHashMap.get(userCommand).invoke(this, messaging);
             } catch (IllegalAccessException e) {
-                logger.error("Error",e);
+                logger.error("Error", e);
             } catch (InvocationTargetException e) {
-                logger.error("Error",e);
+                logger.error("Error", e);
                 e.printStackTrace();
             } catch (Exception ex) {
-                logger.error("Error",ex);
+                logger.error("Error", ex);
                 ex.printStackTrace();
             }
 
@@ -107,10 +105,11 @@ public class MessageParserServiceServiceImpl implements MessageParserService {
     private void methodsHashMapInit() {
         Method[] methods = MessageParserServiceServiceImpl.class.getDeclaredMethods();
         methodsHashMap = new HashMap<>();
-        for(Method method: methods){
-            methodsHashMap.put(method.getName(),method);
+        for (Method method : methods) {
+            methodsHashMap.put(method.getName(), method);
         }
     }
+
     private void deleteOrderings(Messaging messaging) {
         messageProcessorHelperService.helpDeleteOrderings(messaging);
         messageSenderService.sendSimpleMessage("Deleted!", messaging.getSender().getId());
@@ -118,7 +117,7 @@ public class MessageParserServiceServiceImpl implements MessageParserService {
 
     private void navi(Messaging messaging) {
         messageSenderService.sendUserActions(messaging.getSender().getId());
-        userService.changeStatus(messaging,null);
+        userService.changeStatus(messaging, null);
     }
 
     private void askTime(Messaging messaging) {
@@ -188,7 +187,7 @@ public class MessageParserServiceServiceImpl implements MessageParserService {
 
     private void abort(Messaging messaging) {
         userService.changeStatus(messaging, null);
-        if(supportEntityRepositoryService.findByUserId(messaging.getSender().getId())!=null) {
+        if (supportEntityRepositoryService.findByUserId(messaging.getSender().getId()) != null) {
             Support support = supportEntityRepositoryService.findByUserId(messaging.getSender().getId());
             support.setOneMore(null);
             supportEntityRepositoryService.saveAndFlush(support);
@@ -216,7 +215,6 @@ public class MessageParserServiceServiceImpl implements MessageParserService {
         messageProcessorHelperService.helpCompletingOrderings(messaging);
         courierService.parseCourier(messaging);
     }
-
 
 
     private void orderingListFilling(Messaging messaging) {

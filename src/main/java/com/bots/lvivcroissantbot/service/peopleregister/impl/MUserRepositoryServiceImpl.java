@@ -7,10 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
 public class MUserRepositoryServiceImpl implements MUserRepositoryService {
     @Autowired
     private MUserRepository MUserRepository;
+
     @Override
     public List<MUser> findAll() {
         return MUserRepository.findAll();
@@ -20,7 +22,6 @@ public class MUserRepositoryServiceImpl implements MUserRepositoryService {
     public MUser findOnebyRId(Long id) {
         return MUserRepository.findByRecipientId(id);
     }
-
 
 
     @Override

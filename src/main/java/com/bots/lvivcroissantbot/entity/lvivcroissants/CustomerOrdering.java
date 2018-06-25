@@ -1,9 +1,9 @@
 package com.bots.lvivcroissantbot.entity.lvivcroissants;
 
-import com.bots.lvivcroissantbot.entity.register.Courier;
-import com.bots.lvivcroissantbot.entity.register.TUser;
-import com.bots.lvivcroissantbot.entity.register.MUser;
 import com.bots.lvivcroissantbot.constantenum.messenger.PaymentWay;
+import com.bots.lvivcroissantbot.entity.register.Courier;
+import com.bots.lvivcroissantbot.entity.register.MUser;
+import com.bots.lvivcroissantbot.entity.register.TUser;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,7 +30,7 @@ public class CustomerOrdering {
     private MUser mUser;
 
     @ElementCollection
-    private List<String>croissants = new ArrayList<>();
+    private List<String> croissants = new ArrayList<>();
 
 
     @ManyToOne
@@ -43,8 +43,9 @@ public class CustomerOrdering {
     @ManyToOne
     @JoinColumn(name = "courier_id")
     private TUser courier;
+
     @Override
     public String toString() {
-        return "Замовлення № "+id+"\nзамовник: "+name+"\nНомер телефону: "+phoneNumber+"\nAddress: "+address+"\nTime: "+time+"\nprice: "+price+"\nOrder: "+croissants+"\n\n\n";
+        return "Замовлення № " + id + "\nзамовник: " + name + "\nНомер телефону: " + phoneNumber + "\nAddress: " + address + "\nTime: " + time + "\nprice: " + price + "\nOrder: " + croissants + "\n\n\n";
     }
 }

@@ -16,23 +16,24 @@ import java.util.List;
 public class Uni {
     @Autowired
     private CroissantService croissantService;
-    @RequestMapping(value = "/croissants",method = RequestMethod.GET)
-    public List<CroissantDTO>croissants(){
+
+    @RequestMapping(value = "/croissants", method = RequestMethod.GET)
+    public List<CroissantDTO> croissants() {
         return croissantService.getCroissants();
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @RequestMapping(value = "/croissants",method = RequestMethod.POST)
-    public CroissantDTO postCroissants(@Valid @RequestBody CroissantDTO croissantDTO, BindingResult bindingResult){
-        if(bindingResult.hasErrors())
+    @RequestMapping(value = "/croissants", method = RequestMethod.POST)
+    public CroissantDTO postCroissants(@Valid @RequestBody CroissantDTO croissantDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors())
             throw new FieldsNotValidException();
         return croissantService.createCroissant(croissantDTO);
     }
 
     @PutMapping(value = "/croissants/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void putCroissants(@Valid @RequestBody CroissantDTO croissantDTO, BindingResult bindingResult,@PathVariable Long id){
-        if(bindingResult.hasErrors())
+    public void putCroissants(@Valid @RequestBody CroissantDTO croissantDTO, BindingResult bindingResult, @PathVariable Long id) {
+        if (bindingResult.hasErrors())
             throw new FieldsNotValidException();
         croissantService.putCroissant(croissantDTO, id);
     }

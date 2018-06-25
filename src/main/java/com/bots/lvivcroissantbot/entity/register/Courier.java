@@ -19,8 +19,8 @@ public class Courier {
     private String name;
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "userCourier",cascade = CascadeType.ALL)
-    private List<CustomerOrdering>customerOrderings = new ArrayList<>();
+    @OneToMany(mappedBy = "userCourier", cascade = CascadeType.ALL)
+    private List<CustomerOrdering> customerOrderings = new ArrayList<>();
 
     public Courier(Long recipientId, String name, String phoneNumber) {
         this.recipientId = recipientId;
@@ -36,13 +36,13 @@ public class Courier {
     }
 
     public void setCustomerOrderings(List<CustomerOrdering> customerOrderings) {
-        for(CustomerOrdering customerOrdering: customerOrderings){
+        for (CustomerOrdering customerOrdering : customerOrderings) {
             customerOrdering.setUserCourier(this);
         }
         this.customerOrderings = customerOrderings;
     }
 
-    public void addOne(CustomerOrdering customerOrdering){
+    public void addOne(CustomerOrdering customerOrdering) {
         this.getCustomerOrderings().add(customerOrdering);
         customerOrdering.setUserCourier(this);
     }

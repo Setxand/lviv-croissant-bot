@@ -1,18 +1,18 @@
 package com.bots.lvivcroissantbot.service.adminpanel.impl;
 
-import com.bots.lvivcroissantbot.entity.register.TUser;
 import com.bots.lvivcroissantbot.constantenum.BotCommands;
 import com.bots.lvivcroissantbot.constantenum.messenger.Role;
 import com.bots.lvivcroissantbot.constantenum.telegram.TelegramUserStatus;
 import com.bots.lvivcroissantbot.dto.telegram.Message;
 import com.bots.lvivcroissantbot.dto.telegram.button.InlineKeyboardButton;
-import com.bots.lvivcroissantbot.service.adminpanel.BotCommandsParserService;
+import com.bots.lvivcroissantbot.entity.register.TUser;
 import com.bots.lvivcroissantbot.service.adminpanel.BotCommandParseHelperService;
+import com.bots.lvivcroissantbot.service.adminpanel.BotCommandsParserService;
 import com.bots.lvivcroissantbot.service.adminpanel.event.TelegramAddingRecordingsEventService;
-import com.bots.lvivcroissantbot.service.telegram.event.TelegramGetMenuService;
 import com.bots.lvivcroissantbot.service.peopleregister.TelegramUserRepositoryService;
 import com.bots.lvivcroissantbot.service.telegram.TelegramMessageParserHelperService;
 import com.bots.lvivcroissantbot.service.telegram.TelegramMessageSenderService;
+import com.bots.lvivcroissantbot.service.telegram.event.TelegramGetMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -87,8 +87,7 @@ public class BotCommandsParserServiceServiceImpl implements BotCommandsParserSer
             String courierActions = ResourceBundle.getBundle("dictionary").getString(CHOOSE_ACTIONS.name());
             telegramMessageSenderService.sendInlineButtons(Arrays.asList(buttons), courierActions, message);
 
-        }
-        else {
+        } else {
             telegramMessageSenderService.noEnoughPermissions(message);
         }
     }

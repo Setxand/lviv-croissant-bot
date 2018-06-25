@@ -1,10 +1,7 @@
 package com.bots.lvivcroissantbot.service.adminpanel.impl;
 
-import com.bots.lvivcroissantbot.entity.lvivcroissants.CroissantEntity;
-import com.bots.lvivcroissantbot.entity.lvivcroissants.CustomerOrdering;
-import com.bots.lvivcroissantbot.entity.register.TUser;
-import com.bots.lvivcroissantbot.constantenum.messenger.Objects;
 import com.bots.lvivcroissantbot.constantenum.BotCommands;
+import com.bots.lvivcroissantbot.constantenum.messenger.Objects;
 import com.bots.lvivcroissantbot.constantenum.messenger.Role;
 import com.bots.lvivcroissantbot.dto.messanger.Shell;
 import com.bots.lvivcroissantbot.dto.telegram.CallBackQuery;
@@ -12,6 +9,9 @@ import com.bots.lvivcroissantbot.dto.telegram.Message;
 import com.bots.lvivcroissantbot.dto.telegram.button.InlineKeyboardButton;
 import com.bots.lvivcroissantbot.dto.telegram.button.InlineKeyboardMarkup;
 import com.bots.lvivcroissantbot.dto.telegram.button.Markup;
+import com.bots.lvivcroissantbot.entity.lvivcroissants.CroissantEntity;
+import com.bots.lvivcroissantbot.entity.lvivcroissants.CustomerOrdering;
+import com.bots.lvivcroissantbot.entity.register.TUser;
 import com.bots.lvivcroissantbot.exception.ElementNoFoundException;
 import com.bots.lvivcroissantbot.repository.CustomerOrderingRepository;
 import com.bots.lvivcroissantbot.service.adminpanel.BotCommandParseHelperService;
@@ -36,6 +36,7 @@ import static com.bots.lvivcroissantbot.constantenum.telegram.CallBackData.*;
 
 @Service
 public class BotCommandParseHelperServiceImpl implements BotCommandParseHelperService {
+    private final static Logger logger = LoggerFactory.getLogger(BotCommandParseHelperServiceImpl.class);
     @Autowired
     private TelegramMessageSenderService telegramMessageSenderService;
     @Autowired
@@ -52,45 +53,41 @@ public class BotCommandParseHelperServiceImpl implements BotCommandParseHelperSe
     private String SUBSCRIPTION_URL;
     @Value("${picture.ordering}")
     private String PICTURE_ORDERING;
-    private   final static Logger logger = LoggerFactory.getLogger(BotCommandParseHelperServiceImpl.class);
-
-
 
     @Override
     public void helpInvokeBotHelpCommand(Message message) {
         StringBuilder helpMessage = new StringBuilder();
-        for(BotCommands command: BotCommands.values()){
-            if(command!=BotCommands.HELP && command!=BotCommands.START)
-            helpMessage.append("/"+command.name().toLowerCase()+" - "+ResourceBundle.getBundle("botCommands").getString(command.name())+"\n");
+        for (BotCommands command : BotCommands.values()) {
+            if (command != BotCommands.HELP && command != BotCommands.START)
+                helpMessage.append("/" + command.name().toLowerCase() + " - " + ResourceBundle.getBundle("botCommands").getString(command.name()) + "\n");
         }
-        telegramMessageSenderService.simpleMessage(helpMessage.toString(),message);
+        telegramMessageSenderService.simpleMessage(helpMessage.toString(), message);
     }
 
     @Override
     public void helpSetUpMessenger(Message message) {
         TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
-        if(tUser.getUser().getRole()!= Role.ADMIN){
+        if (tUser.getUser().getRole() != Role.ADMIN) {
             telegramMessageSenderService.noEnoughPermissions(message);
             return;
         }
         Shell setMessengerWebHook = new Shell();
-        setMessengerWebHook.setCallbackUrl(SERVER_URL+"/WebHook");
+        setMessengerWebHook.setCallbackUrl(SERVER_URL + "/WebHook");
         setMessengerWebHook.setVerToken(VER_TOK);
         setMessengerWebHook.setObject(Objects.page);
-        setMessengerWebHook.setFields(new String[]{"messages","messaging_postbacks"});
-        makeRequestToFacebook(message,setMessengerWebHook);
+        setMessengerWebHook.setFields(new String[]{"messages", "messaging_postbacks"});
+        makeRequestToFacebook(message, setMessengerWebHook);
 
     }
 
     private void makeRequestToFacebook(Message message, Shell setMessengerWebHook) {
         try {
-            ResponseEntity<?> messengerWebhook = new RestTemplate().postForEntity(SUBSCRIPTION_URL,setMessengerWebHook,Object.class);
-            logger.debug("Messenger webhook:"+messengerWebhook.getBody());
-            telegramMessageSenderService.simpleMessage("Facebook messenger: "+messengerWebhook.getBody().toString()+" /help",message);
-        }
-        catch (Exception ex){
-            logger.error("Error",ex);
-            telegramMessageSenderService.simpleMessage(ex.getMessage(),message);
+            ResponseEntity<?> messengerWebhook = new RestTemplate().postForEntity(SUBSCRIPTION_URL, setMessengerWebHook, Object.class);
+            logger.debug("Messenger webhook:" + messengerWebhook.getBody());
+            telegramMessageSenderService.simpleMessage("Facebook messenger: " + messengerWebhook.getBody().toString() + " /help", message);
+        } catch (Exception ex) {
+            logger.error("Error", ex);
+            telegramMessageSenderService.simpleMessage(ex.getMessage(), message);
         }
     }
 
@@ -103,14 +100,13 @@ public class BotCommandParseHelperServiceImpl implements BotCommandParseHelperSe
         String completeOrder = ResourceBundle.getBundle("dictionary").getString(COMPLETE_ORDERING.name());
         List<CustomerOrdering> customerOrderings = customerOrderingRepositoryService.findAll();
         StringBuilder croissants = new StringBuilder();
-        for(CustomerOrdering customerOrdering: customerOrderings) {
+        for (CustomerOrdering customerOrdering : customerOrderings) {
             if (customerOrdering.getCourier() == null && data.equals(LIST_OF_ORDERING_DATA.name())) {
                 Markup markup = new InlineKeyboardMarkup(Arrays.asList(Arrays.asList(new InlineKeyboardButton(getOrder, GET_ORDER_DATA.name() + "?" + customerOrdering.getId()))));
-                getListOfOrderings(callBackQuery,customerOrdering,uah, markup,croissants);
-            }
-            else if(customerOrdering.getCourier()==tUser && data.equals(LIST_OF_COMPLETE_ORDERING_DATA.name()) && customerOrdering.getCompletedTime()==null){
+                getListOfOrderings(callBackQuery, customerOrdering, uah, markup, croissants);
+            } else if (customerOrdering.getCourier() == tUser && data.equals(LIST_OF_COMPLETE_ORDERING_DATA.name()) && customerOrdering.getCompletedTime() == null) {
                 Markup markup = new InlineKeyboardMarkup(Arrays.asList(Arrays.asList(new InlineKeyboardButton(completeOrder, COMPLETE_ORDER_DATA.name() + "?" + customerOrdering.getId()))));
-                getListOfOrderings(callBackQuery,customerOrdering,uah, markup,croissants);
+                getListOfOrderings(callBackQuery, customerOrdering, uah, markup, croissants);
             }
         }
     }
@@ -123,7 +119,7 @@ public class BotCommandParseHelperServiceImpl implements BotCommandParseHelperSe
         callBackQuery.getMessage().getChat().setId(tUser.getChatId());
         callBackQuery.getMessage().setPlatform(null);
         String text = ResourceBundle.getBundle("dictionary").getString(RECEiVE_ORDER.name());
-        telegramMessageSenderService.simpleQuestion(QUESTION_COMPLETE_DATA,"?"+orderId+"&",text,callBackQuery.getMessage());
+        telegramMessageSenderService.simpleQuestion(QUESTION_COMPLETE_DATA, "?" + orderId + "&", text, callBackQuery.getMessage());
     }
 
     private void getListOfOrderings(CallBackQuery callBackQuery, CustomerOrdering customerOrdering, String uah, Markup markup, StringBuilder croissants) {

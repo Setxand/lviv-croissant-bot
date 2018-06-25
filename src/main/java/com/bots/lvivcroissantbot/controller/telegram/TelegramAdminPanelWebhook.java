@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class TelegramAdminPanelWebhook {
     @Autowired
     private AdminPanelUpdateParserService adminPanelUpdateParserService;
+
     @PostMapping
-    public void getUpdate(@RequestBody Update update){
+    public void getUpdate(@RequestBody Update update) {
         adminPanelUpdateParserService.parseUpdate(update);
     }
 }

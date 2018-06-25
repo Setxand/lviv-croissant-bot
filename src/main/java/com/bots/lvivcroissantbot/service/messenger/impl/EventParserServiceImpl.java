@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class EventParserServiceImpl implements EventParserService {
+    private final static Logger logger = LoggerFactory.getLogger(EventParserService.class);
+    @Autowired
+    MUserRepositoryService MUserRepositoryService;
     @Autowired
     private MessageSenderService messageSenderService;
     @Autowired
@@ -20,13 +23,7 @@ public class EventParserServiceImpl implements EventParserService {
     @Autowired
     private MessageParserService messageParserServiceService;
     @Autowired
-    MUserRepositoryService MUserRepositoryService;
-    @Autowired
     private PayloadParserService payloadParserService;
-
-
-    private   final static Logger logger = LoggerFactory.getLogger(EventParserService.class);
-
 
     @Override
     public boolean parseEvent(Event event) {
@@ -49,7 +46,7 @@ public class EventParserServiceImpl implements EventParserService {
                 } catch (Exception ex) {
 
                     ex.printStackTrace();
-                    logger.error("Error",ex);
+                    logger.error("Error", ex);
                     messageSenderService.errorMessage(messaging.getSender().getId());
                     return true;
                 }

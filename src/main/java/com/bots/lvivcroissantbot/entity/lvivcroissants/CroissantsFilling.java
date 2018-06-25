@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Setter
 public class CroissantsFilling {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
     private int price;
@@ -22,7 +22,8 @@ public class CroissantsFilling {
 
     public CroissantsFilling() {
     }
-    public CroissantsFilling(MenuOfFilling other){
+
+    public CroissantsFilling(MenuOfFilling other) {
         this.name = other.getName();
         this.price = other.getPrice();
     }
@@ -31,7 +32,8 @@ public class CroissantsFilling {
         this.name = name;
         this.price = price;
     }
-    public CroissantsFilling(CroissantFillingModel croissantFillingModel){
+
+    public CroissantsFilling(CroissantFillingModel croissantFillingModel) {
         this.name = croissantFillingModel.getName();
         this.price = croissantFillingModel.getPrice();
     }

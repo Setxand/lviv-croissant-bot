@@ -19,22 +19,20 @@ public class UpdateParserServiceImpl implements UpdateParserService {
     private CallBackParserService callBackParserServiceService;
     @Autowired
     private TelegramUserRepositoryService telegramUserRepositoryService;
+
     @Override
     public void parseUpdate(Update update) {
         try {
-            if(update.getCallBackQuery()!=null){
+            if (update.getCallBackQuery() != null) {
                 callBackParserServiceService.parseCallBackQuery(update.getCallBackQuery());
-            }
-            else if(update.getMessage()!=null){
+            } else if (update.getMessage() != null) {
                 telegramMessageParserService.parseMessage(update.getMessage());
             }
-        }
-        catch (Exception ex){
+        } catch (Exception ex) {
             try {
                 telegramMessageSenderService.errorMessage(update.getMessage());
-                telegramUserRepositoryService.changeStatus(telegramUserRepositoryService.findByChatId(update.getMessage().getChat().getId()),null);
-            }
-            catch (Exception e) {
+                telegramUserRepositoryService.changeStatus(telegramUserRepositoryService.findByChatId(update.getMessage().getChat().getId()), null);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 public class CourierRegisterServiceImpl implements CourierRegisterService {
     @Autowired
     private CourierRegisterRepository courierRegisterRepository;
+
     @Override
     public Courier findByRecipientId(Long recipientId) {
         return courierRegisterRepository.findByRecipientId(recipientId);

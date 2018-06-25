@@ -21,6 +21,6 @@ public class RequestByMessage {
         return "\n\nRequestByMessage{" +
                 "recipientId=" + recipientId +
                 ", mid='" + mid + '\'' +
-                '}'+"\n";
+                '}' + "\n";
     }
 }

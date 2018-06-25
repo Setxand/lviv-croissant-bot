@@ -21,5 +21,5 @@ public class Support {
     private String type;
     private Long userId;
     private Boolean oneMore;
-    
+
 }

@@ -14,7 +14,7 @@ import java.util.List;
 public class CroissantDTO {
     private Long id;
     @NotNull
-    @Size(min = 8,max = 32)
+    @Size(min = 8, max = 32)
     private String name;
     @NotNull
     private String imageAddress;
@@ -27,7 +27,7 @@ public class CroissantDTO {
 
     @Override
     public String toString() {
-        return "\n\n"+name+".\n"+"" +
+        return "\n\n" + name + ".\n" + "" +
                 "Вміст: \n" +
                 croissantsFillings;
     }

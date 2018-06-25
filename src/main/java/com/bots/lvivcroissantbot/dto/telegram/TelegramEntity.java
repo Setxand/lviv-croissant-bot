@@ -12,5 +12,5 @@ import lombok.Setter;
 public class TelegramEntity {
     private Integer offset;
     private Integer length;
-    private String type;     
+    private String type;
 }

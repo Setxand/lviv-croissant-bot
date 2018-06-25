@@ -26,6 +26,7 @@ public class MenuItem {
         this.title = title;
         this.payload = payload;
     }
+
     public MenuItem(String type, String title) {
         this.type = type;
         this.title = title;

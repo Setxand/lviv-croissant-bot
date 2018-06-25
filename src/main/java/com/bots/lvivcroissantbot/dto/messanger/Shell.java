@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Shell {
     @JsonProperty("whitelisted_domains")
-    private List<String>whiteListedDomains ;
+    private List<String> whiteListedDomains;
     private Objects object;
     @JsonProperty("callback_url")
     private String callbackUrl;

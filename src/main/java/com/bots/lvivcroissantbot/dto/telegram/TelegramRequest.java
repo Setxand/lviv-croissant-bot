@@ -12,14 +12,14 @@ import lombok.Setter;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class TelegramRequest {
+    String photo;
+    String caption;
     private String url;
     private String text;
     @JsonProperty("chat_id")
     private Integer chatId;
     @JsonProperty("reply_markup")
     private Markup markup;
-    String photo;
-    String caption;
 
     public TelegramRequest(String text, Integer chatId) {
         this.text = text;

@@ -83,6 +83,7 @@
             height: 50px;
         }
 
+
     </style>
 
     <script th:inline="javascript">
@@ -125,41 +126,43 @@
 
 
 
+
     </script>
 </head>
 
 <body>
-<div >
-<div style="position: fixed" id = "backImg">
-    <img style="position: absolute" src="http://i0.wp.com/b-live.in/wp-content/uploads/2017/06/Croissant.jpg?resize=700%2C400"/>
+<div>
+    <div style="position: fixed" id="backImg">
+        <img style="position: absolute"
+             src="http://i0.wp.com/b-live.in/wp-content/uploads/2017/06/Croissant.jpg?resize=700%2C400"/>
     </div>
-<h3 style="opacity: 0.8">Будь ласка, оцініть програму:</h3>
+    <h3 style="opacity: 0.8">Будь ласка, оцініть програму:</h3>
     <div style="position: absolute; margin-top: 220px; margin-left: 56px" id="animation">
-    <img src="https://loading.io/spinners/eclipse/lg.ring-loading-gif.gif"/>
+        <img src="https://loading.io/spinners/eclipse/lg.ring-loading-gif.gif"/>
     </div>
-<div style="margin-right: 300px; margin-top: 100px" id = "rbutns">
-    <form id = "myForm">
-    <label class="container">Погана
-        <input type="radio" value="bad"  name="mark"/>
-        <span class="checkmark"></span>
-    </label>
-    <label class="container">Нормальна
-        <input type="radio" value="Norm" name="mark" />
-        <span class="checkmark"></span>
-    </label>
-    <label class="container">Добра
-        <input type="radio" value="Good" name="mark"/>
-        <span class="checkmark"></span>
-    </label>
-    <label class="container">Супер
-        <input type="radio" value="Great" name="mark"/>
-        <span class="checkmark"></span>
-    </label>
-    <label id="label-btn-style" class="submLabel">
-    <button type = "button" class = "btn btn-primary btn-lg" id = "btn-style">Відправити</button>
-    </label>
-    </form>
-</div>
+    <div style="margin-right: 300px; margin-top: 100px" id="rbutns">
+        <form id="myForm">
+            <label class="container">Погана
+                <input type="radio" value="bad" name="mark"/>
+                <span class="checkmark"></span>
+            </label>
+            <label class="container">Нормальна
+                <input type="radio" value="Norm" name="mark"/>
+                <span class="checkmark"></span>
+            </label>
+            <label class="container">Добра
+                <input type="radio" value="Good" name="mark"/>
+                <span class="checkmark"></span>
+            </label>
+            <label class="container">Супер
+                <input type="radio" value="Great" name="mark"/>
+                <span class="checkmark"></span>
+            </label>
+            <label id="label-btn-style" class="submLabel">
+                <button type="button" class="btn btn-primary btn-lg" id="btn-style">Відправити</button>
+            </label>
+        </form>
+    </div>
 
 </div>
 </body>

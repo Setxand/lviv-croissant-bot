@@ -36,15 +36,15 @@ public class TelegramMessageSenderServiceImpl implements TelegramMessageSenderSe
     private String SERVER_URL;
     @Value("${telegram.admins.url}")
     private String TELEGRAM_ADMIN_PANEL_URL;
+
     @Override
     public void sendMessage(TelegramRequest telegramRequest, Platform platform) {
         try {
             String url = TELEGRAM_URL;
-            if(platform == TELEGRAM_ADMIN_PANEL_BOT)
+            if (platform == TELEGRAM_ADMIN_PANEL_BOT)
                 url = TELEGRAM_ADMIN_PANEL_URL;
-            new RestTemplate().postForEntity(url+"/sendMessage",telegramRequest,Void.class);
-        }
-        catch (Exception ex){
+            new RestTemplate().postForEntity(url + "/sendMessage", telegramRequest, Void.class);
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
 
@@ -53,76 +53,76 @@ public class TelegramMessageSenderServiceImpl implements TelegramMessageSenderSe
     @Override
     public void helloMessage(Message message) {
         String messange = ResourceBundle.getBundle("dictionary").getString(HELLO_MESSAGE.name());
-        int chatId  = message.getChat().getId();
-        sendMessage(new TelegramRequest(messange,chatId),message.getPlatform());
+        int chatId = message.getChat().getId();
+        sendMessage(new TelegramRequest(messange, chatId), message.getPlatform());
     }
 
     @Override
-    public void simpleMessage(String message,Message m) {
-        sendMessage(new TelegramRequest(message,m.getChat().getId()),m.getPlatform());
+    public void simpleMessage(String message, Message m) {
+        sendMessage(new TelegramRequest(message, m.getChat().getId()), m.getPlatform());
     }
 
     @Override
     public void errorMessage(Message message) {
         String text = "men, i don`t understand this command, try again)";
-        sendMessage(new TelegramRequest(text,message.getChat().getId()),message.getPlatform());
+        sendMessage(new TelegramRequest(text, message.getChat().getId()), message.getPlatform());
     }
 
     @Override
-    public void sendButtons(Markup markup,String text, Message message) {
+    public void sendButtons(Markup markup, String text, Message message) {
         TelegramRequest telegramRequest = new TelegramRequest();
         telegramRequest.setChatId(message.getChat().getId());
         telegramRequest.setText(text);
         telegramRequest.setMarkup(markup);
-        sendMessage(telegramRequest,message.getPlatform());
+        sendMessage(telegramRequest, message.getPlatform());
     }
 
     @Override
-    public void sendInlineButtons(List<List<InlineKeyboardButton>>buttons,String text, Message message) {
+    public void sendInlineButtons(List<List<InlineKeyboardButton>> buttons, String text, Message message) {
         Markup markup = new InlineKeyboardMarkup(buttons);
-        sendButtons(markup,text,message);
+        sendButtons(markup, text, message);
     }
 
     @Override
-    public void sendPhoto( String photo, String caption,Markup markup, Message message) {
+    public void sendPhoto(String photo, String caption, Markup markup, Message message) {
         String url = TELEGRAM_URL;
-        if(message.getPlatform() == TELEGRAM_ADMIN_PANEL_BOT   )
+        if (message.getPlatform() == TELEGRAM_ADMIN_PANEL_BOT)
             url = TELEGRAM_ADMIN_PANEL_URL;
-        new RestTemplate().postForEntity(url+"/sendPhoto",new TelegramRequest(message.getChat().getId(),markup,photo,caption),Void.class);
+        new RestTemplate().postForEntity(url + "/sendPhoto", new TelegramRequest(message.getChat().getId(), markup, photo, caption), Void.class);
     }
 
     @Override
     public void sendActions(Message message) {
-        List<List<InlineKeyboardButton>>inlineKeyboardButtons = new ArrayList<>();
+        List<List<InlineKeyboardButton>> inlineKeyboardButtons = new ArrayList<>();
         InlineKeyboardButton reference = new InlineKeyboardButton();
         reference.setText("Reference");
-        reference.setUrl(SERVER_URL+"/reference");
-        inlineKeyboardButtons.add(new ArrayList<>(Arrays.asList(new InlineKeyboardButton(ResourceBundle.getBundle("dictionary").getString(MENU_OF_CROISSANTS.name()),MENU_DATA.name()))));
+        reference.setUrl(SERVER_URL + "/reference");
+        inlineKeyboardButtons.add(new ArrayList<>(Arrays.asList(new InlineKeyboardButton(ResourceBundle.getBundle("dictionary").getString(MENU_OF_CROISSANTS.name()), MENU_DATA.name()))));
         inlineKeyboardButtons.add(new ArrayList<>(Arrays.asList(new InlineKeyboardButton(ResourceBundle.getBundle("dictionary").getString(CREATE_OWN_CROISSANT.name()), CREATE_OWN_CROISSANT_DATA.name()))));
         inlineKeyboardButtons.add(new ArrayList<>(Arrays.asList(reference)));
         String text = ResourceBundle.getBundle("dictionary").getString(CHOOSE_ACtIONS.name());
-        sendInlineButtons(inlineKeyboardButtons,text,message);
+        sendInlineButtons(inlineKeyboardButtons, text, message);
     }
 
     @Override
-    public void simpleQuestion(CallBackData data, String splitter,String text, Message message ) {
-        List<InlineKeyboardButton>inlineKeyboardButtons = new ArrayList<>();
+    public void simpleQuestion(CallBackData data, String splitter, String text, Message message) {
+        List<InlineKeyboardButton> inlineKeyboardButtons = new ArrayList<>();
         String yes = ResourceBundle.getBundle("dictionary").getString(YES.name());
         String no = ResourceBundle.getBundle("dictionary").getString(NO.name());
-        inlineKeyboardButtons.add(new InlineKeyboardButton(yes,data.name()+splitter+QUESTION_YES.name()));
-        inlineKeyboardButtons.add(new InlineKeyboardButton(no,data.name()+splitter+QUESTION_NO.name()));
-        sendInlineButtons(new ArrayList<>(Arrays.asList(inlineKeyboardButtons)),text,message);
+        inlineKeyboardButtons.add(new InlineKeyboardButton(yes, data.name() + splitter + QUESTION_YES.name()));
+        inlineKeyboardButtons.add(new InlineKeyboardButton(no, data.name() + splitter + QUESTION_NO.name()));
+        sendInlineButtons(new ArrayList<>(Arrays.asList(inlineKeyboardButtons)), text, message);
     }
 
     @Override
     public void noEnoughPermissions(Message message) {
         String text = "You have not enough permissions to make it!";
-        simpleMessage(text,message);
+        simpleMessage(text, message);
     }
 
     @Override
     public void sendKeyboardButtons(Message message, List<List<KeyboardButton>> buttons, String text) {
-        sendButtons(new KeyboardMarkup(buttons),text,message);
+        sendButtons(new KeyboardMarkup(buttons), text, message);
     }
 
     @Override
@@ -132,6 +132,6 @@ public class TelegramMessageSenderServiceImpl implements TelegramMessageSenderSe
         String text = ResourceBundle.getBundle("dictionary").getString(ServerSideSpeaker.ACCEPTED.name());
         telegramRequest.setText(text);
         telegramRequest.setChatId(message.getChat().getId());
-        sendMessage(telegramRequest,message.getPlatform());
+        sendMessage(telegramRequest, message.getPlatform());
     }
 }

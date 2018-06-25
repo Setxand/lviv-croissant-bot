@@ -9,10 +9,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public abstract class DemoApplicationTests {
-
-
-	protected static final Logger logger = LoggerFactory.getLogger(DemoApplicationTests .class);
-	protected static final Long userId = 1772525659494518L;
+    protected static final Logger logger = LoggerFactory.getLogger(DemoApplicationTests.class);
+    protected static final Long userId = 1772525659494518L;
 
 
 }

@@ -1,21 +1,21 @@
 package com.bots.lvivcroissantbot.service.messenger.event.impl;
 
-import com.bots.lvivcroissantbot.entity.lvivcroissants.CroissantEntity;
-import com.bots.lvivcroissantbot.entity.lvivcroissants.CroissantsFilling;
-import com.bots.lvivcroissantbot.entity.register.MUser;
 import com.bots.lvivcroissantbot.dto.messanger.Message;
 import com.bots.lvivcroissantbot.dto.messanger.Messaging;
 import com.bots.lvivcroissantbot.dto.messanger.Recipient;
+import com.bots.lvivcroissantbot.entity.lvivcroissants.CroissantEntity;
+import com.bots.lvivcroissantbot.entity.lvivcroissants.CroissantsFilling;
+import com.bots.lvivcroissantbot.entity.register.MUser;
 import com.bots.lvivcroissantbot.exception.ElementNoFoundException;
 import com.bots.lvivcroissantbot.repository.CroisantsFillingEntityRepository;
 import com.bots.lvivcroissantbot.repository.CustomerOrderingRepository;
 import com.bots.lvivcroissantbot.repository.MenuOfFillingRepository;
 import com.bots.lvivcroissantbot.repository.SupportEntityRepository;
-import com.bots.lvivcroissantbot.service.messenger.event.CroissantSavingService;
-import com.bots.lvivcroissantbot.service.messenger.event.MenuOfFillingService;
 import com.bots.lvivcroissantbot.service.messenger.MessageParserService;
 import com.bots.lvivcroissantbot.service.messenger.MessageSenderService;
 import com.bots.lvivcroissantbot.service.messenger.QuickReplyParserService;
+import com.bots.lvivcroissantbot.service.messenger.event.CroissantSavingService;
+import com.bots.lvivcroissantbot.service.messenger.event.MenuOfFillingService;
 import com.bots.lvivcroissantbot.service.peopleregister.CourierRegisterService;
 import com.bots.lvivcroissantbot.service.peopleregister.MUserRepositoryService;
 import com.bots.lvivcroissantbot.service.support.RecognizeService;
@@ -35,18 +35,17 @@ import static com.bots.lvivcroissantbot.constantenum.messenger.speaking.ServerSi
 
 @Service
 public class CroissantSavingServiceImpl implements CroissantSavingService {
+    private final static Logger logger = LoggerFactory.getLogger(CroissantSavingServiceImpl.class);
     @Autowired
     private MessageSenderService messageSenderService;
     @Autowired
     private MenuOfFillingRepository menuOfFillingRepositoryService;
     @Autowired
     private CroissantService croissantRepositoryService;
-
     @Autowired
     private QuickReplyParserService quickReplyParserService;
     @Autowired
     private CroisantsFillingEntityRepository croissantsFillingEntityRepositoryService;
-
     @Autowired
     private CustomerOrderingRepository customerOrderingRepositoryService;
     @Autowired
@@ -62,28 +61,25 @@ public class CroissantSavingServiceImpl implements CroissantSavingService {
     @Autowired
     private SupportEntityRepository supportEntityRepositoryService;
 
-    private   final static Logger logger = LoggerFactory.getLogger(CroissantSavingServiceImpl.class);
-
     @Override
     public void saveCroissant(Messaging messaging) {
 
         try {
             if (messaging.getMessage().getText().toUpperCase().equals(ADD.name()))
-                messageSenderService.askTypeOfCroissants(messaging.getSender().getId(),TYPE_PAYLOAD.name()+"?");
+                messageSenderService.askTypeOfCroissants(messaging.getSender().getId(), TYPE_PAYLOAD.name() + "?");
             else {
-                 finalizeSavingCroissant(messaging);
+                finalizeSavingCroissant(messaging);
             }
 
-        }catch (Exception ex){
+        } catch (Exception ex) {
 
             CroissantEntity croissantEntity = croissantRepositoryService.findLastRecord();
-            if(croissantEntity.getCroissantsFillings().isEmpty())
+            if (croissantEntity.getCroissantsFillings().isEmpty())
                 croissantRepositoryService.remove(croissantEntity);
             messageSenderService.errorMessage(messaging.getSender().getId());
-            logger.error("Error",ex);
+            logger.error("Error", ex);
         }
     }
-
 
 
     private void finalizeSavingCroissant(Messaging messaging) {
@@ -99,15 +95,14 @@ public class CroissantSavingServiceImpl implements CroissantSavingService {
 
 
         } else if (croissantEntity.getCroissantsFillings().isEmpty()) {
-             parseCroissantsFillings(messaging, croissantEntity);
-        }
-        else if(croissantEntity.getPrice() == 0){
-             parsePrice(messaging, croissantEntity);
+            parseCroissantsFillings(messaging, croissantEntity);
+        } else if (croissantEntity.getPrice() == 0) {
+            parsePrice(messaging, croissantEntity);
 
-        }else {
+        } else {
             MUser.setStatus(null);
             MUserRepositoryService.saveAndFlush(MUser);
-             errorAction(messaging, croissantEntity);
+            errorAction(messaging, croissantEntity);
 
         }
     }
@@ -116,14 +111,14 @@ public class CroissantSavingServiceImpl implements CroissantSavingService {
         try {
             croissantEntity.setPrice(Integer.parseInt(messaging.getMessage().getText()));
             croissantRepositoryService.saveAndFlush(croissantEntity);
-            messageSenderService.sendMessage(new Messaging(new Message(recognizeService.recognize(CROISSANT_SUCCESSFULLY_ADDED.name(),messaging.getSender().getId())), new Recipient(messaging.getSender().getId())));
+            messageSenderService.sendMessage(new Messaging(new Message(recognizeService.recognize(CROISSANT_SUCCESSFULLY_ADDED.name(), messaging.getSender().getId())), new Recipient(messaging.getSender().getId())));
             MUser MUser = MUserRepositoryService.findOnebyRId(messaging.getSender().getId());
             MUser.setStatus(null);
             MUserRepositoryService.saveAndFlush(MUser);
 
-        }catch (Exception ex){
-            logger.error("Error",ex);
-            messageSenderService.sendSimpleMessage(recognizeService.recognize(NON_CORRECT_FORMAT_OF_PRICE.name(),messaging.getSender().getId()),messaging.getSender().getId());
+        } catch (Exception ex) {
+            logger.error("Error", ex);
+            messageSenderService.sendSimpleMessage(recognizeService.recognize(NON_CORRECT_FORMAT_OF_PRICE.name(), messaging.getSender().getId()), messaging.getSender().getId());
         }
     }
 
@@ -136,25 +131,24 @@ public class CroissantSavingServiceImpl implements CroissantSavingService {
     private void parseCroissantsFillings(Messaging messaging, CroissantEntity croissantEntity) {
         String[] str = messaging.getMessage().getText().split(",");
         List<CroissantsFilling> croissantsFillingEntities = new ArrayList<>();
-            try {
-                croissantsFillingEntities.add(new CroissantsFilling(menuOfFillingRepositoryService.findById(Long.parseLong(supportEntityRepositoryService.findByUserId(messaging.getSender().getId()).getType())).orElseThrow(ElementNoFoundException::new)));
+        try {
+            croissantsFillingEntities.add(new CroissantsFilling(menuOfFillingRepositoryService.findById(Long.parseLong(supportEntityRepositoryService.findByUserId(messaging.getSender().getId()).getType())).orElseThrow(ElementNoFoundException::new)));
 
-                for (String s : str) {
-                    croissantsFillingEntities.add(new CroissantsFilling(menuOfFillingRepositoryService.findById(Long.parseLong(s)).orElseThrow(ElementNoFoundException::new)));
+            for (String s : str) {
+                croissantsFillingEntities.add(new CroissantsFilling(menuOfFillingRepositoryService.findById(Long.parseLong(s)).orElseThrow(ElementNoFoundException::new)));
             }
 
-                croissantEntity.setCroissantsFillings(croissantsFillingEntities);
+            croissantEntity.setCroissantsFillings(croissantsFillingEntities);
             croissantRepositoryService.saveAndFlush(croissantEntity);
 
             for (CroissantsFilling croissantsFilling : croissantsFillingEntities) {
                 croissantsFillingEntityRepositoryService.saveAndFlush(croissantsFilling);
             }
 
-            messageSenderService.sendSimpleMessage(recognizeService.recognize(ASK_PRICE.name(),messaging.getSender().getId()),messaging.getSender().getId());
-        }
-        catch (Exception ex){
-            logger.error("Error",ex);
-            messageSenderService.sendSimpleMessage(recognizeService.recognize(NON_CORRECT_FORMAT_OF_FILLING.name(),messaging.getSender().getId()), messaging.getSender().getId());
+            messageSenderService.sendSimpleMessage(recognizeService.recognize(ASK_PRICE.name(), messaging.getSender().getId()), messaging.getSender().getId());
+        } catch (Exception ex) {
+            logger.error("Error", ex);
+            messageSenderService.sendSimpleMessage(recognizeService.recognize(NON_CORRECT_FORMAT_OF_FILLING.name(), messaging.getSender().getId()), messaging.getSender().getId());
             menuOfFillingService.getMenuOfFilling(messaging.getSender().getId());
         }
 
@@ -163,14 +157,14 @@ public class CroissantSavingServiceImpl implements CroissantSavingService {
     private void parseImageUrl(Messaging messaging, CroissantEntity croissantEntity) {
         croissantEntity.setImageUrl(messaging.getMessage().getText());
         croissantRepositoryService.saveAndFlush(croissantEntity);
-        messageSenderService.sendMessage(new Messaging(new Message(recognizeService.recognize(ID_OF_FILLING.name(),messaging.getSender().getId())), new Recipient(messaging.getSender().getId())));
+        messageSenderService.sendMessage(new Messaging(new Message(recognizeService.recognize(ID_OF_FILLING.name(), messaging.getSender().getId())), new Recipient(messaging.getSender().getId())));
         menuOfFillingService.getMenuOfFilling(messaging.getSender().getId());
     }
 
     private void parseName(Messaging messaging, CroissantEntity croissantEntity) {
         croissantEntity.setName(TextFormatter.toNormalFormat(messaging.getMessage().getText()));
         croissantRepositoryService.saveAndFlush(croissantEntity);
-        messageSenderService.sendMessage(new Messaging(new Message(recognizeService.recognize(IMAGE_URL .name(),messaging.getSender().getId()) ), new Recipient(messaging.getSender().getId())));
+        messageSenderService.sendMessage(new Messaging(new Message(recognizeService.recognize(IMAGE_URL.name(), messaging.getSender().getId())), new Recipient(messaging.getSender().getId())));
 
     }
 }

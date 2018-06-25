@@ -13,9 +13,9 @@ import java.util.List;
 @Getter
 @Setter
 @EqualsAndHashCode
-public  class CroissantEntity {
+public class CroissantEntity {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
     private String type;
@@ -34,8 +34,6 @@ public  class CroissantEntity {
     }
 
 
-
-
     public CroissantEntity(String name, String type) {
         this.name = name;
         this.type = type;
@@ -43,16 +41,15 @@ public  class CroissantEntity {
     }
 
 
-    public void addSingleFilling(CroissantsFilling croissantsFilling){
+    public void addSingleFilling(CroissantsFilling croissantsFilling) {
         this.getCroissantsFillings().add(croissantsFilling);
         croissantsFilling.setCroissantEntity(this);
     }
 
 
-
     @Override
     public String toString() {
-        return "\n\n"+name+".\n"+"" +
+        return "\n\n" + name + ".\n" + "" +
                 "Вміст: \n" +
                 croissantsFillings;
     }

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @Getter
 @Setter
@@ -13,7 +14,7 @@ import java.util.List;
 public class Data {
     private String name;
     private String period;
-    private List<Value>values;
+    private List<Value> values;
     private String title;
     private String description;
     private String id;

@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @Getter
 @Setter
 public class PersistentMenu {
@@ -15,7 +16,7 @@ public class PersistentMenu {
     @JsonProperty("call_to_actions")
     private List<MenuItem> callToActions = new ArrayList<>();
 
-    public PersistentMenu( ) {
+    public PersistentMenu() {
         this.locale = "default";
         this.composerInputDisabled = false;
 

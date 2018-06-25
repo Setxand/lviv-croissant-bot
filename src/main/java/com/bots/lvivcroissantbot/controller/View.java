@@ -35,34 +35,33 @@ public class View {
     private CroissantService croissantRepositoryService;
     @Autowired
     private CroissantService croissantService;
-    @RequestMapping(value = "/req/{customerId}",method = RequestMethod.GET)
-    public String  getMyReq(Model model,@PathVariable String customerId){
-        model.addAttribute("customerId",customerId);
+
+    @RequestMapping(value = "/req/{customerId}", method = RequestMethod.GET)
+    public String getMyReq(Model model, @PathVariable String customerId) {
+        model.addAttribute("customerId", customerId);
         return "WebView";
     }
 
 
-
     @RequestMapping(value = "/showMore/{orderId}")
-    public String showMoreForOrderings(@PathVariable String orderId,Model model){
+    public String showMoreForOrderings(@PathVariable String orderId, Model model) {
         CustomerOrdering customerOrdering = customerOrderingRepositoryService.findById(Long.parseLong(orderId)).orElseThrow(ElementNoFoundException::new);
         List<String> orderings = new ArrayList<>();
-        for(String cr: customerOrdering.getCroissants()){
+        for (String cr : customerOrdering.getCroissants()) {
             try {
                 CroissantEntity croissantEntity = croissantRepositoryService.findOne(Long.parseLong(cr));
                 orderings.add(croissantEntity.toString());
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 orderings.add(cr);
             }
         }
-        model.addAttribute("ordering",customerOrdering);
-        model.addAttribute("croissants",orderings);
+        model.addAttribute("ordering", customerOrdering);
+        model.addAttribute("croissants", orderings);
         return "showMorePage";
     }
 
     @RequestMapping(value = "/fillings/{croissantId}")
-    public String showOrdering(@PathVariable String croissantId,Model model){
+    public String showOrdering(@PathVariable String croissantId, Model model) {
         CroissantEntity croissantEntity = croissantRepositoryService.findOne(Long.parseLong(croissantId));
 
         model.addAttribute("fillings", croissantEntity.getCroissantsFillings());
@@ -70,34 +69,36 @@ public class View {
     }
 
     @GetMapping("/payment/{userId}")
-    public String getPayment(@PathVariable String userId, Model model){
+    public String getPayment(@PathVariable String userId, Model model) {
         CustomerOrdering customerOrdering = customerOrderingRepositoryService.findTopByMUserOrderByIdDesc(MUserRepositoryService.findOnebyRId(Long.parseLong(userId)));
-        model.addAttribute("userId",userId);
-        model.addAttribute("price",customerOrdering.getPrice());
+        model.addAttribute("userId", userId);
+        model.addAttribute("price", customerOrdering.getPrice());
         return "payment";
     }
 
     @GetMapping("/reference")
-    public String ref(){
+    public String ref() {
         return "reference";
     }
 
     @GetMapping("/successTrans")
-    public String finTrans(){
+    public String finTrans() {
         return "successTransaction";
     }
 
     @GetMapping("/save_croissant")
-    public String savingCroissant(){
+    public String savingCroissant() {
         return "creatingCroissant";
     }
+
     @GetMapping("/update_croissant")
-    public String updatingCroissant(){
+    public String updatingCroissant() {
         return "updatingCroissant";
     }
+
     @GetMapping("/update_croissant_form")
-    public String updatingCroissantForm(@RequestParam String id, Model model){
-        model.addAttribute("id",id);
+    public String updatingCroissantForm(@RequestParam String id, Model model) {
+        model.addAttribute("id", id);
         return "updatingCroissantForm";
     }
 }

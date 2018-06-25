@@ -1,14 +1,14 @@
 package com.bots.lvivcroissantbot.service.messenger.event.impl;
 
-import com.bots.lvivcroissantbot.entity.lvivcroissants.CroissantEntity;
-import com.bots.lvivcroissantbot.entity.lvivcroissants.CroissantsFilling;
-import com.bots.lvivcroissantbot.entity.Support;
-import com.bots.lvivcroissantbot.entity.register.MUser;
 import com.bots.lvivcroissantbot.constantenum.messenger.Role;
 import com.bots.lvivcroissantbot.dto.messanger.*;
+import com.bots.lvivcroissantbot.entity.Support;
+import com.bots.lvivcroissantbot.entity.lvivcroissants.CroissantEntity;
+import com.bots.lvivcroissantbot.entity.lvivcroissants.CroissantsFilling;
+import com.bots.lvivcroissantbot.entity.register.MUser;
 import com.bots.lvivcroissantbot.repository.SupportEntityRepository;
-import com.bots.lvivcroissantbot.service.messenger.event.GetMenuService;
 import com.bots.lvivcroissantbot.service.messenger.MessageSenderService;
+import com.bots.lvivcroissantbot.service.messenger.event.GetMenuService;
 import com.bots.lvivcroissantbot.service.peopleregister.MUserRepositoryService;
 import com.bots.lvivcroissantbot.service.support.RecognizeService;
 import com.bots.lvivcroissantbot.service.support.TextFormatter;
@@ -43,12 +43,13 @@ public class GetMenuServiceImpl implements GetMenuService {
 
     @Value("${server.url}")
     private String SERVER_URL;
+
     @Override
     public void getMenu(Messaging messaging) {
         if (messaging.getPostback() != null) {
             String payload = messaging.getPostback().getPayload();
-                if (TextFormatter.ejectContext(payload).equals(FOR_GETTING_MENU.name()) || TextFormatter.ejectPaySinglePayload(payload).equals(MENU_PAYLOAD.name())) {
-                    initAndSendQueryAllCr(messaging);
+            if (TextFormatter.ejectContext(payload).equals(FOR_GETTING_MENU.name()) || TextFormatter.ejectPaySinglePayload(payload).equals(MENU_PAYLOAD.name())) {
+                initAndSendQueryAllCr(messaging);
             }
         } else if (messaging.getMessage().getQuickReply() == null) {
             messageSenderService.askTypeOfCroissants(messaging.getSender().getId(), CROISSANT_TYPE_PAYLOAD.name() + "?");
@@ -98,51 +99,48 @@ public class GetMenuServiceImpl implements GetMenuService {
     private List<Element> fillingItems(List<Element> elements, List<CroissantEntity> croissantEntities, Long recipient, Messaging messaging) {
 
         int index = 0;
-        List<CroissantEntity>croissantsSubList;
+        List<CroissantEntity> croissantsSubList;
         if (messaging.getPostback() != null) {
             String payload = messaging.getPostback().getPayload();
             if (TextFormatter.ejectContext(payload).equals(FOR_GETTING_MENU.name())) {
-                index= Integer.parseInt(TextFormatter.ejectVariableWithContext(messaging.getPostback().getPayload()));
+                index = Integer.parseInt(TextFormatter.ejectVariableWithContext(messaging.getPostback().getPayload()));
             }
 
         }
-      try {
-                croissantsSubList = croissantEntities.subList(index,index+10);
-                index+=9;
-            }
-            catch (Exception ex){
-                croissantsSubList = croissantEntities.subList(index, croissantEntities.size());
-                index+=(croissantEntities.size()-index-1);
+        try {
+            croissantsSubList = croissantEntities.subList(index, index + 10);
+            index += 9;
+        } catch (Exception ex) {
+            croissantsSubList = croissantEntities.subList(index, croissantEntities.size());
+            index += (croissantEntities.size() - index - 1);
 
-            }
+        }
 
         MUser MUser = MUserRepositoryService.findOnebyRId(messaging.getSender().getId());
-        for (CroissantEntity croissantEntity :croissantsSubList) {
+        for (CroissantEntity croissantEntity : croissantsSubList) {
             Element element = new Element();
 
-            if(croissantEntity == croissantsSubList.get(croissantsSubList.size()-1) && croissantEntity != croissantEntities.get(croissantEntities.size()-1)) {
-                addShowMore(index, element, elements,messaging);
+            if (croissantEntity == croissantsSubList.get(croissantsSubList.size() - 1) && croissantEntity != croissantEntities.get(croissantEntities.size() - 1)) {
+                addShowMore(index, element, elements, messaging);
                 break;
             }
             element = elementInit(element, croissantEntities, messaging, croissantEntity);
-            if(croissantEntity.getType().equals(OWN.name()) || MUser.getUser().getRole() != Role.CUSTOMER)
+            if (croissantEntity.getType().equals(OWN.name()) || MUser.getUser().getRole() != Role.CUSTOMER)
                 addDeleteButton(element, messaging, croissantEntity);
 
             elements.add(element);
         }
 
 
-
         return elements;
     }
 
-    private void addDeleteButton(Element element,  Messaging messaging, CroissantEntity croissantEntity) {
+    private void addDeleteButton(Element element, Messaging messaging, CroissantEntity croissantEntity) {
 
         Button button1 = new Button(postback.name(), recognizeService.recognize(DELETE_BUTTON.name(), messaging.getSender().getId()));
         button1.setPayload(DELETE_BUTTON_PAYLOAD.name() + "?" + croissantEntity.getId().toString());
         element.getButtons().add(button1);
     }
-
 
 
     private Element elementInit(Element element, List<CroissantEntity> croissantEntities, Messaging messaging, CroissantEntity croissantEntity) {
@@ -151,9 +149,9 @@ public class GetMenuServiceImpl implements GetMenuService {
         Button button = new Button(postback.name(), recognizeService.recognize(MAKE_ORDER.name(), messaging.getSender().getId()));
         element.setSubtitle(counter(croissantEntity.getCroissantsFillings()));
         button.setPayload(ORDER_PAYLOAD.name() + "?" + croissantEntity.getId().toString());
-        Button viewButton = new Button(web_url.name(),recognizeService.recognize(MORE_INFO.name(),messaging.getSender().getId()));
+        Button viewButton = new Button(web_url.name(), recognizeService.recognize(MORE_INFO.name(), messaging.getSender().getId()));
         viewButton.setMesExtentions(true);
-        viewButton.setUrl(SERVER_URL+"/fillings/"+ croissantEntity.getId());
+        viewButton.setUrl(SERVER_URL + "/fillings/" + croissantEntity.getId());
         viewButton.setHeightRatio("tall");
         element.getButtons().add(button);
         element.getButtons().add(viewButton);
@@ -161,9 +159,9 @@ public class GetMenuServiceImpl implements GetMenuService {
     }
 
     private void addShowMore(int index, Element element, List<Element> elements, Messaging messaging) {
-        Button button = new Button(postback.name(), recognizeService.recognize(SHOW_MORE_BUTTON.name(),messaging.getSender().getId()), SHOW_MORE_PAYLOAD.name() + "?" + FOR_GETTING_MENU.name() + "&" + index);
+        Button button = new Button(postback.name(), recognizeService.recognize(SHOW_MORE_BUTTON.name(), messaging.getSender().getId()), SHOW_MORE_PAYLOAD.name() + "?" + FOR_GETTING_MENU.name() + "&" + index);
         element.getButtons().add(button);
-        element.setTitle(recognizeService.recognize(NOT_ALL_CROISSANTS.name(),messaging.getSender().getId()));
+        element.setTitle(recognizeService.recognize(NOT_ALL_CROISSANTS.name(), messaging.getSender().getId()));
         elements.add(element);
 
     }

@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class TelegramWebHook {
     @Autowired
     private UpdateParserService updateParserService;
+
     @PostMapping
-    public void getUpdate(@RequestBody Update update){
+    public void getUpdate(@RequestBody Update update) {
         updateParserService.parseUpdate(update);
     }
 }

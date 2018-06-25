@@ -1,8 +1,8 @@
 package com.bots.lvivcroissantbot.service.adminpanel.impl;
 
-import com.bots.lvivcroissantbot.entity.register.TUser;
-
 import com.bots.lvivcroissantbot.dto.telegram.Message;
+import com.bots.lvivcroissantbot.dto.telegram.TelegramEntity;
+import com.bots.lvivcroissantbot.entity.register.TUser;
 import com.bots.lvivcroissantbot.service.adminpanel.AdminTelegramMessageParserHelperService;
 import com.bots.lvivcroissantbot.service.adminpanel.AdminTelegramMessageParserService;
 import com.bots.lvivcroissantbot.service.adminpanel.BotCommandsParserService;
@@ -11,7 +11,7 @@ import com.bots.lvivcroissantbot.service.peopleregister.TelegramUserRepositorySe
 import com.bots.lvivcroissantbot.service.telegram.TelegramMessageSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.bots.lvivcroissantbot.dto.telegram.TelegramEntity;
+
 import java.util.List;
 
 import static com.bots.lvivcroissantbot.constantenum.telegram.TelegramUserStatus.ADDING_FILLING_STATUS_1;
@@ -28,12 +28,13 @@ public class AdminTelegramMessageParserServiceImpl implements AdminTelegramMessa
     private TelegramAddingRecordingsEventService telegramAddingRecordingsEventService;
     @Autowired
     private AdminTelegramMessageParserHelperService adminTelegramMessageParserHelperService;
+
     @Override
     public void parseMessage(Message message) {
         if (message.getEntities() != null) {
             List<TelegramEntity> entities = message.getEntities();
             for (TelegramEntity telegramEntity : entities) {
-                if(telegramEntity.getType().equals("url")){
+                if (telegramEntity.getType().equals("url")) {
                     checkingByStatus(message);
                     break;
                 }

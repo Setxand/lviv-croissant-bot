@@ -22,22 +22,19 @@ import static com.bots.lvivcroissantbot.constantenum.messenger.type.ButtonType.w
 
 @Component
 public class ServerStarting {
+    private final static Logger logger = LoggerFactory.getLogger(ServerStarting.class);
     @Autowired
     private TelegramMessageSenderService telegramMessageSenderService;
     @Value("${messenger.page.access.token}")
     private String PAGE_ACCESS_TOKEN;
-
     @Value("${messenger.profile.api.uri}")
     private String FACEBOOK_PROFILE_URI;
-
     @Value("${server.url}")
     private String SERVER_URL;
     @Value("${telegram.url}")
     private String TELEGRAM_URL;
     @Value("${telegram.admins.url}")
     private String ADMIN_TELEGRAM_URL;
-
-    private   final static Logger logger = LoggerFactory.getLogger(ServerStarting.class);
     private RestTemplate restTemplate;
 
     @PostConstruct
@@ -61,10 +58,10 @@ public class ServerStarting {
 
             ResponseEntity<?> responseEntity = restTemplate
                     .postForEntity(FACEBOOK_PROFILE_URI + PAGE_ACCESS_TOKEN, messengerProfileApi, MessengerProfileApi.class);
-            logger.info("Messenger: persistence menu - "+responseEntity.toString());
+            logger.info("Messenger: persistence menu - " + responseEntity.toString());
             ResponseEntity<?> responseForWhiteList = restTemplate
                     .postForEntity(FACEBOOK_PROFILE_URI + PAGE_ACCESS_TOKEN, shell, Shell.class);
-            logger.info("Messenger: WhiteList domain - "+responseForWhiteList.toString());
+            logger.info("Messenger: WhiteList domain - " + responseForWhiteList.toString());
 
         } catch (Exception ex) {
             logger.warn("Messenger queries: " + ex);

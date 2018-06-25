@@ -41,7 +41,8 @@ public class MUser {
 
     public MUser() {
     }
-    public void addCustomerOrdering(CustomerOrdering customerOrdering){
+
+    public void addCustomerOrdering(CustomerOrdering customerOrdering) {
         customerOrderings.add(customerOrdering);
         customerOrdering.setMUser(this);
     }

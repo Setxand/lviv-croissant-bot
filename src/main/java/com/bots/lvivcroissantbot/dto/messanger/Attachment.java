@@ -16,7 +16,9 @@ public class Attachment {
         this.type = type;
         this.payload = payload;
     }
-    public Attachment(){}
+
+    public Attachment() {
+    }
 
 
 }

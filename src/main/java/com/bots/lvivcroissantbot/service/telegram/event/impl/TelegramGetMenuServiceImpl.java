@@ -1,9 +1,5 @@
 package com.bots.lvivcroissantbot.service.telegram.event.impl;
 
-import com.bots.lvivcroissantbot.entity.lvivcroissants.CroissantEntity;
-import com.bots.lvivcroissantbot.entity.lvivcroissants.CroissantsFilling;
-import com.bots.lvivcroissantbot.entity.lvivcroissants.MenuOfFilling;
-import com.bots.lvivcroissantbot.entity.register.TUser;
 import com.bots.lvivcroissantbot.constantenum.messenger.speaking.ServerSideSpeaker;
 import com.bots.lvivcroissantbot.constantenum.messenger.type.CroissantsTypes;
 import com.bots.lvivcroissantbot.constantenum.telegram.TelegramUserStatus;
@@ -11,10 +7,14 @@ import com.bots.lvivcroissantbot.dto.telegram.Message;
 import com.bots.lvivcroissantbot.dto.telegram.button.InlineKeyboardButton;
 import com.bots.lvivcroissantbot.dto.telegram.button.InlineKeyboardMarkup;
 import com.bots.lvivcroissantbot.dto.telegram.button.Markup;
+import com.bots.lvivcroissantbot.entity.lvivcroissants.CroissantEntity;
+import com.bots.lvivcroissantbot.entity.lvivcroissants.CroissantsFilling;
+import com.bots.lvivcroissantbot.entity.lvivcroissants.MenuOfFilling;
+import com.bots.lvivcroissantbot.entity.register.TUser;
 import com.bots.lvivcroissantbot.repository.MenuOfFillingRepository;
-import com.bots.lvivcroissantbot.service.telegram.event.TelegramGetMenuService;
 import com.bots.lvivcroissantbot.service.peopleregister.TelegramUserRepositoryService;
 import com.bots.lvivcroissantbot.service.telegram.TelegramMessageSenderService;
+import com.bots.lvivcroissantbot.service.telegram.event.TelegramGetMenuService;
 import com.bots.lvivcroissantbot.service.uni.CroissantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -148,8 +148,8 @@ public class TelegramGetMenuServiceImpl implements TelegramGetMenuService {
         String sandwich = ResourceBundle.getBundle("dictionary").getString(ServerSideSpeaker.SANDWICH.name());
         List<InlineKeyboardButton> list = new ArrayList<>(Arrays.asList(new InlineKeyboardButton(sweet, CROISSANT_TYPE_DATA.name() + "?" + CroissantsTypes.SWEET.name()),
                 new InlineKeyboardButton(sandwich, CROISSANT_TYPE_DATA.name() + "?" + CroissantsTypes.SANDWICH.name())));
-        if(message.getPlatform()!=TELEGRAM_ADMIN_PANEL_BOT)
-        list.add(new InlineKeyboardButton(own, CROISSANT_TYPE_DATA.name() + "?" + CroissantsTypes.OWN.name()));
+        if (message.getPlatform() != TELEGRAM_ADMIN_PANEL_BOT)
+            list.add(new InlineKeyboardButton(own, CROISSANT_TYPE_DATA.name() + "?" + CroissantsTypes.OWN.name()));
         telegramMessageSenderService.sendInlineButtons(new ArrayList<>(Arrays.asList(list)), text, message);
     }
 }
