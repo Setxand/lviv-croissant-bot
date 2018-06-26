@@ -39,7 +39,7 @@ public class TelegramGetMenuServiceImpl implements TelegramGetMenuService {
     private CroissantService croissantRepositoryService;
     @Autowired
     private MenuOfFillingRepository menuOfFillingRepositoryService;
-    @Value("${server.url}")
+    @Value("${url.server}")
     private String SERVER_URL;
 
     @Override

@@ -53,7 +53,7 @@ public class MessageSenderServiceImpl implements MessageSenderService {
     private String USER_DATA_URL;
     @Value("${messenger.facebook.MUser.data.uer.fields}")
     private String DATA_FIELDS;
-    @Value("${server.url}")
+    @Value("${url.server}")
     private String SERVER_URL;
 
     public MessageSenderServiceImpl(CroissantService croissantRepositoryService, CroisantsFillingEntityRepository croisantsFillingEntityRepository, MenuOfFillingRepository menuOfFillingRepositoryService, RecognizeService recognizeService, com.bots.lvivcroissantbot.service.peopleregister.MUserRepositoryService MUserRepositoryService) {

@@ -48,7 +48,7 @@ public class PayloadParserServiceImpl implements PayloadParserService {
     private CourierService courierService;
     @Autowired
     private SupportEntityRepository supportEntityRepositoryService;
-    @Value("${server.url}")
+    @Value("${url.server}")
     private String SERVER_URL;
 
 

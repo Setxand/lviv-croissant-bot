@@ -87,7 +87,7 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
     private MUserRepository mUserRepository;
     @Autowired
     private TelegramMessageSenderService telegramMessageSenderService;
-    @Value("${server.url}")
+    @Value("${url.server}")
     private String SERVER_URL;
 
 

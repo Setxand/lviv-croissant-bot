@@ -61,7 +61,7 @@ public class TelegramMessageParserHelperServiceImpl implements TelegramMessagePa
     private String SUBSCRIPTION_URL;
     @Value("${messenger.app.verify.token}")
     private String VER_TOK;
-    @Value("${server.url}")
+    @Value("${url.server}")
     private String SERVER_URL;
 
     @Override

@@ -43,7 +43,7 @@ public class RequestHandler {
     private EmailService emailService;
     @Autowired
     private UserRepository userRepository;
-    @Value("${server.url}")
+    @Value("${url.server}")
     private String SERVER_URL;
     @Value("${stripe.secret.key}")
     private String STRIPE_API_KEY;

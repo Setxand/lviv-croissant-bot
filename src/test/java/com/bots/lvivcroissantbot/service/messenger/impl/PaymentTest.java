@@ -18,7 +18,7 @@ import static com.bots.lvivcroissantbot.constantenum.messenger.type.ButtonType.w
 
 public class PaymentTest extends DemoApplicationTests {
     List<Button> buttons;
-    @Value("${server.url}")
+    @Value("${url.server}")
     private String SERVER_URL;
     @Mock
     RestTemplate restTemplate;

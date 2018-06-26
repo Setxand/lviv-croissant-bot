@@ -30,11 +30,11 @@ import static com.bots.lvivcroissantbot.constantenum.telegram.CallBackData.MENU_
 public class TelegramMessageSenderServiceImpl implements TelegramMessageSenderService {
     @Autowired
     private SpeakingMessagesRepository speakingMessagesRepositoryService;
-    @Value("${telegram.url}")
+    @Value("${url.telegram}")
     private String TELEGRAM_URL;
-    @Value("${server.url}")
+    @Value("${url.server}")
     private String SERVER_URL;
-    @Value("${telegram.admins.url}")
+    @Value("${url.telegram.admins}")
     private String TELEGRAM_ADMIN_PANEL_URL;
 
     @Override

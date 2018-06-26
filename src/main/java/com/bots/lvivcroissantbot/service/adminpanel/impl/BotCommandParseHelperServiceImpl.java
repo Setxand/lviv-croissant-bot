@@ -45,7 +45,7 @@ public class BotCommandParseHelperServiceImpl implements BotCommandParseHelperSe
     private CustomerOrderingRepository customerOrderingRepositoryService;
     @Autowired
     private CroissantService croissantRepositoryService;
-    @Value("${server.url}")
+    @Value("${url.server}")
     private String SERVER_URL;
     @Value("${messenger.app.verify.token}")
     private String VER_TOK;

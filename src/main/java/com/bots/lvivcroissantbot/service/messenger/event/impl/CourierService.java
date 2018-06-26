@@ -49,7 +49,7 @@ public class CourierService implements com.bots.lvivcroissantbot.service.messeng
     private MUserRepositoryService MUserRepositoryService;
     @Autowired
     private UserService userService;
-    @Value("${server.url}")
+    @Value("${url.server}")
     private String SERVER_URL;
 
     @Override

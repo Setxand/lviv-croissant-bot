@@ -29,9 +29,10 @@ public class UserServiceImpl implements UserService {
     private MUserRepositoryService MUserRepositoryService;
 
     @Autowired
-    private MessageParserService messageParserServiceService;
+    private MessageParserService    messageParserService;
     @Autowired
     private PayloadParserService payloadParserService;
+
 
 
     @Override
@@ -45,7 +46,7 @@ public class UserServiceImpl implements UserService {
             MUser MUser = MUserRepositoryService.findOnebyRId(messaging.getSender().getId());
             if (MUser.getStatus() == null) {
                 messaging.getMessage().setText(CUSTOMER_REGISTER_FINALIZE.name());
-                messageParserServiceService.parseMessage(messaging);
+                messageParserService.parseMessage(messaging);
             } else if (messaging.getMessage().getText().equals(CUSTOMER_REGISTER.name())) {
                 messageSenderService.sendSimpleMessage(recognizeService.recognize(NAME_LASTNAME.name(), messaging.getSender().getId()), messaging.getSender().getId());
             } else {

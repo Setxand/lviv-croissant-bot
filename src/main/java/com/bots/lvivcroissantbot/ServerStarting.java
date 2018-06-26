@@ -27,13 +27,13 @@ public class ServerStarting {
     private TelegramMessageSenderService telegramMessageSenderService;
     @Value("${messenger.page.access.token}")
     private String PAGE_ACCESS_TOKEN;
-    @Value("${messenger.profile.api.uri}")
-    private String FACEBOOK_PROFILE_URI;
-    @Value("${server.url}")
+    @Value("${url.messenger.profile}")
+    private String FACEBOOK_PROFILE_URL;
+    @Value("${url.server}")
     private String SERVER_URL;
-    @Value("${telegram.url}")
+    @Value("${url.telegram}")
     private String TELEGRAM_URL;
-    @Value("${telegram.admins.url}")
+    @Value("${url.telegram.admins}")
     private String ADMIN_TELEGRAM_URL;
     private RestTemplate restTemplate;
 
@@ -57,10 +57,10 @@ public class ServerStarting {
 
 
             ResponseEntity<?> responseEntity = restTemplate
-                    .postForEntity(FACEBOOK_PROFILE_URI + PAGE_ACCESS_TOKEN, messengerProfileApi, MessengerProfileApi.class);
+                    .postForEntity(FACEBOOK_PROFILE_URL + PAGE_ACCESS_TOKEN, messengerProfileApi, MessengerProfileApi.class);
             logger.info("Messenger: persistence menu - " + responseEntity.toString());
             ResponseEntity<?> responseForWhiteList = restTemplate
-                    .postForEntity(FACEBOOK_PROFILE_URI + PAGE_ACCESS_TOKEN, shell, Shell.class);
+                    .postForEntity(FACEBOOK_PROFILE_URL + PAGE_ACCESS_TOKEN, shell, Shell.class);
             logger.info("Messenger: WhiteList domain - " + responseForWhiteList.toString());
 
         } catch (Exception ex) {

@@ -41,7 +41,7 @@ public class GetMenuServiceImpl implements GetMenuService {
     private SupportEntityRepository supportEntityRepositoryService;
 
 
-    @Value("${server.url}")
+    @Value("${url.server}")
     private String SERVER_URL;
 
     @Override
