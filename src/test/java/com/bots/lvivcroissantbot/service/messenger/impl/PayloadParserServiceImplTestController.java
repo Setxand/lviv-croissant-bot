@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.bots.lvivcroissantbot.constantenum.messenger.payload.Payloads.NAVIGATION_MENU;
 
-public class PayloadParserServiceImplTest extends DemoApplicationTests {
+public class PayloadParserServiceImplTestController extends DemoApplicationTests {
     @Autowired
     private PayloadParserService payloadParserService;
     private Messaging messaging;

@@ -1,5 +1,6 @@
 package com.bots.lvivcroissantbot.service.telegram.impl;
 
+import com.bots.lvivcroissantbot.config.client.UrlClient;
 import com.bots.lvivcroissantbot.constantenum.Platform;
 import com.bots.lvivcroissantbot.constantenum.messenger.speaking.ServerSideSpeaker;
 import com.bots.lvivcroissantbot.constantenum.telegram.CallBackData;
@@ -30,19 +31,14 @@ import static com.bots.lvivcroissantbot.constantenum.telegram.CallBackData.MENU_
 public class TelegramMessageSenderServiceImpl implements TelegramMessageSenderService {
     @Autowired
     private SpeakingMessagesRepository speakingMessagesRepositoryService;
-    @Value("${url.telegram}")
-    private String TELEGRAM_URL;
-    @Value("${url.server}")
-    private String SERVER_URL;
-    @Value("${url.telegram.admins}")
-    private String TELEGRAM_ADMIN_PANEL_URL;
-
+    @Autowired
+    private UrlClient urlClient;
     @Override
     public void sendMessage(TelegramRequest telegramRequest, Platform platform) {
         try {
-            String url = TELEGRAM_URL;
+            String url = urlClient.getUrlProps().getProfile().getTelegramCommon();
             if (platform == TELEGRAM_ADMIN_PANEL_BOT)
-                url = TELEGRAM_ADMIN_PANEL_URL;
+                url = urlClient.getUrlProps().getProfile().getTelegramService();
             new RestTemplate().postForEntity(url + "/sendMessage", telegramRequest, Void.class);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -85,9 +81,9 @@ public class TelegramMessageSenderServiceImpl implements TelegramMessageSenderSe
 
     @Override
     public void sendPhoto(String photo, String caption, Markup markup, Message message) {
-        String url = TELEGRAM_URL;
+        String url = urlClient.getUrlProps().getProfile().getTelegramCommon();;
         if (message.getPlatform() == TELEGRAM_ADMIN_PANEL_BOT)
-            url = TELEGRAM_ADMIN_PANEL_URL;
+            url = urlClient.getUrlProps().getProfile().getTelegramService();
         new RestTemplate().postForEntity(url + "/sendPhoto", new TelegramRequest(message.getChat().getId(), markup, photo, caption), Void.class);
     }
 
@@ -96,7 +92,7 @@ public class TelegramMessageSenderServiceImpl implements TelegramMessageSenderSe
         List<List<InlineKeyboardButton>> inlineKeyboardButtons = new ArrayList<>();
         InlineKeyboardButton reference = new InlineKeyboardButton();
         reference.setText("Reference");
-        reference.setUrl(SERVER_URL + "/reference");
+        reference.setUrl(urlClient.getUrlProps().getServer()+ "/reference");
         inlineKeyboardButtons.add(new ArrayList<>(Arrays.asList(new InlineKeyboardButton(ResourceBundle.getBundle("dictionary").getString(MENU_OF_CROISSANTS.name()), MENU_DATA.name()))));
         inlineKeyboardButtons.add(new ArrayList<>(Arrays.asList(new InlineKeyboardButton(ResourceBundle.getBundle("dictionary").getString(CREATE_OWN_CROISSANT.name()), CREATE_OWN_CROISSANT_DATA.name()))));
         inlineKeyboardButtons.add(new ArrayList<>(Arrays.asList(reference)));

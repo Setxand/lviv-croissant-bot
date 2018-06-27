@@ -1,5 +1,8 @@
 package com.bots.lvivcroissantbot;
 
+import com.bots.lvivcroissantbot.config.AppConfig;
+import com.bots.lvivcroissantbot.config.client.UrlClient;
+import com.bots.lvivcroissantbot.controller.TestController;
 import com.bots.lvivcroissantbot.dto.messanger.*;
 import com.bots.lvivcroissantbot.dto.telegram.Chat;
 import com.bots.lvivcroissantbot.dto.telegram.Message;
@@ -22,32 +25,29 @@ import static com.bots.lvivcroissantbot.constantenum.messenger.type.ButtonType.w
 
 @Component
 public class ServerStarting {
+    @Autowired
+    TestController testController;
     private final static Logger logger = LoggerFactory.getLogger(ServerStarting.class);
     @Autowired
     private TelegramMessageSenderService telegramMessageSenderService;
     @Value("${messenger.page.access.token}")
     private String PAGE_ACCESS_TOKEN;
-    @Value("${url.messenger.profile}")
-    private String FACEBOOK_PROFILE_URL;
-    @Value("${url.server}")
-    private String SERVER_URL;
-    @Value("${url.telegram}")
-    private String TELEGRAM_URL;
-    @Value("${url.telegram.admins}")
-    private String ADMIN_TELEGRAM_URL;
     private RestTemplate restTemplate;
-
+    @Autowired
+    private UrlClient urlClient;
     @PostConstruct
     public void getStarted() throws Exception {
+        AppConfig.UrlProps urlProps = urlClient.getUrlProps();
+
         restTemplate = new RestTemplate();
         Shell shell = new Shell();
-        shell.setWhiteListedDomains(new ArrayList<>(Arrays.asList(SERVER_URL)));
+        shell.setWhiteListedDomains(new ArrayList<>(Arrays.asList(urlProps.getServer())));
 
 
         MessengerProfileApi messengerProfileApi = new MessengerProfileApi(new GetStarted(GET_STARTED_PAYLOAD.name()), new ArrayList<PersistentMenu>());
         PersistentMenu persistentMenu = new PersistentMenu();
         MenuItem menuItem = new MenuItem(web_url.name(), "Reference");
-        menuItem.setUrl(SERVER_URL + "/reference");
+        menuItem.setUrl(urlProps.getServer() + "/reference");
         persistentMenu.setCallToActions(Arrays.asList(new MenuItem(postback.name(), "Menu of croissants", MENU_PAYLOAD.name())
                 , new MenuItem(postback.name(), "Navigation menu", NAVIGATION_MENU.name())
                 , menuItem));
@@ -56,21 +56,22 @@ public class ServerStarting {
         try {
 
 
+            testController.setObject(messengerProfileApi);
+            String url = urlProps.getProfile().getMessenger() + PAGE_ACCESS_TOKEN;
             ResponseEntity<?> responseEntity = restTemplate
-                    .postForEntity(FACEBOOK_PROFILE_URL + PAGE_ACCESS_TOKEN, messengerProfileApi, MessengerProfileApi.class);
+                    .postForEntity(url, messengerProfileApi, MessengerProfileApi.class);
             logger.info("Messenger: persistence menu - " + responseEntity.toString());
             ResponseEntity<?> responseForWhiteList = restTemplate
-                    .postForEntity(FACEBOOK_PROFILE_URL + PAGE_ACCESS_TOKEN, shell, Shell.class);
+                    .postForEntity(urlProps.getProfile().getMessenger() + PAGE_ACCESS_TOKEN, shell, Shell.class);
             logger.info("Messenger: WhiteList domain - " + responseForWhiteList.toString());
 
         } catch (Exception ex) {
-            logger.warn("Messenger queries: " + ex);
+            logger.error("Messenger error: " + ex);
         } finally {
             try {
-                ResponseEntity<?> responseEntity = restTemplate.getForEntity(TELEGRAM_URL + "/setWebhook?url=" + SERVER_URL + "/telegramWebHook", Object.class);
+                ResponseEntity<?> responseEntity = restTemplate.getForEntity(urlProps.getProfile().getTelegramCommon() + "/setWebhook?url=" + urlProps.getServer() + "/telegramWebHook", Object.class);
                 logger.info("Telegram`s bot webhook: " + responseEntity.getBody().toString());
-
-                ResponseEntity<?> adminPanelReg = restTemplate.getForEntity(ADMIN_TELEGRAM_URL + "/setWebhook?url=" + SERVER_URL + "/adminpanel", Object.class);
+                ResponseEntity<?> adminPanelReg = restTemplate.getForEntity(urlProps.getProfile().getTelegramService() + "/setWebhook?url=" + urlProps.getServer() + "/adminpanel", Object.class);
                 logger.info("Admin panel webhook: " + adminPanelReg.getBody().toString());
 
 
@@ -78,7 +79,7 @@ public class ServerStarting {
                 message.setChat(new Chat(388073901));
                 telegramMessageSenderService.simpleMessage("Server has ran", message);
             } catch (Exception e) {
-                logger.error(e.getStackTrace().toString());
+                logger.error("Telegram error: "+e.getStackTrace().toString());
             }
         }
     }

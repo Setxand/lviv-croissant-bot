@@ -30,7 +30,7 @@ import static com.bots.lvivcroissantbot.constantenum.messenger.type.ButtonType.w
 
 @RestController
 @RequestMapping("/reqDispatcher")
-public class RequestHandler {
+public class RequestHandlerController {
     @Autowired
     private RecognizeService recognizeService;
     @Autowired

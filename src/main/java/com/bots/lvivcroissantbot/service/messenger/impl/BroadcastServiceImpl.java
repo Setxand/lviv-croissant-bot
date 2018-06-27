@@ -1,6 +1,6 @@
 package com.bots.lvivcroissantbot.service.messenger.impl;
 
-import com.bots.lvivcroissantbot.controller.Test;
+import com.bots.lvivcroissantbot.controller.TestController;
 import com.bots.lvivcroissantbot.dto.messanger.Message;
 import com.bots.lvivcroissantbot.dto.messanger.broadcast.*;
 import com.bots.lvivcroissantbot.service.messenger.BroadcastService;
@@ -18,7 +18,7 @@ import java.util.List;
 public class BroadcastServiceImpl implements BroadcastService {
     private final static Logger logger = LoggerFactory.getLogger(BroadcastServiceImpl.class);
     @Autowired
-    Test test;
+    TestController testController;
     @Value("${messenger.broadcast.message.creatives}")
     private String BROADCAST_MESSAGE_CREATIVES;
     @Value("${messenger.broadcast.message}")

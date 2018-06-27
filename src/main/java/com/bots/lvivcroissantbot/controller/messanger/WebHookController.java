@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/WebHook")
-class MessengerWebhook {
+class WebHookController {
 
 
     @Autowired

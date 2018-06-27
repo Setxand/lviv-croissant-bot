@@ -16,7 +16,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertNotNull;
 
-public class BroadcastServiceTest extends DemoApplicationTests {
+public class BroadcastServiceTestController extends DemoApplicationTests {
 
     @Autowired
     private BroadcastService broadcastService;

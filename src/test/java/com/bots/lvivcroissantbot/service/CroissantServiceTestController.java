@@ -22,8 +22,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CroissantServiceTest {
-    Logger logger = LoggerFactory.getLogger(CroissantServiceTest.class);
+public class CroissantServiceTestController {
+    Logger logger = LoggerFactory.getLogger(CroissantServiceTestController.class);
     private CroissantService croissantService;
     @Mock
     private CroissantEntityRepository croissantEntityRepository;

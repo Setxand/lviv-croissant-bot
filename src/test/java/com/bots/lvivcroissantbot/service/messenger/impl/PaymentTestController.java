@@ -16,7 +16,7 @@ import java.util.List;
 
 import static com.bots.lvivcroissantbot.constantenum.messenger.type.ButtonType.web_url;
 
-public class PaymentTest extends DemoApplicationTests {
+public class PaymentTestController extends DemoApplicationTests {
     List<Button> buttons;
     @Value("${url.server}")
     private String SERVER_URL;
