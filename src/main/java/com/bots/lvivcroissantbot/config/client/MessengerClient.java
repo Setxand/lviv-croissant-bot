@@ -9,5 +9,5 @@ public class MessengerClient {
 
     public MessengerClient(MesProps mesProps) {
         this.mesProps = mesProps;
-       }
+    }
 }

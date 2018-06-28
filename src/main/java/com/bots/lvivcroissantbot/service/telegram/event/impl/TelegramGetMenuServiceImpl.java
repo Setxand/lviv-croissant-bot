@@ -97,7 +97,7 @@ public class TelegramGetMenuServiceImpl implements TelegramGetMenuService {
             parseOwn(tUser, message);
             return;
         }
-        List<CroissantEntity> croissantEntities = croissantRepositoryService.findAllByType(text);
+        List<CroissantEntity> croissantEntities = croissantRepositoryService.findAllByTypeOrderByIdDesc(text);
 
         for (CroissantEntity croissantEntity : croissantEntities) {
             String caption = croissantEntity.getName() + " \nprice: " + croissantEntity.getPrice() + "\n" + getFillings(croissantEntity);

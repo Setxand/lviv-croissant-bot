@@ -142,7 +142,7 @@ public class PayloadParserServiceImpl implements PayloadParserService {
 
     private void parseDelButtonPayload(Messaging messaging) {
         String varPayload = TextFormatter.ejectSingleVariable(messaging.getPostback().getPayload());
-        croissantRepositoryService.remove(croissantRepositoryService.findOne(Long.parseLong(varPayload)));
+        croissantRepositoryService.delete(croissantRepositoryService.findOne(Long.parseLong(varPayload)));
         MUser MUser = MUserRepositoryService.findOnebyRId(messaging.getSender().getId());
         MUser.getOwnCroissantsId().remove(Long.parseLong(varPayload));
         MUserRepositoryService.saveAndFlush(MUser);

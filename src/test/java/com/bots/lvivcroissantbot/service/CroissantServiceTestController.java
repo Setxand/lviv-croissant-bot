@@ -42,7 +42,7 @@ public class CroissantServiceTestController {
         when(croissantEntityRepository.findById(testId)).thenReturn(Optional.of(expected));
 
         // When
-        Optional<CroissantDTO> result = croissantService.findById(testId);
+        Optional<CroissantDTO> result = croissantService.findByIdAndReturnDTO(testId);
 
         // Then
         assertTrue(result.isPresent());

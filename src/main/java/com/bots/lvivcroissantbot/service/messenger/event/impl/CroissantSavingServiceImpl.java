@@ -73,9 +73,9 @@ public class CroissantSavingServiceImpl implements CroissantSavingService {
 
         } catch (Exception ex) {
 
-            CroissantEntity croissantEntity = croissantRepositoryService.findLastRecord();
+            CroissantEntity croissantEntity = croissantRepositoryService.findTopByOrderByIdDesc();
             if (croissantEntity.getCroissantsFillings().isEmpty())
-                croissantRepositoryService.remove(croissantEntity);
+                croissantRepositoryService.delete(croissantEntity);
             messageSenderService.errorMessage(messaging.getSender().getId());
             logger.error("Error", ex);
         }
@@ -84,7 +84,7 @@ public class CroissantSavingServiceImpl implements CroissantSavingService {
 
     private void finalizeSavingCroissant(Messaging messaging) {
         MUser MUser = MUserRepositoryService.findOnebyRId(messaging.getSender().getId());
-        CroissantEntity croissantEntity = croissantRepositoryService.findLastByCreatorId(messaging.getSender().getId());
+        CroissantEntity croissantEntity = croissantRepositoryService.findTopByCreatorIdOrderByIdDesc(messaging.getSender().getId());
 
 
         if (croissantEntity.getName() == null) {
@@ -125,7 +125,7 @@ public class CroissantSavingServiceImpl implements CroissantSavingService {
     private void errorAction(Messaging messaging, CroissantEntity croissantEntity) {
         messageSenderService.errorMessage(messaging.getSender().getId());
         if (croissantEntity.getCroissantsFillings().isEmpty())
-            croissantRepositoryService.remove(croissantEntity);
+            croissantRepositoryService.delete(croissantEntity);
     }
 
     private void parseCroissantsFillings(Messaging messaging, CroissantEntity croissantEntity) {

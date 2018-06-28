@@ -204,7 +204,7 @@ public class CallBackParserServiceServiceImpl implements CallBackParserService {
         CroissantEntity croissantEntity = croissantRepositoryService.findOne(id);
         tUser.getOwnCroissantEntities().remove(croissantEntity);
         croissantEntity.setTUser(null);
-        croissantRepositoryService.remove(croissantEntity);
+        croissantRepositoryService.delete(croissantEntity);
         telegramUserRepositoryService.saveAndFlush(tUser);
         telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(DONE.name()), callBackQuery.getMessage());
     }

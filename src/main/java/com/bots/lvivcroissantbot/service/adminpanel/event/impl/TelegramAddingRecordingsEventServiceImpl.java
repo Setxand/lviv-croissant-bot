@@ -88,7 +88,7 @@ public class TelegramAddingRecordingsEventServiceImpl implements TelegramAddingR
     }
 
     private void nullChecking(Message message) {
-        CroissantEntity croissantEntity = croissantRepositoryService.findLastByCreatorId((long) message.getChat().getId());
+        CroissantEntity croissantEntity = croissantRepositoryService.findTopByCreatorIdOrderByIdDesc((long) message.getChat().getId());
         TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
         if (croissantEntity.getName() == null) {
             createNameForCroissant(message, croissantEntity, tUser);

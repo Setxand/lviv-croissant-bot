@@ -16,6 +16,7 @@ public class TestController {
     private MessengerClient client;
     @Autowired
     private UrlClient urlClient;
+
     @GetMapping
     public Object getObj() {
         return object;
@@ -27,11 +28,12 @@ public class TestController {
 
 
     @GetMapping("/urlProps")
-    private AppConfig.UrlProps getUrlProps(){
+    private AppConfig.UrlProps getUrlProps() {
         return urlClient.getUrlProps();
     }
+
     @GetMapping("/props")
-    public AppConfig.MesProps getProps(){
+    public AppConfig.MesProps getProps() {
         return client.getMesProps();
     }
 }

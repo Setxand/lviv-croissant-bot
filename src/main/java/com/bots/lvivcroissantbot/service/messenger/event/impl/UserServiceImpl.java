@@ -29,10 +29,9 @@ public class UserServiceImpl implements UserService {
     private MUserRepositoryService MUserRepositoryService;
 
     @Autowired
-    private MessageParserService    messageParserService;
+    private MessageParserService messageParserService;
     @Autowired
     private PayloadParserService payloadParserService;
-
 
 
     @Override

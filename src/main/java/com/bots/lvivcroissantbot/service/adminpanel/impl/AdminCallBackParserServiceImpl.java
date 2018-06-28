@@ -205,7 +205,7 @@ public class AdminCallBackParserServiceImpl implements AdminCallBackParserServic
 
     private void deleteCroissant(CallBackQuery callBackQuery) {
         CroissantEntity croissantEntity = croissantRepositoryService.findOne(Long.parseLong(TextFormatter.ejectContext(callBackQuery.getData())));
-        croissantRepositoryService.remove(croissantEntity);
+        croissantRepositoryService.delete(croissantEntity);
         telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(DONE.name()) + "/help", callBackQuery.getMessage());
     }
 

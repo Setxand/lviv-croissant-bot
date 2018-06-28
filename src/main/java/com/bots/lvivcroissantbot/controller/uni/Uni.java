@@ -40,7 +40,7 @@ public class Uni {
 
     @GetMapping(value = "/croissants/{id}")
     public CroissantDTO getById(@PathVariable Long id) {
-        return croissantService.findById(id).orElseThrow(ElementNoFoundException::new);
+        return croissantService.findByIdAndReturnDTO(id).orElseThrow(ElementNoFoundException::new);
     }
 
 }

@@ -45,16 +45,20 @@ public class CroissantService {
         croissantEntityRepository.saveAndFlush(croissantEntity);
     }
 
-    public Optional<CroissantDTO> findById(Long id) {
+    public Optional<CroissantDTO> findByIdAndReturnDTO(Long id) {
         CroissantEntity croissantEntity = croissantEntityRepository.findById(id).orElseThrow(ElementNoFoundException::new);
         return Optional.ofNullable(croissantEntity).map(CroissantUtilManager::croissantEntityToDTO);
     }
 
-    public List<CroissantEntity> findAllByType(String type) {
+
+
+
+
+    public List<CroissantEntity> findAllByTypeOrderByIdDesc(String type) {
         return croissantEntityRepository.findAllByTypeOrderByIdDesc(type);
     }
 
-    public CroissantEntity findLastRecord() {
+    public CroissantEntity findTopByOrderByIdDesc() {
         return croissantEntityRepository.findTopByOrderByIdDesc();
     }
 
@@ -72,11 +76,11 @@ public class CroissantService {
     }
 
 
-    public void remove(CroissantEntity croissantEntity) {
+    public void delete(CroissantEntity croissantEntity) {
         croissantEntityRepository.delete(croissantEntity);
     }
 
-    public CroissantEntity findLastByCreatorId(Long creatorId) {
+    public CroissantEntity findTopByCreatorIdOrderByIdDesc(Long creatorId) {
         return croissantEntityRepository.findTopByCreatorIdOrderByIdDesc(creatorId);
     }
 }

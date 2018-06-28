@@ -75,7 +75,7 @@ public class GetMenuServiceImpl implements GetMenuService {
             Collections.reverse(croissants1);
             croissantEntities = croissants1;
         } else
-            croissantEntities = croissantRepositoryService.findAllByType(croissantType);
+            croissantEntities = croissantRepositoryService.findAllByTypeOrderByIdDesc(croissantType);
         if (croissantEntities.isEmpty())
             messageSenderService.sendSimpleMessage(recognizeService.recognize(EMPTY_LIST.name(), messaging.getSender().getId()), messaging.getSender().getId());
         else

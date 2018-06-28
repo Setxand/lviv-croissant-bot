@@ -11,7 +11,6 @@ import com.bots.lvivcroissantbot.dto.telegram.button.*;
 import com.bots.lvivcroissantbot.repository.SpeakingMessagesRepository;
 import com.bots.lvivcroissantbot.service.telegram.TelegramMessageSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -33,6 +32,7 @@ public class TelegramMessageSenderServiceImpl implements TelegramMessageSenderSe
     private SpeakingMessagesRepository speakingMessagesRepositoryService;
     @Autowired
     private UrlClient urlClient;
+
     @Override
     public void sendMessage(TelegramRequest telegramRequest, Platform platform) {
         try {
@@ -81,7 +81,8 @@ public class TelegramMessageSenderServiceImpl implements TelegramMessageSenderSe
 
     @Override
     public void sendPhoto(String photo, String caption, Markup markup, Message message) {
-        String url = urlClient.getUrlProps().getProfile().getTelegramCommon();;
+        String url = urlClient.getUrlProps().getProfile().getTelegramCommon();
+        ;
         if (message.getPlatform() == TELEGRAM_ADMIN_PANEL_BOT)
             url = urlClient.getUrlProps().getProfile().getTelegramService();
         new RestTemplate().postForEntity(url + "/sendPhoto", new TelegramRequest(message.getChat().getId(), markup, photo, caption), Void.class);
@@ -92,7 +93,7 @@ public class TelegramMessageSenderServiceImpl implements TelegramMessageSenderSe
         List<List<InlineKeyboardButton>> inlineKeyboardButtons = new ArrayList<>();
         InlineKeyboardButton reference = new InlineKeyboardButton();
         reference.setText("Reference");
-        reference.setUrl(urlClient.getUrlProps().getServer()+ "/reference");
+        reference.setUrl(urlClient.getUrlProps().getServer() + "/reference");
         inlineKeyboardButtons.add(new ArrayList<>(Arrays.asList(new InlineKeyboardButton(ResourceBundle.getBundle("dictionary").getString(MENU_OF_CROISSANTS.name()), MENU_DATA.name()))));
         inlineKeyboardButtons.add(new ArrayList<>(Arrays.asList(new InlineKeyboardButton(ResourceBundle.getBundle("dictionary").getString(CREATE_OWN_CROISSANT.name()), CREATE_OWN_CROISSANT_DATA.name()))));
         inlineKeyboardButtons.add(new ArrayList<>(Arrays.asList(reference)));
