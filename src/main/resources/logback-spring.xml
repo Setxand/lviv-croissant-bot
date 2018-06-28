@@ -1,20 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="30 seconds">
+    <springProfile name ="dev">
+        <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                    <pattern>%d{HH:mm} %-5p %c{1}:%L - %m%n</pattern>
+            </encoder>
+        </appender>
+    </springProfile>
 
-    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+    <springProfile name ="prod">
 
-        <encoder>
-            <springProfile name="dev">
-                <pattern>%d{HH:mm} %-5p %c{1}:%L - %m%n</pattern>
-            </springProfile>
-            <springProfile name="prod">
+        <appender name="file" class="ch.qos.logback.core.FileAppender">
+            <file>testFile.log</file>
+        <immediateFlush>false</immediateFlush>
+            <encoder>
                 <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n</pattern>
-            </springProfile>
-        </encoder>
-    </appender>
+
+            </encoder>
+        </appender>
+    </springProfile>
+
     <springProfile name="dev">
-
-
         <logger name="org.hibernate.SQL" level="DEBUG"/>
 
         <logger name="org.hibernate.type" level="TRACE"/>
@@ -24,7 +30,7 @@
     </springProfile>
     <springProfile name="prod">
         <root level="INFO">
-            <appender-ref ref="console"/>
+            <appender-ref ref="file"/>
         </root>
 
     </springProfile>

@@ -12,6 +12,7 @@ import com.bots.lvivcroissantbot.service.support.RecognizeService;
 import com.bots.lvivcroissantbot.service.uni.CroissantService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -40,10 +41,15 @@ import static com.bots.lvivcroissantbot.constantenum.messenger.type.TemplateType
 public class MessageSenderServiceImpl implements MessageSenderService {
 
     private final static Logger logger = LoggerFactory.getLogger(MessageSenderServiceImpl.class);
-    MUserRepositoryService MUserRepositoryService;
+    @Autowired
+    private MUserRepositoryService MUserRepositoryService;
+    @Autowired
     private CroissantService croissantRepositoryService;
+    @Autowired
     private CroisantsFillingEntityRepository croisantsFillingEntityRepository;
+    @Autowired
     private MenuOfFillingRepository menuOfFillingRepositoryService;
+    @Autowired
     private RecognizeService recognizeService;
     @Value("${messenger.page.access.token}")
     private String PAGE_ACCESS_TOKEN;
@@ -53,16 +59,9 @@ public class MessageSenderServiceImpl implements MessageSenderService {
     private String USER_DATA_URL;
     @Value("${messenger.facebook.MUser.data.uer.fields}")
     private String DATA_FIELDS;
-    @Value("${url.server}")
-    private String SERVER_URL;
 
-    public MessageSenderServiceImpl(CroissantService croissantRepositoryService, CroisantsFillingEntityRepository croisantsFillingEntityRepository, MenuOfFillingRepository menuOfFillingRepositoryService, RecognizeService recognizeService, com.bots.lvivcroissantbot.service.peopleregister.MUserRepositoryService MUserRepositoryService) {
-        this.croissantRepositoryService = croissantRepositoryService;
-        this.croisantsFillingEntityRepository = croisantsFillingEntityRepository;
-        this.menuOfFillingRepositoryService = menuOfFillingRepositoryService;
-        this.recognizeService = recognizeService;
-        this.MUserRepositoryService = MUserRepositoryService;
-    }
+
+
 
     @Override
     public void errorMessage(Long recipient) {

@@ -1,6 +1,6 @@
 package com.bots.lvivcroissantbot.entity.lvivcroissants;
 
-import com.bots.lvivcroissantbot.dto.uni.CroissantFillingModel;
+import com.bots.lvivcroissantbot.dto.uni.CroissantFillingDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -33,7 +33,7 @@ public class CroissantsFilling {
         this.price = price;
     }
 
-    public CroissantsFilling(CroissantFillingModel croissantFillingModel) {
+    public CroissantsFilling(CroissantFillingDTO croissantFillingModel) {
         this.name = croissantFillingModel.getName();
         this.price = croissantFillingModel.getPrice();
     }

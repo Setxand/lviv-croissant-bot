@@ -13,14 +13,14 @@ import javax.validation.constraints.NotNull;
 @Setter
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class CroissantFillingModel {
+public class CroissantFillingDTO {
     @NotNull
     @Max(32)
     private String name;
     @NotNull
     private Integer price;
 
-    public CroissantFillingModel(CroissantsFilling croissantsFilling) {
+    public CroissantFillingDTO(CroissantsFilling croissantsFilling) {
         this.name = croissantsFilling.getName();
         this.price = croissantsFilling.getPrice();
     }

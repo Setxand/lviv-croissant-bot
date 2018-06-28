@@ -13,7 +13,7 @@ import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @EnableConfigurationProperties(AppConfig.MesProps.class)
-@PropertySource("classpath:additional.properties")
+@PropertySource("classpath:add.properties")
 public class AppConfig {
 
     @Bean

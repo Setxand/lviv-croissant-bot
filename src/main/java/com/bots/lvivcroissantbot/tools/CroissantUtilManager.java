@@ -1,7 +1,7 @@
 package com.bots.lvivcroissantbot.tools;
 
 import com.bots.lvivcroissantbot.dto.uni.CroissantDTO;
-import com.bots.lvivcroissantbot.dto.uni.CroissantFillingModel;
+import com.bots.lvivcroissantbot.dto.uni.CroissantFillingDTO;
 import com.bots.lvivcroissantbot.entity.lvivcroissants.CroissantEntity;
 import com.bots.lvivcroissantbot.entity.lvivcroissants.CroissantsFilling;
 
@@ -21,10 +21,10 @@ public class CroissantUtilManager {
     }
 
 
-    private static List<CroissantFillingModel> fillingsEntityToDTO(List<CroissantsFilling> croissantsFillings) {
+    private static List<CroissantFillingDTO> fillingsEntityToDTO(List<CroissantsFilling> croissantsFillings) {
 
         return croissantsFillings.stream().map(filling -> {
-            CroissantFillingModel croissantFillingModel = new CroissantFillingModel();
+            CroissantFillingDTO croissantFillingModel = new CroissantFillingDTO();
             croissantFillingModel.setName(filling.getName());
             croissantFillingModel.setPrice(filling.getPrice());
             return croissantFillingModel;
@@ -44,7 +44,7 @@ public class CroissantUtilManager {
         return croissantEntity;
     }
 
-    public static List<CroissantsFilling> fillingDTOToEntity(List<CroissantFillingModel> croissantsFillings) {
+    public static List<CroissantsFilling> fillingDTOToEntity(List<CroissantFillingDTO> croissantsFillings) {
         return croissantsFillings.stream().map(filling -> {
             CroissantsFilling croissantsFilling = new CroissantsFilling();
             croissantsFilling.setName(filling.getName());

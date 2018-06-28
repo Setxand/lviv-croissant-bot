@@ -23,7 +23,7 @@ public class CroissantDTO {
     @NotNull
     private String type;
     @Valid
-    private List<CroissantFillingModel> croissantsFillings = new ArrayList<>();
+    private List<CroissantFillingDTO> croissantsFillings = new ArrayList<>();
 
     @Override
     public String toString() {
