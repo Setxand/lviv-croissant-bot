@@ -3,6 +3,7 @@ package com.bots.lvivcroissantbot.controller;
 import com.bots.lvivcroissantbot.entity.lvivcroissants.CroissantEntity;
 import com.bots.lvivcroissantbot.entity.lvivcroissants.CustomerOrdering;
 import com.bots.lvivcroissantbot.exception.ElementNoFoundException;
+import com.bots.lvivcroissantbot.repository.CroissantEntityRepository;
 import com.bots.lvivcroissantbot.repository.CustomerOrderingRepository;
 import com.bots.lvivcroissantbot.service.messenger.MessageSenderService;
 import com.bots.lvivcroissantbot.service.peopleregister.MUserRepositoryService;
@@ -32,7 +33,7 @@ public class View {
     @Autowired
     private CustomerOrderingRepository customerOrderingRepositoryService;
     @Autowired
-    private CroissantService croissantRepositoryService;
+    private CroissantEntityRepository croissantRepository;
     @Autowired
     private CroissantService croissantService;
 
@@ -49,7 +50,7 @@ public class View {
         List<String> orderings = new ArrayList<>();
         for (String cr : customerOrdering.getCroissants()) {
             try {
-                CroissantEntity croissantEntity = croissantRepositoryService.findOne(Long.parseLong(cr));
+                CroissantEntity croissantEntity = croissantRepository.getOne(Long.parseLong(cr));
                 orderings.add(croissantEntity.toString());
             } catch (Exception ex) {
                 orderings.add(cr);
@@ -62,7 +63,7 @@ public class View {
 
     @RequestMapping(value = "/fillings/{croissantId}")
     public String showOrdering(@PathVariable String croissantId, Model model) {
-        CroissantEntity croissantEntity = croissantRepositoryService.findOne(Long.parseLong(croissantId));
+        CroissantEntity croissantEntity = croissantRepository.getOne(Long.parseLong(croissantId));
 
         model.addAttribute("fillings", croissantEntity.getCroissantsFillings());
         return "fillings";

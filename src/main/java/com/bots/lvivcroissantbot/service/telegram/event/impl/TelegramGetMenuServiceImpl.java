@@ -11,11 +11,11 @@ import com.bots.lvivcroissantbot.entity.lvivcroissants.CroissantEntity;
 import com.bots.lvivcroissantbot.entity.lvivcroissants.CroissantsFilling;
 import com.bots.lvivcroissantbot.entity.lvivcroissants.MenuOfFilling;
 import com.bots.lvivcroissantbot.entity.register.TUser;
+import com.bots.lvivcroissantbot.repository.CroissantEntityRepository;
 import com.bots.lvivcroissantbot.repository.MenuOfFillingRepository;
 import com.bots.lvivcroissantbot.service.peopleregister.TelegramUserRepositoryService;
 import com.bots.lvivcroissantbot.service.telegram.TelegramMessageSenderService;
 import com.bots.lvivcroissantbot.service.telegram.event.TelegramGetMenuService;
-import com.bots.lvivcroissantbot.service.uni.CroissantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -36,7 +36,7 @@ public class TelegramGetMenuServiceImpl implements TelegramGetMenuService {
     @Autowired
     private TelegramMessageSenderService telegramMessageSenderService;
     @Autowired
-    private CroissantService croissantRepositoryService;
+    private CroissantEntityRepository croissantRepository;
     @Autowired
     private MenuOfFillingRepository menuOfFillingRepositoryService;
     @Value("${url.server}")
@@ -97,7 +97,7 @@ public class TelegramGetMenuServiceImpl implements TelegramGetMenuService {
             parseOwn(tUser, message);
             return;
         }
-        List<CroissantEntity> croissantEntities = croissantRepositoryService.findAllByTypeOrderByIdDesc(text);
+        List<CroissantEntity> croissantEntities = croissantRepository.findAllByTypeOrderByIdDesc(text);
 
         for (CroissantEntity croissantEntity : croissantEntities) {
             String caption = croissantEntity.getName() + " \nprice: " + croissantEntity.getPrice() + "\n" + getFillings(croissantEntity);

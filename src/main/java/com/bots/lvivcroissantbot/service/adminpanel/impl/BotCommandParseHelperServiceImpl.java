@@ -13,12 +13,12 @@ import com.bots.lvivcroissantbot.entity.lvivcroissants.CroissantEntity;
 import com.bots.lvivcroissantbot.entity.lvivcroissants.CustomerOrdering;
 import com.bots.lvivcroissantbot.entity.register.TUser;
 import com.bots.lvivcroissantbot.exception.ElementNoFoundException;
+import com.bots.lvivcroissantbot.repository.CroissantEntityRepository;
 import com.bots.lvivcroissantbot.repository.CustomerOrderingRepository;
 import com.bots.lvivcroissantbot.service.adminpanel.BotCommandParseHelperService;
 import com.bots.lvivcroissantbot.service.peopleregister.TelegramUserRepositoryService;
 import com.bots.lvivcroissantbot.service.support.TextFormatter;
 import com.bots.lvivcroissantbot.service.telegram.TelegramMessageSenderService;
-import com.bots.lvivcroissantbot.service.uni.CroissantService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +44,7 @@ public class BotCommandParseHelperServiceImpl implements BotCommandParseHelperSe
     @Autowired
     private CustomerOrderingRepository customerOrderingRepositoryService;
     @Autowired
-    private CroissantService croissantRepositoryService;
+    private CroissantEntityRepository croissantRepository;
     @Value("${url.server}")
     private String SERVER_URL;
     @Value("${messenger.app.verify.token}")
@@ -126,7 +126,7 @@ public class BotCommandParseHelperServiceImpl implements BotCommandParseHelperSe
         croissants.setLength(0);
         for (String orderId : customerOrdering.getCroissants()) {
             long id = Long.parseLong(orderId);
-            CroissantEntity croissantEntity = croissantRepositoryService.findOne(id);
+            CroissantEntity croissantEntity = croissantRepository.getOne(id);
             if (croissantEntity.getType().equals(OWN.name())) {
                 croissants.append(croissantEntity);
                 continue;

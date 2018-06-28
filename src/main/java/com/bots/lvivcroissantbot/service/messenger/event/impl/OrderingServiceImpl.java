@@ -5,6 +5,7 @@ import com.bots.lvivcroissantbot.entity.Support;
 import com.bots.lvivcroissantbot.entity.lvivcroissants.CroissantEntity;
 import com.bots.lvivcroissantbot.entity.lvivcroissants.CustomerOrdering;
 import com.bots.lvivcroissantbot.entity.register.MUser;
+import com.bots.lvivcroissantbot.repository.CroissantEntityRepository;
 import com.bots.lvivcroissantbot.repository.CustomerOrderingRepository;
 import com.bots.lvivcroissantbot.repository.SupportEntityRepository;
 import com.bots.lvivcroissantbot.service.messenger.MessageSenderService;
@@ -13,7 +14,6 @@ import com.bots.lvivcroissantbot.service.messenger.event.UserService;
 import com.bots.lvivcroissantbot.service.peopleregister.MUserRepositoryService;
 import com.bots.lvivcroissantbot.service.support.RecognizeService;
 import com.bots.lvivcroissantbot.service.support.TextFormatter;
-import com.bots.lvivcroissantbot.service.uni.CroissantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +25,7 @@ import static com.bots.lvivcroissantbot.constantenum.messenger.speaking.ServerSi
 @Service
 public class OrderingServiceImpl implements OrderingService {
     @Autowired
-    private CroissantService croissantRepositoryService;
+    private CroissantEntityRepository croissantRepository;
     @Autowired
     private MUserRepositoryService MUserRepositoryService;
     @Autowired
@@ -51,7 +51,7 @@ public class OrderingServiceImpl implements OrderingService {
     private void orderingCreator(Messaging messaging) {
         MUser MUser = MUserRepositoryService.findOnebyRId(messaging.getSender().getId());
         String croissantId = TextFormatter.ejectSingleVariable(messaging.getPostback().getPayload());
-        CroissantEntity croissantEntity = croissantRepositoryService.findOne(Long.parseLong(croissantId));
+        CroissantEntity croissantEntity = croissantRepository.getOne(Long.parseLong(croissantId));
 
         if (supportEntityRepositoryService.findByUserId(messaging.getSender().getId()) != null) {
             if (supportEntityRepositoryService.findByUserId(messaging.getSender().getId()).getOneMore() != null) {
@@ -140,7 +140,7 @@ public class OrderingServiceImpl implements OrderingService {
 
 
             Support support = supportEntityRepositoryService.findByUserId(messaging.getSender().getId());
-            CroissantEntity croissantEntity = croissantRepositoryService.findOne(Long.parseLong(support.getCount().toString()));
+            CroissantEntity croissantEntity = croissantRepository.getOne(Long.parseLong(support.getCount().toString()));
             messageSenderService.sendSimpleQuestion(messaging.getSender().getId(), recognizeService.recognize(ACCEPTING_ORDERING.name(), messaging.getSender().getId()) + croissantEntity.getName() + "?", ACCEPT_ORDERING_PAYLOAD.name() + "?" + croissantEntity.getId(), "&");
             support.setCount(null);
             supportEntityRepositoryService.saveAndFlush(support);

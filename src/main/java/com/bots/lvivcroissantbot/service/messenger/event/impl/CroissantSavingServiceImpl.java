@@ -7,10 +7,7 @@ import com.bots.lvivcroissantbot.entity.lvivcroissants.CroissantEntity;
 import com.bots.lvivcroissantbot.entity.lvivcroissants.CroissantsFilling;
 import com.bots.lvivcroissantbot.entity.register.MUser;
 import com.bots.lvivcroissantbot.exception.ElementNoFoundException;
-import com.bots.lvivcroissantbot.repository.CroisantsFillingEntityRepository;
-import com.bots.lvivcroissantbot.repository.CustomerOrderingRepository;
-import com.bots.lvivcroissantbot.repository.MenuOfFillingRepository;
-import com.bots.lvivcroissantbot.repository.SupportEntityRepository;
+import com.bots.lvivcroissantbot.repository.*;
 import com.bots.lvivcroissantbot.service.messenger.MessageParserService;
 import com.bots.lvivcroissantbot.service.messenger.MessageSenderService;
 import com.bots.lvivcroissantbot.service.messenger.QuickReplyParserService;
@@ -20,7 +17,6 @@ import com.bots.lvivcroissantbot.service.peopleregister.CourierRegisterService;
 import com.bots.lvivcroissantbot.service.peopleregister.MUserRepositoryService;
 import com.bots.lvivcroissantbot.service.support.RecognizeService;
 import com.bots.lvivcroissantbot.service.support.TextFormatter;
-import com.bots.lvivcroissantbot.service.uni.CroissantService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +37,7 @@ public class CroissantSavingServiceImpl implements CroissantSavingService {
     @Autowired
     private MenuOfFillingRepository menuOfFillingRepositoryService;
     @Autowired
-    private CroissantService croissantRepositoryService;
+    private CroissantEntityRepository croissantRepository;
     @Autowired
     private QuickReplyParserService quickReplyParserService;
     @Autowired
@@ -73,9 +69,9 @@ public class CroissantSavingServiceImpl implements CroissantSavingService {
 
         } catch (Exception ex) {
 
-            CroissantEntity croissantEntity = croissantRepositoryService.findTopByOrderByIdDesc();
+            CroissantEntity croissantEntity = croissantRepository.findTopByOrderByIdDesc();
             if (croissantEntity.getCroissantsFillings().isEmpty())
-                croissantRepositoryService.delete(croissantEntity);
+                croissantRepository.delete(croissantEntity);
             messageSenderService.errorMessage(messaging.getSender().getId());
             logger.error("Error", ex);
         }
@@ -84,7 +80,7 @@ public class CroissantSavingServiceImpl implements CroissantSavingService {
 
     private void finalizeSavingCroissant(Messaging messaging) {
         MUser MUser = MUserRepositoryService.findOnebyRId(messaging.getSender().getId());
-        CroissantEntity croissantEntity = croissantRepositoryService.findTopByCreatorIdOrderByIdDesc(messaging.getSender().getId());
+        CroissantEntity croissantEntity = croissantRepository.findTopByCreatorIdOrderByIdDesc(messaging.getSender().getId());
 
 
         if (croissantEntity.getName() == null) {
@@ -110,7 +106,7 @@ public class CroissantSavingServiceImpl implements CroissantSavingService {
     private void parsePrice(Messaging messaging, CroissantEntity croissantEntity) {
         try {
             croissantEntity.setPrice(Integer.parseInt(messaging.getMessage().getText()));
-            croissantRepositoryService.saveAndFlush(croissantEntity);
+            croissantRepository.saveAndFlush(croissantEntity);
             messageSenderService.sendMessage(new Messaging(new Message(recognizeService.recognize(CROISSANT_SUCCESSFULLY_ADDED.name(), messaging.getSender().getId())), new Recipient(messaging.getSender().getId())));
             MUser MUser = MUserRepositoryService.findOnebyRId(messaging.getSender().getId());
             MUser.setStatus(null);
@@ -125,7 +121,7 @@ public class CroissantSavingServiceImpl implements CroissantSavingService {
     private void errorAction(Messaging messaging, CroissantEntity croissantEntity) {
         messageSenderService.errorMessage(messaging.getSender().getId());
         if (croissantEntity.getCroissantsFillings().isEmpty())
-            croissantRepositoryService.delete(croissantEntity);
+            croissantRepository.delete(croissantEntity);
     }
 
     private void parseCroissantsFillings(Messaging messaging, CroissantEntity croissantEntity) {
@@ -139,7 +135,7 @@ public class CroissantSavingServiceImpl implements CroissantSavingService {
             }
 
             croissantEntity.setCroissantsFillings(croissantsFillingEntities);
-            croissantRepositoryService.saveAndFlush(croissantEntity);
+            croissantRepository.saveAndFlush(croissantEntity);
 
             for (CroissantsFilling croissantsFilling : croissantsFillingEntities) {
                 croissantsFillingEntityRepositoryService.saveAndFlush(croissantsFilling);
@@ -156,14 +152,14 @@ public class CroissantSavingServiceImpl implements CroissantSavingService {
 
     private void parseImageUrl(Messaging messaging, CroissantEntity croissantEntity) {
         croissantEntity.setImageUrl(messaging.getMessage().getText());
-        croissantRepositoryService.saveAndFlush(croissantEntity);
+        croissantRepository.saveAndFlush(croissantEntity);
         messageSenderService.sendMessage(new Messaging(new Message(recognizeService.recognize(ID_OF_FILLING.name(), messaging.getSender().getId())), new Recipient(messaging.getSender().getId())));
         menuOfFillingService.getMenuOfFilling(messaging.getSender().getId());
     }
 
     private void parseName(Messaging messaging, CroissantEntity croissantEntity) {
         croissantEntity.setName(TextFormatter.toNormalFormat(messaging.getMessage().getText()));
-        croissantRepositoryService.saveAndFlush(croissantEntity);
+        croissantRepository.saveAndFlush(croissantEntity);
         messageSenderService.sendMessage(new Messaging(new Message(recognizeService.recognize(IMAGE_URL.name(), messaging.getSender().getId())), new Recipient(messaging.getSender().getId())));
 
     }

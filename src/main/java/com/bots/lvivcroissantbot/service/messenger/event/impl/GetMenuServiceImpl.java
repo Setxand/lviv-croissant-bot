@@ -6,13 +6,13 @@ import com.bots.lvivcroissantbot.entity.Support;
 import com.bots.lvivcroissantbot.entity.lvivcroissants.CroissantEntity;
 import com.bots.lvivcroissantbot.entity.lvivcroissants.CroissantsFilling;
 import com.bots.lvivcroissantbot.entity.register.MUser;
+import com.bots.lvivcroissantbot.repository.CroissantEntityRepository;
 import com.bots.lvivcroissantbot.repository.SupportEntityRepository;
 import com.bots.lvivcroissantbot.service.messenger.MessageSenderService;
 import com.bots.lvivcroissantbot.service.messenger.event.GetMenuService;
 import com.bots.lvivcroissantbot.service.peopleregister.MUserRepositoryService;
 import com.bots.lvivcroissantbot.service.support.RecognizeService;
 import com.bots.lvivcroissantbot.service.support.TextFormatter;
-import com.bots.lvivcroissantbot.service.uni.CroissantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,7 @@ public class GetMenuServiceImpl implements GetMenuService {
     @Autowired
     private MessageSenderService messageSenderService;
     @Autowired
-    private CroissantService croissantRepositoryService;
+    private CroissantEntityRepository croissantRepository;
     @Autowired
     private RecognizeService recognizeService;
     @Autowired
@@ -69,13 +69,13 @@ public class GetMenuServiceImpl implements GetMenuService {
             List<CroissantEntity> croissants1 = new ArrayList<>();
             if (MUser.getOwnCroissantsId() != null)
                 for (Long id : MUser.getOwnCroissantsId()) {
-                    if (croissantRepositoryService.findOne(id) != null)
-                        croissants1.add(croissantRepositoryService.findOne(id));
+                    if (croissantRepository.getOne(id) != null)
+                        croissants1.add(croissantRepository.getOne(id));
                 }
             Collections.reverse(croissants1);
             croissantEntities = croissants1;
         } else
-            croissantEntities = croissantRepositoryService.findAllByTypeOrderByIdDesc(croissantType);
+            croissantEntities = croissantRepository.findAllByTypeOrderByIdDesc(croissantType);
         if (croissantEntities.isEmpty())
             messageSenderService.sendSimpleMessage(recognizeService.recognize(EMPTY_LIST.name(), messaging.getSender().getId()), messaging.getSender().getId());
         else

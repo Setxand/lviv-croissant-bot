@@ -18,7 +18,6 @@ import com.bots.lvivcroissantbot.service.peopleregister.TelegramUserRepositorySe
 import com.bots.lvivcroissantbot.service.support.RecognizeService;
 import com.bots.lvivcroissantbot.service.support.TextFormatter;
 import com.bots.lvivcroissantbot.service.telegram.TelegramMessageSenderService;
-import com.bots.lvivcroissantbot.service.uni.CroissantService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +53,7 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
     @Autowired
     private MessageSenderService messageSenderService;
     @Autowired
-    private CroissantService croissantRepositoryService;
+    private CroissantEntityRepository croissantRepository;
     @Autowired
     private MUserRepositoryService MUserRepositoryService;
     @Autowired
@@ -172,7 +171,7 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
         CroissantEntity croissantEntity = new CroissantEntity();
         croissantEntity.setType(type);
         croissantEntity.setCreatorId(messaging.getSender().getId());
-        croissantRepositoryService.saveAndFlush(croissantEntity);
+        croissantRepository.saveAndFlush(croissantEntity);
 
         Support support = null;
         logicTypePayload(messaging, support, type);
@@ -241,7 +240,7 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
     }
 
     private void acceptOrderingYes(Messaging messaging, String context, MUser MUser) {
-        CroissantEntity croissantEntity = croissantRepositoryService.findOne(Long.parseLong(context));
+        CroissantEntity croissantEntity = croissantRepository.getOne(Long.parseLong(context));
         CustomerOrdering ordering = customerOrderingRepositoryService.findTopByMUserOrderByIdDesc(MUser);
         ordering.getCroissants().add(croissantEntity.toString());
         int price = ordering.getPrice() + croissantEntity.getPrice();

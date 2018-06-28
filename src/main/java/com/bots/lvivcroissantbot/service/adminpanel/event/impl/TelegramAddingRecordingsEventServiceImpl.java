@@ -7,13 +7,13 @@ import com.bots.lvivcroissantbot.entity.lvivcroissants.CroissantsFilling;
 import com.bots.lvivcroissantbot.entity.lvivcroissants.MenuOfFilling;
 import com.bots.lvivcroissantbot.entity.register.TUser;
 import com.bots.lvivcroissantbot.exception.ElementNoFoundException;
+import com.bots.lvivcroissantbot.repository.CroissantEntityRepository;
 import com.bots.lvivcroissantbot.repository.MenuOfFillingRepository;
 import com.bots.lvivcroissantbot.service.adminpanel.event.TelegramAddingRecordingsEventService;
 import com.bots.lvivcroissantbot.service.peopleregister.TelegramUserRepositoryService;
 import com.bots.lvivcroissantbot.service.support.TextFormatter;
 import com.bots.lvivcroissantbot.service.telegram.TelegramMessageSenderService;
 import com.bots.lvivcroissantbot.service.telegram.event.TelegramGetMenuService;
-import com.bots.lvivcroissantbot.service.uni.CroissantService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +38,7 @@ public class TelegramAddingRecordingsEventServiceImpl implements TelegramAddingR
     @Autowired
     private TelegramGetMenuService telegramGetMenuService;
     @Autowired
-    private CroissantService croissantRepositoryService;
+    private CroissantEntityRepository croissantRepository;
 
     @Override
     public void addFilling(Message message) {
@@ -80,7 +80,7 @@ public class TelegramAddingRecordingsEventServiceImpl implements TelegramAddingR
         croissantEntity.setType(message.getText());
         int id = message.getChat().getId();
         croissantEntity.setCreatorId((long) id);
-        croissantRepositoryService.saveAndFlush(croissantEntity);
+        croissantRepository.saveAndFlush(croissantEntity);
 
         TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
         telegramUserRepositoryService.changeStatus(tUser, NULL_CHECKING_ADDING_CROISSANT_STATUS);
@@ -88,7 +88,7 @@ public class TelegramAddingRecordingsEventServiceImpl implements TelegramAddingR
     }
 
     private void nullChecking(Message message) {
-        CroissantEntity croissantEntity = croissantRepositoryService.findTopByCreatorIdOrderByIdDesc((long) message.getChat().getId());
+        CroissantEntity croissantEntity = croissantRepository.findTopByCreatorIdOrderByIdDesc((long) message.getChat().getId());
         TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
         if (croissantEntity.getName() == null) {
             createNameForCroissant(message, croissantEntity, tUser);
@@ -115,7 +115,7 @@ public class TelegramAddingRecordingsEventServiceImpl implements TelegramAddingR
         } else if (tUser.getStatus() == NULL_CHECKING_ADDING_CROISSANT_STATUS_1) {
             try {
                 croissantEntity.setPrice(Integer.parseInt(message.getText()));
-                croissantRepositoryService.saveAndFlush(croissantEntity);
+                croissantRepository.saveAndFlush(croissantEntity);
                 telegramUserRepositoryService.changeStatus(tUser, NULL_CHECKING_ADDING_CROISSANT_STATUS);
                 nullChecking(message);
             } catch (Exception ex) {
@@ -147,7 +147,7 @@ public class TelegramAddingRecordingsEventServiceImpl implements TelegramAddingR
                 MenuOfFilling menuOfFilling = menuOfFillingRepositoryService.findById(Long.parseLong(filling)).orElseThrow(ElementNoFoundException::new);
                 croissantEntity.addSingleFilling(new CroissantsFilling(menuOfFilling));
             }
-            croissantRepositoryService.saveAndFlush(croissantEntity);
+            croissantRepository.saveAndFlush(croissantEntity);
             telegramUserRepositoryService.changeStatus(tUser, NULL_CHECKING_ADDING_CROISSANT_STATUS);
             nullChecking(message);
         } catch (Exception ex) {
@@ -168,7 +168,7 @@ public class TelegramAddingRecordingsEventServiceImpl implements TelegramAddingR
             nullCheckingStatus(message, tUser, IMAGE_URL.name());
         } else if (tUser.getStatus() == NULL_CHECKING_ADDING_CROISSANT_STATUS_1) {
             croissantEntity.setImageUrl(message.getText());
-            croissantRepositoryService.saveAndFlush(croissantEntity);
+            croissantRepository.saveAndFlush(croissantEntity);
             telegramUserRepositoryService.changeStatus(tUser, NULL_CHECKING_ADDING_CROISSANT_STATUS);
             nullChecking(message);
 
@@ -180,7 +180,7 @@ public class TelegramAddingRecordingsEventServiceImpl implements TelegramAddingR
             nullCheckingStatus(message, tUser, NAMING_CROISSANT.name());
         } else if (tUser.getStatus() == NULL_CHECKING_ADDING_CROISSANT_STATUS_1) {
             croissantEntity.setName(message.getText());
-            croissantRepositoryService.saveAndFlush(croissantEntity);
+            croissantRepository.saveAndFlush(croissantEntity);
             telegramUserRepositoryService.changeStatus(tUser, NULL_CHECKING_ADDING_CROISSANT_STATUS);
             nullChecking(message);
 

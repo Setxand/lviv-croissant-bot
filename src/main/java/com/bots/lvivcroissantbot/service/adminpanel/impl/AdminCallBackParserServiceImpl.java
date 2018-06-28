@@ -11,6 +11,7 @@ import com.bots.lvivcroissantbot.entity.lvivcroissants.CroissantEntity;
 import com.bots.lvivcroissantbot.entity.lvivcroissants.CustomerOrdering;
 import com.bots.lvivcroissantbot.entity.register.TUser;
 import com.bots.lvivcroissantbot.exception.ElementNoFoundException;
+import com.bots.lvivcroissantbot.repository.CroissantEntityRepository;
 import com.bots.lvivcroissantbot.repository.CustomerOrderingRepository;
 import com.bots.lvivcroissantbot.repository.SpeakingMessagesRepository;
 import com.bots.lvivcroissantbot.service.adminpanel.AdminCallBackParserService;
@@ -22,7 +23,6 @@ import com.bots.lvivcroissantbot.service.support.TextFormatter;
 import com.bots.lvivcroissantbot.service.telegram.CallBackParserService;
 import com.bots.lvivcroissantbot.service.telegram.TelegramMessageSenderService;
 import com.bots.lvivcroissantbot.service.telegram.event.TelegramGetMenuService;
-import com.bots.lvivcroissantbot.service.uni.CroissantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,7 +49,7 @@ public class AdminCallBackParserServiceImpl implements AdminCallBackParserServic
     @Autowired
     private CallBackParserService callBackParserServiceService;
     @Autowired
-    private CroissantService croissantRepositoryService;
+    private CroissantEntityRepository croissantRepository;
     @Autowired
     private AdminTelegramMessageParserHelperService adminTelegramMessageParserHelperService;
     @Autowired
@@ -204,15 +204,15 @@ public class AdminCallBackParserServiceImpl implements AdminCallBackParserServic
     }
 
     private void deleteCroissant(CallBackQuery callBackQuery) {
-        CroissantEntity croissantEntity = croissantRepositoryService.findOne(Long.parseLong(TextFormatter.ejectContext(callBackQuery.getData())));
-        croissantRepositoryService.delete(croissantEntity);
+        CroissantEntity croissantEntity = croissantRepository.getOne(Long.parseLong(TextFormatter.ejectContext(callBackQuery.getData())));
+        croissantRepository.delete(croissantEntity);
         telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(DONE.name()) + "/help", callBackQuery.getMessage());
     }
 
 
     private void deleteButtonData(CallBackQuery callBackQuery) {
         Long id = Long.parseLong(TextFormatter.ejectSingleVariable(callBackQuery.getData()));
-        CroissantEntity croissantEntity = croissantRepositoryService.findOne(id);
+        CroissantEntity croissantEntity = croissantRepository.getOne(id);
         String text = String.format(ResourceBundle.getBundle("dictionary").getString(SURE_DELETE_CROISSANT.name()), croissantEntity.getName());
         telegramMessageSenderService.simpleQuestion(SURE_TO_DELETE_DATA, "?" + id + "&", text, callBackQuery.getMessage());
     }

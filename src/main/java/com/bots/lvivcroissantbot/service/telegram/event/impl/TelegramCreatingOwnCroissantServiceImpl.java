@@ -7,12 +7,12 @@ import com.bots.lvivcroissantbot.entity.lvivcroissants.CroissantsFilling;
 import com.bots.lvivcroissantbot.entity.register.TUser;
 import com.bots.lvivcroissantbot.exception.ElementNoFoundException;
 import com.bots.lvivcroissantbot.repository.CroisantsFillingEntityRepository;
+import com.bots.lvivcroissantbot.repository.CroissantEntityRepository;
 import com.bots.lvivcroissantbot.repository.MenuOfFillingRepository;
 import com.bots.lvivcroissantbot.service.peopleregister.TelegramUserRepositoryService;
 import com.bots.lvivcroissantbot.service.telegram.TelegramMessageSenderService;
 import com.bots.lvivcroissantbot.service.telegram.event.TelegramCreatingOwnCroissantService;
 import com.bots.lvivcroissantbot.service.telegram.event.TelegramGetMenuService;
-import com.bots.lvivcroissantbot.service.uni.CroissantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -34,7 +34,7 @@ public class TelegramCreatingOwnCroissantServiceImpl implements TelegramCreating
     @Autowired
     private MenuOfFillingRepository menuOfFillingRepositoryService;
     @Autowired
-    private CroissantService croissantRepositoryService;
+    private CroissantEntityRepository croissantRepository;
     @Autowired
     private CroisantsFillingEntityRepository croissantsFillingEntityRepositoryService;
 
@@ -62,7 +62,7 @@ public class TelegramCreatingOwnCroissantServiceImpl implements TelegramCreating
         croissantEntity.setImageUrl("http://www.mlinar.hr/wp-content/uploads/2013/06/mlinar-proizvodi-croissantEntity-600x380.png");
         croissantEntity.setName(ResourceBundle.getBundle("dictionary").getString(OWN_CROISSANT.name()));
         croissantEntity.setType(CroissantsTypes.OWN.name());
-        croissantEntity = croissantRepositoryService.saveAndFlush(croissantEntity);
+        croissantEntity = croissantRepository.saveAndFlush(croissantEntity);
         try {
             String[] fillings = text.split(",");
             for (String filling : fillings) {
@@ -73,7 +73,7 @@ public class TelegramCreatingOwnCroissantServiceImpl implements TelegramCreating
             }
             tUser.addCroissant(croissantEntity);
             telegramUserRepositoryService.saveAndFlush(tUser);
-            croissantRepositoryService.saveAndFlush(croissantEntity);
+            croissantRepository.saveAndFlush(croissantEntity);
             finalCreating(message, tUser);
 
         } catch (HttpClientErrorException hEx) {

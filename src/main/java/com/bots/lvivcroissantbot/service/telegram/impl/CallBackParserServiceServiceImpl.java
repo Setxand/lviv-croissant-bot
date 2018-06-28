@@ -13,6 +13,7 @@ import com.bots.lvivcroissantbot.entity.lvivcroissants.CustomerOrdering;
 import com.bots.lvivcroissantbot.entity.register.TUser;
 import com.bots.lvivcroissantbot.entity.register.User;
 import com.bots.lvivcroissantbot.exception.ElementNoFoundException;
+import com.bots.lvivcroissantbot.repository.CroissantEntityRepository;
 import com.bots.lvivcroissantbot.repository.CustomerOrderingRepository;
 import com.bots.lvivcroissantbot.repository.UserRepository;
 import com.bots.lvivcroissantbot.service.peopleregister.TelegramUserRepositoryService;
@@ -24,7 +25,6 @@ import com.bots.lvivcroissantbot.service.telegram.TelegramMessageSenderService;
 import com.bots.lvivcroissantbot.service.telegram.event.TelegramCreatingOwnCroissantService;
 import com.bots.lvivcroissantbot.service.telegram.event.TelegramGetMenuService;
 import com.bots.lvivcroissantbot.service.telegram.event.TelegramOrderingService;
-import com.bots.lvivcroissantbot.service.uni.CroissantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +40,7 @@ public class CallBackParserServiceServiceImpl implements CallBackParserService {
     @Autowired
     private TelegramMessageSenderService telegramMessageSenderService;
     @Autowired
-    private CroissantService croissantRepositoryService;
+    private CroissantEntityRepository croissantRepository;
     @Autowired
     private TelegramGetMenuService telegramGetMenuService;
     @Autowired
@@ -201,10 +201,10 @@ public class CallBackParserServiceServiceImpl implements CallBackParserService {
         Long id = Long.parseLong(TextFormatter.ejectSingleVariable(callBackQuery.getData()));
         TUser tUser = telegramUserRepositoryService.findByChatId(callBackQuery.getMessage().getChat().getId());
 
-        CroissantEntity croissantEntity = croissantRepositoryService.findOne(id);
+        CroissantEntity croissantEntity = croissantRepository.getOne(id);
         tUser.getOwnCroissantEntities().remove(croissantEntity);
         croissantEntity.setTUser(null);
-        croissantRepositoryService.delete(croissantEntity);
+        croissantRepository.delete(croissantEntity);
         telegramUserRepositoryService.saveAndFlush(tUser);
         telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(DONE.name()), callBackQuery.getMessage());
     }

@@ -7,13 +7,13 @@ import com.bots.lvivcroissantbot.dto.telegram.button.InlineKeyboardButton;
 import com.bots.lvivcroissantbot.entity.lvivcroissants.CroissantEntity;
 import com.bots.lvivcroissantbot.entity.lvivcroissants.CustomerOrdering;
 import com.bots.lvivcroissantbot.entity.register.TUser;
+import com.bots.lvivcroissantbot.repository.CroissantEntityRepository;
 import com.bots.lvivcroissantbot.repository.CustomerOrderingRepository;
 import com.bots.lvivcroissantbot.service.peopleregister.TelegramUserRepositoryService;
 import com.bots.lvivcroissantbot.service.support.TextFormatter;
 import com.bots.lvivcroissantbot.service.telegram.TelegramMessageSenderService;
 import com.bots.lvivcroissantbot.service.telegram.event.TelegramGetMenuService;
 import com.bots.lvivcroissantbot.service.telegram.event.TelegramOrderingService;
-import com.bots.lvivcroissantbot.service.uni.CroissantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +32,7 @@ public class TelegramOrderingServiceImpl implements TelegramOrderingService {
     @Autowired
     private TelegramMessageSenderService telegramMessageSenderService;
     @Autowired
-    private CroissantService croissantRepositoryService;
+    private CroissantEntityRepository croissantRepository;
     @Autowired
     private CustomerOrderingRepository customerOrderingRepositoryService;
     @Autowired
@@ -119,7 +119,7 @@ public class TelegramOrderingServiceImpl implements TelegramOrderingService {
             return;
         }
         CustomerOrdering customerOrdering = new CustomerOrdering();
-        CroissantEntity croissantEntity = croissantRepositoryService.findOne(Long.parseLong(message.getText()));
+        CroissantEntity croissantEntity = croissantRepository.getOne(Long.parseLong(message.getText()));
         customerOrdering.setPrice(croissantEntity.getPrice());
         customerOrdering.setName(tUser.getName() + " " + tUser.getLastName());
 
@@ -141,7 +141,7 @@ public class TelegramOrderingServiceImpl implements TelegramOrderingService {
 
     private void oneMoreAddingCroissant(Message message, TUser tUser) {
         CustomerOrdering customerOrdering = customerOrderingRepositoryService.findTopByTUserOrderByIdDesc(tUser);
-        CroissantEntity croissantEntity = croissantRepositoryService.findOne(Long.parseLong(message.getText()));
+        CroissantEntity croissantEntity = croissantRepository.getOne(Long.parseLong(message.getText()));
         customerOrdering.getCroissants().add(croissantEntity.getId().toString());
         customerOrdering.setPrice(customerOrdering.getPrice() + croissantEntity.getPrice());
         telegramUserRepositoryService.saveAndFlush(tUser);
@@ -178,7 +178,7 @@ public class TelegramOrderingServiceImpl implements TelegramOrderingService {
         String done = ResourceBundle.getBundle("dictionary").getString(ORDERING_WAS_DONE.name());
         telegramMessageSenderService.simpleMessage(done, message);
         for (String i : customerOrdering.getCroissants()) {
-            CroissantEntity croissantEntity = croissantRepositoryService.findOne(Long.parseLong(i));
+            CroissantEntity croissantEntity = croissantRepository.getOne(Long.parseLong(i));
             telegramMessageSenderService.sendPhoto(croissantEntity.getImageUrl(), croissantEntity.getName() + "\n" + croissantEntity.getCroissantsFillings().toString(), null, message);
 
         }

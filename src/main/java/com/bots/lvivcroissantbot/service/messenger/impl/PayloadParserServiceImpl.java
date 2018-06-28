@@ -6,6 +6,7 @@ import com.bots.lvivcroissantbot.dto.messanger.Messaging;
 import com.bots.lvivcroissantbot.dto.messanger.QuickReply;
 import com.bots.lvivcroissantbot.entity.Support;
 import com.bots.lvivcroissantbot.entity.register.MUser;
+import com.bots.lvivcroissantbot.repository.CroissantEntityRepository;
 import com.bots.lvivcroissantbot.repository.SupportEntityRepository;
 import com.bots.lvivcroissantbot.service.messenger.MessageParserService;
 import com.bots.lvivcroissantbot.service.messenger.MessageSenderService;
@@ -16,7 +17,6 @@ import com.bots.lvivcroissantbot.service.messenger.event.UserService;
 import com.bots.lvivcroissantbot.service.peopleregister.MUserRepositoryService;
 import com.bots.lvivcroissantbot.service.support.RecognizeService;
 import com.bots.lvivcroissantbot.service.support.TextFormatter;
-import com.bots.lvivcroissantbot.service.uni.CroissantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -37,7 +37,7 @@ public class PayloadParserServiceImpl implements PayloadParserService {
     @Autowired
     private RecognizeService recognizeService;
     @Autowired
-    private CroissantService croissantRepositoryService;
+    private CroissantEntityRepository croissantRepository;
     @Autowired
     private MUserRepositoryService MUserRepositoryService;
     @Autowired
@@ -142,7 +142,7 @@ public class PayloadParserServiceImpl implements PayloadParserService {
 
     private void parseDelButtonPayload(Messaging messaging) {
         String varPayload = TextFormatter.ejectSingleVariable(messaging.getPostback().getPayload());
-        croissantRepositoryService.delete(croissantRepositoryService.findOne(Long.parseLong(varPayload)));
+        croissantRepository.delete(croissantRepository.getOne(Long.parseLong(varPayload)));
         MUser MUser = MUserRepositoryService.findOnebyRId(messaging.getSender().getId());
         MUser.getOwnCroissantsId().remove(Long.parseLong(varPayload));
         MUserRepositoryService.saveAndFlush(MUser);

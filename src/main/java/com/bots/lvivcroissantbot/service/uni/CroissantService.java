@@ -50,37 +50,5 @@ public class CroissantService {
         return Optional.ofNullable(croissantEntity).map(CroissantUtilManager::croissantEntityToDTO);
     }
 
-
-
-
-
-    public List<CroissantEntity> findAllByTypeOrderByIdDesc(String type) {
-        return croissantEntityRepository.findAllByTypeOrderByIdDesc(type);
-    }
-
-    public CroissantEntity findTopByOrderByIdDesc() {
-        return croissantEntityRepository.findTopByOrderByIdDesc();
-    }
-
-
-    public CroissantEntity findOne(Long id) {
-        return croissantEntityRepository.findById(id).orElseThrow(ElementNoFoundException::new);
-    }
-
-    public CroissantEntity getCroissantByName(String name) {
-        return this.croissantEntityRepository.getCroissantByName(name);
-    }
-
-    public CroissantEntity saveAndFlush(CroissantEntity croissantEntity) {
-        return croissantEntityRepository.saveAndFlush(croissantEntity);
-    }
-
-
-    public void delete(CroissantEntity croissantEntity) {
-        croissantEntityRepository.delete(croissantEntity);
-    }
-
-    public CroissantEntity findTopByCreatorIdOrderByIdDesc(Long creatorId) {
-        return croissantEntityRepository.findTopByCreatorIdOrderByIdDesc(creatorId);
-    }
+    
 }
