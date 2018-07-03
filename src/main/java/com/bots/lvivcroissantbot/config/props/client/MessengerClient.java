@@ -1,6 +1,6 @@
-package com.bots.lvivcroissantbot.config.client;
+package com.bots.lvivcroissantbot.config.props.client;
 
-import com.bots.lvivcroissantbot.config.AppConfig.MesProps;
+import com.bots.lvivcroissantbot.config.props.PropertiesConfig.MesProps;
 import lombok.Getter;
 
 @Getter

@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
@@ -89,9 +91,9 @@ public class RequestHandlerController {
     }
 
     @RequestMapping(value = "/sendMail")
-    public void sendMail(@RequestParam(name = "mark1") String mark, @RequestParam(name = "recipientId") String recipient) throws MessagingException, MalformedURLException {
+    public void sendMail(@RequestParam(name = "mark1") String mark) throws MessagingException, MalformedURLException {
         List<MUser> admins = userRepository.findAllByRole(ADMIN).stream().map(User::getMUser).collect(Collectors.toList());
-        Long userId = Long.parseLong(recipient);
+        Long userId = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
         MUser MUser = MUserRepositoryService.findOnebyRId(userId);
         emailService.sendMailForAdminAboutMark(MUser, mark);
         messageSenderService.sendSimpleMessage(recognizeService.recognize(THANK_FOR_RATE.name(), userId), userId);

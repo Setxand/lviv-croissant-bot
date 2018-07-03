@@ -15,6 +15,7 @@ import com.bots.lvivcroissantbot.service.messenger.QuickReplyParserService;
 import com.bots.lvivcroissantbot.service.messenger.event.*;
 import com.bots.lvivcroissantbot.service.peopleregister.MUserRepositoryService;
 import com.bots.lvivcroissantbot.service.peopleregister.TelegramUserRepositoryService;
+import com.bots.lvivcroissantbot.service.support.JwtTokenGenerator;
 import com.bots.lvivcroissantbot.service.support.RecognizeService;
 import com.bots.lvivcroissantbot.service.support.TextFormatter;
 import com.bots.lvivcroissantbot.service.telegram.TelegramMessageSenderService;
@@ -197,7 +198,7 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
         customerOrderingRepositoryService.saveAndFlush(customerOrdering);
         Button button = new Button(web_url.name(), recognizeService.recognize(PAYMENT.name(), messaging.getSender().getId()));
         button.setMesExtentions(true);
-        button.setUrl(SERVER_URL + "/payment/" + messaging.getSender().getId());
+        button.setUrl(SERVER_URL + "/payment/" + messaging.getSender().getId().toString());
         messageSenderService.sendButtons(new ArrayList<Button>(Arrays.asList(button)), recognizeService.recognize(TAP_CREATE_CHARGE.name(), messaging.getSender().getId()), messaging.getSender().getId());
     }
 
@@ -207,7 +208,8 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
         messageSenderService.sendSimpleMessage(recognizeService.recognize(ORDERING_WAS_DONE.name(), messaging.getSender().getId()) + "\n" + customerOrdering.getCroissants() + "\nPrice: " + customerOrdering.getPrice() + recognizeService.recognize(CURRENCY.name(), messaging.getSender().getId()), messaging.getSender().getId());
         Button button = new Button(web_url.name(), recognizeService.recognize(RATING_BUTTON.name(), messaging.getSender().getId()));
         button.setMesExtentions(true);
-        button.setUrl(SERVER_URL + "/req/" + messaging.getSender().getId());
+
+        button.setUrl(SERVER_URL + "/req/"+JwtTokenGenerator.generate(messaging.getSender().getId().toString()));
         messageSenderService.sendButtons(new ArrayList<Button>(Arrays.asList(button)), recognizeService.recognize(RATE_US.name(), messaging.getSender().getId()), messaging.getSender().getId());
         messageSenderService.sendUserActions(messaging.getSender().getId());
     }

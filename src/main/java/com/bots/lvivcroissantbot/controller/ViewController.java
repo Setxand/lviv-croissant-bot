@@ -20,7 +20,7 @@ import java.util.List;
 
 
 @Controller
-public class View {
+public class ViewController {
 
     @Autowired
     private EmailService emailService;
@@ -37,12 +37,12 @@ public class View {
     @Autowired
     private CroissantService croissantService;
 
-    @RequestMapping(value = "/req/{customerId}", method = RequestMethod.GET)
-    public String getMyReq(Model model, @PathVariable String customerId) {
-        model.addAttribute("customerId", customerId);
+
+    @RequestMapping(value = "/req/{token}", method = RequestMethod.GET)
+    public String getMyReq(Model model,@PathVariable String token) {
+        model.addAttribute("token", token);
         return "WebView";
     }
-
 
     @RequestMapping(value = "/showMore/{orderId}")
     public String showMoreForOrderings(@PathVariable String orderId, Model model) {

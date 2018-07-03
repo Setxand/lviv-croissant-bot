@@ -1,7 +1,7 @@
-package com.bots.lvivcroissantbot.config;
+package com.bots.lvivcroissantbot.config.props;
 
-import com.bots.lvivcroissantbot.config.client.MessengerClient;
-import com.bots.lvivcroissantbot.config.client.UrlClient;
+import com.bots.lvivcroissantbot.config.props.client.MessengerClient;
+import com.bots.lvivcroissantbot.config.props.client.UrlClient;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,9 +12,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 @Configuration
-@EnableConfigurationProperties(AppConfig.MesProps.class)
+@EnableConfigurationProperties(PropertiesConfig.MesProps.class)
 @PropertySource("classpath:add.properties")
-public class AppConfig {
+public class PropertiesConfig {
 
     @Bean
     public MessengerClient getProps(MesProps props) {

@@ -1,7 +1,7 @@
 package com.bots.lvivcroissantbot;
 
-import com.bots.lvivcroissantbot.config.AppConfig;
-import com.bots.lvivcroissantbot.config.client.UrlClient;
+import com.bots.lvivcroissantbot.config.props.PropertiesConfig;
+import com.bots.lvivcroissantbot.config.props.client.UrlClient;
 import com.bots.lvivcroissantbot.controller.TestController;
 import com.bots.lvivcroissantbot.dto.messanger.*;
 import com.bots.lvivcroissantbot.dto.telegram.Chat;
@@ -40,7 +40,7 @@ public class ServerStarting {
 
     @PostConstruct
     public void getStarted() throws Exception {
-        AppConfig.UrlProps urlProps = urlClient.getUrlProps();
+        PropertiesConfig.UrlProps urlProps = urlClient.getUrlProps();
 
         restTemplate = new RestTemplate();
         Shell shell = new Shell();
@@ -68,7 +68,7 @@ public class ServerStarting {
     }
 
 
-    private void telegramRequests(AppConfig.UrlProps urlProps) {
+    private void telegramRequests(PropertiesConfig.UrlProps urlProps) {
         try {
             ResponseEntity<?> responseEntity = restTemplate.getForEntity(urlProps.getProfile().getTelegramCommon() + "/setWebhook?url=" + urlProps.getServer() + "/telegramWebHook", Object.class);
             logger.info("Telegram`s bot webhook: " + responseEntity.getBody().toString());
@@ -83,7 +83,7 @@ public class ServerStarting {
         }
     }
 
-    private void messengerRequests(MessengerProfileApi messengerProfileApi, AppConfig.UrlProps urlProps, Shell shell) {
+    private void messengerRequests(MessengerProfileApi messengerProfileApi, PropertiesConfig.UrlProps urlProps, Shell shell) {
         testController.setObject(messengerProfileApi);
         String url = urlProps.getProfile().getMessenger() + PAGE_ACCESS_TOKEN;
 

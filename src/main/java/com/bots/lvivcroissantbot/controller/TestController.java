@@ -1,8 +1,8 @@
 package com.bots.lvivcroissantbot.controller;
 
-import com.bots.lvivcroissantbot.config.AppConfig;
-import com.bots.lvivcroissantbot.config.client.MessengerClient;
-import com.bots.lvivcroissantbot.config.client.UrlClient;
+import com.bots.lvivcroissantbot.config.props.PropertiesConfig;
+import com.bots.lvivcroissantbot.config.props.client.MessengerClient;
+import com.bots.lvivcroissantbot.config.props.client.UrlClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,12 +28,12 @@ public class TestController {
 
 
     @GetMapping("/urlProps")
-    private AppConfig.UrlProps getUrlProps() {
+    private PropertiesConfig.UrlProps getUrlProps() {
         return urlClient.getUrlProps();
     }
 
     @GetMapping("/props")
-    public AppConfig.MesProps getProps() {
+    public PropertiesConfig.MesProps getProps() {
         return client.getMesProps();
     }
 }

@@ -98,7 +98,7 @@
         window.extAsyncInit = function() {
         $(document).ready(function () {
             $("#animation").hide();
-            var rId = [[${customerId}]];
+            var token = [[${token}]];
 
             var mark = "" ;
             $('#myForm input').on('change', function() {
@@ -110,8 +110,10 @@
                 $("#animation").show();
                         $.ajax({
                         method:"GET",
-                        data: {mark1 : mark,recipientId:rId},
-                        url: "/reqDispatcher/sendMail", success: function() {
+                        data: {mark1 : mark},
+                        url: "/reqDispatcher/sendMail",
+                        beforeSend: function(xhr){xhr.setRequestHeader('Authorization', token);},
+                        success: function() {
                             MessengerExtensions.requestCloseBrowser(function success() {
 
                             },

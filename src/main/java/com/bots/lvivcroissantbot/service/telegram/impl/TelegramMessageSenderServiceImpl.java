@@ -1,6 +1,6 @@
 package com.bots.lvivcroissantbot.service.telegram.impl;
 
-import com.bots.lvivcroissantbot.config.client.UrlClient;
+import com.bots.lvivcroissantbot.config.props.client.UrlClient;
 import com.bots.lvivcroissantbot.constantenum.Platform;
 import com.bots.lvivcroissantbot.constantenum.messenger.speaking.ServerSideSpeaker;
 import com.bots.lvivcroissantbot.constantenum.telegram.CallBackData;

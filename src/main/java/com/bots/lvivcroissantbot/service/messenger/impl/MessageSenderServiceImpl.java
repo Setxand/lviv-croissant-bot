@@ -14,13 +14,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+import org.springframework.http.client.support.HttpRequestWrapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static com.bots.lvivcroissantbot.constantenum.messenger.CasesCourierActions.COMPLETING_ORDERINGS;
@@ -60,6 +62,7 @@ public class MessageSenderServiceImpl implements MessageSenderService {
     @Value("${messenger.facebook.MUser.data.uer.fields}")
     private String DATA_FIELDS;
 
+    private RestTemplate restTemplate;
 
 
 
@@ -165,6 +168,16 @@ public class MessageSenderServiceImpl implements MessageSenderService {
         Message message = new Message();
         message.setAttachment(attachment);
         sendMessage(new Messaging(message, new Recipient(recipient)));
+
+//        restTemplate = new RestTemplate();
+//        HttpHeaders httpHeaders = new HttpHeaders();
+//        httpHeaders.set(HttpHeaders.AUTHORIZATION,);
+//
+//        HttpEntity<Messaging>httpEntity = new HttpEntity<>(new Messaging(message,new Recipient(recipient)),httpHeaders);
+
+
+
+
     }
 
     @Override
@@ -178,6 +191,7 @@ public class MessageSenderServiceImpl implements MessageSenderService {
     @Override
     public @ResponseBody
     void sendMessage(Messaging messaging) {
+
         new RestTemplate().postForEntity(FACEBOOK_SEND_URL + PAGE_ACCESS_TOKEN, messaging, Void.class);
 
     }
