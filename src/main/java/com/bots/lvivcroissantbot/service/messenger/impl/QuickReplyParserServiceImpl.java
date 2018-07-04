@@ -209,7 +209,7 @@ public class QuickReplyParserServiceImpl implements QuickReplyParserService {
         Button button = new Button(web_url.name(), recognizeService.recognize(RATING_BUTTON.name(), messaging.getSender().getId()));
         button.setMesExtentions(true);
 
-        button.setUrl(SERVER_URL + "/req/"+JwtTokenGenerator.generate(messaging.getSender().getId().toString()));
+        button.setUrl(SERVER_URL + "/req/" + JwtTokenGenerator.generate(messaging.getSender().getId().toString()));
         messageSenderService.sendButtons(new ArrayList<Button>(Arrays.asList(button)), recognizeService.recognize(RATE_US.name(), messaging.getSender().getId()), messaging.getSender().getId());
         messageSenderService.sendUserActions(messaging.getSender().getId());
     }

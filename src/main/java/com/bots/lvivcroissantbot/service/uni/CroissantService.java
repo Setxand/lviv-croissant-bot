@@ -6,6 +6,8 @@ import com.bots.lvivcroissantbot.exception.ElementNoFoundException;
 import com.bots.lvivcroissantbot.repository.CroissantEntityRepository;
 import com.bots.lvivcroissantbot.tools.CroissantUtilManager;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +37,7 @@ public class CroissantService {
     }
 
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public void putCroissant(CroissantDTO croissantDTO, Long id) {
         CroissantEntity croissantEntity = croissantEntityRepository.findById(id).orElseThrow(ElementNoFoundException::new);
         croissantEntity.setName(croissantDTO.getName());
@@ -42,7 +45,7 @@ public class CroissantService {
         croissantEntity.setPrice(croissantDTO.getPrice());
         croissantEntity.setType(croissantDTO.getType());
         croissantEntity.setCroissantsFillings(CroissantUtilManager.fillingDTOToEntity(croissantDTO.getCroissantsFillings()));
-        croissantEntityRepository.saveAndFlush(croissantEntity);
+//        croissantEntityRepository.saveAndFlush(croissantEntity);
     }
 
     public Optional<CroissantDTO> findByIdAndReturnDTO(Long id) {
@@ -50,5 +53,4 @@ public class CroissantService {
         return Optional.ofNullable(croissantEntity).map(CroissantUtilManager::croissantEntityToDTO);
     }
 
-    
 }

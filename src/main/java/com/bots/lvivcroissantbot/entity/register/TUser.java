@@ -37,7 +37,7 @@ public class TUser {
     @OneToMany(mappedBy = "tUser", cascade = CascadeType.ALL)
     private List<CroissantEntity> ownCroissantEntities = new ArrayList<>();
 
-    @OneToMany(mappedBy = "userCourier", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "courier", cascade = CascadeType.ALL)
     private List<CustomerOrdering> courierCustomerOrderings = new ArrayList<>();
 
     public void addCroissant(CroissantEntity croissantEntity) {
@@ -52,7 +52,7 @@ public class TUser {
 
     public void addCourierOrdering(CustomerOrdering customerOrdering) {
         courierCustomerOrderings.add(customerOrdering);
-        customerOrdering.setTUser(this);
+        customerOrdering.setCourier(this);
     }
 
 

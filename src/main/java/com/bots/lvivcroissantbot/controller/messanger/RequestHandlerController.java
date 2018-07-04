@@ -9,6 +9,7 @@ import com.bots.lvivcroissantbot.repository.UserRepository;
 import com.bots.lvivcroissantbot.service.messenger.MessageSenderService;
 import com.bots.lvivcroissantbot.service.peopleregister.MUserRepositoryService;
 import com.bots.lvivcroissantbot.service.support.EmailService;
+import com.bots.lvivcroissantbot.service.support.JwtTokenGenerator;
 import com.bots.lvivcroissantbot.service.support.RecognizeService;
 import com.stripe.Stripe;
 import com.stripe.exception.*;
@@ -18,7 +19,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
@@ -85,7 +85,7 @@ public class RequestHandlerController {
         messageSenderService.sendSimpleMessage(recognizeService.recognize(ORDERING_WAS_DONE.name(), uId) + "\n" + customerOrdering.getCroissants() + "\nPrice: " + customerOrdering.getPrice() + recognizeService.recognize(CURRENCY.name(), uId), uId);
         Button button = new Button(web_url.name(), recognizeService.recognize(RATING_BUTTON.name(), uId));
         button.setMesExtentions(true);
-        button.setUrl(SERVER_URL + "/req/" + uId);
+        button.setUrl(SERVER_URL + "/req/" + JwtTokenGenerator.generate(uId.toString()));
         messageSenderService.sendButtons(new ArrayList<Button>(Arrays.asList(button)), recognizeService.recognize(RATE_US.name(), uId), uId);
         messageSenderService.sendUserActions(uId);
     }

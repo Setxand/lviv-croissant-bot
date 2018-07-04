@@ -11,6 +11,7 @@ import com.bots.lvivcroissantbot.service.support.EmailService;
 import com.bots.lvivcroissantbot.service.support.RecognizeService;
 import com.bots.lvivcroissantbot.service.uni.CroissantService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -39,14 +40,14 @@ public class ViewController {
 
 
     @RequestMapping(value = "/req/{token}", method = RequestMethod.GET)
-    public String getMyReq(Model model,@PathVariable String token) {
+    public String getMyReq(Model model, @PathVariable String token) {
         model.addAttribute("token", token);
         return "WebView";
     }
 
-    @RequestMapping(value = "/showMore/{orderId}")
-    public String showMoreForOrderings(@PathVariable String orderId, Model model) {
-        CustomerOrdering customerOrdering = customerOrderingRepositoryService.findById(Long.parseLong(orderId)).orElseThrow(ElementNoFoundException::new);
+    @RequestMapping(value = "/showMore/{orderingId}")
+    public String showMoreForOrderings(Model model,@PathVariable Long orderingId) {
+        CustomerOrdering customerOrdering = customerOrderingRepositoryService.findById(orderingId).orElseThrow(ElementNoFoundException::new);
         List<String> orderings = new ArrayList<>();
         for (String cr : customerOrdering.getCroissants()) {
             try {

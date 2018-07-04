@@ -9,6 +9,7 @@ import com.bots.lvivcroissantbot.service.messenger.MessageSenderService;
 import com.bots.lvivcroissantbot.service.messenger.event.UserService;
 import com.bots.lvivcroissantbot.service.peopleregister.CourierRegisterService;
 import com.bots.lvivcroissantbot.service.peopleregister.MUserRepositoryService;
+import com.bots.lvivcroissantbot.service.support.JwtTokenGenerator;
 import com.bots.lvivcroissantbot.service.support.RecognizeService;
 import com.bots.lvivcroissantbot.service.support.TextFormatter;
 import org.slf4j.Logger;
