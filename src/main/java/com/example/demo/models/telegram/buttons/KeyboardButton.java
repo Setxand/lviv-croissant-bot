@@ -10,9 +10,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class KeyboardButton implements Button {
-    private String text;
+	private String text;
 
-    public KeyboardButton(String text) {
-        this.text = text;
-    }
+	public KeyboardButton(String text) {
+		this.text = text;
+	}
 }

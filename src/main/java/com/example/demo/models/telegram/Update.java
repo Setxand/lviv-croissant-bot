@@ -11,9 +11,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Update {
-    @JsonProperty("update_id")
-    private Integer updateId;
-    @JsonProperty("callback_query")
-    private CallBackQuery callBackQuery;
-    private Message message;
+	@JsonProperty("update_id")
+	private Integer updateId;
+	@JsonProperty("callback_query")
+	private CallBackQuery callBackQuery;
+	private Message message;
 }

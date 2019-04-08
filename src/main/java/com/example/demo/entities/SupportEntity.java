@@ -14,12 +14,12 @@ import javax.persistence.Id;
 @Setter
 @NoArgsConstructor
 public class SupportEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    private Integer count;
-    private String type;
-    private Long userId;
-    private Boolean oneMore;
-    
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
+	private Integer count;
+	private String type;
+	private Long userId;
+	private Boolean oneMore;
+
 }

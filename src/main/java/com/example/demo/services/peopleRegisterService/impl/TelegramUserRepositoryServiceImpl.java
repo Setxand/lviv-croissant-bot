@@ -11,36 +11,37 @@ import java.util.List;
 
 @Service
 public class TelegramUserRepositoryServiceImpl implements TelegramUserRepositoryService {
-    @Autowired
-    private TelegramUserRepository telegramUserRepository;
-    @Override
-    public void delete(TUser tUser) {
-        telegramUserRepository.delete(tUser);
-    }
+	@Autowired
+	private TelegramUserRepository telegramUserRepository;
 
-    @Override
-    public TUser saveAndFlush(TUser tUser) {
-       return telegramUserRepository.saveAndFlush(tUser);
-    }
+	@Override
+	public void delete(TUser tUser) {
+		telegramUserRepository.delete(tUser);
+	}
 
-    @Override
-    public TUser findByChatId(Integer chatId) {
-        return telegramUserRepository.findByChatId(chatId);
-    }
+	@Override
+	public TUser saveAndFlush(TUser tUser) {
+		return telegramUserRepository.saveAndFlush(tUser);
+	}
 
-    @Override
-    public void changeStatus(TUser user, TelegramUserStatus status) {
-        user.setStatus(status);
-        telegramUserRepository.saveAndFlush(user);
-    }
+	@Override
+	public TUser findByChatId(Integer chatId) {
+		return telegramUserRepository.findByChatId(chatId);
+	}
 
-    @Override
-    public TUser findByUserName(String userName) {
-        return telegramUserRepository.findByUserName(userName);
-    }
+	@Override
+	public void changeStatus(TUser user, TelegramUserStatus status) {
+		user.setStatus(status);
+		telegramUserRepository.saveAndFlush(user);
+	}
 
-    @Override
-    public List<String> findTopUserNames() {
-        return telegramUserRepository.findTopw();
-    }
+	@Override
+	public TUser findByUserName(String userName) {
+		return telegramUserRepository.findByUserName(userName);
+	}
+
+	@Override
+	public List<String> findTopUserNames() {
+		return telegramUserRepository.findTopw();
+	}
 }

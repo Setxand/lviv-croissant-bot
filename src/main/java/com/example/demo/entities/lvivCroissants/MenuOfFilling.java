@@ -12,24 +12,23 @@ import javax.persistence.Id;
 @Getter
 @Setter
 public class MenuOfFilling {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    private String name;
-    private int price;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
+	private String name;
+	private int price;
 
-    public MenuOfFilling(String name, int price) {
-        this.name = name;
-        this.price = price;
-    }
+	public MenuOfFilling(String name, int price) {
+		this.name = name;
+		this.price = price;
+	}
 
-    public MenuOfFilling() {
-    }
+	public MenuOfFilling() {
+	}
 
 
-
-    @Override
-    public String toString() {
-        return id+". "+name;
-    }
+	@Override
+	public String toString() {
+		return id + ". " + name;
+	}
 }

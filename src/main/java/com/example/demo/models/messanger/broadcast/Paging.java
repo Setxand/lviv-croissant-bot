@@ -8,12 +8,12 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class Paging {
-    private Cursor cursors;
+	private Cursor cursors;
 
-    @Override
-    public String toString() {
-        return "Paging{" +
-                "cursors=" + cursors +
-                '}';
-    }
+	@Override
+	public String toString() {
+		return "Paging{" +
+				"cursors=" + cursors +
+				'}';
+	}
 }

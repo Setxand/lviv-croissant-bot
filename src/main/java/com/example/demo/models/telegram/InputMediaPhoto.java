@@ -11,9 +11,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class InputMediaPhoto implements InputMedia {
-    private String type;
-    private String media;
-    private String caption;
-    @JsonProperty("parse_mode")
-    private String parseMode;
+	private String type;
+	private String media;
+	private String caption;
+	@JsonProperty("parse_mode")
+	private String parseMode;
 }

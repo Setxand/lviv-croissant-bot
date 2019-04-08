@@ -8,15 +8,17 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Attachment {
-    private String type;
-    private Payload payload;
+	private String type;
+	private Payload payload;
 
 
-    public Attachment(String type, Payload payload) {
-        this.type = type;
-        this.payload = payload;
-    }
-    public Attachment(){}
+	public Attachment(String type, Payload payload) {
+		this.type = type;
+		this.payload = payload;
+	}
+
+	public Attachment() {
+	}
 
 
 }

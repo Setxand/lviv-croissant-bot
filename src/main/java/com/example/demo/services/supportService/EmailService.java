@@ -6,5 +6,5 @@ import javax.mail.MessagingException;
 import java.net.MalformedURLException;
 
 public interface EmailService {
-    public void sendMailForAdminAboutMark(User user, String mark) throws MessagingException, MalformedURLException;
+	public void sendMailForAdminAboutMark(User user, String mark) throws MessagingException, MalformedURLException;
 }

@@ -8,6 +8,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class Cursor {
-    private String before;
-    private String after;
+	private String before;
+	private String after;
 }

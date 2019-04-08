@@ -9,15 +9,15 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class Value {
-    private Long value;
-    @JsonProperty("end_time")
-    private String endTime;
+	private Long value;
+	@JsonProperty("end_time")
+	private String endTime;
 
-    @Override
-    public String toString() {
-        return "Value{" +
-                "value=" + value +
-                ", endTime='" + endTime + '\'' +
-                '}';
-    }
+	@Override
+	public String toString() {
+		return "Value{" +
+				"value=" + value +
+				", endTime='" + endTime + '\'' +
+				'}';
+	}
 }

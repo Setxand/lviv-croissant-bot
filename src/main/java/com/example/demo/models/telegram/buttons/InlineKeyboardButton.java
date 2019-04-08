@@ -11,13 +11,13 @@ import lombok.Setter;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class InlineKeyboardButton implements Button {
-    private String text;
-    private String url;
-    @JsonProperty("callback_data")
-    private String callBackData;
+	private String text;
+	private String url;
+	@JsonProperty("callback_data")
+	private String callBackData;
 
-    public InlineKeyboardButton(String text, String callBackData) {
-        this.text = text;
-        this.callBackData = callBackData;
-    }
+	public InlineKeyboardButton(String text, String callBackData) {
+		this.text = text;
+		this.callBackData = callBackData;
+	}
 }

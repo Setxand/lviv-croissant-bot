@@ -8,13 +8,15 @@ import lombok.Setter;
 @Setter
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Sender {
-    private Long id;
-    private UserData name;
-    public Sender(Long id) {
-        this.id = id;
-    }
-    public Sender(){}
+	private Long id;
+	private UserData name;
 
+	public Sender(Long id) {
+		this.id = id;
+	}
+
+	public Sender() {
+	}
 
 
 }

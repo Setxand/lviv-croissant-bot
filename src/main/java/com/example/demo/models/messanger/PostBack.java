@@ -8,13 +8,13 @@ import lombok.Setter;
 @Setter
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class PostBack {
-   private String title;
-   private String payload;
+	private String title;
+	private String payload;
 
-    public PostBack() {
-    }
+	public PostBack() {
+	}
 
-    public PostBack(String payload) {
-        this.payload = payload;
-    }
+	public PostBack(String payload) {
+		this.payload = payload;
+	}
 }

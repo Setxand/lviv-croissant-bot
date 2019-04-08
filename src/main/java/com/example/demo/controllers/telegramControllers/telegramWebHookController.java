@@ -11,10 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/telegramWebHook")
 public class telegramWebHookController {
-    @Autowired
-    private UpdateParserService updateParserService;
-    @PostMapping
-    public void getUpdate(@RequestBody Update update){
-        updateParserService.parseUpdate(update);
-    }
+	@Autowired
+	private UpdateParserService updateParserService;
+
+	@PostMapping
+	public void getUpdate(@RequestBody Update update) {
+		updateParserService.parseUpdate(update);
+	}
 }

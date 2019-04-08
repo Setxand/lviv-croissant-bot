@@ -11,15 +11,15 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class BroadcastMessage {
-    @JsonProperty("message_creative_id")
-    private Long messageCreativeId;
-    @JsonProperty("notification_type")
-    private String notificationType;
-    private String tag;
-    @JsonProperty("custom_label_id")
-    private Long customLabelId;
+	@JsonProperty("message_creative_id")
+	private Long messageCreativeId;
+	@JsonProperty("notification_type")
+	private String notificationType;
+	private String tag;
+	@JsonProperty("custom_label_id")
+	private Long customLabelId;
 
-    public BroadcastMessage(Long messageCreativeId) {
-        this.messageCreativeId = messageCreativeId;
-    }
+	public BroadcastMessage(Long messageCreativeId) {
+		this.messageCreativeId = messageCreativeId;
+	}
 }

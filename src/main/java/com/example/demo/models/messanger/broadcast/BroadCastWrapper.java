@@ -8,9 +8,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class BroadCastWrapper<T> {
-    T t;
+	T t;
 
-    public BroadCastWrapper(T t) {
-        this.t = t;
-    }
+	public BroadCastWrapper(T t) {
+		this.t = t;
+	}
 }

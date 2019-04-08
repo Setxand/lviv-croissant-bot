@@ -11,18 +11,18 @@ import lombok.Setter;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Chat {
-    private Integer id;
-    private String type;
-    private String title;
-    @JsonProperty("username")
-    private String userName;
-    @JsonProperty("first_name")
-    private String firstName;
-    @JsonProperty("last_name")
-    private String lastName;
-    private String text;
+	private Integer id;
+	private String type;
+	private String title;
+	@JsonProperty("username")
+	private String userName;
+	@JsonProperty("first_name")
+	private String firstName;
+	@JsonProperty("last_name")
+	private String lastName;
+	private String text;
 
-    public Chat(Integer id) {
-        this.id = id;
-    }
+	public Chat(Integer id) {
+		this.id = id;
+	}
 }

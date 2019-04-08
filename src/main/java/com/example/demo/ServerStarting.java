@@ -21,70 +21,64 @@ import static com.example.demo.enums.messengerEnums.types.ButtonType.web_url;
 
 @Component
 public class ServerStarting {
-    @Autowired
-    private TelegramMessageSenderService telegramMessageSenderService;
-    @Value("${page.access.token}")
-    private String PAGE_ACCESS_TOKEN;
+	private static final Logger logger = Logger.getLogger(ServerStarting.class);
+	@Autowired
+	private TelegramMessageSenderService telegramMessageSenderService;
+	@Value("${page.access.token}")
+	private String PAGE_ACCESS_TOKEN;
+	@Value("${profile.api.uri}")
+	private String FACEBOOK_PROFILE_URI;
+	@Value("${server.url}")
+	private String SERVER_URL;
+	@Value("${telegran.url}")
+	private String TELEGRAM_URL;
+	@Value("${telegran.admins.url}")
+	private String ADMIN_TELEGRAM_URL;
 
-    @Value("${profile.api.uri}")
-    private String FACEBOOK_PROFILE_URI;
-
-    @Value("${server.url}")
-    private String SERVER_URL;
-    @Value("${telegran.url}")
-    private String TELEGRAM_URL;
-    @Value("${telegran.admins.url}")
-    private String ADMIN_TELEGRAM_URL;
-
-    private static final Logger logger = Logger.getLogger(ServerStarting.class);
-
-    @PostConstruct
-    public void getStarted() throws Exception {
-        Shell shell = new Shell();
-        shell.setWhiteListedDomains(new ArrayList<>(Arrays.asList(SERVER_URL)));
+	@PostConstruct
+	public void getStarted() throws Exception {
+		Shell shell = new Shell();
+		shell.setWhiteListedDomains(new ArrayList<>(Arrays.asList(SERVER_URL)));
 
 
+		MessengerProfileApi messengerProfileApi = new MessengerProfileApi(new GetStarted(GET_STARTED_PAYLOAD.name()), new ArrayList<PersistentMenu>());
+		PersistentMenu persistentMenu = new PersistentMenu();
+		MenuItem menuItem = new MenuItem(web_url.name(), "Reference");
+		menuItem.setUrl(SERVER_URL + "/reference");
+		persistentMenu.setCallToActions(Arrays.asList(new MenuItem(postback.name(), "Menu of croissants", MENU_PAYLOAD.name())
+				, new MenuItem(postback.name(), "Navigation menu", NAVIGATION_MENU.name())
+				, menuItem));
+		messengerProfileApi.getPersistentMenu().add(persistentMenu);
 
-        MessengerProfileApi messengerProfileApi = new MessengerProfileApi(new GetStarted(GET_STARTED_PAYLOAD.name()), new ArrayList<PersistentMenu>());
-        PersistentMenu persistentMenu = new PersistentMenu();
-        MenuItem menuItem = new MenuItem(web_url.name(),"Reference");
-        menuItem.setUrl(SERVER_URL+"/reference");
-        persistentMenu.setCallToActions(Arrays.asList(new MenuItem(postback.name(), "Menu of croissants", MENU_PAYLOAD.name())
-        ,new MenuItem(postback.name(),"Navigation menu",NAVIGATION_MENU.name())
-        ,menuItem));
-        messengerProfileApi.getPersistentMenu().add(persistentMenu);
-
-        try {
-
-
-            ResponseEntity<?> responseEntity = new RestTemplate()
-                    .postForEntity(FACEBOOK_PROFILE_URI + PAGE_ACCESS_TOKEN, messengerProfileApi, MessengerProfileApi.class);
-            logger.debug(responseEntity);
-            ResponseEntity<?> responseForWhiteList = new RestTemplate()
-                    .postForEntity(FACEBOOK_PROFILE_URI + PAGE_ACCESS_TOKEN, shell, Shell.class);
-            logger.debug(responseForWhiteList);
-
-        } catch (Exception ex) {
-            logger.warn("Messenger queries: "+ex);
-        }
-        finally {
-            try {
-                ResponseEntity<?>responseEntity = new RestTemplate().getForEntity(TELEGRAM_URL+"/setWebhook?url="+SERVER_URL+"/telegramWebHook",Object.class);
-                logger.debug("Telegram`s bot webhook: "+responseEntity.getBody().toString());
-
-                ResponseEntity<?>adminPanelReg = new RestTemplate().getForEntity(ADMIN_TELEGRAM_URL+"/setWebhook?url="+SERVER_URL+"/adminPanel",Object.class);
-                logger.debug("Admin panel webhook: "+ adminPanelReg.getBody().toString());
+		try {
 
 
-                Message message = new Message();
-                message.setChat(new Chat(388073901));
-                telegramMessageSenderService.simpleMessage("Server has ran",message);
-            }
-            catch (Exception e){
-                logger.warn(e);
-            }
-        }
-    }
+			ResponseEntity<?> responseEntity = new RestTemplate()
+					.postForEntity(FACEBOOK_PROFILE_URI + PAGE_ACCESS_TOKEN, messengerProfileApi, MessengerProfileApi.class);
+			logger.debug(responseEntity);
+			ResponseEntity<?> responseForWhiteList = new RestTemplate()
+					.postForEntity(FACEBOOK_PROFILE_URI + PAGE_ACCESS_TOKEN, shell, Shell.class);
+			logger.debug(responseForWhiteList);
+
+		} catch (Exception ex) {
+			logger.warn("Messenger queries: " + ex);
+		} finally {
+			try {
+				ResponseEntity<?> responseEntity = new RestTemplate().getForEntity(TELEGRAM_URL + "/setWebhook?url=" + SERVER_URL + "/telegramWebHook", Object.class);
+				logger.debug("Telegram`s bot webhook: " + responseEntity.getBody().toString());
+
+				ResponseEntity<?> adminPanelReg = new RestTemplate().getForEntity(ADMIN_TELEGRAM_URL + "/setWebhook?url=" + SERVER_URL + "/adminPanel", Object.class);
+				logger.debug("Admin panel webhook: " + adminPanelReg.getBody().toString());
+
+
+				Message message = new Message();
+				message.setChat(new Chat(388073901));
+				telegramMessageSenderService.simpleMessage("Server has ran", message);
+			} catch (Exception e) {
+				logger.warn(e);
+			}
+		}
+	}
 
 
 }

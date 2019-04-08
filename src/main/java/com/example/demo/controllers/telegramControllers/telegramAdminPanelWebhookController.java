@@ -11,10 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/adminPanel")
 public class telegramAdminPanelWebhookController {
-    @Autowired
-    private AdminPanelUpdateParserService adminPanelUpdateParserService;
-    @PostMapping
-    public void getUpdate(@RequestBody Update update){
-        adminPanelUpdateParserService.parseUpdate(update);
-    }
+	@Autowired
+	private AdminPanelUpdateParserService adminPanelUpdateParserService;
+
+	@PostMapping
+	public void getUpdate(@RequestBody Update update) {
+		adminPanelUpdateParserService.parseUpdate(update);
+	}
 }

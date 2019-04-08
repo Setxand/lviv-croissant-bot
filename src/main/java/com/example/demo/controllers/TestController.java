@@ -6,14 +6,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class TestController {
-    private Object object;
+	private Object object;
 
 
-    @RequestMapping(value = "/test",method = RequestMethod.GET)
-    public Object getObj(){
-        return object;
-    }
-    public void setObject(Object object) {
-        this.object = object;
-    }
+	@RequestMapping(value = "/test", method = RequestMethod.GET)
+	public Object getObj() {
+		return object;
+	}
+
+	public void setObject(Object object) {
+		this.object = object;
+	}
 }

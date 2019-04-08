@@ -11,24 +11,25 @@ import java.util.List;
 @Getter
 @Setter
 public class MenuItem {
-    private String type;
-    private String title;
-    private String url;
-    private String payload;
-    @JsonProperty("call_to_actions")
-    private List<MenuItem> callToActions;
+	private String type;
+	private String title;
+	private String url;
+	private String payload;
+	@JsonProperty("call_to_actions")
+	private List<MenuItem> callToActions;
 
-    public MenuItem() {
-    }
+	public MenuItem() {
+	}
 
-    public MenuItem(String type, String title, String payload) {
-        this.type = type;
-        this.title = title;
-        this.payload = payload;
-    }
-    public MenuItem(String type, String title) {
-        this.type = type;
-        this.title = title;
+	public MenuItem(String type, String title, String payload) {
+		this.type = type;
+		this.title = title;
+		this.payload = payload;
+	}
 
-    }
+	public MenuItem(String type, String title) {
+		this.type = type;
+		this.title = title;
+
+	}
 }

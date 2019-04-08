@@ -9,15 +9,17 @@ import lombok.Setter;
 @Setter
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Recipient {
-    private Long id;
-    private UserData name;
-    @JsonProperty("phone_number")
-    private String phoneNumber;
-    public Recipient() {
-    }
-    public Recipient(Long id){
-        this.id = id;
-    }
+	private Long id;
+	private UserData name;
+	@JsonProperty("phone_number")
+	private String phoneNumber;
+
+	public Recipient() {
+	}
+
+	public Recipient(Long id) {
+		this.id = id;
+	}
 
 
 }

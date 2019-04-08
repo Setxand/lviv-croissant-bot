@@ -5,8 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface   CroisantsFillingRepository extends JpaRepository<CroissantsFilling,Long> {
-    public List<CroissantsFilling> getFillingByPrice(int price);
-    public CroissantsFilling getFillingByName(String name);
+public interface CroisantsFillingRepository extends JpaRepository<CroissantsFilling, Long> {
+	public List<CroissantsFilling> getFillingByPrice(int price);
+
+	public CroissantsFilling getFillingByName(String name);
 
 }

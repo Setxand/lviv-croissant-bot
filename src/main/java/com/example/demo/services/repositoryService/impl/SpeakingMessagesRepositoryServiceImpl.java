@@ -8,20 +8,21 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SpeakingMessagesRepositoryServiceImpl implements SpeakingMessagesRepositoryService {
-    @Autowired
-    private SpeakingMessagesRepository speakingMessagesRepository;
-    @Override
-    public SpeakingMessage findByKey(String key) {
-        return speakingMessagesRepository.findOne(key);
-    }
+	@Autowired
+	private SpeakingMessagesRepository speakingMessagesRepository;
 
-    @Override
-    public SpeakingMessage saveAndFlush(SpeakingMessage speakingMessage) {
-        return speakingMessagesRepository.saveAndFlush(speakingMessage);
-    }
+	@Override
+	public SpeakingMessage findByKey(String key) {
+		return speakingMessagesRepository.findOne(key);
+	}
 
-    @Override
-    public void delete(SpeakingMessage speakingMessage) {
-        speakingMessagesRepository.delete(speakingMessage);
-    }
+	@Override
+	public SpeakingMessage saveAndFlush(SpeakingMessage speakingMessage) {
+		return speakingMessagesRepository.saveAndFlush(speakingMessage);
+	}
+
+	@Override
+	public void delete(SpeakingMessage speakingMessage) {
+		speakingMessagesRepository.delete(speakingMessage);
+	}
 }

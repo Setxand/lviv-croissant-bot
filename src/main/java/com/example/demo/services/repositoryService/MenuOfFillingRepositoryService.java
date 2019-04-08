@@ -6,13 +6,16 @@ import java.util.List;
 
 public interface MenuOfFillingRepositoryService {
 
-    public List<MenuOfFilling> getAll();
-    public List<MenuOfFilling> getFillingByPrice(int price);
+	public List<MenuOfFilling> getAll();
 
-    public MenuOfFilling findOne(Long id);
-    public MenuOfFilling getFillingByName(String name);
+	public List<MenuOfFilling> getFillingByPrice(int price);
 
-    public void saveAndFlush(MenuOfFilling croissantsFilling);
-    public void remove(MenuOfFilling croissantsFilling);
+	public MenuOfFilling findOne(Long id);
+
+	public MenuOfFilling getFillingByName(String name);
+
+	public void saveAndFlush(MenuOfFilling croissantsFilling);
+
+	public void remove(MenuOfFilling croissantsFilling);
 
 }

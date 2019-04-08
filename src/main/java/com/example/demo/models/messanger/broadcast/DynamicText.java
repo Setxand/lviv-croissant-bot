@@ -11,12 +11,12 @@ import lombok.Setter;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class DynamicText {
-    private String text;
-    @JsonProperty("fallback_text")
-    private String fallBackText;
+	private String text;
+	@JsonProperty("fallback_text")
+	private String fallBackText;
 
-    public DynamicText(String text, String fallBackText) {
-        this.text = text;
-        this.fallBackText = fallBackText;
-    }
+	public DynamicText(String text, String fallBackText) {
+		this.text = text;
+		this.fallBackText = fallBackText;
+	}
 }

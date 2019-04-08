@@ -7,44 +7,43 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
 public class CroissantsFillingRepositoryServiceImpl implements CroissantsFillingRepositoryService {
-    
-    @Autowired
-    private CroisantsFillingRepository croisantsFillingRepository;
 
-    @Override
-    public List<CroissantsFilling> getAll() {
-        return croisantsFillingRepository.findAll();
-    }
+	@Autowired
+	private CroisantsFillingRepository croisantsFillingRepository;
 
-    @Override
-    public List<CroissantsFilling> getFillingByPrice(int price) {
-        return croisantsFillingRepository.getFillingByPrice(price);
-    }
+	@Override
+	public List<CroissantsFilling> getAll() {
+		return croisantsFillingRepository.findAll();
+	}
 
-    @Override
-    public CroissantsFilling findOne(Long id) {
-        return croisantsFillingRepository.findOne(id);
-    }
+	@Override
+	public List<CroissantsFilling> getFillingByPrice(int price) {
+		return croisantsFillingRepository.getFillingByPrice(price);
+	}
 
-    @Override
-    public CroissantsFilling getFillingByName(String name) {
-        return croisantsFillingRepository.getFillingByName(name);
-    }
+	@Override
+	public CroissantsFilling findOne(Long id) {
+		return croisantsFillingRepository.findOne(id);
+	}
 
-    @Override
-    public void saveAndFlush(CroissantsFilling croissantsFilling) {
-        croisantsFillingRepository.saveAndFlush(croissantsFilling);
+	@Override
+	public CroissantsFilling getFillingByName(String name) {
+		return croisantsFillingRepository.getFillingByName(name);
+	}
 
-    }
+	@Override
+	public void saveAndFlush(CroissantsFilling croissantsFilling) {
+		croisantsFillingRepository.saveAndFlush(croissantsFilling);
 
-
+	}
 
 
-    @Override
-    public void remove(CroissantsFilling croissantsFilling) {
-        croisantsFillingRepository.delete(croissantsFilling);
-    }
+	@Override
+	public void remove(CroissantsFilling croissantsFilling) {
+		croisantsFillingRepository.delete(croissantsFilling);
+	}
 
 }
