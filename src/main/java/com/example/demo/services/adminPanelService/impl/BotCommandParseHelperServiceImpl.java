@@ -1,17 +1,17 @@
 package com.example.demo.services.adminPanelService.impl;
 
-import com.example.demo.entities.lvivCroissants.Croissant;
-import com.example.demo.entities.lvivCroissants.CustomerOrdering;
-import com.example.demo.entities.peopleRegister.TUser;
-import com.example.demo.enums.BotCommands;
-import com.example.demo.enums.messengerEnums.Objects;
-import com.example.demo.enums.messengerEnums.Roles;
-import com.example.demo.models.messanger.Shell;
-import com.example.demo.models.telegram.CallBackQuery;
-import com.example.demo.models.telegram.Message;
-import com.example.demo.models.telegram.buttons.InlineKeyboardButton;
-import com.example.demo.models.telegram.buttons.InlineKeyboardMarkup;
-import com.example.demo.models.telegram.buttons.Markup;
+import com.example.demo.entity.lvivCroissants.Croissant;
+import com.example.demo.entity.lvivCroissants.CustomerOrdering;
+import com.example.demo.entity.peopleRegister.TUser;
+import com.example.demo.constcomponent.BotCommands;
+import com.example.demo.constcomponent.messengerEnums.Objects;
+import com.example.demo.constcomponent.messengerEnums.Roles;
+import com.example.demo.model.messanger.Shell;
+import com.example.demo.model.telegram.CallBackQuery;
+import com.example.demo.model.telegram.Message;
+import com.example.demo.model.telegram.buttons.InlineKeyboardButton;
+import com.example.demo.model.telegram.buttons.InlineKeyboardMarkup;
+import com.example.demo.model.telegram.buttons.Markup;
 import com.example.demo.services.adminPanelService.BotCommandParseHelperService;
 import com.example.demo.services.peopleRegisterService.TelegramUserRepositoryService;
 import com.example.demo.services.repositoryService.CroissantRepositoryService;
@@ -29,8 +29,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.*;
-import static com.example.demo.enums.telegramEnums.CallBackData.*;
+import static com.example.demo.constcomponent.messengerEnums.speaking.ServerSideSpeaker.*;
+import static com.example.demo.constcomponent.telegramEnums.CallBackData.*;
 
 @Service
 public class BotCommandParseHelperServiceImpl implements BotCommandParseHelperService {

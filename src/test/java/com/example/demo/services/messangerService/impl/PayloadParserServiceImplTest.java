@@ -1,13 +1,13 @@
 package com.example.demo.services.messangerService.impl;
 
 import com.example.demo.DemoApplicationTests;
-import com.example.demo.models.messanger.*;
+import com.example.demo.model.messanger.*;
 import com.example.demo.services.messangerService.PayloadParserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static com.example.demo.enums.messengerEnums.payloads.Payloads.NAVIGATION_MENU;
+import static com.example.demo.constcomponent.messengerEnums.payloads.Payloads.NAVIGATION_MENU;
 
 public class PayloadParserServiceImplTest extends DemoApplicationTests{
     @Autowired

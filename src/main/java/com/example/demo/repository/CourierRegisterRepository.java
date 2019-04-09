@@ -1,6 +1,6 @@
 package com.example.demo.repository;
 
-import com.example.demo.entities.peopleRegister.CourierRegister;
+import com.example.demo.entity.peopleRegister.CourierRegister;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CourierRegisterRepository extends JpaRepository<CourierRegister, Long> {

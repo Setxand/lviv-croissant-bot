@@ -1,10 +1,10 @@
 package com.example.demo.services.messangerService.impl;
 
-import com.example.demo.entities.SupportEntity;
-import com.example.demo.entities.lvivCroissants.Croissant;
-import com.example.demo.entities.lvivCroissants.CustomerOrdering;
-import com.example.demo.entities.peopleRegister.User;
-import com.example.demo.models.messanger.*;
+import com.example.demo.entity.SupportEntity;
+import com.example.demo.entity.lvivCroissants.Croissant;
+import com.example.demo.entity.lvivCroissants.CustomerOrdering;
+import com.example.demo.entity.peopleRegister.User;
+import com.example.demo.model.messanger.*;
 import com.example.demo.services.eventService.messengerEventService.*;
 import com.example.demo.services.messangerService.MessageParserService;
 import com.example.demo.services.messangerService.MessageSenderService;
@@ -26,20 +26,20 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
-import static com.example.demo.enums.messengerEnums.Cases.*;
-import static com.example.demo.enums.messengerEnums.PayloadCases.QUESTION_YES;
-import static com.example.demo.enums.messengerEnums.PayloadCases.UA;
-import static com.example.demo.enums.messengerEnums.PaymentWay.CARD;
-import static com.example.demo.enums.messengerEnums.PaymentWay.CASH;
-import static com.example.demo.enums.messengerEnums.Roles.ADMIN;
-import static com.example.demo.enums.messengerEnums.Roles.PERSONAL;
-import static com.example.demo.enums.messengerEnums.payloads.Payloads.CREATE_OWN_CROISSANT_PAYLOAD;
-import static com.example.demo.enums.messengerEnums.payloads.QuickReplyPayloads.*;
-import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.CREATE_OWN_CROISSANT;
-import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.*;
-import static com.example.demo.enums.messengerEnums.types.ButtonType.web_url;
-import static com.example.demo.enums.messengerEnums.types.ContentType.text;
-import static com.example.demo.enums.messengerEnums.types.CroissantsTypes.SWEET;
+import static com.example.demo.constcomponent.messengerEnums.Cases.*;
+import static com.example.demo.constcomponent.messengerEnums.PayloadCases.QUESTION_YES;
+import static com.example.demo.constcomponent.messengerEnums.PayloadCases.UA;
+import static com.example.demo.constcomponent.messengerEnums.PaymentWay.CARD;
+import static com.example.demo.constcomponent.messengerEnums.PaymentWay.CASH;
+import static com.example.demo.constcomponent.messengerEnums.Roles.ADMIN;
+import static com.example.demo.constcomponent.messengerEnums.Roles.PERSONAL;
+import static com.example.demo.constcomponent.messengerEnums.payloads.Payloads.CREATE_OWN_CROISSANT_PAYLOAD;
+import static com.example.demo.constcomponent.messengerEnums.payloads.QuickReplyPayloads.*;
+import static com.example.demo.constcomponent.messengerEnums.speaking.ServerSideSpeaker.CREATE_OWN_CROISSANT;
+import static com.example.demo.constcomponent.messengerEnums.speaking.ServerSideSpeaker.*;
+import static com.example.demo.constcomponent.messengerEnums.types.ButtonType.web_url;
+import static com.example.demo.constcomponent.messengerEnums.types.ContentType.text;
+import static com.example.demo.constcomponent.messengerEnums.types.CroissantsTypes.SWEET;
 
 @Service
 public class QuickReplyParserServiceImpl implements QuickReplyParserService {

@@ -1,16 +1,16 @@
 package com.example.demo.services.eventService.telegramEventService.impl;
 
-import com.example.demo.entities.lvivCroissants.Croissant;
-import com.example.demo.entities.lvivCroissants.CroissantsFilling;
-import com.example.demo.entities.lvivCroissants.MenuOfFilling;
-import com.example.demo.entities.peopleRegister.TUser;
-import com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker;
-import com.example.demo.enums.messengerEnums.types.CroissantsTypes;
-import com.example.demo.enums.telegramEnums.TelegramUserStatus;
-import com.example.demo.models.telegram.Message;
-import com.example.demo.models.telegram.buttons.InlineKeyboardButton;
-import com.example.demo.models.telegram.buttons.InlineKeyboardMarkup;
-import com.example.demo.models.telegram.buttons.Markup;
+import com.example.demo.entity.lvivCroissants.Croissant;
+import com.example.demo.entity.lvivCroissants.CroissantsFilling;
+import com.example.demo.entity.lvivCroissants.MenuOfFilling;
+import com.example.demo.entity.peopleRegister.TUser;
+import com.example.demo.constcomponent.messengerEnums.speaking.ServerSideSpeaker;
+import com.example.demo.constcomponent.messengerEnums.types.CroissantsTypes;
+import com.example.demo.constcomponent.telegramEnums.TelegramUserStatus;
+import com.example.demo.model.telegram.Message;
+import com.example.demo.model.telegram.buttons.InlineKeyboardButton;
+import com.example.demo.model.telegram.buttons.InlineKeyboardMarkup;
+import com.example.demo.model.telegram.buttons.Markup;
 import com.example.demo.services.eventService.telegramEventService.TelegramGetMenuEventService;
 import com.example.demo.services.peopleRegisterService.TelegramUserRepositoryService;
 import com.example.demo.services.repositoryService.CroissantRepositoryService;
@@ -25,9 +25,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static com.example.demo.enums.Platform.TELEGRAM_ADMIN_PANEL_BOT;
-import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.*;
-import static com.example.demo.enums.telegramEnums.CallBackData.*;
+import static com.example.demo.constcomponent.Platform.TELEGRAM_ADMIN_PANEL_BOT;
+import static com.example.demo.constcomponent.messengerEnums.speaking.ServerSideSpeaker.*;
+import static com.example.demo.constcomponent.telegramEnums.CallBackData.*;
 
 @Service
 public class TelegramGetMenuEventServiceImpl implements TelegramGetMenuEventService {

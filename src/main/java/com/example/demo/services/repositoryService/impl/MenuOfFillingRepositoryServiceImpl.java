@@ -1,6 +1,6 @@
 package com.example.demo.services.repositoryService.impl;
 
-import com.example.demo.entities.lvivCroissants.MenuOfFilling;
+import com.example.demo.entity.lvivCroissants.MenuOfFilling;
 import com.example.demo.repository.MenuOfFillingRepository;
 import com.example.demo.services.repositoryService.MenuOfFillingRepositoryService;
 import org.springframework.beans.factory.annotation.Autowired;

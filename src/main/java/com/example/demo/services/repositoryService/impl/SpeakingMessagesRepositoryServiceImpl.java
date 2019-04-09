@@ -1,6 +1,6 @@
 package com.example.demo.services.repositoryService.impl;
 
-import com.example.demo.entities.SpeakingMessage;
+import com.example.demo.entity.SpeakingMessage;
 import com.example.demo.repository.SpeakingMessagesRepository;
 import com.example.demo.services.repositoryService.SpeakingMessagesRepositoryService;
 import org.springframework.beans.factory.annotation.Autowired;

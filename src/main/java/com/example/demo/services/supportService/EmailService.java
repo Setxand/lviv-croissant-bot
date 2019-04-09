@@ -1,6 +1,6 @@
 package com.example.demo.services.supportService;
 
-import com.example.demo.entities.peopleRegister.User;
+import com.example.demo.entity.peopleRegister.User;
 
 import javax.mail.MessagingException;
 import java.net.MalformedURLException;

@@ -1,9 +1,9 @@
 package com.example.demo.services.messangerService.impl;
 
-import com.example.demo.entities.lvivCroissants.CustomerOrdering;
-import com.example.demo.entities.peopleRegister.User;
-import com.example.demo.models.messanger.Messaging;
-import com.example.demo.models.messanger.QuickReply;
+import com.example.demo.entity.lvivCroissants.CustomerOrdering;
+import com.example.demo.entity.peopleRegister.User;
+import com.example.demo.model.messanger.Messaging;
+import com.example.demo.model.messanger.QuickReply;
 import com.example.demo.services.eventService.messengerEventService.UserEventService;
 import com.example.demo.services.messangerService.MessageProcessorHelperService;
 import com.example.demo.services.messangerService.MessageSenderService;
@@ -16,12 +16,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.example.demo.enums.messengerEnums.Cases.*;
-import static com.example.demo.enums.messengerEnums.Roles.ADMIN;
-import static com.example.demo.enums.messengerEnums.payloads.QuickReplyPayloads.COMPLETING_ORDERINGS;
-import static com.example.demo.enums.messengerEnums.payloads.QuickReplyPayloads.GET_LIST_OF_ORDERING;
-import static com.example.demo.enums.messengerEnums.payloads.QuickReplyPayloads.*;
-import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.*;
+import static com.example.demo.constcomponent.messengerEnums.Cases.*;
+import static com.example.demo.constcomponent.messengerEnums.Roles.ADMIN;
+import static com.example.demo.constcomponent.messengerEnums.payloads.QuickReplyPayloads.COMPLETING_ORDERINGS;
+import static com.example.demo.constcomponent.messengerEnums.payloads.QuickReplyPayloads.GET_LIST_OF_ORDERING;
+import static com.example.demo.constcomponent.messengerEnums.payloads.QuickReplyPayloads.*;
+import static com.example.demo.constcomponent.messengerEnums.speaking.ServerSideSpeaker.*;
 
 @Service
 public class MessageProcessorHelperServiceImpl implements MessageProcessorHelperService {

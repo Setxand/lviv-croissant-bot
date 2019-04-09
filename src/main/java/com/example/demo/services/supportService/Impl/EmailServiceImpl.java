@@ -1,6 +1,6 @@
 package com.example.demo.services.supportService.Impl;
 
-import com.example.demo.entities.peopleRegister.User;
+import com.example.demo.entity.peopleRegister.User;
 import com.example.demo.services.peopleRegisterService.UserRepositoryService;
 import com.example.demo.services.supportService.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.net.MalformedURLException;
 
-import static com.example.demo.enums.messengerEnums.Roles.ADMIN;
+import static com.example.demo.constcomponent.messengerEnums.Roles.ADMIN;
 
 
 @Service

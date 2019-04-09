@@ -1,7 +1,7 @@
 package com.example.demo.repository;
 
-import com.example.demo.entities.lvivCroissants.Croissant;
-import com.example.demo.entities.lvivCroissants.CroissantsFilling;
+import com.example.demo.entity.lvivCroissants.Croissant;
+import com.example.demo.entity.lvivCroissants.CroissantsFilling;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

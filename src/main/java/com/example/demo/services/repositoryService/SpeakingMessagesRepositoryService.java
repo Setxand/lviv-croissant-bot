@@ -1,6 +1,6 @@
 package com.example.demo.services.repositoryService;
 
-import com.example.demo.entities.SpeakingMessage;
+import com.example.demo.entity.SpeakingMessage;
 
 public interface SpeakingMessagesRepositoryService {
 	public SpeakingMessage findByKey(String key);

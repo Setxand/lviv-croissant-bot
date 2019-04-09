@@ -1,6 +1,6 @@
 package com.example.demo.services.eventService.messengerEventService;
 
-import com.example.demo.models.messanger.Messaging;
+import com.example.demo.model.messanger.Messaging;
 
 public interface MenuOfFillingEventService {
 	public void getMenuOfFilling(Long recipient);

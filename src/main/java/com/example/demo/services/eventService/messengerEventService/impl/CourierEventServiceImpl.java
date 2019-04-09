@@ -1,9 +1,9 @@
 package com.example.demo.services.eventService.messengerEventService.impl;
 
-import com.example.demo.entities.lvivCroissants.CustomerOrdering;
-import com.example.demo.entities.peopleRegister.CourierRegister;
-import com.example.demo.entities.peopleRegister.User;
-import com.example.demo.models.messanger.*;
+import com.example.demo.entity.lvivCroissants.CustomerOrdering;
+import com.example.demo.entity.peopleRegister.CourierRegister;
+import com.example.demo.entity.peopleRegister.User;
+import com.example.demo.model.messanger.*;
 import com.example.demo.services.eventService.messengerEventService.CourierEventService;
 import com.example.demo.services.eventService.messengerEventService.UserEventService;
 import com.example.demo.services.messangerService.MessageSenderService;
@@ -20,18 +20,18 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.demo.enums.messengerEnums.Cases.COMPLETE_ORDERINGS_LIST;
-import static com.example.demo.enums.messengerEnums.Cases.ORDERING_LIST_FILLING;
-import static com.example.demo.enums.messengerEnums.CasesCourierActions.COMPLETING_ORDERINGS;
-import static com.example.demo.enums.messengerEnums.CasesCourierActions.GET_LIST_OF_ORDERING;
-import static com.example.demo.enums.messengerEnums.payloads.Payloads.*;
-import static com.example.demo.enums.messengerEnums.payloads.QuickReplyPayloads.COURIER_QUESTION_PAYLOAD;
-import static com.example.demo.enums.messengerEnums.payloads.QuickReplyPayloads.ONE_MORE_ACTION_COURIER_PAYLOAD;
-import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.*;
-import static com.example.demo.enums.messengerEnums.types.AttachmentType.template;
-import static com.example.demo.enums.messengerEnums.types.ButtonType.postback;
-import static com.example.demo.enums.messengerEnums.types.ButtonType.web_url;
-import static com.example.demo.enums.messengerEnums.types.TemplateType.generic;
+import static com.example.demo.constcomponent.messengerEnums.Cases.COMPLETE_ORDERINGS_LIST;
+import static com.example.demo.constcomponent.messengerEnums.Cases.ORDERING_LIST_FILLING;
+import static com.example.demo.constcomponent.messengerEnums.CasesCourierActions.COMPLETING_ORDERINGS;
+import static com.example.demo.constcomponent.messengerEnums.CasesCourierActions.GET_LIST_OF_ORDERING;
+import static com.example.demo.constcomponent.messengerEnums.payloads.Payloads.*;
+import static com.example.demo.constcomponent.messengerEnums.payloads.QuickReplyPayloads.COURIER_QUESTION_PAYLOAD;
+import static com.example.demo.constcomponent.messengerEnums.payloads.QuickReplyPayloads.ONE_MORE_ACTION_COURIER_PAYLOAD;
+import static com.example.demo.constcomponent.messengerEnums.speaking.ServerSideSpeaker.*;
+import static com.example.demo.constcomponent.messengerEnums.types.AttachmentType.template;
+import static com.example.demo.constcomponent.messengerEnums.types.ButtonType.postback;
+import static com.example.demo.constcomponent.messengerEnums.types.ButtonType.web_url;
+import static com.example.demo.constcomponent.messengerEnums.types.TemplateType.generic;
 
 @Service
 public class CourierEventServiceImpl implements CourierEventService {

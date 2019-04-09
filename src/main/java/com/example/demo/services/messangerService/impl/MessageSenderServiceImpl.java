@@ -1,10 +1,10 @@
 package com.example.demo.services.messangerService.impl;
 
-import com.example.demo.controllers.TestController;
-import com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker;
-import com.example.demo.enums.messengerEnums.types.ContentType;
-import com.example.demo.enums.messengerEnums.types.CroissantsTypes;
-import com.example.demo.models.messanger.*;
+import com.example.demo.controller.TestController;
+import com.example.demo.constcomponent.messengerEnums.speaking.ServerSideSpeaker;
+import com.example.demo.constcomponent.messengerEnums.types.ContentType;
+import com.example.demo.constcomponent.messengerEnums.types.CroissantsTypes;
+import com.example.demo.model.messanger.*;
 import com.example.demo.services.messangerService.MessageSenderService;
 import com.example.demo.services.peopleRegisterService.UserRepositoryService;
 import com.example.demo.services.repositoryService.CroissantRepositoryService;
@@ -23,19 +23,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.example.demo.enums.messengerEnums.CasesCourierActions.COMPLETING_ORDERINGS;
-import static com.example.demo.enums.messengerEnums.CasesCourierActions.GET_LIST_OF_ORDERING;
-import static com.example.demo.enums.messengerEnums.PayloadCases.*;
-import static com.example.demo.enums.messengerEnums.payloads.Payloads.CREATE_OWN_CROISSANT_PAYLOAD;
-import static com.example.demo.enums.messengerEnums.payloads.Payloads.MENU_PAYLOAD;
-import static com.example.demo.enums.messengerEnums.payloads.QuickReplyPayloads.CROISSANT_TYPE_PAYLOAD;
-import static com.example.demo.enums.messengerEnums.payloads.QuickReplyPayloads.LANGUAGE_PAYLOAD;
-import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.*;
-import static com.example.demo.enums.messengerEnums.types.AttachmentType.template;
-import static com.example.demo.enums.messengerEnums.types.ButtonType.postback;
-import static com.example.demo.enums.messengerEnums.types.CroissantsTypes.SANDWICH;
-import static com.example.demo.enums.messengerEnums.types.CroissantsTypes.SWEET;
-import static com.example.demo.enums.messengerEnums.types.TemplateType.button;
+import static com.example.demo.constcomponent.messengerEnums.CasesCourierActions.COMPLETING_ORDERINGS;
+import static com.example.demo.constcomponent.messengerEnums.CasesCourierActions.GET_LIST_OF_ORDERING;
+import static com.example.demo.constcomponent.messengerEnums.PayloadCases.*;
+import static com.example.demo.constcomponent.messengerEnums.payloads.Payloads.CREATE_OWN_CROISSANT_PAYLOAD;
+import static com.example.demo.constcomponent.messengerEnums.payloads.Payloads.MENU_PAYLOAD;
+import static com.example.demo.constcomponent.messengerEnums.payloads.QuickReplyPayloads.CROISSANT_TYPE_PAYLOAD;
+import static com.example.demo.constcomponent.messengerEnums.payloads.QuickReplyPayloads.LANGUAGE_PAYLOAD;
+import static com.example.demo.constcomponent.messengerEnums.speaking.ServerSideSpeaker.*;
+import static com.example.demo.constcomponent.messengerEnums.types.AttachmentType.template;
+import static com.example.demo.constcomponent.messengerEnums.types.ButtonType.postback;
+import static com.example.demo.constcomponent.messengerEnums.types.CroissantsTypes.SANDWICH;
+import static com.example.demo.constcomponent.messengerEnums.types.CroissantsTypes.SWEET;
+import static com.example.demo.constcomponent.messengerEnums.types.TemplateType.button;
 
 @Service
 public class MessageSenderServiceImpl implements MessageSenderService {

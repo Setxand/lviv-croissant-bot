@@ -1,9 +1,9 @@
 package com.example.demo.services.telegramService.impl;
 
-import com.example.demo.entities.peopleRegister.TUser;
-import com.example.demo.enums.telegramEnums.MessageCases;
-import com.example.demo.enums.telegramEnums.TelegramUserStatus;
-import com.example.demo.models.telegram.Message;
+import com.example.demo.entity.peopleRegister.TUser;
+import com.example.demo.constcomponent.telegramEnums.MessageCases;
+import com.example.demo.constcomponent.telegramEnums.TelegramUserStatus;
+import com.example.demo.model.telegram.Message;
 import com.example.demo.services.eventService.telegramEventService.TelegramCreatingOwnCroissantEventService;
 import com.example.demo.services.eventService.telegramEventService.TelegramGetMenuEventService;
 import com.example.demo.services.eventService.telegramEventService.TelegramOrderingEventService;

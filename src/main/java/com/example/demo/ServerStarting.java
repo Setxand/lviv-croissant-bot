@@ -1,9 +1,7 @@
 package com.example.demo;
 
-import com.example.demo.models.messanger.*;
-import com.example.demo.models.telegram.Chat;
-import com.example.demo.models.telegram.Message;
-import com.example.demo.services.telegramService.TelegramMessageSenderService;
+import com.example.demo.model.messanger.*;
+import com.example.demo.test.TelegramClientEx;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,25 +13,22 @@ import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static com.example.demo.enums.messengerEnums.payloads.Payloads.*;
-import static com.example.demo.enums.messengerEnums.types.ButtonType.postback;
-import static com.example.demo.enums.messengerEnums.types.ButtonType.web_url;
+import static com.example.demo.constcomponent.messengerEnums.payloads.Payloads.*;
+import static com.example.demo.constcomponent.messengerEnums.types.ButtonType.postback;
+import static com.example.demo.constcomponent.messengerEnums.types.ButtonType.web_url;
 
 @Component
 public class ServerStarting {
 	private static final Logger logger = Logger.getLogger(ServerStarting.class);
-	@Autowired
-	private TelegramMessageSenderService telegramMessageSenderService;
+
 	@Value("${page.access.token}")
 	private String PAGE_ACCESS_TOKEN;
 	@Value("${profile.api.uri}")
 	private String FACEBOOK_PROFILE_URI;
 	@Value("${server.url}")
 	private String SERVER_URL;
-	@Value("${telegran.url}")
-	private String TELEGRAM_URL;
-	@Value("${telegran.admins.url}")
-	private String ADMIN_TELEGRAM_URL;
+
+	@Autowired TelegramClientEx clientChB;
 
 	@PostConstruct
 	public void getStarted() throws Exception {
@@ -64,16 +59,8 @@ public class ServerStarting {
 			logger.warn("Messenger queries: " + ex);
 		} finally {
 			try {
-				ResponseEntity<?> responseEntity = new RestTemplate().getForEntity(TELEGRAM_URL + "/setWebhook?url=" + SERVER_URL + "/telegramWebHook", Object.class);
-				logger.debug("Telegram`s bot webhook: " + responseEntity.getBody().toString());
-
-				ResponseEntity<?> adminPanelReg = new RestTemplate().getForEntity(ADMIN_TELEGRAM_URL + "/setWebhook?url=" + SERVER_URL + "/adminPanel", Object.class);
-				logger.debug("Admin panel webhook: " + adminPanelReg.getBody().toString());
-
-
-				Message message = new Message();
-				message.setChat(new Chat(388073901));
-				telegramMessageSenderService.simpleMessage("Server has ran", message);
+				clientChB.setWebHooks();
+				clientChB.simpleMessage("Server has ran", new telegram.Message(new telegram.Chat(388073901)));
 			} catch (Exception e) {
 				logger.warn(e);
 			}

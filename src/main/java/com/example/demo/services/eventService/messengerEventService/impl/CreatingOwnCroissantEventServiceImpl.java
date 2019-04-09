@@ -1,13 +1,13 @@
 package com.example.demo.services.eventService.messengerEventService.impl;
 
-import com.example.demo.entities.SupportEntity;
-import com.example.demo.entities.lvivCroissants.Croissant;
-import com.example.demo.entities.lvivCroissants.CroissantsFilling;
-import com.example.demo.entities.peopleRegister.User;
-import com.example.demo.enums.messengerEnums.Cases;
-import com.example.demo.models.messanger.Message;
-import com.example.demo.models.messanger.Messaging;
-import com.example.demo.models.messanger.QuickReply;
+import com.example.demo.entity.SupportEntity;
+import com.example.demo.entity.lvivCroissants.Croissant;
+import com.example.demo.entity.lvivCroissants.CroissantsFilling;
+import com.example.demo.entity.peopleRegister.User;
+import com.example.demo.constcomponent.messengerEnums.Cases;
+import com.example.demo.model.messanger.Message;
+import com.example.demo.model.messanger.Messaging;
+import com.example.demo.model.messanger.QuickReply;
 import com.example.demo.services.eventService.messengerEventService.CreatingOwnCroissantEventService;
 import com.example.demo.services.eventService.messengerEventService.GetMenuEventService;
 import com.example.demo.services.eventService.messengerEventService.MenuOfFillingEventService;
@@ -28,10 +28,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
-import static com.example.demo.enums.messengerEnums.Cases.COMPLETE_CROISSANT_SECOND_STEP;
-import static com.example.demo.enums.messengerEnums.Cases.MENU;
-import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.*;
-import static com.example.demo.enums.messengerEnums.types.CroissantsTypes.OWN;
+import static com.example.demo.constcomponent.messengerEnums.Cases.COMPLETE_CROISSANT_SECOND_STEP;
+import static com.example.demo.constcomponent.messengerEnums.Cases.MENU;
+import static com.example.demo.constcomponent.messengerEnums.speaking.ServerSideSpeaker.*;
+import static com.example.demo.constcomponent.messengerEnums.types.CroissantsTypes.OWN;
 
 @Service
 public class CreatingOwnCroissantEventServiceImpl implements CreatingOwnCroissantEventService {

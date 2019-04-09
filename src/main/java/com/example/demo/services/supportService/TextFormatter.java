@@ -1,6 +1,6 @@
 package com.example.demo.services.supportService;
 
-import com.example.demo.models.messanger.Messaging;
+import com.example.demo.model.messanger.Messaging;
 
 public class TextFormatter {
 

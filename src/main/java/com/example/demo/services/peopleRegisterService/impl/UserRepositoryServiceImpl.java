@@ -1,7 +1,7 @@
 package com.example.demo.services.peopleRegisterService.impl;
 
-import com.example.demo.entities.peopleRegister.User;
-import com.example.demo.enums.messengerEnums.Roles;
+import com.example.demo.entity.peopleRegister.User;
+import com.example.demo.constcomponent.messengerEnums.Roles;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.services.peopleRegisterService.UserRepositoryService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package com.example.demo.services.messangerService.impl;
 
 import com.example.demo.DemoApplicationTests;
-import com.example.demo.models.messanger.Button;
+import com.example.demo.model.messanger.Button;
 import com.example.demo.services.messangerService.MessageSenderService;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +14,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.demo.enums.messengerEnums.types.ButtonType.web_url;
+import static com.example.demo.constcomponent.messengerEnums.types.ButtonType.web_url;
 
 public class PaymentTest extends DemoApplicationTests {
     List<Button> buttons;

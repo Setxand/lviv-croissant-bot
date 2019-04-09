@@ -1,6 +1,6 @@
 package com.example.demo.services.repositoryService;
 
-import com.example.demo.entities.lvivCroissants.MenuOfFilling;
+import com.example.demo.entity.lvivCroissants.MenuOfFilling;
 
 import java.util.List;
 

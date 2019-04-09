@@ -1,12 +1,12 @@
 package com.example.demo.services.eventService.telegramEventService.impl;
 
-import com.example.demo.entities.lvivCroissants.Croissant;
-import com.example.demo.entities.lvivCroissants.CustomerOrdering;
-import com.example.demo.entities.peopleRegister.TUser;
-import com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker;
-import com.example.demo.enums.telegramEnums.CallBackData;
-import com.example.demo.models.telegram.Message;
-import com.example.demo.models.telegram.buttons.InlineKeyboardButton;
+import com.example.demo.entity.lvivCroissants.Croissant;
+import com.example.demo.entity.lvivCroissants.CustomerOrdering;
+import com.example.demo.entity.peopleRegister.TUser;
+import com.example.demo.constcomponent.messengerEnums.speaking.ServerSideSpeaker;
+import com.example.demo.constcomponent.telegramEnums.CallBackData;
+import com.example.demo.model.telegram.Message;
+import com.example.demo.model.telegram.buttons.InlineKeyboardButton;
 import com.example.demo.services.eventService.telegramEventService.TelegramGetMenuEventService;
 import com.example.demo.services.eventService.telegramEventService.TelegramOrderingEventService;
 import com.example.demo.services.peopleRegisterService.TelegramUserRepositoryService;
@@ -21,9 +21,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.*;
-import static com.example.demo.enums.telegramEnums.CallBackData.ONE_MORE_ORDERING_DATA;
-import static com.example.demo.enums.telegramEnums.TelegramUserStatus.*;
+import static com.example.demo.constcomponent.messengerEnums.speaking.ServerSideSpeaker.*;
+import static com.example.demo.constcomponent.telegramEnums.CallBackData.ONE_MORE_ORDERING_DATA;
+import static com.example.demo.constcomponent.telegramEnums.TelegramUserStatus.*;
 
 @Service
 public class TelegramOrderingEventServiceImpl implements TelegramOrderingEventService {

@@ -1,8 +1,8 @@
 package com.example.demo.services.messangerService.impl;
 
-import com.example.demo.controllers.TestController;
-import com.example.demo.models.messanger.Message;
-import com.example.demo.models.messanger.broadcast.*;
+import com.example.demo.controller.TestController;
+import com.example.demo.model.messanger.Message;
+import com.example.demo.model.messanger.broadcast.*;
 import com.example.demo.services.messangerService.BroadcastService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

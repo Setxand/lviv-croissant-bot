@@ -1,9 +1,9 @@
 package com.example.demo.services.adminPanelService.impl;
 
-import com.example.demo.entities.peopleRegister.TUser;
-import com.example.demo.enums.Platform;
-import com.example.demo.enums.messengerEnums.Roles;
-import com.example.demo.models.telegram.Update;
+import com.example.demo.entity.peopleRegister.TUser;
+import com.example.demo.constcomponent.Platform;
+import com.example.demo.constcomponent.messengerEnums.Roles;
+import com.example.demo.model.telegram.Update;
 import com.example.demo.services.adminPanelService.AdminCallBackParserService;
 import com.example.demo.services.adminPanelService.AdminPanelUpdateParserService;
 import com.example.demo.services.adminPanelService.AdminTelegramMessageParserService;

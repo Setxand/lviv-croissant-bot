@@ -1,11 +1,11 @@
 package com.example.demo.services.eventService.servicePanel.impl;
 
-import com.example.demo.entities.lvivCroissants.Croissant;
-import com.example.demo.entities.lvivCroissants.CroissantsFilling;
-import com.example.demo.entities.lvivCroissants.MenuOfFilling;
-import com.example.demo.entities.peopleRegister.TUser;
-import com.example.demo.models.telegram.Message;
-import com.example.demo.models.telegram.buttons.InlineKeyboardButton;
+import com.example.demo.entity.lvivCroissants.Croissant;
+import com.example.demo.entity.lvivCroissants.CroissantsFilling;
+import com.example.demo.entity.lvivCroissants.MenuOfFilling;
+import com.example.demo.entity.peopleRegister.TUser;
+import com.example.demo.model.telegram.Message;
+import com.example.demo.model.telegram.buttons.InlineKeyboardButton;
 import com.example.demo.services.eventService.servicePanel.TelegramAddingRecordingsEventService;
 import com.example.demo.services.eventService.telegramEventService.TelegramGetMenuEventService;
 import com.example.demo.services.peopleRegisterService.TelegramUserRepositoryService;
@@ -19,10 +19,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.*;
-import static com.example.demo.enums.telegramEnums.CallBackData.CROISSANT_TYPE_ADDING_DATA;
-import static com.example.demo.enums.telegramEnums.TelegramUserStatus.NULL_CHECKING_ADDING_CROISSANT_STATUS;
-import static com.example.demo.enums.telegramEnums.TelegramUserStatus.NULL_CHECKING_ADDING_CROISSANT_STATUS_1;
+import static com.example.demo.constcomponent.messengerEnums.speaking.ServerSideSpeaker.*;
+import static com.example.demo.constcomponent.telegramEnums.CallBackData.CROISSANT_TYPE_ADDING_DATA;
+import static com.example.demo.constcomponent.telegramEnums.TelegramUserStatus.NULL_CHECKING_ADDING_CROISSANT_STATUS;
+import static com.example.demo.constcomponent.telegramEnums.TelegramUserStatus.NULL_CHECKING_ADDING_CROISSANT_STATUS_1;
 
 @Service
 public class TelegramAddingRecordingsEventServiceImpl implements TelegramAddingRecordingsEventService {

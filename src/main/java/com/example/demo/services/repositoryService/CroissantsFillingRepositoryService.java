@@ -1,6 +1,6 @@
 package com.example.demo.services.repositoryService;
 
-import com.example.demo.entities.lvivCroissants.CroissantsFilling;
+import com.example.demo.entity.lvivCroissants.CroissantsFilling;
 
 import java.util.List;
 

@@ -1,12 +1,12 @@
 package com.example.demo.services.telegramService.impl;
 
-import com.example.demo.enums.Platform;
-import com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker;
-import com.example.demo.enums.telegramEnums.CallBackData;
-import com.example.demo.models.telegram.Message;
-import com.example.demo.models.telegram.ReplyKeyboardRemove;
-import com.example.demo.models.telegram.TelegramRequest;
-import com.example.demo.models.telegram.buttons.*;
+import com.example.demo.constcomponent.Platform;
+import com.example.demo.constcomponent.messengerEnums.speaking.ServerSideSpeaker;
+import com.example.demo.constcomponent.telegramEnums.CallBackData;
+import com.example.demo.model.telegram.Message;
+import com.example.demo.model.telegram.ReplyKeyboardRemove;
+import com.example.demo.model.telegram.TelegramRequest;
+import com.example.demo.model.telegram.buttons.*;
 import com.example.demo.services.repositoryService.SpeakingMessagesRepositoryService;
 import com.example.demo.services.telegramService.TelegramMessageSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +19,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static com.example.demo.enums.Platform.TELEGRAM_ADMIN_PANEL_BOT;
-import static com.example.demo.enums.messengerEnums.PayloadCases.QUESTION_NO;
-import static com.example.demo.enums.messengerEnums.PayloadCases.QUESTION_YES;
-import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.*;
-import static com.example.demo.enums.telegramEnums.CallBackData.CREATE_OWN_CROISSANT_DATA;
-import static com.example.demo.enums.telegramEnums.CallBackData.MENU_DATA;
+import static com.example.demo.constcomponent.Platform.TELEGRAM_ADMIN_PANEL_BOT;
+import static com.example.demo.constcomponent.messengerEnums.PayloadCases.QUESTION_NO;
+import static com.example.demo.constcomponent.messengerEnums.PayloadCases.QUESTION_YES;
+import static com.example.demo.constcomponent.messengerEnums.speaking.ServerSideSpeaker.*;
+import static com.example.demo.constcomponent.telegramEnums.CallBackData.CREATE_OWN_CROISSANT_DATA;
+import static com.example.demo.constcomponent.telegramEnums.CallBackData.MENU_DATA;
 
 @Service
 public class TelegramMessageSenderServiceImpl implements TelegramMessageSenderService {

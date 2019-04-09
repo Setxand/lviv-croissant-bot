@@ -1,9 +1,9 @@
 package com.example.demo.services.messangerService;
 
-import com.example.demo.models.messanger.Button;
-import com.example.demo.models.messanger.Messaging;
-import com.example.demo.models.messanger.QuickReply;
-import com.example.demo.models.messanger.UserData;
+import com.example.demo.model.messanger.Button;
+import com.example.demo.model.messanger.Messaging;
+import com.example.demo.model.messanger.QuickReply;
+import com.example.demo.model.messanger.UserData;
 
 import java.util.List;
 

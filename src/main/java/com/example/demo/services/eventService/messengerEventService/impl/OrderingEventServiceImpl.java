@@ -1,10 +1,10 @@
 package com.example.demo.services.eventService.messengerEventService.impl;
 
-import com.example.demo.entities.SupportEntity;
-import com.example.demo.entities.lvivCroissants.Croissant;
-import com.example.demo.entities.lvivCroissants.CustomerOrdering;
-import com.example.demo.entities.peopleRegister.User;
-import com.example.demo.models.messanger.Messaging;
+import com.example.demo.entity.SupportEntity;
+import com.example.demo.entity.lvivCroissants.Croissant;
+import com.example.demo.entity.lvivCroissants.CustomerOrdering;
+import com.example.demo.entity.peopleRegister.User;
+import com.example.demo.model.messanger.Messaging;
 import com.example.demo.services.eventService.messengerEventService.OrderingEventService;
 import com.example.demo.services.eventService.messengerEventService.UserEventService;
 import com.example.demo.services.messangerService.MessageSenderService;
@@ -17,10 +17,10 @@ import com.example.demo.services.supportService.TextFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static com.example.demo.enums.messengerEnums.Cases.*;
-import static com.example.demo.enums.messengerEnums.payloads.QuickReplyPayloads.ACCEPT_ORDERING_PAYLOAD;
-import static com.example.demo.enums.messengerEnums.payloads.QuickReplyPayloads.ADDRESS_PAYLOAD;
-import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.*;
+import static com.example.demo.constcomponent.messengerEnums.Cases.*;
+import static com.example.demo.constcomponent.messengerEnums.payloads.QuickReplyPayloads.ACCEPT_ORDERING_PAYLOAD;
+import static com.example.demo.constcomponent.messengerEnums.payloads.QuickReplyPayloads.ADDRESS_PAYLOAD;
+import static com.example.demo.constcomponent.messengerEnums.speaking.ServerSideSpeaker.*;
 
 @Service
 public class OrderingEventServiceImpl implements OrderingEventService {

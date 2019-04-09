@@ -1,9 +1,9 @@
 package com.example.demo.services.messangerService.impl;
 
-import com.example.demo.entities.SupportEntity;
-import com.example.demo.entities.peopleRegister.User;
-import com.example.demo.enums.messengerEnums.Cases;
-import com.example.demo.models.messanger.Messaging;
+import com.example.demo.entity.SupportEntity;
+import com.example.demo.entity.peopleRegister.User;
+import com.example.demo.constcomponent.messengerEnums.Cases;
+import com.example.demo.model.messanger.Messaging;
 import com.example.demo.services.eventService.messengerEventService.*;
 import com.example.demo.services.messangerService.*;
 import com.example.demo.services.peopleRegisterService.CourierRegisterService;
@@ -23,9 +23,9 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.example.demo.enums.messengerEnums.Cases.*;
-import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.ABORTED;
-import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.U_ARE_NOT_A_COURIER;
+import static com.example.demo.constcomponent.messengerEnums.Cases.*;
+import static com.example.demo.constcomponent.messengerEnums.speaking.ServerSideSpeaker.ABORTED;
+import static com.example.demo.constcomponent.messengerEnums.speaking.ServerSideSpeaker.U_ARE_NOT_A_COURIER;
 
 @Service
 public class MessageParserServiceImpl implements MessageParserService {

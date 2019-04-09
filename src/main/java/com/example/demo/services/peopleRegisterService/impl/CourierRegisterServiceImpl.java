@@ -1,6 +1,6 @@
 package com.example.demo.services.peopleRegisterService.impl;
 
-import com.example.demo.entities.peopleRegister.CourierRegister;
+import com.example.demo.entity.peopleRegister.CourierRegister;
 import com.example.demo.repository.CourierRegisterRepository;
 import com.example.demo.services.peopleRegisterService.CourierRegisterService;
 import org.springframework.beans.factory.annotation.Autowired;

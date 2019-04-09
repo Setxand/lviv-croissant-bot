@@ -1,7 +1,7 @@
 package com.example.demo.services.peopleRegisterService;
 
-import com.example.demo.entities.peopleRegister.TUser;
-import com.example.demo.enums.telegramEnums.TelegramUserStatus;
+import com.example.demo.entity.peopleRegister.TUser;
+import com.example.demo.constcomponent.telegramEnums.TelegramUserStatus;
 
 import java.util.List;
 

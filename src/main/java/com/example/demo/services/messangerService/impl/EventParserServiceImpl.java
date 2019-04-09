@@ -1,9 +1,9 @@
 package com.example.demo.services.messangerService.impl;
 
-import com.example.demo.entities.peopleRegister.User;
-import com.example.demo.models.messanger.Entry;
-import com.example.demo.models.messanger.Event;
-import com.example.demo.models.messanger.Messaging;
+import com.example.demo.entity.peopleRegister.User;
+import com.example.demo.model.messanger.Entry;
+import com.example.demo.model.messanger.Event;
+import com.example.demo.model.messanger.Messaging;
 import com.example.demo.services.messangerService.*;
 import com.example.demo.services.peopleRegisterService.UserRepositoryService;
 import org.apache.log4j.Logger;

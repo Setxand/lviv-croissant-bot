@@ -1,11 +1,11 @@
 package com.example.demo.services.messangerService;
 
 import com.example.demo.DemoApplicationTests;
-import com.example.demo.models.messanger.Message;
-import com.example.demo.models.messanger.broadcast.BroadcastMessage;
-import com.example.demo.models.messanger.broadcast.Data;
-import com.example.demo.models.messanger.broadcast.DynamicText;
-import com.example.demo.models.messanger.broadcast.EstimationReach;
+import com.example.demo.model.messanger.Message;
+import com.example.demo.model.messanger.broadcast.BroadcastMessage;
+import com.example.demo.model.messanger.broadcast.Data;
+import com.example.demo.model.messanger.broadcast.DynamicText;
+import com.example.demo.model.messanger.broadcast.EstimationReach;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

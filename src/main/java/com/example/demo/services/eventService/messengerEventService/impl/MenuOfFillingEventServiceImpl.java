@@ -1,10 +1,10 @@
 package com.example.demo.services.eventService.messengerEventService.impl;
 
-import com.example.demo.entities.lvivCroissants.MenuOfFilling;
-import com.example.demo.entities.peopleRegister.User;
-import com.example.demo.models.messanger.Message;
-import com.example.demo.models.messanger.Messaging;
-import com.example.demo.models.messanger.Recipient;
+import com.example.demo.entity.lvivCroissants.MenuOfFilling;
+import com.example.demo.entity.peopleRegister.User;
+import com.example.demo.model.messanger.Message;
+import com.example.demo.model.messanger.Messaging;
+import com.example.demo.model.messanger.Recipient;
 import com.example.demo.services.eventService.messengerEventService.MenuOfFillingEventService;
 import com.example.demo.services.messangerService.MessageSenderService;
 import com.example.demo.services.peopleRegisterService.UserRepositoryService;
@@ -18,8 +18,8 @@ import org.springframework.stereotype.Service;
 import java.util.Iterator;
 import java.util.List;
 
-import static com.example.demo.enums.messengerEnums.Cases.ADD_FILLING;
-import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.*;
+import static com.example.demo.constcomponent.messengerEnums.Cases.ADD_FILLING;
+import static com.example.demo.constcomponent.messengerEnums.speaking.ServerSideSpeaker.*;
 
 @Service
 public class MenuOfFillingEventServiceImpl implements MenuOfFillingEventService {

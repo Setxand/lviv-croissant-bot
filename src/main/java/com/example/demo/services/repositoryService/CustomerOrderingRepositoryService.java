@@ -1,8 +1,8 @@
 package com.example.demo.services.repositoryService;
 
-import com.example.demo.entities.lvivCroissants.CustomerOrdering;
-import com.example.demo.entities.peopleRegister.TUser;
-import com.example.demo.entities.peopleRegister.User;
+import com.example.demo.entity.lvivCroissants.CustomerOrdering;
+import com.example.demo.entity.peopleRegister.TUser;
+import com.example.demo.entity.peopleRegister.User;
 
 import java.util.List;
 

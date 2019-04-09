@@ -1,10 +1,10 @@
 package com.example.demo.services.telegramService.impl;
 
-import com.example.demo.entities.SpeakingMessage;
-import com.example.demo.entities.lvivCroissants.CustomerOrdering;
-import com.example.demo.entities.peopleRegister.TUser;
-import com.example.demo.enums.messengerEnums.Roles;
-import com.example.demo.models.telegram.Message;
+import com.example.demo.entity.SpeakingMessage;
+import com.example.demo.entity.lvivCroissants.CustomerOrdering;
+import com.example.demo.entity.peopleRegister.TUser;
+import com.example.demo.constcomponent.messengerEnums.Roles;
+import com.example.demo.model.telegram.Message;
 import com.example.demo.services.eventService.telegramEventService.TelegramCreatingOwnCroissantEventService;
 import com.example.demo.services.peopleRegisterService.TelegramUserRepositoryService;
 import com.example.demo.services.repositoryService.CustomerOrderingRepositoryService;
@@ -19,8 +19,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.*;
-import static com.example.demo.enums.telegramEnums.TelegramUserStatus.OWN_MENU_STATUS;
+import static com.example.demo.constcomponent.messengerEnums.speaking.ServerSideSpeaker.*;
+import static com.example.demo.constcomponent.telegramEnums.TelegramUserStatus.OWN_MENU_STATUS;
 
 @Service
 public class TelegramMessageParserHelperServiceImpl implements TelegramMessageParserHelperService {

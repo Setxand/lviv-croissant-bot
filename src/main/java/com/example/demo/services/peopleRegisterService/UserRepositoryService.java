@@ -1,7 +1,7 @@
 package com.example.demo.services.peopleRegisterService;
 
-import com.example.demo.entities.peopleRegister.User;
-import com.example.demo.enums.messengerEnums.Roles;
+import com.example.demo.entity.peopleRegister.User;
+import com.example.demo.constcomponent.messengerEnums.Roles;
 
 import java.util.List;
 

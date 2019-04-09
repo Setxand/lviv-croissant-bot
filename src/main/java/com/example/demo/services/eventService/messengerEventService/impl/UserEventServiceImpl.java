@@ -1,9 +1,9 @@
 package com.example.demo.services.eventService.messengerEventService.impl;
 
-import com.example.demo.entities.peopleRegister.User;
-import com.example.demo.enums.messengerEnums.Roles;
-import com.example.demo.models.messanger.Messaging;
-import com.example.demo.models.messanger.UserData;
+import com.example.demo.entity.peopleRegister.User;
+import com.example.demo.constcomponent.messengerEnums.Roles;
+import com.example.demo.model.messanger.Messaging;
+import com.example.demo.model.messanger.UserData;
 import com.example.demo.services.eventService.messengerEventService.UserEventService;
 import com.example.demo.services.messangerService.MessageParserService;
 import com.example.demo.services.messangerService.MessageSenderService;
@@ -14,10 +14,10 @@ import com.example.demo.services.supportService.TextFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static com.example.demo.enums.messengerEnums.Cases.CUSTOMER_REGISTER;
-import static com.example.demo.enums.messengerEnums.Cases.CUSTOMER_REGISTER_FINALIZE;
-import static com.example.demo.enums.messengerEnums.payloads.Payloads.GET_STARTED_PAYLOAD;
-import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.*;
+import static com.example.demo.constcomponent.messengerEnums.Cases.CUSTOMER_REGISTER;
+import static com.example.demo.constcomponent.messengerEnums.Cases.CUSTOMER_REGISTER_FINALIZE;
+import static com.example.demo.constcomponent.messengerEnums.payloads.Payloads.GET_STARTED_PAYLOAD;
+import static com.example.demo.constcomponent.messengerEnums.speaking.ServerSideSpeaker.*;
 
 @Service
 public class UserEventServiceImpl implements UserEventService {

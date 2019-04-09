@@ -1,11 +1,11 @@
 package com.example.demo.services.messangerService.impl;
 
-import com.example.demo.entities.SupportEntity;
-import com.example.demo.entities.peopleRegister.User;
-import com.example.demo.enums.messengerEnums.payloads.Payloads;
-import com.example.demo.models.messanger.Message;
-import com.example.demo.models.messanger.Messaging;
-import com.example.demo.models.messanger.QuickReply;
+import com.example.demo.entity.SupportEntity;
+import com.example.demo.entity.peopleRegister.User;
+import com.example.demo.constcomponent.messengerEnums.payloads.Payloads;
+import com.example.demo.model.messanger.Message;
+import com.example.demo.model.messanger.Messaging;
+import com.example.demo.model.messanger.QuickReply;
 import com.example.demo.services.eventService.messengerEventService.CourierEventService;
 import com.example.demo.services.eventService.messengerEventService.GetMenuEventService;
 import com.example.demo.services.eventService.messengerEventService.UserEventService;
@@ -21,12 +21,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import static com.example.demo.enums.messengerEnums.Cases.*;
-import static com.example.demo.enums.messengerEnums.payloads.Payloads.FOR_GETTING_MENU;
-import static com.example.demo.enums.messengerEnums.payloads.Payloads.OWN_CROISSANT_MENU_PAYLOAD;
-import static com.example.demo.enums.messengerEnums.payloads.QuickReplyPayloads.CREATING_OWN_CROISSANT_PAYLOAD;
-import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.DONE;
-import static com.example.demo.enums.messengerEnums.types.CroissantsTypes.OWN;
+import static com.example.demo.constcomponent.messengerEnums.Cases.*;
+import static com.example.demo.constcomponent.messengerEnums.payloads.Payloads.FOR_GETTING_MENU;
+import static com.example.demo.constcomponent.messengerEnums.payloads.Payloads.OWN_CROISSANT_MENU_PAYLOAD;
+import static com.example.demo.constcomponent.messengerEnums.payloads.QuickReplyPayloads.CREATING_OWN_CROISSANT_PAYLOAD;
+import static com.example.demo.constcomponent.messengerEnums.speaking.ServerSideSpeaker.DONE;
+import static com.example.demo.constcomponent.messengerEnums.types.CroissantsTypes.OWN;
 
 @Service
 public class PayloadParserServiceImpl implements PayloadParserService {

@@ -1,10 +1,10 @@
 package com.example.demo.services.eventService.telegramEventService.impl;
 
-import com.example.demo.entities.lvivCroissants.Croissant;
-import com.example.demo.entities.lvivCroissants.CroissantsFilling;
-import com.example.demo.entities.peopleRegister.TUser;
-import com.example.demo.enums.messengerEnums.types.CroissantsTypes;
-import com.example.demo.models.telegram.Message;
+import com.example.demo.entity.lvivCroissants.Croissant;
+import com.example.demo.entity.lvivCroissants.CroissantsFilling;
+import com.example.demo.entity.peopleRegister.TUser;
+import com.example.demo.constcomponent.messengerEnums.types.CroissantsTypes;
+import com.example.demo.model.telegram.Message;
 import com.example.demo.services.eventService.telegramEventService.TelegramCreatingOwnCroissantEventService;
 import com.example.demo.services.eventService.telegramEventService.TelegramGetMenuEventService;
 import com.example.demo.services.peopleRegisterService.TelegramUserRepositoryService;
@@ -18,9 +18,9 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.ResourceBundle;
 
-import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.*;
-import static com.example.demo.enums.telegramEnums.TelegramUserStatus.GETTING_MENU_STATUS;
-import static com.example.demo.enums.telegramEnums.TelegramUserStatus.INPUTTING_FILLINGS_IN_OWN_CROISSANT_STATUS;
+import static com.example.demo.constcomponent.messengerEnums.speaking.ServerSideSpeaker.*;
+import static com.example.demo.constcomponent.telegramEnums.TelegramUserStatus.GETTING_MENU_STATUS;
+import static com.example.demo.constcomponent.telegramEnums.TelegramUserStatus.INPUTTING_FILLINGS_IN_OWN_CROISSANT_STATUS;
 
 @Service
 public class TelegramCreatingOwnCroissantEventServiceImpl implements TelegramCreatingOwnCroissantEventService {

@@ -1,6 +1,6 @@
 package com.example.demo.services.peopleRegisterService;
 
-import com.example.demo.entities.peopleRegister.CourierRegister;
+import com.example.demo.entity.peopleRegister.CourierRegister;
 
 public interface CourierRegisterService {
 	public CourierRegister findByRecipientId(Long recipientId);

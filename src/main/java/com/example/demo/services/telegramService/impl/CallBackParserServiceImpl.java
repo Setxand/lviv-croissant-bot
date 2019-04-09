@@ -1,14 +1,14 @@
 package com.example.demo.services.telegramService.impl;
 
-import com.example.demo.entities.lvivCroissants.Croissant;
-import com.example.demo.entities.lvivCroissants.CustomerOrdering;
-import com.example.demo.entities.peopleRegister.TUser;
-import com.example.demo.enums.messengerEnums.PayloadCases;
-import com.example.demo.enums.telegramEnums.CallBackData;
-import com.example.demo.enums.telegramEnums.TelegramUserStatus;
-import com.example.demo.models.telegram.CallBackQuery;
-import com.example.demo.models.telegram.Chat;
-import com.example.demo.models.telegram.Message;
+import com.example.demo.entity.lvivCroissants.Croissant;
+import com.example.demo.entity.lvivCroissants.CustomerOrdering;
+import com.example.demo.entity.peopleRegister.TUser;
+import com.example.demo.constcomponent.messengerEnums.PayloadCases;
+import com.example.demo.constcomponent.telegramEnums.CallBackData;
+import com.example.demo.constcomponent.telegramEnums.TelegramUserStatus;
+import com.example.demo.model.telegram.CallBackQuery;
+import com.example.demo.model.telegram.Chat;
+import com.example.demo.model.telegram.Message;
 import com.example.demo.services.eventService.telegramEventService.TelegramCreatingOwnCroissantEventService;
 import com.example.demo.services.eventService.telegramEventService.TelegramGetMenuEventService;
 import com.example.demo.services.eventService.telegramEventService.TelegramOrderingEventService;
@@ -24,10 +24,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.ResourceBundle;
 
-import static com.example.demo.enums.Platform.TELEGRAM_ADMIN_PANEL_BOT;
-import static com.example.demo.enums.messengerEnums.PayloadCases.QUESTION_YES;
-import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.*;
-import static com.example.demo.enums.telegramEnums.TelegramUserStatus.*;
+import static com.example.demo.constcomponent.Platform.TELEGRAM_ADMIN_PANEL_BOT;
+import static com.example.demo.constcomponent.messengerEnums.PayloadCases.QUESTION_YES;
+import static com.example.demo.constcomponent.messengerEnums.speaking.ServerSideSpeaker.*;
+import static com.example.demo.constcomponent.telegramEnums.TelegramUserStatus.*;
 
 @Service
 public class CallBackParserServiceImpl implements CallBackParserService {

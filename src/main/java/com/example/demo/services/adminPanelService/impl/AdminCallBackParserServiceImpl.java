@@ -1,15 +1,15 @@
 package com.example.demo.services.adminPanelService.impl;
 
-import com.example.demo.entities.lvivCroissants.Croissant;
-import com.example.demo.entities.lvivCroissants.CustomerOrdering;
-import com.example.demo.entities.peopleRegister.TUser;
-import com.example.demo.enums.messengerEnums.Roles;
-import com.example.demo.enums.telegramEnums.CallBackData;
-import com.example.demo.enums.telegramEnums.TelegramUserStatus;
-import com.example.demo.models.telegram.CallBackQuery;
-import com.example.demo.models.telegram.Chat;
-import com.example.demo.models.telegram.Message;
-import com.example.demo.models.telegram.buttons.KeyboardButton;
+import com.example.demo.entity.lvivCroissants.Croissant;
+import com.example.demo.entity.lvivCroissants.CustomerOrdering;
+import com.example.demo.entity.peopleRegister.TUser;
+import com.example.demo.constcomponent.messengerEnums.Roles;
+import com.example.demo.constcomponent.telegramEnums.CallBackData;
+import com.example.demo.constcomponent.telegramEnums.TelegramUserStatus;
+import com.example.demo.model.telegram.CallBackQuery;
+import com.example.demo.model.telegram.Chat;
+import com.example.demo.model.telegram.Message;
+import com.example.demo.model.telegram.buttons.KeyboardButton;
 import com.example.demo.services.adminPanelService.AdminCallBackParserService;
 import com.example.demo.services.adminPanelService.AdminTelegramMessageParserHelperService;
 import com.example.demo.services.adminPanelService.BotCommandParseHelperService;
@@ -29,11 +29,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static com.example.demo.enums.Platform.TELEGRAM_ADMIN_PANEL_BOT;
-import static com.example.demo.enums.messengerEnums.PayloadCases.QUESTION_YES;
-import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.*;
-import static com.example.demo.enums.telegramEnums.CallBackData.SURE_TO_DELETE_DATA;
-import static com.example.demo.enums.telegramEnums.TelegramUserStatus.*;
+import static com.example.demo.constcomponent.Platform.TELEGRAM_ADMIN_PANEL_BOT;
+import static com.example.demo.constcomponent.messengerEnums.PayloadCases.QUESTION_YES;
+import static com.example.demo.constcomponent.messengerEnums.speaking.ServerSideSpeaker.*;
+import static com.example.demo.constcomponent.telegramEnums.CallBackData.SURE_TO_DELETE_DATA;
+import static com.example.demo.constcomponent.telegramEnums.TelegramUserStatus.*;
 
 @Service
 public class AdminCallBackParserServiceImpl implements AdminCallBackParserService {

@@ -1,11 +1,11 @@
 package com.example.demo.services.eventService.messengerEventService.impl;
 
-import com.example.demo.entities.SupportEntity;
-import com.example.demo.entities.lvivCroissants.Croissant;
-import com.example.demo.entities.lvivCroissants.CroissantsFilling;
-import com.example.demo.entities.peopleRegister.User;
-import com.example.demo.enums.messengerEnums.Roles;
-import com.example.demo.models.messanger.*;
+import com.example.demo.entity.SupportEntity;
+import com.example.demo.entity.lvivCroissants.Croissant;
+import com.example.demo.entity.lvivCroissants.CroissantsFilling;
+import com.example.demo.entity.peopleRegister.User;
+import com.example.demo.constcomponent.messengerEnums.Roles;
+import com.example.demo.model.messanger.*;
 import com.example.demo.services.eventService.messengerEventService.GetMenuEventService;
 import com.example.demo.services.messangerService.MessageSenderService;
 import com.example.demo.services.peopleRegisterService.UserRepositoryService;
@@ -19,13 +19,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-import static com.example.demo.enums.messengerEnums.payloads.Payloads.*;
-import static com.example.demo.enums.messengerEnums.payloads.QuickReplyPayloads.CROISSANT_TYPE_PAYLOAD;
-import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.*;
-import static com.example.demo.enums.messengerEnums.types.AttachmentType.template;
-import static com.example.demo.enums.messengerEnums.types.ButtonType.postback;
-import static com.example.demo.enums.messengerEnums.types.ButtonType.web_url;
-import static com.example.demo.enums.messengerEnums.types.CroissantsTypes.OWN;
+import static com.example.demo.constcomponent.messengerEnums.payloads.Payloads.*;
+import static com.example.demo.constcomponent.messengerEnums.payloads.QuickReplyPayloads.CROISSANT_TYPE_PAYLOAD;
+import static com.example.demo.constcomponent.messengerEnums.speaking.ServerSideSpeaker.*;
+import static com.example.demo.constcomponent.messengerEnums.types.AttachmentType.template;
+import static com.example.demo.constcomponent.messengerEnums.types.ButtonType.postback;
+import static com.example.demo.constcomponent.messengerEnums.types.ButtonType.web_url;
+import static com.example.demo.constcomponent.messengerEnums.types.CroissantsTypes.OWN;
 
 @Service
 public class GetMenuEventServiceImpl implements GetMenuEventService {

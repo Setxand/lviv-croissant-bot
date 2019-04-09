@@ -1,11 +1,11 @@
 package com.example.demo.services.adminPanelService.impl;
 
-import com.example.demo.entities.peopleRegister.TUser;
-import com.example.demo.enums.BotCommands;
-import com.example.demo.enums.messengerEnums.Roles;
-import com.example.demo.enums.telegramEnums.TelegramUserStatus;
-import com.example.demo.models.telegram.Message;
-import com.example.demo.models.telegram.buttons.InlineKeyboardButton;
+import com.example.demo.entity.peopleRegister.TUser;
+import com.example.demo.constcomponent.BotCommands;
+import com.example.demo.constcomponent.messengerEnums.Roles;
+import com.example.demo.constcomponent.telegramEnums.TelegramUserStatus;
+import com.example.demo.model.telegram.Message;
+import com.example.demo.model.telegram.buttons.InlineKeyboardButton;
 import com.example.demo.services.adminPanelService.BotCommandParseHelperService;
 import com.example.demo.services.adminPanelService.BotCommandsParserService;
 import com.example.demo.services.eventService.servicePanel.TelegramAddingRecordingsEventService;
@@ -21,11 +21,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static com.example.demo.enums.messengerEnums.Roles.ADMIN;
-import static com.example.demo.enums.messengerEnums.Roles.COURIER;
-import static com.example.demo.enums.messengerEnums.speaking.ServerSideSpeaker.*;
-import static com.example.demo.enums.telegramEnums.CallBackData.*;
-import static com.example.demo.enums.telegramEnums.TelegramUserStatus.ASKING_TYPE_STATUS;
+import static com.example.demo.constcomponent.messengerEnums.Roles.ADMIN;
+import static com.example.demo.constcomponent.messengerEnums.Roles.COURIER;
+import static com.example.demo.constcomponent.messengerEnums.speaking.ServerSideSpeaker.*;
+import static com.example.demo.constcomponent.telegramEnums.CallBackData.*;
+import static com.example.demo.constcomponent.telegramEnums.TelegramUserStatus.ASKING_TYPE_STATUS;
 
 @Service
 public class BotCommandsParserServiceImpl implements BotCommandsParserService {

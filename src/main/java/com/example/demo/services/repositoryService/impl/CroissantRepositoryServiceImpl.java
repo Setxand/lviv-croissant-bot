@@ -1,7 +1,7 @@
 package com.example.demo.services.repositoryService.impl;
 
-import com.example.demo.entities.lvivCroissants.Croissant;
-import com.example.demo.entities.lvivCroissants.CroissantsFilling;
+import com.example.demo.entity.lvivCroissants.Croissant;
+import com.example.demo.entity.lvivCroissants.CroissantsFilling;
 import com.example.demo.repository.CroissantRepository;
 import com.example.demo.services.repositoryService.CroissantRepositoryService;
 import org.springframework.beans.factory.annotation.Autowired;

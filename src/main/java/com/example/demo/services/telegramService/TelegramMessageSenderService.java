@@ -1,12 +1,12 @@
 package com.example.demo.services.telegramService;
 
-import com.example.demo.enums.Platform;
-import com.example.demo.enums.telegramEnums.CallBackData;
-import com.example.demo.models.telegram.Message;
-import com.example.demo.models.telegram.TelegramRequest;
-import com.example.demo.models.telegram.buttons.InlineKeyboardButton;
-import com.example.demo.models.telegram.buttons.KeyboardButton;
-import com.example.demo.models.telegram.buttons.Markup;
+import com.example.demo.constcomponent.Platform;
+import com.example.demo.constcomponent.telegramEnums.CallBackData;
+import com.example.demo.model.telegram.Message;
+import com.example.demo.model.telegram.TelegramRequest;
+import com.example.demo.model.telegram.buttons.InlineKeyboardButton;
+import com.example.demo.model.telegram.buttons.KeyboardButton;
+import com.example.demo.model.telegram.buttons.Markup;
 
 import java.util.List;
 

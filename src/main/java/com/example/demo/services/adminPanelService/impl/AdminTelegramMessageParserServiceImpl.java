@@ -1,8 +1,8 @@
 package com.example.demo.services.adminPanelService.impl;
 
-import com.example.demo.entities.peopleRegister.TUser;
-import com.example.demo.models.telegram.Message;
-import com.example.demo.models.telegram.TelegramEntity;
+import com.example.demo.entity.peopleRegister.TUser;
+import com.example.demo.model.telegram.Message;
+import com.example.demo.model.telegram.TelegramEntity;
 import com.example.demo.services.adminPanelService.AdminTelegramMessageParserHelperService;
 import com.example.demo.services.adminPanelService.AdminTelegramMessageParserService;
 import com.example.demo.services.adminPanelService.BotCommandsParserService;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.example.demo.enums.telegramEnums.TelegramUserStatus.ADDING_FILLING_STATUS_1;
+import static com.example.demo.constcomponent.telegramEnums.TelegramUserStatus.ADDING_FILLING_STATUS_1;
 
 @Service
 public class AdminTelegramMessageParserServiceImpl implements AdminTelegramMessageParserService {

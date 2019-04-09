@@ -1,6 +1,6 @@
 package com.example.demo.services.repositoryService;
 
-import com.example.demo.entities.SupportEntity;
+import com.example.demo.entity.SupportEntity;
 
 public interface SupportEntityRepositoryService {
 	public SupportEntity getByUserId(Long userId);

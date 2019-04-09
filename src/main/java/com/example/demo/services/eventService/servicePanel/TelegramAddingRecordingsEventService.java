@@ -1,6 +1,6 @@
 package com.example.demo.services.eventService.servicePanel;
 
-import com.example.demo.models.telegram.Message;
+import com.example.demo.model.telegram.Message;
 
 public interface TelegramAddingRecordingsEventService {
 	public void addFilling(Message message);

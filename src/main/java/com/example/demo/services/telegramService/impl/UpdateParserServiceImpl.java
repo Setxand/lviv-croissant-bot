@@ -1,6 +1,6 @@
 package com.example.demo.services.telegramService.impl;
 
-import com.example.demo.models.telegram.Update;
+import com.example.demo.model.telegram.Update;
 import com.example.demo.services.peopleRegisterService.TelegramUserRepositoryService;
 import com.example.demo.services.telegramService.CallBackParserService;
 import com.example.demo.services.telegramService.TelegramMessageParserService;

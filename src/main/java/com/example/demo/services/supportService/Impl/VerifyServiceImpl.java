@@ -1,7 +1,7 @@
 package com.example.demo.services.supportService.Impl;
 
-import com.example.demo.entities.peopleRegister.User;
-import com.example.demo.models.messanger.Messaging;
+import com.example.demo.entity.peopleRegister.User;
+import com.example.demo.model.messanger.Messaging;
 import com.example.demo.services.peopleRegisterService.UserRepositoryService;
 import com.example.demo.services.supportService.VerifyService;
 import org.springframework.beans.factory.annotation.Autowired;
