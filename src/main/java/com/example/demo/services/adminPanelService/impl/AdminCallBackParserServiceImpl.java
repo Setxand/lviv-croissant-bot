@@ -6,10 +6,6 @@ import com.example.demo.entity.peopleRegister.TUser;
 import com.example.demo.constcomponent.messengerEnums.Roles;
 import com.example.demo.constcomponent.telegramEnums.CallBackData;
 import com.example.demo.constcomponent.telegramEnums.TelegramUserStatus;
-import com.example.demo.model.telegram.CallBackQuery;
-import com.example.demo.model.telegram.Chat;
-import com.example.demo.model.telegram.Message;
-import com.example.demo.model.telegram.buttons.KeyboardButton;
 import com.example.demo.services.adminPanelService.AdminCallBackParserService;
 import com.example.demo.services.adminPanelService.AdminTelegramMessageParserHelperService;
 import com.example.demo.services.adminPanelService.BotCommandParseHelperService;
@@ -21,9 +17,13 @@ import com.example.demo.services.repositoryService.CustomerOrderingRepositorySer
 import com.example.demo.services.repositoryService.SpeakingMessagesRepositoryService;
 import com.example.demo.services.supportService.TextFormatter;
 import com.example.demo.services.telegramService.CallBackParserService;
-import com.example.demo.services.telegramService.TelegramMessageSenderService;
+import com.example.demo.test.TelegramClientEx;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import telegram.CallBackQuery;
+import telegram.Chat;
+import telegram.Message;
+import telegram.button.KeyboardButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +38,7 @@ import static com.example.demo.constcomponent.telegramEnums.TelegramUserStatus.*
 @Service
 public class AdminCallBackParserServiceImpl implements AdminCallBackParserService {
 	@Autowired
-	private TelegramMessageSenderService telegramMessageSenderService;
+	private TelegramClientEx telegramClient;
 	@Autowired
 	private TelegramUserRepositoryService telegramUserRepositoryService;
 	@Autowired
@@ -99,7 +99,7 @@ public class AdminCallBackParserServiceImpl implements AdminCallBackParserServic
 				completeOrderData(callBackQuery);
 				break;
 			default:
-				telegramMessageSenderService.errorMessage(callBackQuery.getMessage());
+				telegramClient.errorMessage(callBackQuery.getMessage());
 				break;
 		}
 	}
@@ -139,7 +139,7 @@ public class AdminCallBackParserServiceImpl implements AdminCallBackParserServic
 		tUser.addCourierOrdering(customerOrdering);
 		telegramUserRepositoryService.saveAndFlush(tUser);
 		String text = ResourceBundle.getBundle("dictionary").getString(DONE.name());
-		telegramMessageSenderService.simpleMessage(text, callBackQuery.getMessage());
+		telegramClient.simpleMessage(text, callBackQuery.getMessage());
 
 	}
 
@@ -149,7 +149,7 @@ public class AdminCallBackParserServiceImpl implements AdminCallBackParserServic
 
 	private void setHelloMessageData(CallBackQuery callBackQuery) {
 		String text = ResourceBundle.getBundle("dictionary").getString(NAME_OF_NEW_TEXT.name());
-		telegramMessageSenderService.simpleMessage(text, callBackQuery.getMessage());
+		telegramClient.simpleMessage(text, callBackQuery.getMessage());
 		TUser tUser = telegramUserRepositoryService.findByChatId(callBackQuery.getMessage().getChat().getId());
 		telegramUserRepositoryService.changeStatus(tUser, NAME_OF_NEW_TEXT_STATUS);
 	}
@@ -173,17 +173,17 @@ public class AdminCallBackParserServiceImpl implements AdminCallBackParserServic
 					tUser.setRole(Roles.CUSTOMER);
 					break;
 				default:
-					telegramMessageSenderService.errorMessage(callBackQuery.getMessage());
+					telegramClient.errorMessage(callBackQuery.getMessage());
 					break;
 			}
 			telegramUserRepositoryService.saveAndFlush(tUser);
 			Message message1 = new Message();
 			message1.setChat(new Chat(tUser.getChatId()));
 			message1.setPlatform(TELEGRAM_ADMIN_PANEL_BOT);
-			telegramMessageSenderService.simpleMessage(String.format(ResourceBundle.getBundle("dictionary").getString(ROLE_SET.name()), tUser.getRole().name()), message1);
-			telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(DONE.name()), callBackQuery.getMessage());
+			telegramClient.simpleMessage(String.format(ResourceBundle.getBundle("dictionary").getString(ROLE_SET.name()), tUser.getRole().name()), message1);
+			telegramClient.simpleMessage(ResourceBundle.getBundle("dictionary").getString(DONE.name()), callBackQuery.getMessage());
 		} else {
-			telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(THANKS.name()), callBackQuery.getMessage());
+			telegramClient.simpleMessage(ResourceBundle.getBundle("dictionary").getString(THANKS.name()), callBackQuery.getMessage());
 		}
 	}
 
@@ -209,7 +209,7 @@ public class AdminCallBackParserServiceImpl implements AdminCallBackParserServic
 		}
 
 
-		telegramMessageSenderService.sendKeyboardButtons(callBackQuery.getMessage(), keyboardButtons, "Enter username:");
+		telegramClient.sendKeyboardButtons(callBackQuery.getMessage(), keyboardButtons, "Enter username:");
 	}
 
 	private void sureDeleteData(CallBackQuery callBackQuery) {
@@ -218,21 +218,21 @@ public class AdminCallBackParserServiceImpl implements AdminCallBackParserServic
 			deleteCroissant(callBackQuery);
 		} else {
 			String text = ResourceBundle.getBundle("dictionary").getString(THANKS.name());
-			telegramMessageSenderService.simpleMessage(text + " /help", callBackQuery.getMessage());
+			telegramClient.simpleMessage(text + " /help", callBackQuery.getMessage());
 		}
 	}
 
 	private void deleteCroissant(CallBackQuery callBackQuery) {
 		Croissant croissant = croissantRepositoryService.findOne(Long.parseLong(TextFormatter.ejectContext(callBackQuery.getData())));
 		croissantRepositoryService.remove(croissant);
-		telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(DONE.name()) + "/help", callBackQuery.getMessage());
+		telegramClient.simpleMessage(ResourceBundle.getBundle("dictionary").getString(DONE.name()) + "/help", callBackQuery.getMessage());
 	}
 
 	private void deleteButtonData(CallBackQuery callBackQuery) {
 		Long id = Long.parseLong(TextFormatter.ejectSingleVariable(callBackQuery.getData()));
 		Croissant croissant = croissantRepositoryService.findOne(id);
 		String text = String.format(ResourceBundle.getBundle("dictionary").getString(SURE_DELETE_CROISSANT.name()), croissant.getName());
-		telegramMessageSenderService.simpleQuestion(SURE_TO_DELETE_DATA, "?" + id + "&", text, callBackQuery.getMessage());
+		telegramClient.simpleQuestion(SURE_TO_DELETE_DATA, "?" + id + "&", text, callBackQuery.getMessage());
 	}
 
 	private void croissantTypeData(CallBackQuery callBackQuery) {

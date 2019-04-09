@@ -5,17 +5,18 @@ import com.example.demo.entity.SpeakingMessage;
 import com.example.demo.entity.lvivCroissants.CustomerOrdering;
 import com.example.demo.entity.peopleRegister.TUser;
 import com.example.demo.constcomponent.messengerEnums.Roles;
-import com.example.demo.model.telegram.Message;
 import com.example.demo.services.eventService.telegramEventService.TelegramCreatingOwnCroissantEventService;
 import com.example.demo.services.peopleRegisterService.TelegramUserRepositoryService;
 import com.example.demo.services.repositoryService.CustomerOrderingRepositoryService;
 import com.example.demo.services.repositoryService.SpeakingMessagesRepositoryService;
 import com.example.demo.services.telegramService.TelegramMessageParserHelperService;
-import com.example.demo.services.telegramService.TelegramMessageSenderService;
+import com.example.demo.test.TelegramClientEx;
+import com.sun.javafx.application.PlatformImpl;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import telegram.Message;
 
 import java.util.List;
 import java.util.ResourceBundle;
@@ -31,7 +32,7 @@ public class TelegramMessageParserHelperServiceImpl implements TelegramMessagePa
 	@Autowired
 	private CustomerOrderingRepositoryService customerOrderingRepositoryService;
 	@Autowired
-	private TelegramMessageSenderService telegramMessageSenderService;
+	private TelegramClientEx telegramClient;
 	@Autowired
 	private TelegramCreatingOwnCroissantEventService telegramCreatingOwnCroissantEventService;
 	@Autowired
@@ -60,11 +61,11 @@ public class TelegramMessageParserHelperServiceImpl implements TelegramMessagePa
 
 		telegramUserRepositoryService.saveAndFlush(tUser);
 		SpeakingMessage speakingMessage = speakingMessagesRepositoryService.findByKey(HELLO_MESSAGE.name());
-		if (message.getPlatform() == null)
-			telegramMessageSenderService.simpleMessage(speakingMessage.getMessage(), message);
-		else {
+		if (message.getPlatform() == Platform.COMMON_BOT)
+			telegramClient.simpleMessage(speakingMessage.getMessage(), message);
+		else if (message.getPlatform() == Platform.TELEGRAM_ADMIN_PANEL_BOT){
 			String helloMessage = ResourceBundle.getBundle("dictionary").getString(HELLO_SERVICE.name());
-			telegramMessageSenderService.simpleMessage(helloMessage, message);
+			telegramClient.simpleMessage(helloMessage, message);
 		}
 
 	}
@@ -79,7 +80,7 @@ public class TelegramMessageParserHelperServiceImpl implements TelegramMessagePa
 			customerOrderingRepositoryService.delete(customerOrdering);
 		}
 		telegramUserRepositoryService.saveAndFlush(tUser);
-		telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(DONE.name()), message);
+		telegramClient.simpleMessage(ResourceBundle.getBundle("dictionary").getString(DONE.name()), message);
 	}
 
 	@Override

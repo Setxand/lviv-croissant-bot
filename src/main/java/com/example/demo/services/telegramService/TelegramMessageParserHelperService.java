@@ -1,6 +1,6 @@
 package com.example.demo.services.telegramService;
 
-import com.example.demo.model.telegram.Message;
+import telegram.Message;
 
 public interface TelegramMessageParserHelperService {
 	public void helpStart(Message message);

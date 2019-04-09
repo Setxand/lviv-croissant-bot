@@ -1,7 +1,8 @@
 package com.example.demo.services.adminPanelService;
 
-import com.example.demo.model.telegram.CallBackQuery;
-import com.example.demo.model.telegram.Message;
+
+import telegram.CallBackQuery;
+import telegram.Message;
 
 public interface BotCommandParseHelperService {
 	public void helpInvokeBotHelpCommand(Message message);

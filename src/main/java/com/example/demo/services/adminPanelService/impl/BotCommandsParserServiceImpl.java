@@ -4,17 +4,17 @@ import com.example.demo.entity.peopleRegister.TUser;
 import com.example.demo.constcomponent.BotCommands;
 import com.example.demo.constcomponent.messengerEnums.Roles;
 import com.example.demo.constcomponent.telegramEnums.TelegramUserStatus;
-import com.example.demo.model.telegram.Message;
-import com.example.demo.model.telegram.buttons.InlineKeyboardButton;
 import com.example.demo.services.adminPanelService.BotCommandParseHelperService;
 import com.example.demo.services.adminPanelService.BotCommandsParserService;
 import com.example.demo.services.eventService.servicePanel.TelegramAddingRecordingsEventService;
 import com.example.demo.services.eventService.telegramEventService.TelegramGetMenuEventService;
 import com.example.demo.services.peopleRegisterService.TelegramUserRepositoryService;
 import com.example.demo.services.telegramService.TelegramMessageParserHelperService;
-import com.example.demo.services.telegramService.TelegramMessageSenderService;
+import com.example.demo.test.TelegramClientEx;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import telegram.Message;
+import telegram.button.InlineKeyboardButton;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,7 +36,7 @@ public class BotCommandsParserServiceImpl implements BotCommandsParserService {
 	@Autowired
 	private BotCommandParseHelperService botCommandParseHelperService;
 	@Autowired
-	private TelegramMessageSenderService telegramMessageSenderService;
+	private TelegramClientEx telegramCLient;
 	@Autowired
 	private TelegramGetMenuEventService telegramGetMenuEventService;
 	@Autowired
@@ -71,7 +71,7 @@ public class BotCommandsParserServiceImpl implements BotCommandsParserService {
 				courierActions(message);
 				break;
 			default:
-				telegramMessageSenderService.errorMessage(message);
+				telegramCLient.errorMessage(message);
 				break;
 		}
 
@@ -85,10 +85,10 @@ public class BotCommandsParserServiceImpl implements BotCommandsParserService {
 			List<InlineKeyboardButton> buttons = Arrays.asList(new InlineKeyboardButton(listOfOrdering, LIST_OF_ORDERING_DATA.name()),
 					new InlineKeyboardButton(listOfOwnOrdering, LIST_OF_COMPLETE_ORDERING_DATA.name()));
 			String courierActions = ResourceBundle.getBundle("dictionary").getString(CHOOSE_ACTIONS.name());
-			telegramMessageSenderService.sendInlineButtons(Arrays.asList(buttons), courierActions, message);
+			telegramCLient.sendInlineButtons(Arrays.asList(buttons), courierActions, message);
 
 		} else {
-			telegramMessageSenderService.noEnoughPermissions(message);
+			telegramCLient.noEnoughPermissions(message);
 		}
 	}
 
@@ -96,20 +96,20 @@ public class BotCommandsParserServiceImpl implements BotCommandsParserService {
 	private void adminPanel(Message message) {
 		TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
 		if (tUser.getRole() != ADMIN) {
-			telegramMessageSenderService.noEnoughPermissions(message);
+			telegramCLient.noEnoughPermissions(message);
 			return;
 		}
 		List<InlineKeyboardButton> buttons = new ArrayList<>(Arrays.asList(new InlineKeyboardButton("Set role", SET_ROLE_DATA.name()),
 				new InlineKeyboardButton("Change hello message", SET_HELLO_MESSAGE_DATA.name())));
 		String text = ResourceBundle.getBundle("dictionary").getString(CHOOSE_ACTIONS.name());
-		telegramMessageSenderService.sendInlineButtons(new ArrayList<>(Arrays.asList(buttons)), text, message);
+		telegramCLient.sendInlineButtons(new ArrayList<>(Arrays.asList(buttons)), text, message);
 	}
 
 	private void deleteCroissant(Message message) {
 
 		TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
 		if (tUser.getRole() != ADMIN && tUser.getRole() != Roles.PERSONAL) {
-			telegramMessageSenderService.noEnoughPermissions(message);
+			telegramCLient.noEnoughPermissions(message);
 			return;
 		}
 		telegramUserRepositoryService.changeStatus(tUser, ASKING_TYPE_STATUS);
@@ -131,7 +131,7 @@ public class BotCommandsParserServiceImpl implements BotCommandsParserService {
 			telegramUserRepositoryService.changeStatus(tUser, TelegramUserStatus.ADDING_CROISSANT_STATUS);
 			telegramAddingRecordingsEventService.addCroissant(message);
 		} else
-			telegramMessageSenderService.noEnoughPermissions(message);
+			telegramCLient.noEnoughPermissions(message);
 
 	}
 
@@ -142,6 +142,6 @@ public class BotCommandsParserServiceImpl implements BotCommandsParserService {
 			telegramUserRepositoryService.changeStatus(tUser, TelegramUserStatus.ADDING_FILLING_STATUS);
 			telegramAddingRecordingsEventService.addFilling(message);
 		} else
-			telegramMessageSenderService.noEnoughPermissions(message);
+			telegramCLient.noEnoughPermissions(message);
 	}
 }

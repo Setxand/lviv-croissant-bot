@@ -3,27 +3,22 @@ package com.example.demo.services.adminPanelService.impl;
 import com.example.demo.entity.peopleRegister.TUser;
 import com.example.demo.constcomponent.Platform;
 import com.example.demo.constcomponent.messengerEnums.Roles;
-import com.example.demo.model.telegram.Update;
 import com.example.demo.services.adminPanelService.AdminCallBackParserService;
 import com.example.demo.services.adminPanelService.AdminPanelUpdateParserService;
 import com.example.demo.services.adminPanelService.AdminTelegramMessageParserService;
 import com.example.demo.services.peopleRegisterService.TelegramUserRepositoryService;
-import com.example.demo.services.telegramService.TelegramMessageSenderService;
+import com.example.demo.test.TelegramClientEx;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import telegram.Update;
 
 @Service
 public class AdminPanelUpdateParserServiceImpl implements AdminPanelUpdateParserService {
 
-
-	@Autowired
-	private TelegramUserRepositoryService telegramUserRepositoryService;
-	@Autowired
-	private AdminCallBackParserService adminCallBackParserService;
-	@Autowired
-	private AdminTelegramMessageParserService adminTelegramMessageParserService;
-	@Autowired
-	private TelegramMessageSenderService telegramMessageSenderService;
+	@Autowired private TelegramUserRepositoryService telegramUserRepositoryService;
+	@Autowired private AdminCallBackParserService adminCallBackParserService;
+	@Autowired private AdminTelegramMessageParserService adminTelegramMessageParserService;
+	@Autowired private TelegramClientEx telegramClient;
 
 	@Override
 	public void parseUpdate(Update update) {
@@ -36,7 +31,7 @@ public class AdminPanelUpdateParserServiceImpl implements AdminPanelUpdateParser
 
 				tUser = telegramUserRepositoryService.findByChatId(update.getCallBackQuery().getMessage().getChat().getId());
 				if (tUser.getRole() == Roles.CUSTOMER) {
-					telegramMessageSenderService.simpleMessage("U are not a personal of Lviv croissants!", update.getCallBackQuery().getMessage());
+					telegramClient.simpleMessage("U are not a personal of Lviv croissants!", update.getCallBackQuery().getMessage());
 					return;
 				}
 				adminCallBackParserService.parseAdminCallBackQuery(update.getCallBackQuery());
@@ -45,7 +40,7 @@ public class AdminPanelUpdateParserServiceImpl implements AdminPanelUpdateParser
 
 				tUser = telegramUserRepositoryService.findByChatId(update.getMessage().getChat().getId());
 				if (tUser.getRole() == Roles.CUSTOMER && !update.getMessage().getText().equals("/start")) {
-					telegramMessageSenderService.simpleMessage("U are not a personal of Lviv croissants!", update.getMessage());
+					telegramClient.simpleMessage("U are not a personal of Lviv croissants!", update.getMessage());
 					return;
 				}
 				adminTelegramMessageParserService.parseMessage(update.getMessage());
@@ -54,7 +49,7 @@ public class AdminPanelUpdateParserServiceImpl implements AdminPanelUpdateParser
 
 		} catch (Exception ex) {
 			try {
-				telegramMessageSenderService.errorMessage(update.getMessage());
+				telegramClient.errorMessage(update.getMessage());
 				telegramUserRepositoryService.changeStatus(telegramUserRepositoryService.findByChatId(update.getMessage().getChat().getId()), null);
 			} catch (Exception e) {
 				e.printStackTrace();

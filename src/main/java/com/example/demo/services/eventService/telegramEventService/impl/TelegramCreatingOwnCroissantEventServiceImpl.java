@@ -4,17 +4,17 @@ import com.example.demo.entity.lvivCroissants.Croissant;
 import com.example.demo.entity.lvivCroissants.CroissantsFilling;
 import com.example.demo.entity.peopleRegister.TUser;
 import com.example.demo.constcomponent.messengerEnums.types.CroissantsTypes;
-import com.example.demo.model.telegram.Message;
 import com.example.demo.services.eventService.telegramEventService.TelegramCreatingOwnCroissantEventService;
 import com.example.demo.services.eventService.telegramEventService.TelegramGetMenuEventService;
 import com.example.demo.services.peopleRegisterService.TelegramUserRepositoryService;
 import com.example.demo.services.repositoryService.CroissantRepositoryService;
 import com.example.demo.services.repositoryService.CroissantsFillingRepositoryService;
 import com.example.demo.services.repositoryService.MenuOfFillingRepositoryService;
-import com.example.demo.services.telegramService.TelegramMessageSenderService;
+import com.example.demo.test.TelegramClientEx;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
+import telegram.Message;
 
 import java.util.ResourceBundle;
 
@@ -25,7 +25,7 @@ import static com.example.demo.constcomponent.telegramEnums.TelegramUserStatus.I
 @Service
 public class TelegramCreatingOwnCroissantEventServiceImpl implements TelegramCreatingOwnCroissantEventService {
 	@Autowired
-	private TelegramMessageSenderService telegramMessageSenderService;
+	private TelegramClientEx telegramClient;
 	@Autowired
 	private TelegramGetMenuEventService telegramGetMenuEventService;
 	@Autowired
@@ -48,7 +48,7 @@ public class TelegramCreatingOwnCroissantEventServiceImpl implements TelegramCre
 				inputtingFillingsIfOnwCroissant(message, tUser);
 				break;
 			default:
-				telegramMessageSenderService.errorMessage(message);
+				telegramClient.errorMessage(message);
 				break;
 		}
 
@@ -80,24 +80,24 @@ public class TelegramCreatingOwnCroissantEventServiceImpl implements TelegramCre
 			telegramUserRepositoryService.changeStatus(tUser, null);
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(NON_CORRECT_FORMAT_OF_FILLING.name()), message);
-			telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(ID_OF_FILLING.name()), message);
+			telegramClient.simpleMessage(ResourceBundle.getBundle("dictionary").getString(NON_CORRECT_FORMAT_OF_FILLING.name()), message);
+			telegramClient.simpleMessage(ResourceBundle.getBundle("dictionary").getString(ID_OF_FILLING.name()), message);
 		}
 
 
 	}
 
 	private void finalCreating(Message message, TUser tUser) {
-		telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(CREATED_CROISSANT.name()), message);
+		telegramClient.simpleMessage(ResourceBundle.getBundle("dictionary").getString(CREATED_CROISSANT.name()), message);
 		telegramUserRepositoryService.changeStatus(tUser, GETTING_MENU_STATUS);
 		message.setText(CroissantsTypes.OWN.name());
 		telegramGetMenuEventService.getMenu(message);
 	}
 
 	private void startCreatingOwnCroissant(Message message, TUser tUser) {
-		telegramMessageSenderService.simpleMessage("Here you can to create your own croissant!!!", message);
+		telegramClient.simpleMessage("Here you can to create your own croissant!!!", message);
 		telegramGetMenuEventService.getMenuOfFillings(message);
-		telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(ID_OF_FILLING.name()), message);
+		telegramClient.simpleMessage(ResourceBundle.getBundle("dictionary").getString(ID_OF_FILLING.name()), message);
 		telegramUserRepositoryService.changeStatus(tUser, INPUTTING_FILLINGS_IN_OWN_CROISSANT_STATUS);
 	}
 }

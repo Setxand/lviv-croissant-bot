@@ -1,16 +1,16 @@
 package com.example.demo.services.adminPanelService.impl;
 
 import com.example.demo.entity.peopleRegister.TUser;
-import com.example.demo.model.telegram.Message;
-import com.example.demo.model.telegram.TelegramEntity;
 import com.example.demo.services.adminPanelService.AdminTelegramMessageParserHelperService;
 import com.example.demo.services.adminPanelService.AdminTelegramMessageParserService;
 import com.example.demo.services.adminPanelService.BotCommandsParserService;
 import com.example.demo.services.eventService.servicePanel.TelegramAddingRecordingsEventService;
 import com.example.demo.services.peopleRegisterService.TelegramUserRepositoryService;
-import com.example.demo.services.telegramService.TelegramMessageSenderService;
+import com.example.demo.test.TelegramClientEx;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import telegram.Message;
+import telegram.TelegramEntity;
 
 import java.util.List;
 
@@ -22,8 +22,7 @@ public class AdminTelegramMessageParserServiceImpl implements AdminTelegramMessa
 	private TelegramUserRepositoryService telegramUserRepositoryService;
 	@Autowired
 	private BotCommandsParserService botCommandsParserService;
-	@Autowired
-	private TelegramMessageSenderService telegramMessageSenderService;
+	@Autowired private TelegramClientEx telegramClient;
 	@Autowired
 	private TelegramAddingRecordingsEventService telegramAddingRecordingsEventService;
 	@Autowired
@@ -71,7 +70,7 @@ public class AdminTelegramMessageParserServiceImpl implements AdminTelegramMessa
 				adminTelegramMessageParserHelperService.helpChangeHelloMessage(message);
 				break;
 			default:
-				telegramMessageSenderService.errorMessage(message);
+				telegramClient.errorMessage(message);
 				break;
 
 		}

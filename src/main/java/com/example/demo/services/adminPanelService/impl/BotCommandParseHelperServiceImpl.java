@@ -8,23 +8,23 @@ import com.example.demo.constcomponent.BotCommands;
 import com.example.demo.constcomponent.messengerEnums.Objects;
 import com.example.demo.constcomponent.messengerEnums.Roles;
 import com.example.demo.model.messanger.Shell;
-import com.example.demo.model.telegram.CallBackQuery;
-import com.example.demo.model.telegram.Message;
-import com.example.demo.model.telegram.buttons.InlineKeyboardButton;
-import com.example.demo.model.telegram.buttons.InlineKeyboardMarkup;
-import com.example.demo.model.telegram.buttons.Markup;
 import com.example.demo.services.adminPanelService.BotCommandParseHelperService;
 import com.example.demo.services.peopleRegisterService.TelegramUserRepositoryService;
 import com.example.demo.services.repositoryService.CroissantRepositoryService;
 import com.example.demo.services.repositoryService.CustomerOrderingRepositoryService;
 import com.example.demo.services.supportService.TextFormatter;
-import com.example.demo.services.telegramService.TelegramMessageSenderService;
+import com.example.demo.test.TelegramClientEx;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import telegram.CallBackQuery;
+import telegram.Markup;
+import telegram.Message;
+import telegram.button.InlineKeyboardButton;
+import telegram.button.InlineKeyboardMarkup;
 
 import java.util.Arrays;
 import java.util.List;
@@ -36,14 +36,10 @@ import static com.example.demo.constcomponent.telegramEnums.CallBackData.*;
 @Service
 public class BotCommandParseHelperServiceImpl implements BotCommandParseHelperService {
 	private static final Logger logger = Logger.getLogger(BotCommandParseHelperServiceImpl.class);
-	@Autowired
-	private TelegramMessageSenderService telegramMessageSenderService;
-	@Autowired
-	private TelegramUserRepositoryService telegramUserRepositoryService;
-	@Autowired
-	private CustomerOrderingRepositoryService customerOrderingRepositoryService;
-	@Autowired
-	private CroissantRepositoryService croissantRepositoryService;
+	@Autowired private TelegramClientEx telegramClient;
+	@Autowired private TelegramUserRepositoryService telegramUserRepositoryService;
+	@Autowired private CustomerOrderingRepositoryService customerOrderingRepositoryService;
+	@Autowired private CroissantRepositoryService croissantRepositoryService;
 	@Value("${server.url}")
 	private String SERVER_URL;
 	@Value("${app.verify.token}")
@@ -60,14 +56,14 @@ public class BotCommandParseHelperServiceImpl implements BotCommandParseHelperSe
 			if (command != BotCommands.HELP && command != BotCommands.START)
 				helpMessage.append("/" + command.name().toLowerCase() + " - " + ResourceBundle.getBundle("botCommands").getString(command.name()) + "\n");
 		}
-		telegramMessageSenderService.simpleMessage(helpMessage.toString(), message);
+		telegramClient.simpleMessage(helpMessage.toString(), message);
 	}
 
 	@Override
 	public void helpSetUpMessenger(Message message) {
 		TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
 		if (tUser.getRole() != Roles.ADMIN) {
-			telegramMessageSenderService.noEnoughPermissions(message);
+			telegramClient.noEnoughPermissions(message);
 			return;
 		}
 		Shell setMessengerWebHook = new Shell();
@@ -107,17 +103,17 @@ public class BotCommandParseHelperServiceImpl implements BotCommandParseHelperSe
 		callBackQuery.getMessage().getChat().setId(tUser.getChatId());
 		callBackQuery.getMessage().setPlatform(Platform.COMMON_BOT);
 		String text = ResourceBundle.getBundle("dictionary").getString(RECEiVE_ORDER.name());
-		telegramMessageSenderService.simpleQuestion(QUESTION_COMPLETE_DATA, "?" + orderId + "&", text, callBackQuery.getMessage());
+		telegramClient.simpleQuestion(QUESTION_COMPLETE_DATA, "?" + orderId + "&", text, callBackQuery.getMessage());
 	}
 
 	private void makeRequestToFacebook(Message message, Shell setMessengerWebHook) {
 		try {
 			ResponseEntity<?> messengerWebhook = new RestTemplate().postForEntity(SUBSCRIPTION_URL, setMessengerWebHook, Object.class);
 			logger.debug("Messenger webhook:" + messengerWebhook.getBody());
-			telegramMessageSenderService.simpleMessage("Facebook messenger: " + messengerWebhook.getBody().toString() + " /help", message);
+			telegramClient.simpleMessage("Facebook messenger: " + messengerWebhook.getBody().toString() + " /help", message);
 		} catch (Exception ex) {
 			logger.warn(ex);
-			telegramMessageSenderService.simpleMessage(ex.getMessage(), message);
+			telegramClient.simpleMessage(ex.getMessage(), message);
 		}
 	}
 
@@ -135,6 +131,6 @@ public class BotCommandParseHelperServiceImpl implements BotCommandParseHelperSe
 		String caption = customerOrdering.getId() + ". " + "time: " + customerOrdering.getTime() + "\naddress: " + customerOrdering.getAddress() + "" +
 				"\nphone number: " + customerOrdering.getPhoneNumber() + "\n" + croissants + "\n" +
 				customerOrdering.getPrice() + uah;
-		telegramMessageSenderService.sendPhoto(PICTURE_ORDERING, caption, markup, callBackQuery.getMessage());
+		telegramClient.sendPhoto(PICTURE_ORDERING, caption, markup, callBackQuery.getMessage());
 	}
 }

@@ -3,14 +3,14 @@ package com.example.demo.services.adminPanelService.impl;
 import com.example.demo.entity.SpeakingMessage;
 import com.example.demo.entity.peopleRegister.TUser;
 import com.example.demo.constcomponent.messengerEnums.Roles;
-import com.example.demo.model.telegram.Message;
-import com.example.demo.model.telegram.buttons.InlineKeyboardButton;
 import com.example.demo.services.adminPanelService.AdminTelegramMessageParserHelperService;
 import com.example.demo.services.peopleRegisterService.TelegramUserRepositoryService;
 import com.example.demo.services.repositoryService.SpeakingMessagesRepositoryService;
-import com.example.demo.services.telegramService.TelegramMessageSenderService;
+import com.example.demo.test.TelegramClientEx;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import telegram.Message;
+import telegram.button.InlineKeyboardButton;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,7 +26,7 @@ public class AdminTelegramMessageParserHelperServiceImpl implements AdminTelegra
 	@Autowired
 	private TelegramUserRepositoryService telegramUserRepositoryService;
 	@Autowired
-	private TelegramMessageSenderService telegramMessageSenderService;
+	private TelegramClientEx telegramClient;
 	@Autowired
 	private SpeakingMessagesRepositoryService speakingMessagesRepositoryService;
 
@@ -45,14 +45,14 @@ public class AdminTelegramMessageParserHelperServiceImpl implements AdminTelegra
 		} catch (Exception ex) {
 			telegramUserRepositoryService.changeStatus(telegramUserRepositoryService.findByChatId(message.getChat().getId()), null);
 			String text = "User with username " + message.getText() + " is not exists in our database! He needs to enter command /start!!!";
-			telegramMessageSenderService.simpleMessage(text, message);
+			telegramClient.simpleMessage(text, message);
 		}
-		telegramMessageSenderService.removeKeyboardButtons(message);
+		telegramClient.removeKeyboardButtons(message);
 		List<InlineKeyboardButton> buttons = Arrays.asList(new InlineKeyboardButton("Admin", SETTING_ROLE_DATA_1.name() + "?" + Roles.ADMIN.name() + "&" + message.getText()),
 				new InlineKeyboardButton("Personal", SETTING_ROLE_DATA_1.name() + "?" + Roles.PERSONAL.name() + "&" + message.getText()),
 				new InlineKeyboardButton("Courier", SETTING_ROLE_DATA_1.name() + "?" + Roles.COURIER.name() + "&" + message.getText()),
 				new InlineKeyboardButton("Customer", SETTING_ROLE_DATA_1.name() + "?" + Roles.CUSTOMER.name() + "&" + message.getText()));
-		telegramMessageSenderService.sendInlineButtons(Arrays.asList(buttons), "Choose role for " + message.getText() + ":", message);
+		telegramClient.sendInlineButtons(Arrays.asList(buttons), "Choose role for " + message.getText() + ":", message);
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public class AdminTelegramMessageParserHelperServiceImpl implements AdminTelegra
 		speakingMessage.setMessage(message.getText());
 		speakingMessagesRepositoryService.saveAndFlush(speakingMessage);
 		String text = String.format(ResourceBundle.getBundle("dictionary").getString(NEW_TEXT_HAS_SET.name()), message.getText());
-		telegramMessageSenderService.simpleMessage(text, message);
+		telegramClient.simpleMessage(text, message);
 		TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
 		telegramUserRepositoryService.changeStatus(tUser, null);
 	}
@@ -75,7 +75,7 @@ public class AdminTelegramMessageParserHelperServiceImpl implements AdminTelegra
 
 		TUser tUser = telegramUserRepositoryService.findByUserName(message.getText());
 		String text = "Are you sure you want to set this role for" + tUser.getName() + " " + tUser.getLastName() + " with username \"" + tUser.getUserName() + "\"?";
-		telegramMessageSenderService.simpleQuestion(SETTING_ROLE_DATA_2, "?" + tUser.getUserName() + "&", text, message);
+		telegramClient.simpleQuestion(SETTING_ROLE_DATA_2, "?" + tUser.getUserName() + "&", text, message);
 
 
 	}

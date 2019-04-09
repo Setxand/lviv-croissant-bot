@@ -7,18 +7,18 @@ import com.example.demo.entity.peopleRegister.TUser;
 import com.example.demo.constcomponent.messengerEnums.speaking.ServerSideSpeaker;
 import com.example.demo.constcomponent.messengerEnums.types.CroissantsTypes;
 import com.example.demo.constcomponent.telegramEnums.TelegramUserStatus;
-import com.example.demo.model.telegram.Message;
-import com.example.demo.model.telegram.buttons.InlineKeyboardButton;
-import com.example.demo.model.telegram.buttons.InlineKeyboardMarkup;
-import com.example.demo.model.telegram.buttons.Markup;
 import com.example.demo.services.eventService.telegramEventService.TelegramGetMenuEventService;
 import com.example.demo.services.peopleRegisterService.TelegramUserRepositoryService;
 import com.example.demo.services.repositoryService.CroissantRepositoryService;
 import com.example.demo.services.repositoryService.MenuOfFillingRepositoryService;
-import com.example.demo.services.telegramService.TelegramMessageSenderService;
+import com.example.demo.test.TelegramClientEx;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import telegram.Markup;
+import telegram.Message;
+import telegram.button.InlineKeyboardButton;
+import telegram.button.InlineKeyboardMarkup;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,7 +34,7 @@ public class TelegramGetMenuEventServiceImpl implements TelegramGetMenuEventServ
 	@Autowired
 	private TelegramUserRepositoryService telegramUserRepositoryService;
 	@Autowired
-	private TelegramMessageSenderService telegramMessageSenderService;
+	private TelegramClientEx telegramClient;
 	@Autowired
 	private CroissantRepositoryService croissantRepositoryService;
 	@Autowired
@@ -71,7 +71,7 @@ public class TelegramGetMenuEventServiceImpl implements TelegramGetMenuEventServ
 		for (MenuOfFilling menuOfFilling : menuOfFillings) {
 			fillings += menuOfFilling.getId() + ". " + menuOfFilling.getName() + "\n";
 		}
-		telegramMessageSenderService.simpleMessage(fillings, message);
+		telegramClient.simpleMessage(fillings, message);
 
 	}
 
@@ -90,7 +90,7 @@ public class TelegramGetMenuEventServiceImpl implements TelegramGetMenuEventServ
 	}
 
 	private void gettingMenu(Message message) {
-		telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(CROISSANTS_MENU.name()), message);
+		telegramClient.simpleMessage(ResourceBundle.getBundle("dictionary").getString(CROISSANTS_MENU.name()), message);
 		TUser tUser = telegramUserRepositoryService.findByChatId(message.getChat().getId());
 		String text = message.getText();
 		if (text.equals(CroissantsTypes.OWN.name())) {
@@ -110,32 +110,32 @@ public class TelegramGetMenuEventServiceImpl implements TelegramGetMenuEventServ
 
 			Markup markup = new InlineKeyboardMarkup(Arrays.asList(Arrays.asList(new InlineKeyboardButton(ResourceBundle.getBundle("dictionary").getString(button), buttonData + "?" + croissant.getId()))));
 
-			telegramMessageSenderService.sendPhoto(croissant.getImageUrl(), caption, markup, message);
+			telegramClient.sendPhoto(croissant.getImageUrl(), caption, markup, message);
 		}
 		if (tUser.getStatus() != TelegramUserStatus.ONE_MORE_ORDERING_GETTING_MENU_STATUS && message.getPlatform() != TELEGRAM_ADMIN_PANEL_BOT) {
 			telegramUserRepositoryService.changeStatus(tUser, null);
-			telegramMessageSenderService.sendActions(message);
+			telegramClient.sendActions(message);
 		}
 	}
 
 	private void parseOwn(TUser tUser, Message message) {
 		List<Croissant> croissants = tUser.getOwnCroissants();
 		if (croissants.isEmpty()) {
-			telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(EMPTY_LIST.name()), message);
+			telegramClient.simpleMessage(ResourceBundle.getBundle("dictionary").getString(EMPTY_LIST.name()), message);
 			telegramUserRepositoryService.changeStatus(tUser, null);
 			String simpleQuestionText = ResourceBundle.getBundle("dictionary").getString(CREATE_OWN_QUESTION.name());
-			telegramMessageSenderService.simpleQuestion(CREATE_OWN_QUESTION_DATA, "?", simpleQuestionText, message);
+			telegramClient.simpleQuestion(CREATE_OWN_QUESTION_DATA, "?", simpleQuestionText, message);
 			return;
 		}
 		for (Croissant croissant : croissants) {
 			String caption = croissant.getName() + " \nprice: " + croissant.getPrice() + "\n" + getFillings(croissant);
 			Markup markup = new InlineKeyboardMarkup(Arrays.asList(Arrays.asList(new InlineKeyboardButton(ResourceBundle.getBundle("dictionary").getString(MAKE_ORDER.name()), ORDERING_DATA.name() + "?" + croissant.getId())),
 					Arrays.asList(new InlineKeyboardButton(ResourceBundle.getBundle("dictionary").getString(DELETE_BUTTON.name()), DELETE_BUTTON_DATA.name() + "?" + croissant.getId()))));
-			telegramMessageSenderService.sendPhoto(croissant.getImageUrl(), caption, markup, message);
+			telegramClient.sendPhoto(croissant.getImageUrl(), caption, markup, message);
 		}
 		telegramUserRepositoryService.changeStatus(tUser, null);
 
-		telegramMessageSenderService.sendActions(message);
+		telegramClient.sendActions(message);
 
 
 	}
@@ -151,6 +151,6 @@ public class TelegramGetMenuEventServiceImpl implements TelegramGetMenuEventServ
 				new InlineKeyboardButton(sandwich, CROISSANT_TYPE_DATA.name() + "?" + CroissantsTypes.SANDWICH.name())));
 		if (message.getPlatform() != TELEGRAM_ADMIN_PANEL_BOT)
 			list.add(new InlineKeyboardButton(own, CROISSANT_TYPE_DATA.name() + "?" + CroissantsTypes.OWN.name()));
-		telegramMessageSenderService.sendInlineButtons(new ArrayList<>(Arrays.asList(list)), text, message);
+		telegramClient.sendInlineButtons(new ArrayList<>(Arrays.asList(list)), text, message);
 	}
 }

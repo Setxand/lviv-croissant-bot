@@ -3,21 +3,21 @@ package com.example.demo.services.telegramService.impl;
 import com.example.demo.entity.peopleRegister.TUser;
 import com.example.demo.constcomponent.telegramEnums.MessageCases;
 import com.example.demo.constcomponent.telegramEnums.TelegramUserStatus;
-import com.example.demo.model.telegram.Message;
 import com.example.demo.services.eventService.telegramEventService.TelegramCreatingOwnCroissantEventService;
 import com.example.demo.services.eventService.telegramEventService.TelegramGetMenuEventService;
 import com.example.demo.services.eventService.telegramEventService.TelegramOrderingEventService;
 import com.example.demo.services.peopleRegisterService.TelegramUserRepositoryService;
 import com.example.demo.services.telegramService.TelegramMessageParserHelperService;
 import com.example.demo.services.telegramService.TelegramMessageParserService;
-import com.example.demo.services.telegramService.TelegramMessageSenderService;
+import com.example.demo.test.TelegramClientEx;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import telegram.Message;
 
 @Service
 public class TelegramMessageParserServiceImpl implements TelegramMessageParserService {
 
-	@Autowired TelegramMessageSenderService telegramMessageSenderService;
+	@Autowired TelegramClientEx telegramClient;
 	@Autowired TelegramGetMenuEventService telegramGetMenuEventService;
 	@Autowired TelegramMessageParserHelperService telegramMessageParserHelperService;
 	@Autowired TelegramUserRepositoryService telegramUserRepositoryService;
@@ -38,7 +38,7 @@ public class TelegramMessageParserServiceImpl implements TelegramMessageParserSe
 			}
 			switch (MessageCases.valueOf(message.getText().toUpperCase())) {
 				case HI:
-					telegramMessageSenderService.helloMessage(message);
+					telegramClient.helloMessage(message);
 					break;
 				case MENU:
 					menu(message, tUser);
@@ -50,7 +50,7 @@ public class TelegramMessageParserServiceImpl implements TelegramMessageParserSe
 					telegramMessageParserHelperService.helpCreateOwnCroissant(message);
 					break;
 				default:
-					telegramMessageSenderService.errorMessage(message);
+					telegramClient.errorMessage(message);
 					break;
 			}
 		}
@@ -76,7 +76,7 @@ public class TelegramMessageParserServiceImpl implements TelegramMessageParserSe
 				break;
 
 			default:
-				telegramMessageSenderService.errorMessage(message);
+				telegramClient.errorMessage(message);
 				break;
 		}
 	}
@@ -101,6 +101,6 @@ public class TelegramMessageParserServiceImpl implements TelegramMessageParserSe
 	private void start(Message message) {
 		telegramMessageParserHelperService.helpStart(message);
 
-		telegramMessageSenderService.sendActions(message);
+		telegramClient.sendActions(message);
 	}
 }
