@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import com.example.demo.constcomponent.Platform;
 import com.example.demo.model.messanger.*;
 import com.example.demo.test.TelegramClientEx;
 import org.apache.log4j.Logger;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import telegram.Chat;
+import telegram.Message;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -27,8 +30,10 @@ public class ServerStarting {
 	private String FACEBOOK_PROFILE_URI;
 	@Value("${server.url}")
 	private String SERVER_URL;
-
+	@Value("${telegram.urlmap}") String URL_MAP;
 	@Autowired TelegramClientEx clientChB;
+
+
 
 	@PostConstruct
 	public void getStarted() throws Exception {
@@ -47,7 +52,6 @@ public class ServerStarting {
 
 		try {
 
-
 			ResponseEntity<?> responseEntity = new RestTemplate()
 					.postForEntity(FACEBOOK_PROFILE_URI + PAGE_ACCESS_TOKEN, messengerProfileApi, MessengerProfileApi.class);
 			logger.debug(responseEntity);
@@ -60,7 +64,9 @@ public class ServerStarting {
 		} finally {
 			try {
 				clientChB.setWebHooks();
-				clientChB.simpleMessage("Server has ran", new telegram.Message(new telegram.Chat(388073901)));
+				Message message = new Message(new Chat(388073901));
+				message.setPlatform(Platform.COMMON_BOT);
+				clientChB.simpleMessage("Server has ran", message);
 			} catch (Exception e) {
 				logger.warn(e);
 			}

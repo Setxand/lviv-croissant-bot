@@ -24,8 +24,10 @@ public class UpdateParserServiceImpl implements UpdateParserService {
 	public void parseUpdate(Update update) {
 		try {
 			if (update.getCallBackQuery() != null) {
+				update.getCallBackQuery().getMessage().setPlatform(Platform.COMMON_BOT);
 				callBackParserService.parseCallBackQuery(update.getCallBackQuery());
 			} else if (update.getMessage() != null) {
+				update.getMessage().setPlatform(Platform.COMMON_BOT);
 				telegramMessageParserService.parseMessage(update.getMessage());
 			}
 		} catch (Exception ex) {

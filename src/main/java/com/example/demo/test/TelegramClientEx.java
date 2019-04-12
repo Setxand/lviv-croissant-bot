@@ -10,8 +10,8 @@ import telegram.client.TelegramClient;
 public class TelegramClientEx extends TelegramClient {
 
 	public TelegramClientEx(@Value("${telegran.url}") String telegramUrl, @Value("${server.url}") String serverUrl,
-							@Value("${telegram.webhooks}") String webhooks) {
-		super(telegramUrl, serverUrl, webhooks);
+							@Value("${telegram.webhooks}") String webhooks, @Value("${telegram.urlmap}") String urlMap) {
+		super(telegramUrl, serverUrl, webhooks, urlMap);
 	}
 
 	@Override
