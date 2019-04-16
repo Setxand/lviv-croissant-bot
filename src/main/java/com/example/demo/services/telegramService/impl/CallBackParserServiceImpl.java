@@ -6,9 +6,6 @@ import com.example.demo.entity.peopleRegister.TUser;
 import com.example.demo.constcomponent.messengerEnums.PayloadCases;
 import com.example.demo.constcomponent.telegramEnums.CallBackData;
 import com.example.demo.constcomponent.telegramEnums.TelegramUserStatus;
-import com.example.demo.model.telegram.CallBackQuery;
-import com.example.demo.model.telegram.Chat;
-import com.example.demo.model.telegram.Message;
 import com.example.demo.services.eventService.telegramEventService.TelegramCreatingOwnCroissantEventService;
 import com.example.demo.services.eventService.telegramEventService.TelegramGetMenuEventService;
 import com.example.demo.services.eventService.telegramEventService.TelegramOrderingEventService;
@@ -18,9 +15,12 @@ import com.example.demo.services.repositoryService.CustomerOrderingRepositorySer
 import com.example.demo.services.supportService.TextFormatter;
 import com.example.demo.services.telegramService.CallBackParserService;
 import com.example.demo.services.telegramService.TelegramMessageParserService;
-import com.example.demo.services.telegramService.TelegramMessageSenderService;
+import com.example.demo.test.TelegramClientEx;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import telegram.CallBackQuery;
+import telegram.Chat;
+import telegram.Message;
 
 import java.util.ResourceBundle;
 
@@ -32,7 +32,7 @@ import static com.example.demo.constcomponent.telegramEnums.TelegramUserStatus.*
 @Service
 public class CallBackParserServiceImpl implements CallBackParserService {
 	@Autowired
-	private TelegramMessageSenderService telegramMessageSenderService;
+	private TelegramClientEx telegramClient;
 	@Autowired
 	private CroissantRepositoryService croissantRepositoryService;
 	@Autowired
@@ -79,7 +79,7 @@ public class CallBackParserServiceImpl implements CallBackParserService {
 				questionCompleteData(callBackQuery);
 				break;
 			default:
-				telegramMessageSenderService.errorMessage(callBackQuery.getMessage());
+				telegramClient.errorMessage(callBackQuery.getMessage());
 				break;
 		}
 	}
@@ -91,7 +91,7 @@ public class CallBackParserServiceImpl implements CallBackParserService {
 			finishingOrdering(callBackQuery, orderId);
 		} else {
 			String text = ResourceBundle.getBundle("dictionary").getString(TECHNICAL_TROUBLE.name());
-			telegramMessageSenderService.simpleMessage(text, callBackQuery.getMessage());
+			telegramClient.simpleMessage(text, callBackQuery.getMessage());
 		}
 	}
 
@@ -101,12 +101,12 @@ public class CallBackParserServiceImpl implements CallBackParserService {
 		customerOrderingRepositoryService.saveAndFlush(customerOrdering);
 		String done = ResourceBundle.getBundle("dictionary").getString(DONE.name());
 		String thanks = ResourceBundle.getBundle("dictionary").getString(THANKS.name());
-		telegramMessageSenderService.simpleMessage(thanks, callBackQuery.getMessage());
+		telegramClient.simpleMessage(thanks, callBackQuery.getMessage());
 		TUser courier = customerOrdering.getCourier();
 		Message message = new Message();
 		message.setPlatform(TELEGRAM_ADMIN_PANEL_BOT);
 		message.setChat(new Chat(courier.getChatId()));
-		telegramMessageSenderService.simpleMessage(done, message);
+		telegramClient.simpleMessage(done, message);
 	}
 
 	private void cancelData(CallBackQuery callBackQuery) {
@@ -118,7 +118,7 @@ public class CallBackParserServiceImpl implements CallBackParserService {
 		customerOrderingRepositoryService.delete(customerOrdering);
 		telegramUserRepositoryService.saveAndFlush(tUser);
 		String text = ResourceBundle.getBundle("dictionary").getString(DONE.name());
-		telegramMessageSenderService.simpleMessage(text, callBackQuery.getMessage());
+		telegramClient.simpleMessage(text, callBackQuery.getMessage());
 
 	}
 
@@ -138,8 +138,8 @@ public class CallBackParserServiceImpl implements CallBackParserService {
 		if (PayloadCases.valueOf(answer) == QUESTION_YES) {
 			createOwnCroissantData(callBackQuery);
 		} else {
-			telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(THANKS.name()), callBackQuery.getMessage());
-			telegramMessageSenderService.sendActions(callBackQuery.getMessage());
+			telegramClient.simpleMessage(ResourceBundle.getBundle("dictionary").getString(THANKS.name()), callBackQuery.getMessage());
+			telegramClient.sendActions(callBackQuery.getMessage());
 
 		}
 	}
@@ -153,7 +153,7 @@ public class CallBackParserServiceImpl implements CallBackParserService {
 		croissant.setTUser(null);
 		croissantRepositoryService.remove(croissant);
 		telegramUserRepositoryService.saveAndFlush(tUser);
-		telegramMessageSenderService.simpleMessage(ResourceBundle.getBundle("dictionary").getString(DONE.name()), callBackQuery.getMessage());
+		telegramClient.simpleMessage(ResourceBundle.getBundle("dictionary").getString(DONE.name()), callBackQuery.getMessage());
 	}
 
 	private void createOwnCroissantData(CallBackQuery callBackQuery) {
