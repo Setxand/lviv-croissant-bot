@@ -1,5 +1,6 @@
 package com.example.demo.services.adminPanelService.impl;
 
+import com.example.demo.constcomponent.Platform;
 import com.example.demo.entity.lvivCroissants.Croissant;
 import com.example.demo.entity.lvivCroissants.CustomerOrdering;
 import com.example.demo.entity.peopleRegister.TUser;
@@ -104,7 +105,7 @@ public class BotCommandParseHelperServiceImpl implements BotCommandParseHelperSe
 		CustomerOrdering customerOrdering = customerOrderingRepositoryService.findOne(Long.parseLong(orderId));
 		TUser tUser = customerOrdering.getTUser();
 		callBackQuery.getMessage().getChat().setId(tUser.getChatId());
-		callBackQuery.getMessage().setPlatform(null);
+		callBackQuery.getMessage().setPlatform(Platform.COMMON_BOT);
 		String text = ResourceBundle.getBundle("dictionary").getString(RECEiVE_ORDER.name());
 		telegramMessageSenderService.simpleQuestion(QUESTION_COMPLETE_DATA, "?" + orderId + "&", text, callBackQuery.getMessage());
 	}

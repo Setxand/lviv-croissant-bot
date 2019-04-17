@@ -171,9 +171,8 @@ public class CallBackParserServiceImpl implements CallBackParserService {
 
 	private void orderingData(CallBackQuery callBackQuery) {
 		TUser tUser = telegramUserRepositoryService.findByChatId(callBackQuery.getMessage().getChat().getId());
-		Message message = new Message();
+		Message message = callBackQuery.getMessage();
 		message.setText(TextFormatter.ejectSingleVariable(callBackQuery.getData()));
-		message.setChat(callBackQuery.getMessage().getChat());
 
 		if (tUser.getStatus() != ONE_MORE_ORDERING_GETTING_MENU_STATUS)
 			telegramUserRepositoryService.changeStatus(tUser, TEL_NUMBER_ORDERING_STATUS);
