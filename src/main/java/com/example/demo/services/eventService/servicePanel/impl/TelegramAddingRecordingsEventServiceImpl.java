@@ -1,5 +1,6 @@
 package com.example.demo.services.eventService.servicePanel.impl;
 
+import com.example.demo.client.TelegramClientEx;
 import com.example.demo.entity.lvivCroissants.Croissant;
 import com.example.demo.entity.lvivCroissants.CroissantsFilling;
 import com.example.demo.entity.lvivCroissants.MenuOfFilling;
@@ -10,7 +11,6 @@ import com.example.demo.services.peopleRegisterService.TelegramUserRepositorySer
 import com.example.demo.services.repositoryService.CroissantRepositoryService;
 import com.example.demo.services.repositoryService.MenuOfFillingRepositoryService;
 import com.example.demo.services.supportService.TextFormatter;
-import com.example.demo.test.TelegramClientEx;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -190,7 +190,7 @@ public class TelegramAddingRecordingsEventServiceImpl implements TelegramAddingR
 		String sandwich = ResourceBundle.getBundle("dictionary").getString(SANDWICH.name());
 		List<InlineKeyboardButton> buttons = new ArrayList<>(Arrays.asList(new InlineKeyboardButton(sweet, CROISSANT_TYPE_ADDING_DATA.name() + "?" + SWEET.name()),
 				new InlineKeyboardButton(sandwich, CROISSANT_TYPE_ADDING_DATA.name() + "?" + SANDWICH.name())));
-		telegramClient.sendInlineButtons(new ArrayList<>(Arrays.asList(buttons)), text, message);
+		telegramClient.sendInlineButtons(buttons, text, message);
 	}
 
 	private void addingFillingStatus1(Message message, TUser tUser) {

@@ -1,16 +1,16 @@
 package com.example.demo.services.adminPanelService.impl;
 
-import com.example.demo.entity.peopleRegister.TUser;
+import com.example.demo.client.TelegramClientEx;
 import com.example.demo.constcomponent.BotCommands;
 import com.example.demo.constcomponent.messengerEnums.Roles;
 import com.example.demo.constcomponent.telegramEnums.TelegramUserStatus;
+import com.example.demo.entity.peopleRegister.TUser;
 import com.example.demo.services.adminPanelService.BotCommandParseHelperService;
 import com.example.demo.services.adminPanelService.BotCommandsParserService;
 import com.example.demo.services.eventService.servicePanel.TelegramAddingRecordingsEventService;
 import com.example.demo.services.eventService.telegramEventService.TelegramGetMenuEventService;
 import com.example.demo.services.peopleRegisterService.TelegramUserRepositoryService;
 import com.example.demo.services.telegramService.TelegramMessageParserHelperService;
-import com.example.demo.test.TelegramClientEx;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import telegram.Message;
@@ -85,7 +85,7 @@ public class BotCommandsParserServiceImpl implements BotCommandsParserService {
 			List<InlineKeyboardButton> buttons = Arrays.asList(new InlineKeyboardButton(listOfOrdering, LIST_OF_ORDERING_DATA.name()),
 					new InlineKeyboardButton(listOfOwnOrdering, LIST_OF_COMPLETE_ORDERING_DATA.name()));
 			String courierActions = ResourceBundle.getBundle("dictionary").getString(CHOOSE_ACTIONS.name());
-			telegramCLient.sendInlineButtons(Arrays.asList(buttons), courierActions, message);
+			telegramCLient.sendInlineButtons(buttons, courierActions, message);
 
 		} else {
 			telegramCLient.noEnoughPermissions(message);
@@ -102,7 +102,7 @@ public class BotCommandsParserServiceImpl implements BotCommandsParserService {
 		List<InlineKeyboardButton> buttons = new ArrayList<>(Arrays.asList(new InlineKeyboardButton("Set role", SET_ROLE_DATA.name()),
 				new InlineKeyboardButton("Change hello message", SET_HELLO_MESSAGE_DATA.name())));
 		String text = ResourceBundle.getBundle("dictionary").getString(CHOOSE_ACTIONS.name());
-		telegramCLient.sendInlineButtons(new ArrayList<>(Arrays.asList(buttons)), text, message);
+		telegramCLient.sendInlineButtons(buttons, text, message);
 	}
 
 	private void deleteCroissant(Message message) {

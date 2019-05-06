@@ -1,17 +1,16 @@
 package com.example.demo.services.telegramService.impl;
 
+import com.example.demo.client.TelegramClientEx;
 import com.example.demo.constcomponent.Platform;
+import com.example.demo.constcomponent.messengerEnums.Roles;
 import com.example.demo.entity.SpeakingMessage;
 import com.example.demo.entity.lvivCroissants.CustomerOrdering;
 import com.example.demo.entity.peopleRegister.TUser;
-import com.example.demo.constcomponent.messengerEnums.Roles;
 import com.example.demo.services.eventService.telegramEventService.TelegramCreatingOwnCroissantEventService;
 import com.example.demo.services.peopleRegisterService.TelegramUserRepositoryService;
 import com.example.demo.services.repositoryService.CustomerOrderingRepositoryService;
 import com.example.demo.services.repositoryService.SpeakingMessagesRepositoryService;
 import com.example.demo.services.telegramService.TelegramMessageParserHelperService;
-import com.example.demo.test.TelegramClientEx;
-import com.sun.javafx.application.PlatformImpl;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,19 +1,19 @@
 package com.example.demo.services.adminPanelService.impl;
 
+import com.example.demo.client.TelegramClientEx;
+import com.example.demo.constcomponent.BotCommands;
 import com.example.demo.constcomponent.Platform;
+import com.example.demo.constcomponent.messengerEnums.Objects;
+import com.example.demo.constcomponent.messengerEnums.Roles;
 import com.example.demo.entity.lvivCroissants.Croissant;
 import com.example.demo.entity.lvivCroissants.CustomerOrdering;
 import com.example.demo.entity.peopleRegister.TUser;
-import com.example.demo.constcomponent.BotCommands;
-import com.example.demo.constcomponent.messengerEnums.Objects;
-import com.example.demo.constcomponent.messengerEnums.Roles;
 import com.example.demo.model.messanger.Shell;
 import com.example.demo.services.adminPanelService.BotCommandParseHelperService;
 import com.example.demo.services.peopleRegisterService.TelegramUserRepositoryService;
 import com.example.demo.services.repositoryService.CroissantRepositoryService;
 import com.example.demo.services.repositoryService.CustomerOrderingRepositoryService;
 import com.example.demo.services.supportService.TextFormatter;
-import com.example.demo.test.TelegramClientEx;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,8 +1,8 @@
 package com.example.demo;
 
+import com.example.demo.client.TelegramClientEx;
 import com.example.demo.constcomponent.Platform;
 import com.example.demo.model.messanger.*;
-import com.example.demo.test.TelegramClientEx;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

@@ -2,13 +2,14 @@ package com.example.demo.model.messanger;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.messanger.MesBod;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class Messaging {
+public class Messaging implements MesBod {
 	@JsonProperty("messaging_type")
 	private String messagingType;
 	private Sender sender;

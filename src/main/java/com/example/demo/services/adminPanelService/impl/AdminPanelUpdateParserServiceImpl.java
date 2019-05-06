@@ -1,13 +1,13 @@
 package com.example.demo.services.adminPanelService.impl;
 
-import com.example.demo.entity.peopleRegister.TUser;
+import com.example.demo.client.TelegramClientEx;
 import com.example.demo.constcomponent.Platform;
 import com.example.demo.constcomponent.messengerEnums.Roles;
+import com.example.demo.entity.peopleRegister.TUser;
 import com.example.demo.services.adminPanelService.AdminCallBackParserService;
 import com.example.demo.services.adminPanelService.AdminPanelUpdateParserService;
 import com.example.demo.services.adminPanelService.AdminTelegramMessageParserService;
 import com.example.demo.services.peopleRegisterService.TelegramUserRepositoryService;
-import com.example.demo.test.TelegramClientEx;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import telegram.Update;

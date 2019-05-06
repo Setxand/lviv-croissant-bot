@@ -1,15 +1,15 @@
 package com.example.demo.services.telegramService.impl;
 
-import com.example.demo.entity.peopleRegister.TUser;
+import com.example.demo.client.TelegramClientEx;
 import com.example.demo.constcomponent.telegramEnums.MessageCases;
 import com.example.demo.constcomponent.telegramEnums.TelegramUserStatus;
+import com.example.demo.entity.peopleRegister.TUser;
 import com.example.demo.services.eventService.telegramEventService.TelegramCreatingOwnCroissantEventService;
 import com.example.demo.services.eventService.telegramEventService.TelegramGetMenuEventService;
 import com.example.demo.services.eventService.telegramEventService.TelegramOrderingEventService;
 import com.example.demo.services.peopleRegisterService.TelegramUserRepositoryService;
 import com.example.demo.services.telegramService.TelegramMessageParserHelperService;
 import com.example.demo.services.telegramService.TelegramMessageParserService;
-import com.example.demo.test.TelegramClientEx;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import telegram.Message;

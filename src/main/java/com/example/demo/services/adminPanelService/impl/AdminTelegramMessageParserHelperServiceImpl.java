@@ -1,12 +1,12 @@
 package com.example.demo.services.adminPanelService.impl;
 
+import com.example.demo.client.TelegramClientEx;
+import com.example.demo.constcomponent.messengerEnums.Roles;
 import com.example.demo.entity.SpeakingMessage;
 import com.example.demo.entity.peopleRegister.TUser;
-import com.example.demo.constcomponent.messengerEnums.Roles;
 import com.example.demo.services.adminPanelService.AdminTelegramMessageParserHelperService;
 import com.example.demo.services.peopleRegisterService.TelegramUserRepositoryService;
 import com.example.demo.services.repositoryService.SpeakingMessagesRepositoryService;
-import com.example.demo.test.TelegramClientEx;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import telegram.Message;
@@ -52,7 +52,7 @@ public class AdminTelegramMessageParserHelperServiceImpl implements AdminTelegra
 				new InlineKeyboardButton("Personal", SETTING_ROLE_DATA_1.name() + "?" + Roles.PERSONAL.name() + "&" + message.getText()),
 				new InlineKeyboardButton("Courier", SETTING_ROLE_DATA_1.name() + "?" + Roles.COURIER.name() + "&" + message.getText()),
 				new InlineKeyboardButton("Customer", SETTING_ROLE_DATA_1.name() + "?" + Roles.CUSTOMER.name() + "&" + message.getText()));
-		telegramClient.sendInlineButtons(Arrays.asList(buttons), "Choose role for " + message.getText() + ":", message);
+		telegramClient.sendInlineButtons(buttons, "Choose role for " + message.getText() + ":", message);
 	}
 
 	@Override

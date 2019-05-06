@@ -1,17 +1,17 @@
 package com.example.demo.services.eventService.telegramEventService.impl;
 
+import com.example.demo.client.TelegramClientEx;
+import com.example.demo.constcomponent.messengerEnums.speaking.ServerSideSpeaker;
+import com.example.demo.constcomponent.messengerEnums.types.CroissantsTypes;
+import com.example.demo.constcomponent.telegramEnums.TelegramUserStatus;
 import com.example.demo.entity.lvivCroissants.Croissant;
 import com.example.demo.entity.lvivCroissants.CroissantsFilling;
 import com.example.demo.entity.lvivCroissants.MenuOfFilling;
 import com.example.demo.entity.peopleRegister.TUser;
-import com.example.demo.constcomponent.messengerEnums.speaking.ServerSideSpeaker;
-import com.example.demo.constcomponent.messengerEnums.types.CroissantsTypes;
-import com.example.demo.constcomponent.telegramEnums.TelegramUserStatus;
 import com.example.demo.services.eventService.telegramEventService.TelegramGetMenuEventService;
 import com.example.demo.services.peopleRegisterService.TelegramUserRepositoryService;
 import com.example.demo.services.repositoryService.CroissantRepositoryService;
 import com.example.demo.services.repositoryService.MenuOfFillingRepositoryService;
-import com.example.demo.test.TelegramClientEx;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -151,6 +151,6 @@ public class TelegramGetMenuEventServiceImpl implements TelegramGetMenuEventServ
 				new InlineKeyboardButton(sandwich, CROISSANT_TYPE_DATA.name() + "?" + CroissantsTypes.SANDWICH.name())));
 		if (message.getPlatform() != TELEGRAM_ADMIN_PANEL_BOT)
 			list.add(new InlineKeyboardButton(own, CROISSANT_TYPE_DATA.name() + "?" + CroissantsTypes.OWN.name()));
-		telegramClient.sendInlineButtons(new ArrayList<>(Arrays.asList(list)), text, message);
+		telegramClient.sendInlineButtons(list, text, message);
 	}
 }

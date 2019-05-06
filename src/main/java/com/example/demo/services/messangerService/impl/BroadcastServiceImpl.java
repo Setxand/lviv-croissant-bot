@@ -1,11 +1,9 @@
 package com.example.demo.services.messangerService.impl;
 
-import com.example.demo.controller.TestController;
 import com.example.demo.model.messanger.Message;
 import com.example.demo.model.messanger.broadcast.*;
 import com.example.demo.services.messangerService.BroadcastService;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -16,8 +14,6 @@ import java.util.List;
 @Service
 public class BroadcastServiceImpl implements BroadcastService {
 	private static final Logger logger = Logger.getLogger(BroadcastServiceImpl.class);
-	@Autowired
-	TestController testController;
 	@Value("${broadcast.message.creatives}")
 	private String BROADCAST_MESSAGE_CREATIVES;
 	@Value("${broadcast.message}")

@@ -1,12 +1,12 @@
 package com.example.demo.services.adminPanelService.impl;
 
+import com.example.demo.client.TelegramClientEx;
 import com.example.demo.entity.peopleRegister.TUser;
 import com.example.demo.services.adminPanelService.AdminTelegramMessageParserHelperService;
 import com.example.demo.services.adminPanelService.AdminTelegramMessageParserService;
 import com.example.demo.services.adminPanelService.BotCommandsParserService;
 import com.example.demo.services.eventService.servicePanel.TelegramAddingRecordingsEventService;
 import com.example.demo.services.peopleRegisterService.TelegramUserRepositoryService;
-import com.example.demo.test.TelegramClientEx;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import telegram.Message;

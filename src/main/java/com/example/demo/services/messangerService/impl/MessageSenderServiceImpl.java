@@ -1,6 +1,6 @@
 package com.example.demo.services.messangerService.impl;
 
-import com.example.demo.controller.TestController;
+import com.example.demo.client.MessengerClient;
 import com.example.demo.constcomponent.messengerEnums.speaking.ServerSideSpeaker;
 import com.example.demo.constcomponent.messengerEnums.types.ContentType;
 import com.example.demo.constcomponent.messengerEnums.types.CroissantsTypes;
@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -41,28 +40,24 @@ import static com.example.demo.constcomponent.messengerEnums.types.TemplateType.
 public class MessageSenderServiceImpl implements MessageSenderService {
 
 	private static final Logger logger = Logger.getLogger(MessageSenderServiceImpl.class);
-	@Autowired
-	UserRepositoryService userRepositoryService;
-	@Autowired
-	TestController testController;
-	@Autowired
-	private CroissantRepositoryService croissantRepositoryService;
-	@Autowired
-	private CroissantsFillingRepositoryService croissantsFillingRepositoryService;
-	@Autowired
-	private MenuOfFillingRepositoryService menuOfFillingRepositoryService;
-	@Autowired
-	private RecognizeService recognizeService;
-	@Value("${page.access.token}")
-	private String PAGE_ACCESS_TOKEN;
-	@Value("${send.api.uri}")
-	private String FACEBOOK_SEND_URL;
-	@Value("${facebook.user.data.url}")
-	private String USER_DATA_URL;
-	@Value("${facebook.user.data.uer.fields}")
-	private String DATA_FIELDS;
-	@Value("${server.url}")
-	private String SERVER_URL;
+	@Autowired UserRepositoryService userRepositoryService;
+	@Autowired private CroissantRepositoryService croissantRepositoryService;
+	@Autowired private CroissantsFillingRepositoryService croissantsFillingRepositoryService;
+	@Autowired private MenuOfFillingRepositoryService menuOfFillingRepositoryService;
+	@Autowired private RecognizeService recognizeService;
+	@Autowired MessengerClient messengerClient;
+
+	@Value("${page.access.token}") private String PAGE_ACCESS_TOKEN;
+	@Value("${send.api.uri}") private String FACEBOOK_SEND_URL;
+	@Value("${facebook.user.data.url}") private String USER_DATA_URL;
+	@Value("${facebook.user.data.uer.fields}") private String DATA_FIELDS;
+	@Value("${server.url}") private String SERVER_URL;
+
+
+	@Override
+	public void sendMessage(Messaging messaging) {
+		messengerClient.sendMessage(messaging);
+	}
 
 	@Override
 	public void errorMessage(Long recipient) {
@@ -176,13 +171,10 @@ public class MessageSenderServiceImpl implements MessageSenderService {
 		sendMessage(new Messaging(message, new Recipient(recipient)));
 	}
 
-	@Override
-	public @ResponseBody
-	void sendMessage(Messaging messaging) {
-		testController.setObject(messaging);
-		new RestTemplate().postForEntity(FACEBOOK_SEND_URL + PAGE_ACCESS_TOKEN, messaging, Void.class);
-
-	}
-
-
+//	@Override
+//	public
+//	void sendMessage(Messaging messaging) {
+////		new RestTemplate().postForEntity(FACEBOOK_SEND_URL + PAGE_ACCESS_TOKEN, messaging, Void.class);
+//
+//	}
 }

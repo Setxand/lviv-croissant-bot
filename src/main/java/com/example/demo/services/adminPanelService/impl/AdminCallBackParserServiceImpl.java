@@ -1,11 +1,12 @@
 package com.example.demo.services.adminPanelService.impl;
 
-import com.example.demo.entity.lvivCroissants.Croissant;
-import com.example.demo.entity.lvivCroissants.CustomerOrdering;
-import com.example.demo.entity.peopleRegister.TUser;
+import com.example.demo.client.TelegramClientEx;
 import com.example.demo.constcomponent.messengerEnums.Roles;
 import com.example.demo.constcomponent.telegramEnums.CallBackData;
 import com.example.demo.constcomponent.telegramEnums.TelegramUserStatus;
+import com.example.demo.entity.lvivCroissants.Croissant;
+import com.example.demo.entity.lvivCroissants.CustomerOrdering;
+import com.example.demo.entity.peopleRegister.TUser;
 import com.example.demo.services.adminPanelService.AdminCallBackParserService;
 import com.example.demo.services.adminPanelService.AdminTelegramMessageParserHelperService;
 import com.example.demo.services.adminPanelService.BotCommandParseHelperService;
@@ -17,12 +18,12 @@ import com.example.demo.services.repositoryService.CustomerOrderingRepositorySer
 import com.example.demo.services.repositoryService.SpeakingMessagesRepositoryService;
 import com.example.demo.services.supportService.TextFormatter;
 import com.example.demo.services.telegramService.CallBackParserService;
-import com.example.demo.test.TelegramClientEx;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import telegram.CallBackQuery;
 import telegram.Chat;
 import telegram.Message;
+import telegram.button.Button;
 import telegram.button.KeyboardButton;
 
 import java.util.ArrayList;
@@ -196,10 +197,10 @@ public class AdminCallBackParserServiceImpl implements AdminCallBackParserServic
 	private void userNameEntering(CallBackQuery callBackQuery) {
 		List<String> list = telegramUserRepositoryService.findTopUserNames();
 
-		List<List<KeyboardButton>> keyboardButtons = new ArrayList<>();
+		List<List<Button>> keyboardButtons = new ArrayList<>();
 		for (int i = 0; i < 10; i++) {
 			if (list.isEmpty()) break;
-			List<KeyboardButton> list1 = new ArrayList<>();
+			List<Button> list1 = new ArrayList<>();
 			keyboardButtons.add(list1);
 			for (int j = 0; j < 2; j++) {
 				if (list.isEmpty()) break;
@@ -207,9 +208,7 @@ public class AdminCallBackParserServiceImpl implements AdminCallBackParserServic
 				list.remove(0);
 			}
 		}
-
-
-		telegramClient.sendKeyboardButtons(callBackQuery.getMessage(), keyboardButtons, "Enter username:");
+		telegramClient.sendSpecialButtons(keyboardButtons, "Enter username:", callBackQuery.getMessage());
 	}
 
 	private void sureDeleteData(CallBackQuery callBackQuery) {
