@@ -56,7 +56,7 @@ public class MessageSenderServiceImpl implements MessageSenderService {
 
 	@Override
 	public void sendMessage(Messaging messaging) {
-		messengerClient.sendMessage(messaging);
+
 	}
 
 	@Override
