@@ -1,11 +1,11 @@
 package com.example.demo.services.adminPanelService.impl;
 
-import com.example.demo.entity.lvivCroissants.Croissant;
-import com.example.demo.entity.lvivCroissants.CustomerOrdering;
-import com.example.demo.entity.peopleRegister.TUser;
 import com.example.demo.constcomponent.messengerEnums.Roles;
 import com.example.demo.constcomponent.telegramEnums.CallBackData;
 import com.example.demo.constcomponent.telegramEnums.TelegramUserStatus;
+import com.example.demo.entity.lvivCroissants.Croissant;
+import com.example.demo.entity.lvivCroissants.CustomerOrdering;
+import com.example.demo.entity.peopleRegister.TUser;
 import com.example.demo.services.adminPanelService.AdminCallBackParserService;
 import com.example.demo.services.adminPanelService.AdminTelegramMessageParserHelperService;
 import com.example.demo.services.adminPanelService.BotCommandParseHelperService;
@@ -23,7 +23,9 @@ import org.springframework.stereotype.Service;
 import telegram.CallBackQuery;
 import telegram.Chat;
 import telegram.Message;
+import telegram.button.Button;
 import telegram.button.KeyboardButton;
+import telegram.button.KeyboardMarkup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -196,10 +198,10 @@ public class AdminCallBackParserServiceImpl implements AdminCallBackParserServic
 	private void userNameEntering(CallBackQuery callBackQuery) {
 		List<String> list = telegramUserRepositoryService.findTopUserNames();
 
-		List<List<KeyboardButton>> keyboardButtons = new ArrayList<>();
+		List<List<Button>> keyboardButtons = new ArrayList<>();
 		for (int i = 0; i < 10; i++) {
 			if (list.isEmpty()) break;
-			List<KeyboardButton> list1 = new ArrayList<>();
+			List<Button> list1 = new ArrayList<>();
 			keyboardButtons.add(list1);
 			for (int j = 0; j < 2; j++) {
 				if (list.isEmpty()) break;
@@ -209,7 +211,8 @@ public class AdminCallBackParserServiceImpl implements AdminCallBackParserServic
 		}
 
 
-		telegramClient.sendKeyboardButtons(callBackQuery.getMessage(), keyboardButtons, "Enter username:");
+		KeyboardMarkup keyboardMarkup = new KeyboardMarkup(keyboardButtons);
+		telegramClient.sendButtons(keyboardMarkup, "Enter username:", callBackQuery.getMessage());
 	}
 
 	private void sureDeleteData(CallBackQuery callBackQuery) {

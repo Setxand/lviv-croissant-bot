@@ -190,7 +190,7 @@ public class TelegramAddingRecordingsEventServiceImpl implements TelegramAddingR
 		String sandwich = ResourceBundle.getBundle("dictionary").getString(SANDWICH.name());
 		List<InlineKeyboardButton> buttons = new ArrayList<>(Arrays.asList(new InlineKeyboardButton(sweet, CROISSANT_TYPE_ADDING_DATA.name() + "?" + SWEET.name()),
 				new InlineKeyboardButton(sandwich, CROISSANT_TYPE_ADDING_DATA.name() + "?" + SANDWICH.name())));
-		telegramClient.sendInlineButtons(new ArrayList<>(Arrays.asList(buttons)), text, message);
+		telegramClient.sendInlineButtons(text, message, buttons.toArray(new InlineKeyboardButton[0]));
 	}
 
 	private void addingFillingStatus1(Message message, TUser tUser) {

@@ -1,9 +1,9 @@
 package com.example.demo.services.adminPanelService.impl;
 
-import com.example.demo.entity.peopleRegister.TUser;
 import com.example.demo.constcomponent.BotCommands;
 import com.example.demo.constcomponent.messengerEnums.Roles;
 import com.example.demo.constcomponent.telegramEnums.TelegramUserStatus;
+import com.example.demo.entity.peopleRegister.TUser;
 import com.example.demo.services.adminPanelService.BotCommandParseHelperService;
 import com.example.demo.services.adminPanelService.BotCommandsParserService;
 import com.example.demo.services.eventService.servicePanel.TelegramAddingRecordingsEventService;
@@ -85,7 +85,7 @@ public class BotCommandsParserServiceImpl implements BotCommandsParserService {
 			List<InlineKeyboardButton> buttons = Arrays.asList(new InlineKeyboardButton(listOfOrdering, LIST_OF_ORDERING_DATA.name()),
 					new InlineKeyboardButton(listOfOwnOrdering, LIST_OF_COMPLETE_ORDERING_DATA.name()));
 			String courierActions = ResourceBundle.getBundle("dictionary").getString(CHOOSE_ACTIONS.name());
-			telegramCLient.sendInlineButtons(Arrays.asList(buttons), courierActions, message);
+			telegramCLient.sendInlineButtons(courierActions, message, buttons.toArray(new InlineKeyboardButton[0]));
 
 		} else {
 			telegramCLient.noEnoughPermissions(message);
@@ -102,7 +102,7 @@ public class BotCommandsParserServiceImpl implements BotCommandsParserService {
 		List<InlineKeyboardButton> buttons = new ArrayList<>(Arrays.asList(new InlineKeyboardButton("Set role", SET_ROLE_DATA.name()),
 				new InlineKeyboardButton("Change hello message", SET_HELLO_MESSAGE_DATA.name())));
 		String text = ResourceBundle.getBundle("dictionary").getString(CHOOSE_ACTIONS.name());
-		telegramCLient.sendInlineButtons(new ArrayList<>(Arrays.asList(buttons)), text, message);
+		telegramCLient.sendInlineButtons(text, message, buttons.toArray(new InlineKeyboardButton[0]));
 	}
 
 	private void deleteCroissant(Message message) {

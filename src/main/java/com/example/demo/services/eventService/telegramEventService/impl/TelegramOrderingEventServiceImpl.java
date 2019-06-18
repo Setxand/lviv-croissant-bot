@@ -1,10 +1,10 @@
 package com.example.demo.services.eventService.telegramEventService.impl;
 
+import com.example.demo.constcomponent.messengerEnums.speaking.ServerSideSpeaker;
+import com.example.demo.constcomponent.telegramEnums.CallBackData;
 import com.example.demo.entity.lvivCroissants.Croissant;
 import com.example.demo.entity.lvivCroissants.CustomerOrdering;
 import com.example.demo.entity.peopleRegister.TUser;
-import com.example.demo.constcomponent.messengerEnums.speaking.ServerSideSpeaker;
-import com.example.demo.constcomponent.telegramEnums.CallBackData;
 import com.example.demo.services.eventService.telegramEventService.TelegramGetMenuEventService;
 import com.example.demo.services.eventService.telegramEventService.TelegramOrderingEventService;
 import com.example.demo.services.peopleRegisterService.TelegramUserRepositoryService;
@@ -189,7 +189,7 @@ public class TelegramOrderingEventServiceImpl implements TelegramOrderingEventSe
 		String text = ResourceBundle.getBundle("dictionary").getString(ServerSideSpeaker.CANCEL.name());
 		List<InlineKeyboardButton> buttons = Arrays.asList(new InlineKeyboardButton(text, CallBackData.CANCEL_DATA.name() + "?" + customerOrdering.getId()));
 		String mes = ResourceBundle.getBundle("dictionary").getString(ServerSideSpeaker.CANCEL_TEXT.name());
-		telegramClient.sendInlineButtons(Arrays.asList(buttons), mes, message);
+		telegramClient.sendInlineButtons(mes, message, buttons.toArray(new InlineKeyboardButton[0]));
 	}
 
 	private void timeReq(Message message) {
